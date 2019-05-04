@@ -36,7 +36,7 @@ public class MainPage extends AppCompatActivity {
     FirebaseFirestore firebaseFirestore;
     SharedPreferences sharedPref;
     AlertDialog alertDialog,alertDialog1;
-    String flatid = "", buildid = "", commid = "",famid="",userid="";
+    String  buildid = "", commid = "";
 
 
 
@@ -72,6 +72,22 @@ public class MainPage extends AppCompatActivity {
                 Intent intent = new Intent(context, DaroanPass.class);
                 startActivity(intent);
                 finish();
+            }
+        });
+
+        vehicle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, VehicleActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        child.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, VehicleActivity.class);
+                startActivity(intent);
             }
         });
 
@@ -162,29 +178,29 @@ public class MainPage extends AppCompatActivity {
 
             }
         });
-//        parcel.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Intent intent= new Intent(MainPage.this,ParcelActivity.class);
-//                startActivity(intent);
-//
-//            }
-//        });
-//        invitee.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Intent intent= new Intent(MainPage.this,InvitedsList.class);
-//                startActivity(intent);
-//
-//            }
-//        });
-//        settings.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Intent intent= new Intent(MainPage.this,SettingsActivity.class);
-//                startActivity(intent);
-//            }
-//        });
+        parcel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent= new Intent(MainPage.this,ParcelActivity.class);
+                startActivity(intent);
+
+            }
+        });
+        invitee.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent= new Intent(MainPage.this,InvitedsList.class);
+                startActivity(intent);
+
+            }
+        });
+        settings.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent= new Intent(MainPage.this,SettingsActivity.class);
+                startActivity(intent);
+            }
+        });
 
     }
 

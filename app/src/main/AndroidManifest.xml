@@ -32,12 +32,26 @@
 
         </activity>
         <activity android:name=".MainPage" />
-        <activity android:name=".GatePass" />
+        <activity
+            android:name=".GatePass"
+            android:label="@string/title_activity_gate_pass"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="stateAlwaysHidden" />
         <activity android:name=".AddVisitor" />
         <activity android:name=".VisitorsList" />
         <activity android:name=".NoticeBoard" />
         <activity android:name=".CreateProfile" />
         <activity android:name=".CreateProfileforGuards" />
+        <activity android:name=".ParcelActivity" />
+        <activity android:name=".InvitedsList" />
+        <activity android:name=".SettingsActivity" />
+
+        <activity
+            android:name=".GeneralActivity"
+            android:label="General Settings"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".VehicleActivity" />
+        <activity android:name=".ChildrenList" />
 
         <provider
             android:name="android.support.v4.content.FileProvider"

@@ -17,12 +17,13 @@ public class Visvehicle {
     private String pic;
     private String thumb;
     private String id; //auto
+    private boolean isin;
     private List<String> vehicle_array;
 
     public Visvehicle(){
     }
 
-    public Visvehicle(String build_id, String comm_id, String flat_id, String family_id, String phone, String vehicle_number, Date checkin, Date checkout, String name, String pic, String thumb, String id, List<String> vehicle_array) {
+    public Visvehicle(String build_id, String comm_id, String flat_id, String family_id, String phone, String vehicle_number, Date checkin, Date checkout, String name, String pic, String thumb, String id, boolean isin, List<String> vehicle_array) {
         this.build_id = build_id;
         this.comm_id = comm_id;
         this.flat_id = flat_id;
@@ -35,8 +36,10 @@ public class Visvehicle {
         this.pic = pic;
         this.thumb = thumb;
         this.id = id;
+        this.isin = isin;
         this.vehicle_array = vehicle_array;
     }
+
 
     public String getBuild_id() {
         return build_id;
@@ -132,6 +135,14 @@ public class Visvehicle {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public boolean isIsin() {
+        return isin;
+    }
+
+    public void setIsin(boolean isin) {
+        this.isin = isin;
     }
 
     public List<String> getVehicle_array() {

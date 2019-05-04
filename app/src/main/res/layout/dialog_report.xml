@@ -14,7 +14,8 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="10dp"
         android:layout_marginBottom="30dp"
-        android:textColor="@color/black"
+        android:textColor="@color/orange"
+        android:textStyle="bold"
         android:text="Submit your report here( এখানে  অভিযোগ করুন ) "
         android:textSize="17sp" />
 

@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -40,7 +41,7 @@ import java.util.Locale;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 
-public class InviteeAdapter extends RecyclerView.Adapter<InviteeAdapter.InviteeViewHolder> {
+public class InviteeAdapter extends RecyclerView.Adapter<InviteeAdapter.InviteeViewHolder>  implements Filterable {
 
 
     public List<Invitees> list;
@@ -54,11 +55,23 @@ public class InviteeAdapter extends RecyclerView.Adapter<InviteeAdapter.InviteeV
     }
     private MyInterface myInterface;
     private ArrayList<Invitees> minviteeFilterList;
+    private ValueFilter valueFilter;
     private LayoutInflater mInflater;
    // private ValueFilter valueFilter;
     private Normalfunc normalfunc;
 
 
+
+    @Override
+    public Filter getFilter() {
+
+        if (valueFilter == null) {
+
+            valueFilter = new ValueFilter();
+        }
+
+        return valueFilter;
+    }
 
 
     private Context context;
@@ -69,6 +82,13 @@ public class InviteeAdapter extends RecyclerView.Adapter<InviteeAdapter.InviteeV
         mInflater = LayoutInflater.from(context);
         normalfunc= new Normalfunc();
         minviteeFilterList=list;
+
+        getFilter();
+        try {
+            this.myInterface = ((MyInterface) context);
+        } catch (ClassCastException e) {
+            throw new ClassCastException("Activity must implement AdapterCallback.");
+        }
 
     }
 

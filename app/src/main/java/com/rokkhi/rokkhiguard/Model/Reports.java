@@ -6,7 +6,7 @@ public class Reports {
 
     private String subject;
     private String user_id;
-    private String flat_id;
+    private String build_id;
     private String body;
     private Date when;
 
@@ -15,10 +15,10 @@ public class Reports {
 
     }
 
-    public Reports(String subject, String user_id, String flat_id, String body, Date when) {
+    public Reports(String subject, String user_id, String build_id, String body, Date when) {
         this.subject = subject;
         this.user_id = user_id;
-        this.flat_id = flat_id;
+        this.build_id = build_id;
         this.body = body;
         this.when = when;
     }
@@ -39,12 +39,12 @@ public class Reports {
         this.user_id = user_id;
     }
 
-    public String getFlat_id() {
-        return flat_id;
+    public String getBuild_id() {
+        return build_id;
     }
 
-    public void setFlat_id(String flat_id) {
-        this.flat_id = flat_id;
+    public void setBuild_id(String build_id) {
+        this.build_id = build_id;
     }
 
     public String getBody() {

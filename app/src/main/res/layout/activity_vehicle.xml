@@ -25,29 +25,41 @@
                 android:orientation="horizontal"
                 android:layout_height="wrap_content">
 
-                <ImageView
-                    android:id="@+id/media_image"
+                <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:adjustViewBounds="true"
-                    android:contentDescription="new post image"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/logotext"
-                    android:visibility="visible"
+                    android:layout_marginStart="16dp"
+                    android:text="Rokkhi"
+                    android:textColor="@color/orange"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
+                <!--<Button-->
+                    <!--android:id="@+id/media_image"-->
+                    <!--android:layout_width="120dp"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_marginEnd="24dp"-->
+                    <!--android:adjustViewBounds="true"-->
+                    <!--android:background="@drawable/less_round_button"-->
+                    <!--android:scaleType="centerCrop"-->
+
+                    <!--android:text="Vehicle list"-->
+                    <!--android:textColor="@color/orange"-->
+                    <!--android:visibility="visible"-->
+                    <!--app:layout_constraintBottom_toBottomOf="parent"-->
+                    <!--app:layout_constraintEnd_toEndOf="parent"-->
+                    <!--app:layout_constraintTop_toTopOf="parent" />-->
+
             </android.support.constraint.ConstraintLayout>
-
-
 
         </android.support.v7.widget.Toolbar>
 
     </android.support.design.widget.AppBarLayout>
 
-    <include layout="@layout/content_parcel" />
+    <include layout="@layout/content_add_vehicle" />
 
 
 
