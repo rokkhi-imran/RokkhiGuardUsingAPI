@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/nested"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:showIn="@layout/activity_visitors_list"
+    >
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:id="@+id/search"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="20dp"
+            android:background="@drawable/round_edittext"
+            android:paddingStart="20dp"
+            android:layout_marginStart="20dp"
+            android:drawableEnd="@drawable/ic_search"
+            android:layout_marginEnd="20dp"
+            android:hint="  Search by token number or name\n  অতিথির নাম অথবা  আইডি নাম্বার দিয়ে  খুঁজুন ) "
+            android:paddingEnd="20dp"
+            />
+
+        <android.support.v7.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/recyclerview"
+            android:layout_below="@+id/search"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="200dp"
+            android:layout_marginStart="10dp"
+            >
+
+        </android.support.v7.widget.RecyclerView>
+
+        <ProgressBar
+            android:id="@+id/progressBar2"
+            style="?android:attr/progressBarStyleLarge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:layout_marginBottom="200dp"
+            android:layout_centerInParent="true"
+            android:layout_below="@+id/recyclerview"
+            />
+
+
+
+    </RelativeLayout>
+
+</android.support.v4.widget.NestedScrollView>

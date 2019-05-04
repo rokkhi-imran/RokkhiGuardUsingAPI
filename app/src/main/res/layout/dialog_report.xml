@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="15dp"
+    android:padding="15dp"
+    >
+
+    <TextView
+        android:id="@+id/tik"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="30dp"
+        android:textColor="@color/black"
+        android:text="Submit your report here( এখানে  অভিযোগ করুন ) "
+        android:textSize="17sp" />
+
+    <EditText
+        android:id="@+id/subject"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_below="@+id/tik"
+        android:background="@drawable/round_edittext"
+        android:gravity="center_vertical"
+        android:hint="Report title  (  শিরোনাম  )"
+        android:paddingStart="20dp"
+        android:paddingEnd="10dp" />
+
+    <EditText
+        android:id="@+id/body"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_below="@+id/subject"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/round_edittext"
+        android:gravity="top"
+        android:hint="Report details  ( বিস্তারিত )"
+        android:paddingStart="20dp"
+        android:paddingTop="10dp"
+        android:paddingEnd="5dp" />
+
+    <Button
+        android:id="@+id/submit"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_gravity="center"
+        android:layout_below="@+id/body"
+        android:layout_marginTop="50dp"
+
+        android:layout_marginBottom="8dp"
+        android:background="@drawable/orange_rounded_button"
+        android:text="Submit   ( পাঠিয়ে দিন )"
+        android:textColor="@color/white"
+        android:textSize="12sp" />
+
+    <Button
+        android:id="@+id/cancel"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_gravity="center"
+        android:layout_below="@+id/submit"
+        android:layout_marginTop="5dp"
+
+        android:layout_marginBottom="8dp"
+        android:background="@drawable/white_rounded_button"
+        android:text="Cancel  (বাদ দিন )"
+        android:textColor="@color/black"
+        android:textSize="12sp" />
+
+
+
+    <ProgressBar
+        android:id="@+id/dialog_progress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:visibility="gone"
+
+        />
+
+</RelativeLayout>
+
+

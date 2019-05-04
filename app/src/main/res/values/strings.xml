@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Rokkhi Home</string>
+
+    <string name="sign_in">Sign In</string>
+    <string name="create_account">Create Account</string>
+    <string name="sign_out">Sign Out</string>
+    <string name="disconnect">Disconnect</string>
+    <string name="loading">Loading…</string>
+    <string name="signed_out">Signed Out</string>
+    <string name="verify">Verify</string>
+
+
+    <string name="logout">Logout?</string>
+    <string name="hint_email">Email</string>
+    <string name="hint_password">Password</string>
+    <string name="hint_name">Name</string>
+    <string name="hint_photo">Photo URL</string>
+    <string name="title_activity_verify">VerifyActivity</string>
+    <string name="title_activity_invite">InviteActivity</string>
+    <string name="title_activity_notice_board">NoticeBoard</string>
+    <string name="title_activity_settings">SettingsActivity</string>
+    <string name="title_activity_setting_new">Settings</string>
+
+    <!-- Strings related to Settings -->
+
+    <!-- Example General settings -->
+    <string name="pref_header_general">General</string>
+
+    <string name="pref_title_social_recommendations">Enable social recommendations</string>
+    <string name="pref_description_social_recommendations">Recommendations for people to contact
+        based on your message history
+    </string>
+
+    <string name="pref_title_display_name">Display name</string>
+    <string name="pref_default_display_name">John Smith</string>
+
+    <string name="pref_title_add_friends_to_messages">Add friends to messages</string>
+    <string-array name="pref_example_list_titles">
+        <item>Always</item>
+        <item>When possible</item>
+        <item>Never</item>
+    </string-array>
+    <string-array name="pref_example_list_values">
+        <item>1</item>
+        <item>0</item>
+        <item>-1</item>
+    </string-array>
+
+    <!-- Example settings for Data & Sync -->
+    <string name="pref_header_data_sync">Data &amp; sync</string>
+
+    <string name="pref_title_sync_frequency">Sync frequency</string>
+    <string-array name="pref_sync_frequency_titles">
+        <item>15 minutes</item>
+        <item>30 minutes</item>
+        <item>1 hour</item>
+        <item>3 hours</item>
+        <item>6 hours</item>
+        <item>Never</item>
+    </string-array>
+    <string-array name="pref_sync_frequency_values">
+        <item>15</item>
+        <item>30</item>
+        <item>60</item>
+        <item>180</item>
+        <item>360</item>
+        <item>-1</item>
+    </string-array>
+
+    <string-array name="list_preference_entries">
+        <item>Entry 1</item>
+        <item>Entry 2</item>
+        <item>Entry 3</item>
+    </string-array>
+
+    <string-array name="list_preference_entry_values">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+    </string-array>
+
+    <string-array name="multi_select_list_preference_default_value" />
+
+    <string name="pref_title_system_sync_settings">System sync settings</string>
+
+    <!-- Example settings for Notifications -->
+    <string name="pref_header_notifications">Notifications</string>
+
+    <string name="pref_title_new_message_notifications">New message notifications</string>
+
+    <string name="pref_title_ringtone">Ringtone</string>
+    <string name="pref_ringtone_silent">Silent</string>
+
+    <string name="pref_title_vibrate">Vibrate</string>
+
+    <string name="pref_title_notifications">Notifications</string>
+    <string name="summary_choose_ringtone">Choose notification sound</string>
+    <string name="pref_header_about">About</string>
+    <string name="summary_about">The future of office security starts here.Manage your visitors,invitees and explore more!</string>
+    <string name="app_version">1.0</string>
+    <string name="summary_support">Got any queries? We are happy to help!</string>
+    <string name="title_send_feedback">Send Feedback</string>
+    <string name="title_faq">FAQ</string>
+    <string name="summary_faq">View frequently asked questions</string>
+    <string name="url_faq">http://www.androidhive.info/privacy-policy/</string>
+    <string name="privacy_policy">Privacy Policy</string>
+    <string name="url_privacy">http://www.androidhive.info/privacy-policy/</string>
+    <string name="title_terms">Terms &amp; Conditions</string>
+    <string name="url_terms">http://www.androidhive.info/terms-of-service/</string>
+    <string name="title_version">Version</string>
+    <string name="choose_email_client">Choose email client</string>
+    <string name="title_gallery_storage">Default Storage</string>
+    <string name="title_new_notification_sound">New message notification</string>
+    <string name="title_vibrate">Vibrate</string>
+    <string name="summary_vibrate">Vibrate on new notification</string>
+    <string name="key_upload_over_wifi">key_upload_over_wifi</string>
+    <string name="key_gallery_name">key_gallery_name</string>
+    <string name="key_upload_quality">key_upload_quality</string>
+    <string name="notifications_new_message">notifications_new_message</string>
+    <string name="key_notifications_new_message_ringtone">key_notifications_new_message_ringtone</string>
+    <string name="key_vibrate">key_vibrate</string>
+    <string name="key_send_feedback">key_send_feedback</string>
+    <string name="title_activity_main_page">MainPage</string>
+    <string name="title_activity_gate_pass">GatePass</string>
+    <string name="title_activity_add_visitor">AddVisitor</string>
+    <string name="title_activity_visitors_list">VisitorsList</string>
+    <string name="title_activity_parcel">ParcelActivity</string>
+    <string name="title_activity_create_profile">CreateProfile</string>
+
+
+    <string name="error_invalid_email">This email address is invalid</string>
+    <string name="error_invalid_phone">This phone number is invalid</string>
+    <string name="error_invalid_password">This password is too short</string>
+    <string name="error_invalid_cname">Company name can not be empty</string>
+    <string name="error_incorrect_password">This password is incorrect</string>
+    <string name="error_field_required">This field is required</string>
+    <string name="error_sign_in">Email or Password not matched</string>
+    <string name="error_sign_up">Error Signup</string>
+    <string name="error_sign_up_usemail">This email is already in use.</string>
+    <string name="permission_rationale">"Contacts permissions are needed for providing email
+        completions."
+    </string>
+
+
+
+    <string name="col_activebuild">activebuildings</string>
+    <string name="col_activecomm">activecommunities</string>
+    <string name="col_activeflat">activeflats</string>
+    <string name="col_vehicle">vehicles</string>
+    <string name="col_users">users</string>
+    <string name="col_flats">flats</string>
+    <string name="col_members">members</string>
+    <string name="col_family">family</string>
+    <string name="col_child">child</string>
+    <string name="col_build">buildings</string>
+    <string name="col_community">community</string>
+    <string name="col_additional">additional</string>
+    <string name="col_allmail">allmails</string>
+    <string name="col_setting">settings</string>
+    <string name="col_sworker">sworkers</string>
+
+
+
+    <string name="progress_downloading">Downloading…</string>
+    <string name="progress_uploading">Uploading…</string>
+
+    <string name="upload_success">Upload finished</string>
+    <string name="upload_failure">Upload failed</string>
+    <string name="title_activity_signin">SigninActivity</string>
+
+    <string name="col_employees">employees</string>
+    <string name="col_admins">admins</string>
+    <string name="col_guards">guards</string>
+    <string name="col_phoneguards">guardPhone</string>
+    <string name="col_attendance">attendance</string>
+    <string name="col_visitors">visitors</string>
+    <string name="col_parcels">parcels</string>
+    <string name="col_invitees">invitees</string>
+    <string name="col_office">offices</string>
+    <string name="col_request">requests</string>
+    <string name="col_notification">notifications</string>
+    <string name="col_allmails">allmails</string>
+    <string name="col_report">reports</string>
+
+
+
+    <string name="ob_header1">SIMPLE ABROAD CALLS</string>
+    <string name="ob_header2">FREE WONEP TO WONEP</string>
+    <string name="ob_header3">NO HIDDEN CHARGES OR FEES</string>
+
+    <string name="ob_get_started">GET STARTED</string>
+
+    <string name="ob_desc1">Wonep converts international calls to local calls without WiFi or data</string>
+    <string name="ob_desc2">If the person you’re calling also has Wonep the call will be entirely free</string>
+    <string name="ob_desc3">We have a very small charge for non-Wonep calls to mobiles or landlines</string>
+
+
+    <string name="sign_in_cancelled">Sign in cancelled</string>
+    <string name="no_internet_connection">No Internet connection</string>
+    <string name="unknown_error">Unknown error</string>
+    <string name="sign_out_failed">Sign out failed</string>
+    <string name="delete">Delete</string>
+    <string name="delete_account_failed">Delete account failed</string>
+    <string name="unknown_sign_in_response">Login successful!</string>
+    <string name="title_activity_visitors">VisitorsActivity</string>
+
+    <string name="default_notification_channel_id" translatable="false">office_notification</string>
+    <!--
+        This is the name that users will see when interacting with this channel.
+        It should describe the category of notifications that will be sent through this channel
+     -->
+    <string name="default_notification_channel_name" translatable="true">Office</string>
+    <string name="msg_subscribe_failed">Failed to subscribe to office notification</string>
+    <string name="fcm_message">FCM Message</string>
+
+
+</resources>

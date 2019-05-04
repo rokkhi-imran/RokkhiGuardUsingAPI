@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context=".AddVisitor"
+    tools:showIn="@layout/activity_parcel">
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:padding="20dp">
+
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/prorel"
+            >
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/parcel_photo"
+                android:layout_width="150dp"
+                android:src="@color/grey_300"
+                android:layout_height="150dp"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="10dp"
+                app:civ_border_color="@color/black"
+                app:civ_border_width=".5dp" />
+
+
+
+
+
+        </RelativeLayout>
+
+
+
+
+
+
+        <!-- username section -->
+        <LinearLayout
+            android:id="@+id/relname"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/prorel"
+            android:layout_marginTop="70dp"
+            android:background="@drawable/grey_border_bottom"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="15dp"
+                android:text="Company name   ( যে কোম্পানি  থেকে পার্সেল এসেছে )"
+                android:textColor="@color/orange"
+                android:textSize="20sp" />
+
+            <EditText
+                android:id="@+id/cname"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@null"
+                android:hint="Name"
+                android:textSize="24sp"
+                android:inputType="textNoSuggestions" />
+
+        </LinearLayout>
+
+
+
+        <LinearLayout
+            android:id="@+id/relphone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/relname"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/grey_border_bottom"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="15dp"
+                android:text="Guard *  ( গার্ড এর নাম )"
+                android:textColor="@color/orange"
+                android:textSize="20sp" />
+
+            <EditText
+                android:id="@+id/gphone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@null"
+                android:hint="Contact no"
+                android:textSize="24sp"
+                android:focusable="false"
+                />
+
+        </LinearLayout>
+
+
+
+        <LinearLayout
+            android:id="@+id/relrecipient"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/relphone"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/grey_border_bottom"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="15dp"
+                android:text="recipient *  (যার কাছে পার্সেল এসেছে )"
+                android:textColor="@color/orange"
+                android:textSize="20sp" />
+
+            <EditText
+                android:id="@+id/recipient"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@null"
+                android:hint="recipient"
+                android:focusable="false"
+                android:textSize="24sp"
+                android:inputType="textNoSuggestions" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/reltype"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/relrecipient"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/grey_border_bottom"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="15dp"
+                android:text=" Parcel type *  (কি টাইপ পার্সেল )"
+                android:textColor="@color/orange"
+                android:textSize="20sp" />
+
+            <EditText
+                android:id="@+id/type"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@null"
+                android:hint="parcel type"
+                android:focusable="false"
+                android:textSize="24sp"
+                android:inputType="textNoSuggestions" />
+
+        </LinearLayout>
+
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:text="Done  ( শেষ ) "
+            android:id="@+id/done"
+            android:background="@drawable/round_button"
+            android:textColor="@color/white"
+            android:layout_below="@+id/reltype"
+            android:layout_marginTop="70dp"
+            android:layout_marginBottom="50dp"
+            android:textSize="18sp"
+            android:layout_centerHorizontal="true"
+            />
+
+        <ProgressBar
+            android:id="@+id/progressBar1"
+            style="?android:attr/progressBarStyleLarge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:layout_centerInParent="true" />
+
+
+
+
+    </RelativeLayout>
+
+
+
+
+
+
+
+</ScrollView>

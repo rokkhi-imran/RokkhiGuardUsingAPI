@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorAccent">#ff3300</color>
+    <color name="colorPrimary">#FFFFFF</color>
+    <color name="colorPrimaryDark">#FFFFFF</color>
+
+    <color name="grey_100">#F5F5F5</color>
+    <color name="grey_300">#E0E0E0</color>
+    <color name="grey_500">#9E9E9E</color>
+    <color name="grey_1000">#6b6b6b</color>
+    <color name="White">#fff</color>
+    <color name="Grey">#c3c3c3</color>
+    <color name="Black">#000000</color>
+    <color name="osthir">#c3c3c3</color>
+    <color name="osthirdark">#008e76</color>
+    <color name="base">#00b0ff</color>
+    <color name="base_gree">#9fffe0</color>
+    <color name="grey">#bfbfbf</color>
+    <color name="white">#fff</color>
+    <color name="black">#000000</color>
+    <color name="link_blue">#4d94ff</color>
+    <color name="darkRed">#cc0000</color>
+    <color name="orange">#ff3300</color>
+    <color name="orange2">#F94E03</color>
+    <color name="orangedark">#ca4a04</color>
+    <color name="golden">#CFE310</color>
+    <color name="lightblue">#10CFE3</color>
+    <color name="majenda">#10E38D</color>
+    <color name="green">#33cc33</color>
+    <color name="majenda_light">#b3ffe7</color>
+    <color name="yellow_light">#ffff99</color>
+    <color name="red_light">#ff5c33</color>
+    <color name="pink_light">#e580ff</color>
+    <color name="blue_light">#b380ff</color>
+    <color name="orange_light">#ffcc80</color>
+    <color name="green_light">#8fe069</color>
+    <color name="car_blue">#338AE9</color>
+    <color name="family_brown">#A66A25</color>
+
+    <color name="pinFieldLibraryAccent">#ff3300</color>
+    <color name="inactivePinFieldColor">#ff3300</color>
+    <color name="pinFieldLibraryTransparent">#00000000</color>
+
+    <color name="selected_dot">#2D9CDB</color>
+    <color name="idle_dot">#662D9CDB</color>
+    <color name="ob_header">#4A4A4A</color>
+    <color name="ob_desc">#4A4A4A</color>
+
+
+</resources>
