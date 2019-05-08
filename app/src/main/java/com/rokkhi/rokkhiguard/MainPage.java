@@ -225,7 +225,6 @@ public class MainPage extends AppCompatActivity {
         ok.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //TODO ekhane asole visitor node theke kaj korte hbe
                 alertDialog.dismiss();
 
             }
@@ -255,7 +254,6 @@ public class MainPage extends AppCompatActivity {
         emp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //TODO ekhane asole visitor node theke kaj korte hbe
                 alertDialog.dismiss();
                 Intent intent= new Intent(MainPage.this,CreateProfile.class);
                 startActivity(intent);

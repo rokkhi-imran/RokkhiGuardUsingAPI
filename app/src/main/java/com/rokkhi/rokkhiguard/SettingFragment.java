@@ -126,7 +126,6 @@ public class SettingFragment extends Fragment {
                     @Override
                     public void onClick(View view) {
                         progressBar.setVisibility(View.VISIBLE);
-                        //TODO ekhane asole visitor node theke kaj korte hbe
                         FirebaseAuth firebaseAuth= FirebaseAuth.getInstance();
                         if(firebaseAuth==null)return;
 
