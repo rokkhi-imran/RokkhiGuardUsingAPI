@@ -141,6 +141,36 @@
 
         </LinearLayout>
 
+        <LinearLayout
+            android:id="@+id/relflat"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/reldesig"
+            android:layout_marginTop="30dp"
+            android:background="@drawable/grey_border_bottom"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/flat"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="15dp"
+                android:text="flats *     (   কোন কোন ফ্ল্যাটে কাজ করে )"
+                android:textColor="@color/orange"
+                android:textSize="22sp" />
+
+            <EditText
+                android:id="@+id/user_flat"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@null"
+                android:hint="type of worker"
+                android:focusable="false"
+                android:textSize="24sp"
+                android:inputType="numberDecimal" />
+
+        </LinearLayout>
+
 
 
 
@@ -158,7 +188,7 @@
             android:id="@+id/done"
             android:background="@drawable/round_button"
             android:textColor="@color/white"
-            android:layout_below="@+id/reldesig"
+            android:layout_below="@+id/relflat"
             android:layout_marginTop="70dp"
             android:layout_marginBottom="50dp"
             android:textSize="18sp"

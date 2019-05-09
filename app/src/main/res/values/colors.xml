@@ -46,5 +46,7 @@
     <color name="ob_header">#4A4A4A</color>
     <color name="ob_desc">#4A4A4A</color>
 
+    <color name="pressed_color">#4d90fe</color>
+
 
 </resources>

@@ -41,6 +41,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.rokkhi.rokkhiguard.Model.ActiveFlats;
 import com.rokkhi.rokkhiguard.Utils.Normalfunc;
 import com.rokkhi.rokkhiguard.Utils.StringAdapter;
 import com.rokkhi.rokkhiguard.Utils.UniversalImageLoader;
@@ -64,7 +65,8 @@ public class CreateProfile extends AppCompatActivity {
 
     CircleImageView userphoto;
     ArrayList<String> types;
-    EditText username, phone,type;
+    ArrayList<ActiveFlats> activeFlats;
+    EditText username, phone,type,flats;
     Button done;
     Map<String, Object> doc;
 
@@ -103,6 +105,7 @@ public class CreateProfile extends AppCompatActivity {
         progressBar = findViewById(R.id.progressBar1);
         myCalendar = Calendar.getInstance();
         type= findViewById(R.id.user_wtype);
+        flats= findViewById(R.id.user_flat);
 
 
 
@@ -119,6 +122,19 @@ public class CreateProfile extends AppCompatActivity {
                     for (DocumentSnapshot documentSnapshot : task.getResult()) {
                         String name = documentSnapshot.getId();
                         types.add(name);
+                    }
+                }
+            }
+        });
+
+        firebaseFirestore.collection(getString(R.string.col_activeflat)).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                activeFlats = new ArrayList<>();
+                if (task.isSuccessful() && task.getResult() != null) {
+                    for (DocumentSnapshot documentSnapshot : task.getResult()) {
+                        ActiveFlats activeFlat= documentSnapshot.toObject(ActiveFlats.class);
+                        activeFlats.add(activeFlat);
                     }
                 }
             }
