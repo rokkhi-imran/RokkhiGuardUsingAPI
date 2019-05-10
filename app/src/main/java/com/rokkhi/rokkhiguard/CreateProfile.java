@@ -85,6 +85,7 @@ public class CreateProfile extends AppCompatActivity {
     StorageReference photoRef;
     Calendar myCalendar;
     String typeselected;
+    ActiveFlats flatselected;
     Normalfunc normalfunc;
 
     @Override
@@ -161,6 +162,59 @@ public class CreateProfile extends AppCompatActivity {
         mdialog.dismiss();
     }
 
+    public void addallflats() {
+
+        final ActiveFlatAdapter activeFlatAdapter = new ActiveFlatAdapter(activeFlats, context);
+        final AlertDialog alertcompany = new AlertDialog.Builder(context).create();
+        LayoutInflater inflater = getLayoutInflater();
+        View convertView = (View) inflater.inflate(R.layout.custom_list, null);
+        final EditText editText = convertView.findViewById(R.id.sear);
+        final ListView lv = (ListView) convertView.findViewById(R.id.listView1);
+        final Button done = convertView.findViewById(R.id.done);
+        alertcompany.setView(convertView);
+        alertcompany.setCancelable(false);
+        //valueAdapter.notifyDataSetChanged();
+
+        lv.setAdapter(activeFlatAdapter);
+        alertcompany.show();
+
+        done.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                flats.setText(editText.getText().toString());
+                alertcompany.dismiss();
+            }
+        });
+
+        editText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                activeFlatAdapter.getFilter().filter(s);
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        });
+
+        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//                typeselected = (String) lv.getItemAtPosition(position);
+//                //cname.setText(myoffice.getName());
+//                type.setText(typeselected);
+//                alertcompany.dismiss();
+
+                view.setSelected(true);
+            }
+        });
+
+    }
+
     public void addalltypes() {
 
         final StringAdapter valueAdapter = new StringAdapter(types, context);
@@ -217,6 +271,12 @@ public class CreateProfile extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 addalltypes();
+            }
+        });
+        flats.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                addallflats();
             }
         });
 

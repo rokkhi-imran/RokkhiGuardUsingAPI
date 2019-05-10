@@ -9,7 +9,6 @@ public class Active_Community {
     private String c_mail;
     private String c_name;
     private boolean c_status;
-    private List<String> b_array;
     private List<String> c_array; //search
     private List<String> address; //0 house no, 1 road no, 2 area ,3 district
 
@@ -17,12 +16,11 @@ public class Active_Community {
 
     }
 
-    public Active_Community(String comm_id, String c_mail, String c_name, boolean c_status, List<String> b_array, List<String> c_array, List<String> address) {
+    public Active_Community(String comm_id, String c_mail, String c_name, boolean c_status, List<String> c_array, List<String> address) {
         this.comm_id = comm_id;
         this.c_mail = c_mail;
         this.c_name = c_name;
         this.c_status = c_status;
-        this.b_array = b_array;
         this.c_array = c_array;
         this.address = address;
     }
@@ -57,14 +55,6 @@ public class Active_Community {
 
     public void setC_status(boolean c_status) {
         this.c_status = c_status;
-    }
-
-    public List<String> getB_array() {
-        return b_array;
-    }
-
-    public void setB_array(List<String> b_array) {
-        this.b_array = b_array;
     }
 
     public List<String> getC_array() {

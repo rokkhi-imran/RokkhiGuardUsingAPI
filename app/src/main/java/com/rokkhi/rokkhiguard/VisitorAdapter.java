@@ -1,7 +1,6 @@
 package com.rokkhi.rokkhiguard;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
@@ -14,7 +13,6 @@ import android.widget.Button;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -213,8 +211,8 @@ public class VisitorAdapter extends RecyclerView.Adapter<VisitorAdapter.VisitorV
             view = itemView;
             name = view.findViewById(R.id.name);
             propic = view.findViewById(R.id.propic);
-            intime = view.findViewById(R.id.body);
-            outtime = view.findViewById(R.id.outtime);
+            intime = view.findViewById(R.id.starttime);
+            outtime = view.findViewById(R.id.endtime);
             out = view.findViewById(R.id.out);
 
             flat = view.findViewById(R.id.towhom);

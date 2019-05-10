@@ -33,7 +33,7 @@
 
 
     <TextView
-        android:id="@+id/body"
+        android:id="@+id/starttime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
@@ -47,7 +47,7 @@
 
 
     <TextView
-        android:id="@+id/outtime"
+        android:id="@+id/endtime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="44dp"
@@ -56,7 +56,7 @@
         android:text="still in"
         android:textColor="@color/grey_1000"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/body"
+        app:layout_constraintStart_toEndOf="@+id/starttime"
         app:layout_constraintTop_toBottomOf="@+id/towhom" />
 
     <TextView

@@ -165,7 +165,7 @@ public class SettingFragment extends Fragment {
         final Button cancel= convertView.findViewById(R.id.cancel);
         final Button submit= convertView.findViewById(R.id.submit);
         final EditText subject= convertView.findViewById(R.id.subject);
-        final EditText body= convertView.findViewById(R.id.body);
+        final EditText body= convertView.findViewById(R.id.starttime);
 
 
 

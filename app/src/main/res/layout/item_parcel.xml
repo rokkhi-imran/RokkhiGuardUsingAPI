@@ -34,7 +34,7 @@
 
 
     <TextView
-        android:id="@+id/body"
+        android:id="@+id/starttime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="48dp"
@@ -46,7 +46,7 @@
         app:layout_constraintTop_toBottomOf="@+id/companyname" />
 
     <TextView
-        android:id="@+id/outtime"
+        android:id="@+id/endtime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="48dp"
@@ -54,7 +54,7 @@
         android:textColor="@color/link_blue"
         android:textSize="18sp"
         app:layout_constraintStart_toEndOf="@+id/propic"
-        app:layout_constraintTop_toBottomOf="@+id/body" />
+        app:layout_constraintTop_toBottomOf="@+id/starttime" />
 
 
 

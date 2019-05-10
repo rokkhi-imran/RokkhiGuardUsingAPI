@@ -15,13 +15,12 @@ public class Activebuilding {
     private String build_id;
     private String comm_id;
     private List<String> b_array;
-    private List<String> f_array;
 
     public Activebuilding(){
 
     }
 
-    public Activebuilding(String b_name, String b_flatformat, String b_houseno, String b_roadno, String b_district, String b_area, int b_tfloor, int b_tflat, String build_id, String comm_id, List<String> b_array, List<String> f_array) {
+    public Activebuilding(String b_name, String b_flatformat, String b_houseno, String b_roadno, String b_district, String b_area, int b_tfloor, int b_tflat, String build_id, String comm_id, List<String> b_array) {
         this.b_name = b_name;
         this.b_flatformat = b_flatformat;
         this.b_houseno = b_houseno;
@@ -33,8 +32,8 @@ public class Activebuilding {
         this.build_id = build_id;
         this.comm_id = comm_id;
         this.b_array = b_array;
-        this.f_array = f_array;
     }
+
 
     public String getB_name() {
         return b_name;
@@ -122,13 +121,5 @@ public class Activebuilding {
 
     public void setB_array(List<String> b_array) {
         this.b_array = b_array;
-    }
-
-    public List<String> getF_array() {
-        return f_array;
-    }
-
-    public void setF_array(List<String> f_array) {
-        this.f_array = f_array;
     }
 }

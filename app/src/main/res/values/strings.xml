@@ -153,6 +153,7 @@
     <string name="col_members">members</string>
     <string name="col_family">family</string>
     <string name="col_child">child</string>
+    <string name="col_buildchild">buildingchild</string>
     <string name="col_build">buildings</string>
     <string name="col_community">community</string>
     <string name="col_additional">additional</string>

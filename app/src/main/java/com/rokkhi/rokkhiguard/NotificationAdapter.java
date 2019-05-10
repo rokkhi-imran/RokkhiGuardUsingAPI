@@ -125,7 +125,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
             title = view.findViewById(R.id.title);
             propic=view.findViewById(R.id.propic);
             date= view.findViewById(R.id.date);
-            body= view.findViewById(R.id.body);
+            body= view.findViewById(R.id.starttime);
         }
     }
 

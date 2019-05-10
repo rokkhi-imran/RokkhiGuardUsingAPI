@@ -1,10 +1,15 @@
 package com.rokkhi.rokkhiguard;
 
+import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -16,6 +21,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -34,21 +40,21 @@ import java.util.Calendar;
 import java.util.Date;
 
 
-public class ChildrenList extends AppCompatActivity implements VisitorAdapter.MyInterface {
+public class ChildrenList extends AppCompatActivity implements ChildAdapter.MyInterface {
     FirebaseFirestore firebaseFirestore;
     private DocumentSnapshot lastVisible=null;
     private boolean isLastItemReached = false;
-    private static final String TAG = "VisitorsList";
+    private static final String TAG = "ChildrenList";
     ArrayList<Visitors> list;
     RecyclerView recyclerView;
-    VisitorAdapter visitorAdapter;
+    ChildAdapter childAdapter;
     FirebaseUser user;
     View mrootView;
     Toolbar toolbar;
     ProgressBar progressBar;
     Context context;
     SharedPreferences sharedPref;
-    CollectionReference visitorref;
+    CollectionReference childref;
     EditText search;
     SharedPreferences.Editor editor;
 
@@ -89,11 +95,11 @@ public class ChildrenList extends AppCompatActivity implements VisitorAdapter.My
         getdate();
 
 
-        visitorref=firebaseFirestore.
-                collection(getString(R.string.col_visitors));
+        childref=firebaseFirestore.
+                collection(getString(R.string.col_buildchild));
 
 
-        getFirstQuery=visitorref.whereEqualTo("build_id",buildid).whereEqualTo("isin",true)
+        getFirstQuery=childref.whereEqualTo("build_id",buildid).whereEqualTo("isactivated",true)
                 .whereGreaterThan("v_checkin",low)
                 .whereLessThan("v_checkin",high).
                 orderBy("v_checkin", Query.Direction.ASCENDING).limit(limit);
@@ -236,12 +242,52 @@ public class ChildrenList extends AppCompatActivity implements VisitorAdapter.My
 
     }
 
-    @Override
-    public void loadagain() {
-        list.clear();
-        progressBar.setVisibility(View.VISIBLE);
-        search.setText("");
-        getfirstdata();
+    private void onCallBtnClick(){
+        if (ActivityCompat.checkSelfPermission(context,
+                Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_GRANTED) {
 
+            phoneCall();
+        }else {
+            final String[] PERMISSIONS_STORAGE = {Manifest.permission.CALL_PHONE};
+            //Asking request Permissions
+            ActivityCompat.requestPermissions(this, PERMISSIONS_STORAGE, 9);
+        }
     }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        boolean permissionGranted = false;
+        switch(requestCode){
+            case 9:
+                permissionGranted = grantResults[0]== PackageManager.PERMISSION_GRANTED;
+                break;
+        }
+        if(permissionGranted){
+            phoneCall();
+        }else {
+            Toast.makeText(context, "You don't assign permission.", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    String phoneno="";
+
+    private void phoneCall(){
+        if (ActivityCompat.checkSelfPermission(context,
+                Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_GRANTED) {
+            Intent callIntent = new Intent(Intent.ACTION_CALL);
+            if (phoneno.isEmpty())callIntent.setData(Uri.parse("tel:01521110045"));
+            else callIntent.setData(Uri.parse("tel:"+ phoneno));
+            startActivity(callIntent);
+        }else{
+            Toast.makeText(context, "You don't assign permission.", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @Override
+    public void callparents(String number) {
+        phoneno=number;
+        onCallBtnClick();
+    }
+
+
 }

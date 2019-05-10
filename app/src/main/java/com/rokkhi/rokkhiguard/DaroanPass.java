@@ -135,7 +135,7 @@ public class DaroanPass extends AppCompatActivity implements View.OnClickListene
 
 
                     Log.d(TAG, "onAuthStateChanged: ccc10 "+ phoneno);
-                    firebaseFirestore.collection(getString(R.string.col_phoneguards)).document(userid).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    firebaseFirestore.collection(getString(R.string.col_phoneguards)).document(phoneno).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                         @Override
                         public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                             if(task.isSuccessful()){
@@ -150,6 +150,32 @@ public class DaroanPass extends AppCompatActivity implements View.OnClickListene
                                     editor.putString("commid",commid);
                                     editor.apply();
                                     token=documentSnapshot.getString("g_token");
+                                    tabpass= documentSnapshot.getString("mobilepass");
+
+
+                                    editor.putString("pass",tabpass);
+                                    editor.apply();
+
+                                    if(buildid!=null && !buildid.equals("none") && !buildid.isEmpty()){
+                                        String topic= buildid;
+                                        topic=topic+"guard";
+                                        FirebaseMessaging.getInstance().subscribeToTopic(topic).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                            @Override
+                                            public void onSuccess(Void aVoid) {
+
+                                            }
+                                        });
+
+                                        String topic1= buildid;
+                                        topic1=topic1+"all";
+
+                                        FirebaseMessaging.getInstance().subscribeToTopic(topic1).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                            @Override
+                                            public void onSuccess(Void aVoid) {
+
+                                            }
+                                        });
+                                    }
 
 
                                     firebaseFirestore.collection(getString(R.string.col_community))
@@ -191,46 +217,7 @@ public class DaroanPass extends AppCompatActivity implements View.OnClickListene
                                         }
                                     });
 
-                                    firebaseFirestore.collection(getString(R.string.col_setting))
-                                            .document(buildid).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                                        @Override
-                                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                                            if(task.isSuccessful()){
-                                                DocumentSnapshot documentSnapshot1= task.getResult();
-                                                if(documentSnapshot1.exists()){
-                                                    String pass= documentSnapshot1.getString("mobilepass");
-                                                    if(pass==null ){
-                                                        Log.d(TAG, "onComplete: ck4");
-                                                        Toast.makeText(context,"Connecton Error!",Toast.LENGTH_SHORT).show();
-                                                    }
-                                                    else{
-                                                        String topic= buildid;
-                                                        topic=topic+"guard";
-                                                        FirebaseMessaging.getInstance().subscribeToTopic(topic).addOnSuccessListener(new OnSuccessListener<Void>() {
-                                                            @Override
-                                                            public void onSuccess(Void aVoid) {
 
-                                                            }
-                                                        });
-
-                                                        String topic1= buildid;
-                                                        topic1=topic1+"all";
-
-                                                        FirebaseMessaging.getInstance().subscribeToTopic(topic1).addOnSuccessListener(new OnSuccessListener<Void>() {
-                                                            @Override
-                                                            public void onSuccess(Void aVoid) {
-
-                                                            }
-                                                        });
-
-                                                        tabpass= pass;
-                                                        editor.putString("pass",tabpass);
-                                                        editor.apply();
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    });
 
 
 
