@@ -33,6 +33,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.messaging.FirebaseMessaging;
+import com.rokkhi.rokkhiguard.Model.Buildingchild;
 import com.rokkhi.rokkhiguard.Model.Visitors;
 
 import java.util.ArrayList;
@@ -45,7 +46,7 @@ public class ChildrenList extends AppCompatActivity implements ChildAdapter.MyIn
     private DocumentSnapshot lastVisible=null;
     private boolean isLastItemReached = false;
     private static final String TAG = "ChildrenList";
-    ArrayList<Visitors> list;
+    ArrayList<Buildingchild> list;
     RecyclerView recyclerView;
     ChildAdapter childAdapter;
     FirebaseUser user;
@@ -100,9 +101,8 @@ public class ChildrenList extends AppCompatActivity implements ChildAdapter.MyIn
 
 
         getFirstQuery=childref.whereEqualTo("build_id",buildid).whereEqualTo("isactivated",true)
-                .whereGreaterThan("v_checkin",low)
-                .whereLessThan("v_checkin",high).
-                orderBy("v_checkin", Query.Direction.ASCENDING).limit(limit);
+                .whereGreaterThan("endtime",low)
+               .limit(limit);
         getfirstdata();
 
         search.addTextChangedListener(new TextWatcher() {
@@ -111,7 +111,7 @@ public class ChildrenList extends AppCompatActivity implements ChildAdapter.MyIn
             }
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                visitorAdapter.getFilter().filter(s);
+                childAdapter.getFilter().filter(s);
             }
             @Override
             public void afterTextChanged(Editable s) {
@@ -124,20 +124,8 @@ public class ChildrenList extends AppCompatActivity implements ChildAdapter.MyIn
 
     public void getdate(){
         Calendar cal = Calendar.getInstance(); //current date and time
-        cal.add(Calendar.DAY_OF_MONTH, 0); //add a day
-        cal.set(Calendar.HOUR_OF_DAY, 23); //set hour to last hour
-        cal.set(Calendar.MINUTE, 59); //set minutes to last minute
-        cal.set(Calendar.SECOND, 59); //set seconds to last second
-        cal.set(Calendar.MILLISECOND, 999); //set milliseconds to last millisecond
 
-        high=cal.getTime();
-        Calendar cal1 = Calendar.getInstance(); //current date and time
-        cal1.add(Calendar.DAY_OF_MONTH, 0); //add a day
-        cal1.set(Calendar.HOUR_OF_DAY, 0); //set hour to last hour
-        cal1.set(Calendar.MINUTE, 0); //set minutes to last minute
-        cal1.set(Calendar.SECOND, 0); //set seconds to last second
-        cal1.set(Calendar.MILLISECOND, 0); //set milliseconds to last millisecond
-        low= cal1.getTime();
+        low= cal.getTime();
 
         Log.d(TAG, "getdate: bb "+ high + " "+low);
 
@@ -151,13 +139,13 @@ public class ChildrenList extends AppCompatActivity implements ChildAdapter.MyIn
                     Log.d(TAG, "onComplete: kotoboro "+task.getResult().size());
                     list = new ArrayList<>();
                     for (DocumentSnapshot document : task.getResult()) {
-                        Visitors visitors = document.toObject(Visitors.class);
-                        list.add(visitors);
+                        Buildingchild buildingchild = document.toObject(Buildingchild.class);
+                        list.add(buildingchild);
                     }
                     progressBar.setVisibility(View.GONE);
-                    visitorAdapter = new VisitorAdapter(list,context);
-                    visitorAdapter.setHasStableIds(true);
-                    recyclerView.setAdapter(visitorAdapter);
+                    childAdapter = new ChildAdapter(list,context);
+                    childAdapter.setHasStableIds(true);
+                    recyclerView.setAdapter(childAdapter);
                     int xx=task.getResult().size();
                     if(xx>0)lastVisible = task.getResult().getDocuments().get(xx - 1);
                     loadmoredata();
@@ -200,10 +188,8 @@ public class ChildrenList extends AppCompatActivity implements ChildAdapter.MyIn
 
                             Log.d(TAG, "onScrolled: mmmmll dhukse");
                             Query nextQuery;
-                            nextQuery= visitorref.whereEqualTo("build_id",buildid).whereEqualTo("isin",true)
-                                    .whereGreaterThan("v_checkin",low)
-                                    .whereLessThan("v_checkin",high).
-                                            orderBy("v_checkin", Query.Direction.ASCENDING)
+                            nextQuery= childref.whereEqualTo("build_id",buildid).whereEqualTo("isactivated",true)
+                                    .whereGreaterThan("endtime",low)
                                     .startAfter(lastVisible).limit(limit);
 
                             nextQuery.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -213,12 +199,12 @@ public class ChildrenList extends AppCompatActivity implements ChildAdapter.MyIn
                                         // list.clear();
 
                                         for (DocumentSnapshot d : t.getResult()) {
-                                            Visitors productModel = d.toObject(Visitors.class);
-                                            list.add(productModel);
+                                            Buildingchild buildingchild = d.toObject(Buildingchild.class);
+                                            list.add(buildingchild);
                                         }
                                         shouldscrol=true;
                                         progressBar.setVisibility(View.GONE);
-                                        visitorAdapter.notifyDataSetChanged();
+                                        childAdapter.notifyDataSetChanged();
                                         int xx=t.getResult().size();
                                         if(xx>0)lastVisible = t.getResult().getDocuments().get(xx - 1);
 

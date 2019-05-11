@@ -33,31 +33,22 @@
 
 
     <TextView
-        android:id="@+id/starttime"
+        android:id="@+id/activated"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
         android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
-        android:text="intime"
+        android:text="ACTIVE"
+        android:textStyle="bold"
+        android:textSize="16sp"
         android:textColor="@color/green"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@+id/propic"
         app:layout_constraintTop_toBottomOf="@+id/flat" />
 
 
-    <TextView
-        android:id="@+id/endtime"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="44dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"
-        android:text="outtime"
-        android:textColor="@color/darkRed"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/starttime"
-        app:layout_constraintTop_toBottomOf="@+id/flat" />
+
 
     <TextView
         android:id="@+id/flat"

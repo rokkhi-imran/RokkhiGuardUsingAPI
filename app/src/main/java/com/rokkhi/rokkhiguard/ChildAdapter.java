@@ -10,6 +10,7 @@ import android.os.Build;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -110,14 +111,14 @@ public class ChildAdapter extends RecyclerView.Adapter<ChildAdapter.ChildViewHol
         final Buildingchild child = list.get(position);
         holder.name.setText(child.getM_name());
         UniversalImageLoader.setImage(child.getM_thumb(), holder.propic, null, "");
-        Date date1 = child.getStarttime();
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(date1);
-        Date date2= child.getEndtime();
-
-
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("hh:mm a", Locale.getDefault());
-        holder.starttime.setText(simpleDateFormat.format(cal.getTime()));
+        if(child.isIsactivated()){
+            holder.active.setText("ACTIVE");
+            holder.active.setTextColor(ContextCompat.getColor(context, R.color.green));
+        }
+        else{
+            holder.active.setText("NOT ACTIVE");
+            holder.active.setTextColor(ContextCompat.getColor(context, R.color.darkRed));
+        }
         holder.call.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -126,8 +127,7 @@ public class ChildAdapter extends RecyclerView.Adapter<ChildAdapter.ChildViewHol
 
             }
         });
-        cal.setTime(date2);
-        holder.endtime.setText(simpleDateFormat.format(cal.getTime()));
+
 
 
     }
@@ -153,7 +153,7 @@ public class ChildAdapter extends RecyclerView.Adapter<ChildAdapter.ChildViewHol
     public class ChildViewHolder extends RecyclerView.ViewHolder {
         public View view;
         TextView name;
-        TextView starttime, endtime, flat;
+        TextView active, flat;
         CircleImageView propic;
         ImageView call;
         String phoneno="";
@@ -163,10 +163,8 @@ public class ChildAdapter extends RecyclerView.Adapter<ChildAdapter.ChildViewHol
             view = itemView;
             name = view.findViewById(R.id.name);
             propic = view.findViewById(R.id.propic);
-            starttime = view.findViewById(R.id.starttime);
-            endtime = view.findViewById(R.id.endtime);
+            active = view.findViewById(R.id.activated);
             call = view.findViewById(R.id.call);
-
             flat = view.findViewById(R.id.flat);
         }
     }

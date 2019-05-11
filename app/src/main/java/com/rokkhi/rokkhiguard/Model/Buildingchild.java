@@ -8,9 +8,6 @@ public class Buildingchild {
     private String mem_id; //from members
     private String who_add_number;
     private boolean isactivated;
-    private boolean isallday;
-    private int settings;
-    private Date starttime;
     private Date endtime;
     private String m_name;
     private String m_pic;
@@ -27,13 +24,10 @@ public class Buildingchild {
 
     }
 
-    public Buildingchild(String mem_id, String who_add_number, boolean isactivated, boolean isallday, int settings, Date starttime, Date endtime, String m_name, String m_pic, String m_thumb, Date m_bday, String m_gender, String flat_id, String flatno, String build_id, String family_id, List<String> m_array) {
+    public Buildingchild(String mem_id, String who_add_number, boolean isactivated, Date endtime, String m_name, String m_pic, String m_thumb, Date m_bday, String m_gender, String flat_id, String flatno, String build_id, String family_id, List<String> m_array) {
         this.mem_id = mem_id;
         this.who_add_number = who_add_number;
         this.isactivated = isactivated;
-        this.isallday = isallday;
-        this.settings = settings;
-        this.starttime = starttime;
         this.endtime = endtime;
         this.m_name = m_name;
         this.m_pic = m_pic;
@@ -69,30 +63,6 @@ public class Buildingchild {
 
     public void setIsactivated(boolean isactivated) {
         this.isactivated = isactivated;
-    }
-
-    public boolean isIsallday() {
-        return isallday;
-    }
-
-    public void setIsallday(boolean isallday) {
-        this.isallday = isallday;
-    }
-
-    public int getSettings() {
-        return settings;
-    }
-
-    public void setSettings(int settings) {
-        this.settings = settings;
-    }
-
-    public Date getStarttime() {
-        return starttime;
-    }
-
-    public void setStarttime(Date starttime) {
-        this.starttime = starttime;
     }
 
     public Date getEndtime() {

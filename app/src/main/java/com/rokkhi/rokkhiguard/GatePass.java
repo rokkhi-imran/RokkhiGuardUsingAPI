@@ -176,6 +176,7 @@ public class GatePass extends AppCompatActivity implements View.OnClickListener,
                     gateAdapter = new GateAdapter(list,context);
                     gateAdapter.setHasStableIds(true);
                     recyclerView.setAdapter(gateAdapter);
+
                 }
                 else Log.d(TAG, "onComplete:  cjj3");
 
