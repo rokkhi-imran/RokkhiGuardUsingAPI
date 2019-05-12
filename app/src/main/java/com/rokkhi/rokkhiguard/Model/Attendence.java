@@ -1,5 +1,6 @@
 package com.rokkhi.rokkhiguard.Model;
 
+import java.util.Date;
 import java.util.List;
 
 public class Attendence {
@@ -8,23 +9,21 @@ public class Attendence {
     private String employee_id;
     private String build_id;
     private String comm_id;
-    private String e_checkin;
-    private String e_checkout;
-    private List<String> flat_array;
+    private Date time;
+    private List<String> fam_array;
     private boolean isin;
 
     public Attendence(){
 
     }
 
-    public Attendence(String auto_id, String employee_id, String build_id, String comm_id, String e_checkin, String e_checkout, List<String> flat_array, boolean isin) {
+    public Attendence(String auto_id, String employee_id, String build_id, String comm_id, Date time, List<String> fam_array, boolean isin) {
         this.auto_id = auto_id;
         this.employee_id = employee_id;
         this.build_id = build_id;
         this.comm_id = comm_id;
-        this.e_checkin = e_checkin;
-        this.e_checkout = e_checkout;
-        this.flat_array = flat_array;
+        this.time = time;
+        this.fam_array = fam_array;
         this.isin = isin;
     }
 
@@ -60,28 +59,20 @@ public class Attendence {
         this.comm_id = comm_id;
     }
 
-    public String getE_checkin() {
-        return e_checkin;
+    public Date getTime() {
+        return time;
     }
 
-    public void setE_checkin(String e_checkin) {
-        this.e_checkin = e_checkin;
+    public void setTime(Date time) {
+        this.time = time;
     }
 
-    public String getE_checkout() {
-        return e_checkout;
+    public List<String> getFam_array() {
+        return fam_array;
     }
 
-    public void setE_checkout(String e_checkout) {
-        this.e_checkout = e_checkout;
-    }
-
-    public List<String> getFlat_array() {
-        return flat_array;
-    }
-
-    public void setFlat_array(List<String> flat_array) {
-        this.flat_array = flat_array;
+    public void setFam_array(List<String> fam_array) {
+        this.fam_array = fam_array;
     }
 
     public boolean isIsin() {

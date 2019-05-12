@@ -141,9 +141,8 @@ public class GateAdapter extends RecyclerView.Adapter<GateAdapter.ListViewHolder
                                             mm.put("build_id",buildid);
                                             mm.put("comm_id",commid);
                                             mm.put("isin",true);
-                                            mm.put("flat_array",farray);
-                                            mm.put("e_checkin", FieldValue.serverTimestamp());
-                                            mm.put("e_checkout", FieldValue.serverTimestamp());
+                                            mm.put("fam_array",farray);
+                                            mm.put("time", FieldValue.serverTimestamp());
                                             firebaseFirestore.collection(context.getString(R.string.col_attendance)).document(auto_id)
                                                     .set(mm)
                                                     .addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -179,13 +178,13 @@ public class GateAdapter extends RecyclerView.Adapter<GateAdapter.ListViewHolder
                                         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                                             if(!view.isSelected()){
                                                 ActiveFlats aa=(ActiveFlats) lv.getItemAtPosition(position);
-                                                farray.add(aa.getFlat_id());
+                                                farray.add(aa.getFamily_id());
                                                 view.setSelected(true);
                                                 holder.total=holder.total+aa.getF_no()+" ";
                                             }
                                             else{
                                                 ActiveFlats aa=(ActiveFlats) lv.getItemAtPosition(position);
-                                                farray.remove(aa.getFlat_id());
+                                                farray.remove(aa.getFamily_id());
                                                 view.setSelected(true);
                                                 holder.total.replace(aa.getF_no()+" ","");
                                                // holder.total.replace(aa.getF_no()+" ","");
@@ -218,8 +217,7 @@ public class GateAdapter extends RecyclerView.Adapter<GateAdapter.ListViewHolder
                 mm.put("build_id",buildid);
                 mm.put("comm_id",commid);
                 mm.put("isin",false);
-                mm.put("e_checkin", FieldValue.serverTimestamp());
-                mm.put("e_checkout", FieldValue.serverTimestamp());
+                mm.put("time", FieldValue.serverTimestamp());
 
 
 
