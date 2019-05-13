@@ -17,7 +17,6 @@ public class Activebuilding {
     private List<String> b_array;
 
     public Activebuilding(){
-
     }
 
     public Activebuilding(String b_name, String b_flatformat, String b_houseno, String b_roadno, String b_district, String b_area, int b_tfloor, int b_tflat, String build_id, String comm_id, List<String> b_array) {

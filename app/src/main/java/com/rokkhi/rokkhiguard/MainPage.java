@@ -35,7 +35,7 @@ public class MainPage extends AppCompatActivity {
     ImageButton settings;
     FirebaseFirestore firebaseFirestore;
     SharedPreferences sharedPref;
-    AlertDialog alertDialog,alertDialog1;
+    AlertDialog alertDialog;
     String  buildid = "", commid = "";
 
 
@@ -61,6 +61,9 @@ public class MainPage extends AppCompatActivity {
         create= findViewById(R.id.profile);
         invitee= findViewById(R.id.invitee);
         settings = findViewById(R.id.settings);
+        vehicle = findViewById(R.id.vehicle);
+        child = findViewById(R.id.child);
+
         firebaseFirestore= FirebaseFirestore.getInstance();
         sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
         buildid = sharedPref.getString("buildid", "none");
@@ -86,7 +89,7 @@ public class MainPage extends AppCompatActivity {
         child.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(context, VehicleActivity.class);
+                Intent intent = new Intent(context, ChildrenList.class);
                 startActivity(intent);
             }
         });

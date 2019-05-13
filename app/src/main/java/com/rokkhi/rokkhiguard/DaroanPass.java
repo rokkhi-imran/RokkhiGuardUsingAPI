@@ -152,30 +152,43 @@ public class DaroanPass extends AppCompatActivity implements View.OnClickListene
                                     token=documentSnapshot.getString("g_token");
                                     tabpass= documentSnapshot.getString("mobilepass");
 
-
                                     editor.putString("pass",tabpass);
                                     editor.apply();
 
-                                    if(buildid!=null && !buildid.equals("none") && !buildid.isEmpty()){
-                                        String topic= buildid;
-                                        topic=topic+"guard";
-                                        FirebaseMessaging.getInstance().subscribeToTopic(topic).addOnSuccessListener(new OnSuccessListener<Void>() {
-                                            @Override
-                                            public void onSuccess(Void aVoid) {
 
-                                            }
-                                        });
+                                    firebaseFirestore.collection(getString(R.string.col_build)).document(buildid).get()
+                                            .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                                @Override
+                                                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                                    if(task.isSuccessful()){
+                                                        DocumentSnapshot documentSnapshot1= task.getResult();
+                                                        if(documentSnapshot1.exists()){
+                                                            String hname= documentSnapshot1.getString("b_name");
+                                                            homename.setText(hname);
 
-                                        String topic1= buildid;
-                                        topic1=topic1+"all";
 
-                                        FirebaseMessaging.getInstance().subscribeToTopic(topic1).addOnSuccessListener(new OnSuccessListener<Void>() {
-                                            @Override
-                                            public void onSuccess(Void aVoid) {
+                                                            String topic= buildid;
+                                                            topic=topic+"guard";
+                                                            FirebaseMessaging.getInstance().subscribeToTopic(topic).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                                @Override
+                                                                public void onSuccess(Void aVoid) {
 
-                                            }
-                                        });
-                                    }
+                                                                }
+                                                            });
+
+                                                            String topic1= buildid;
+                                                            topic1=topic1+"all";
+
+                                                            FirebaseMessaging.getInstance().subscribeToTopic(topic1).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                                @Override
+                                                                public void onSuccess(Void aVoid) {
+
+                                                                }
+                                                            });
+                                                        }
+                                                    }
+                                                }
+                                            });
 
 
                                     firebaseFirestore.collection(getString(R.string.col_community))
@@ -185,14 +198,14 @@ public class DaroanPass extends AppCompatActivity implements View.OnClickListene
                                             if(task.isSuccessful()){
                                                 DocumentSnapshot documentSnapshot1= task.getResult();
                                                 if(documentSnapshot1.exists()){
-                                                    String hname= documentSnapshot1.getString("c_name");
+
                                                     Boolean status= documentSnapshot1.getBoolean("c_status");
                                                     if(status==null || !status){
                                                         Log.d(TAG, "onComplete: ck4");
                                                         mAuth.signOut();
                                                     }
                                                     else{
-                                                        homename.setText(hname);
+                                                        //homename.setText(hname);
                                                         String topic= commid.replace("@","_");
                                                         topic=topic+"guard";
                                                         FirebaseMessaging.getInstance().subscribeToTopic(topic).addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -228,7 +241,7 @@ public class DaroanPass extends AppCompatActivity implements View.OnClickListene
 
                                             String tempToken=instanceIdResult.getToken();
 
-                                            if(!tempToken.equals(token))firebaseFirestore.collection(getString(R.string.col_phoneguards)).document(userid).update("g_token",instanceIdResult.getToken()
+                                            if(!tempToken.equals(token))firebaseFirestore.collection(getString(R.string.col_phoneguards)).document(phoneno).update("g_token",instanceIdResult.getToken()
                                             ,"activated",true)
                                                     .addOnCompleteListener(new OnCompleteListener<Void>() {
                                                         @Override

@@ -338,16 +338,14 @@ public class AddVisitor extends AppCompatActivity implements InviteeAdapter.MyIn
         doc.put("v_gpass", idcardno.getText().toString());
         doc.put("flat_id", selected.getFlat_id());
         doc.put("comm_id", selected.getComm_id());
-        doc.put("build_id", selected.getComm_id());
+        doc.put("build_id", selected.getBuild_id());
         doc.put("family_id", selected.getFamily_id());
         doc.put("v_vehicleno", "");
         doc.put("v_pic", "");
         doc.put("v_thumb", "");
         doc.put("isin",false);
         doc.put("response",1);
-
         doc.put("v_type","visitor");
-
         doc.put("v_array",ll);
 
         if(!linkFromSearch.isEmpty()){
