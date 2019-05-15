@@ -11,10 +11,6 @@ public class Vsearch {
     private String o_mail;
     private String v_type;
 
-
-
-
-
     public Vsearch() {
     }
 
