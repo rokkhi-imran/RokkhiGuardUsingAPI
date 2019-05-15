@@ -12,7 +12,6 @@ public class Invitees implements Parcelable {
     private String flat_id;
     private String comm_id;
     private String build_id;
-    private String family_id;
     private  String i_name;
     private  String i_phone;
     private  String i_purpose;
@@ -29,12 +28,11 @@ public class Invitees implements Parcelable {
     public Invitees(){
     }
 
-    public Invitees(String i_mail, String flat_id, String comm_id, String build_id, String family_id, String i_name, String i_phone, String i_purpose, String i_pic, String i_thumb, Date i_mtime, int i_tmem, String i_uid, String i_token, boolean hasdone, List<String> i_array) {
+    public Invitees(String i_mail, String flat_id, String comm_id, String build_id,  String i_name, String i_phone, String i_purpose, String i_pic, String i_thumb, Date i_mtime, int i_tmem, String i_uid, String i_token, boolean hasdone, List<String> i_array) {
         this.i_mail = i_mail;
         this.flat_id = flat_id;
         this.comm_id = comm_id;
         this.build_id = build_id;
-        this.family_id = family_id;
         this.i_name = i_name;
         this.i_phone = i_phone;
         this.i_purpose = i_purpose;
@@ -53,7 +51,6 @@ public class Invitees implements Parcelable {
         flat_id = in.readString();
         comm_id = in.readString();
         build_id = in.readString();
-        family_id = in.readString();
         i_name = in.readString();
         i_phone = in.readString();
         i_purpose = in.readString();
@@ -110,13 +107,7 @@ public class Invitees implements Parcelable {
         this.build_id = build_id;
     }
 
-    public String getFamily_id() {
-        return family_id;
-    }
 
-    public void setFamily_id(String family_id) {
-        this.family_id = family_id;
-    }
 
     public String getI_name() {
         return i_name;
@@ -217,7 +208,6 @@ public class Invitees implements Parcelable {
         dest.writeString(flat_id);
         dest.writeString(comm_id);
         dest.writeString(build_id);
-        dest.writeString(family_id);
         dest.writeString(i_name);
         dest.writeString(i_phone);
         dest.writeString(i_purpose);
@@ -229,4 +219,6 @@ public class Invitees implements Parcelable {
         dest.writeByte((byte) (hasdone ? 1 : 0));
         dest.writeStringList(i_array);
     }
+
+
 }

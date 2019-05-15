@@ -8,7 +8,6 @@ public class Parcels {
     private String build_id;
     private String comm_id;
     private String flat_id;
-    private String family_id;
     private String p_com;
     private String g_uid;
     private Date p_rtime;
@@ -21,11 +20,10 @@ public class Parcels {
     public Parcels(){
     }
 
-    public Parcels(String build_id, String comm_id, String flat_id, String family_id, String p_com, String g_uid, Date p_rtime, String p_type, String p_pic, String p_thumb, String p_uid, List<String> p_array) {
+    public Parcels(String build_id, String comm_id, String flat_id, String p_com, String g_uid, Date p_rtime, String p_type, String p_pic, String p_thumb, String p_uid, List<String> p_array) {
         this.build_id = build_id;
         this.comm_id = comm_id;
         this.flat_id = flat_id;
-        this.family_id = family_id;
         this.p_com = p_com;
         this.g_uid = g_uid;
         this.p_rtime = p_rtime;
@@ -58,14 +56,6 @@ public class Parcels {
 
     public void setFlat_id(String flat_id) {
         this.flat_id = flat_id;
-    }
-
-    public String getFamily_id() {
-        return family_id;
-    }
-
-    public void setFamily_id(String family_id) {
-        this.family_id = family_id;
     }
 
     public String getP_com() {

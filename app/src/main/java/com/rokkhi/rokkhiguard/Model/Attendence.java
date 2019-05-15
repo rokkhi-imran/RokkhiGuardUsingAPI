@@ -10,20 +10,20 @@ public class Attendence {
     private String build_id;
     private String comm_id;
     private Date time;
-    private List<String> fam_array;
+    private List<String> flat_array;
     private boolean isin;
 
     public Attendence(){
 
     }
 
-    public Attendence(String auto_id, String employee_id, String build_id, String comm_id, Date time, List<String> fam_array, boolean isin) {
+    public Attendence(String auto_id, String employee_id, String build_id, String comm_id, Date time, List<String> flat_array, boolean isin) {
         this.auto_id = auto_id;
         this.employee_id = employee_id;
         this.build_id = build_id;
         this.comm_id = comm_id;
         this.time = time;
-        this.fam_array = fam_array;
+        this.flat_array = flat_array;
         this.isin = isin;
     }
 
@@ -67,12 +67,12 @@ public class Attendence {
         this.time = time;
     }
 
-    public List<String> getFam_array() {
-        return fam_array;
+    public List<String> getFlat_array() {
+        return flat_array;
     }
 
-    public void setFam_array(List<String> fam_array) {
-        this.fam_array = fam_array;
+    public void setFlat_array(List<String> flat_array) {
+        this.flat_array = flat_array;
     }
 
     public boolean isIsin() {

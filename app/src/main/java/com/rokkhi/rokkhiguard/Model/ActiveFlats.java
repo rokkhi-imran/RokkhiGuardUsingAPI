@@ -9,19 +9,17 @@ public class ActiveFlats {
     private String comm_id;
     private String f_no;
     private List<String> f_array;
-    private String family_id;
 
     public ActiveFlats(){
 
     }
 
-    public ActiveFlats(String flat_id, String build_id, String comm_id, String f_no, List<String> f_array, String family_id) {
+    public ActiveFlats(String flat_id, String build_id, String comm_id, String f_no, List<String> f_array) {
         this.flat_id = flat_id;
         this.build_id = build_id;
         this.comm_id = comm_id;
         this.f_no = f_no;
         this.f_array = f_array;
-        this.family_id = family_id;
     }
 
     public String getFlat_id() {
@@ -62,13 +60,5 @@ public class ActiveFlats {
 
     public void setF_array(List<String> f_array) {
         this.f_array = f_array;
-    }
-
-    public String getFamily_id() {
-        return family_id;
-    }
-
-    public void setFamily_id(String family_id) {
-        this.family_id = family_id;
     }
 }

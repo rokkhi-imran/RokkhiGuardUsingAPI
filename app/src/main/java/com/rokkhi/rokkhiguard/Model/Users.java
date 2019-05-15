@@ -8,7 +8,6 @@ import java.util.List;
 public class Users {
 
     private String name;
-    private Date joining;
     private Date bday;
     private String gender;
     private String pic;
@@ -26,9 +25,8 @@ public class Users {
     public Users() {
     }
 
-    public Users(String name, Date joining, Date bday, String gender, String pic, String thumb, String phone, String mail, String token, boolean istoken, String userid, List<String> u_array) {
+    public Users(String name, Date bday, String gender, String pic, String thumb, String phone, String mail, String token, boolean istoken, String userid, List<String> u_array) {
         this.name = name;
-        this.joining = joining;
         this.bday = bday;
         this.gender = gender;
         this.pic = pic;
@@ -41,20 +39,13 @@ public class Users {
         this.u_array = u_array;
     }
 
+
     public String getName() {
         return name;
     }
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public Date getJoining() {
-        return joining;
-    }
-
-    public void setJoining(Date joining) {
-        this.joining = joining;
     }
 
     public Date getBday() {

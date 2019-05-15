@@ -17,14 +17,13 @@ public class Buildingchild {
     private String flat_id;
     private String flatno;
     private String build_id;
-    private String family_id;
     private List<String> m_array;
 
     public Buildingchild(){
 
     }
 
-    public Buildingchild(String mem_id, String who_add_number, boolean isactivated, Date endtime, String m_name, String m_pic, String m_thumb, Date m_bday, String m_gender, String flat_id, String flatno, String build_id, String family_id, List<String> m_array) {
+    public Buildingchild(String mem_id, String who_add_number, boolean isactivated, Date endtime, String m_name, String m_pic, String m_thumb, Date m_bday, String m_gender, String flat_id, String flatno, String build_id, List<String> m_array) {
         this.mem_id = mem_id;
         this.who_add_number = who_add_number;
         this.isactivated = isactivated;
@@ -37,9 +36,9 @@ public class Buildingchild {
         this.flat_id = flat_id;
         this.flatno = flatno;
         this.build_id = build_id;
-        this.family_id = family_id;
         this.m_array = m_array;
     }
+
 
     public String getMem_id() {
         return mem_id;
@@ -135,14 +134,6 @@ public class Buildingchild {
 
     public void setBuild_id(String build_id) {
         this.build_id = build_id;
-    }
-
-    public String getFamily_id() {
-        return family_id;
-    }
-
-    public void setFamily_id(String family_id) {
-        this.family_id = family_id;
     }
 
     public List<String> getM_array() {

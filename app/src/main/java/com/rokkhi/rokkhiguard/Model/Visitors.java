@@ -15,7 +15,6 @@ public class Visitors{
     private String flat_id;
     private String comm_id;
     private String build_id;
-    private String family_id;
     private String v_vehicleno;
     private String v_gpass;
     private Date v_checkin;
@@ -34,7 +33,7 @@ public class Visitors{
     }
 
 
-    public Visitors(String v_phone, String v_name, String v_pic, String v_thumb, String v_purpose, String v_mail, String v_where, String flat_id, String comm_id, String build_id, String family_id, String v_vehicleno, String v_gpass, Date v_checkin, Date v_checkout, String v_uid, boolean isin, int response, String v_type, List<String> v_array) {
+    public Visitors(String v_phone, String v_name, String v_pic, String v_thumb, String v_purpose, String v_mail, String v_where, String flat_id, String comm_id, String build_id, String v_vehicleno, String v_gpass, Date v_checkin, Date v_checkout, String v_uid, boolean isin, int response, String v_type, List<String> v_array) {
         this.v_phone = v_phone;
         this.v_name = v_name;
         this.v_pic = v_pic;
@@ -45,7 +44,6 @@ public class Visitors{
         this.flat_id = flat_id;
         this.comm_id = comm_id;
         this.build_id = build_id;
-        this.family_id = family_id;
         this.v_vehicleno = v_vehicleno;
         this.v_gpass = v_gpass;
         this.v_checkin = v_checkin;
@@ -135,14 +133,6 @@ public class Visitors{
 
     public void setBuild_id(String build_id) {
         this.build_id = build_id;
-    }
-
-    public String getFamily_id() {
-        return family_id;
-    }
-
-    public void setFamily_id(String family_id) {
-        this.family_id = family_id;
     }
 
     public String getV_vehicleno() {

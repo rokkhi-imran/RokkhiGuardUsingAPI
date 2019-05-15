@@ -1,23 +1,25 @@
 package com.rokkhi.rokkhiguard.Model;
 
+import java.util.Date;
+
 public class UDetails {
 
     private String user_id;
-    private String family_id;
     private String flat_id;
     private String build_id;
     private String comm_id;
+    private Date fjoindate;
 
     public UDetails(){
 
     }
 
-    public UDetails(String user_id, String family_id, String flat_id, String build_id, String comm_id) {
+    public UDetails(String user_id, String flat_id, String build_id, String comm_id, Date fjoindate) {
         this.user_id = user_id;
-        this.family_id = family_id;
         this.flat_id = flat_id;
         this.build_id = build_id;
         this.comm_id = comm_id;
+        this.fjoindate = fjoindate;
     }
 
     public String getUser_id() {
@@ -26,14 +28,6 @@ public class UDetails {
 
     public void setUser_id(String user_id) {
         this.user_id = user_id;
-    }
-
-    public String getFamily_id() {
-        return family_id;
-    }
-
-    public void setFamily_id(String family_id) {
-        this.family_id = family_id;
     }
 
     public String getFlat_id() {
@@ -58,5 +52,13 @@ public class UDetails {
 
     public void setComm_id(String comm_id) {
         this.comm_id = comm_id;
+    }
+
+    public Date getFjoindate() {
+        return fjoindate;
+    }
+
+    public void setFjoindate(Date fjoindate) {
+        this.fjoindate = fjoindate;
     }
 }

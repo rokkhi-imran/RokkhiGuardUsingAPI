@@ -15,13 +15,13 @@ public class Flats {
     private String f_dish;
     private String f_parking;
     private List<String> f_array;
-    private String family_id;
 
+    
     public Flats(){
 
     }
 
-    public Flats(String flat_id, String build_id, String comm_id, String f_no, String f_troom, String f_size, String f_rent, String f_internet, String f_dish, String f_parking, List<String> f_array, String family_id) {
+    public Flats(String flat_id, String build_id, String comm_id, String f_no, String f_troom, String f_size, String f_rent, String f_internet, String f_dish, String f_parking, List<String> f_array) {
         this.flat_id = flat_id;
         this.build_id = build_id;
         this.comm_id = comm_id;
@@ -33,9 +33,7 @@ public class Flats {
         this.f_dish = f_dish;
         this.f_parking = f_parking;
         this.f_array = f_array;
-        this.family_id = family_id;
     }
-
 
     public String getFlat_id() {
         return flat_id;
@@ -123,13 +121,5 @@ public class Flats {
 
     public void setF_array(List<String> f_array) {
         this.f_array = f_array;
-    }
-
-    public String getFamily_id() {
-        return family_id;
-    }
-
-    public void setFamily_id(String family_id) {
-        this.family_id = family_id;
     }
 }

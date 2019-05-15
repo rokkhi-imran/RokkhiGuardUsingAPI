@@ -10,7 +10,6 @@ public class GuardPhone {
     private String mobilepass;
 
     public GuardPhone(){
-
     }
 
     public GuardPhone(String phone, boolean activated, String g_token, String build_id, String comm_id, String mobilepass) {

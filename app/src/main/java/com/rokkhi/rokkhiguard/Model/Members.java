@@ -11,7 +11,6 @@ public class Members {
     private String m_name;
     private String m_phone;
     private String m_userid;
-    private String m_mail;
     private String m_pic;
     private String m_thumb;
     private Date m_bday;
@@ -21,14 +20,13 @@ public class Members {
     public Members(){
     }
 
-    public Members(boolean approve, String m_id, String who_add, String m_name, String m_phone, String m_userid, String m_mail, String m_pic, String m_thumb, Date m_bday, String m_gender, List<String> m_array) {
+    public Members(boolean approve, String m_id, String who_add, String m_name, String m_phone, String m_userid, String m_pic, String m_thumb, Date m_bday, String m_gender, List<String> m_array) {
         this.approve = approve;
         this.m_id = m_id;
         this.who_add = who_add;
         this.m_name = m_name;
         this.m_phone = m_phone;
         this.m_userid = m_userid;
-        this.m_mail = m_mail;
         this.m_pic = m_pic;
         this.m_thumb = m_thumb;
         this.m_bday = m_bday;
@@ -82,14 +80,6 @@ public class Members {
 
     public void setM_userid(String m_userid) {
         this.m_userid = m_userid;
-    }
-
-    public String getM_mail() {
-        return m_mail;
-    }
-
-    public void setM_mail(String m_mail) {
-        this.m_mail = m_mail;
     }
 
     public String getM_pic() {
