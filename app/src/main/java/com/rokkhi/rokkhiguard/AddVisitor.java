@@ -339,7 +339,6 @@ public class AddVisitor extends AppCompatActivity implements InviteeAdapter.MyIn
         doc.put("flat_id", selected.getFlat_id());
         doc.put("comm_id", selected.getComm_id());
         doc.put("build_id", selected.getBuild_id());
-        doc.put("family_id", selected.getFamily_id());
         doc.put("v_vehicleno", "");
         doc.put("v_pic", "");
         doc.put("v_thumb", "");
@@ -443,7 +442,7 @@ public class AddVisitor extends AppCompatActivity implements InviteeAdapter.MyIn
 
 
         boolean approve;
-        if(selected.getFamily_id()==null || selected.getFamily_id().isEmpty())approve=false;
+        if(!selected.isVaratia())approve=false;
         else approve=true;
 
         Log.d(TAG, "dialogconfirmation:  approve "+ approve);

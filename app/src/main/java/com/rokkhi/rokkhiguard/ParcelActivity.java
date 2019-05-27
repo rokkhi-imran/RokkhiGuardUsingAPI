@@ -493,7 +493,6 @@ public class ParcelActivity extends AppCompatActivity {
         }
         doc.put("p_type", typeselected);
         doc.put("flat_id", flatselected.getFlat_id());
-        doc.put("family_id", flatselected.getFamily_id());
         doc.put("p_pic", "");
         doc.put("p_thumb", "");
 

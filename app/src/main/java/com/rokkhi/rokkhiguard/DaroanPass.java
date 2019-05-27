@@ -63,7 +63,7 @@ public class DaroanPass extends AppCompatActivity implements View.OnClickListene
     SharedPreferences.Editor editor;
     String token="";
     String tabpass="";
-    String flatid = "", buildid = "", commid = "",famid="",userid="";
+    String flatid = "", buildid = "", commid = "",userid="";
     TextView homename;
 
     int flag=0;
@@ -84,7 +84,6 @@ public class DaroanPass extends AppCompatActivity implements View.OnClickListene
         flatid = sharedPref.getString("flatid", "none");
         buildid = sharedPref.getString("buildid", "none");
         commid = sharedPref.getString("commid", "none");
-        famid = sharedPref.getString("familyid", "none");
 
         firebaseFirestore= FirebaseFirestore.getInstance();
         editor=sharedPref.edit();

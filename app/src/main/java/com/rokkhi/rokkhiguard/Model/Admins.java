@@ -4,23 +4,24 @@ import java.util.List;
 
 public class Admins {
 
+
     private String user_id;
     private String build_id;
     private String comm_id;
     private String who_add;
     private String when_add;
+    private String type;
+    private boolean isflatOwner;
     private List<String> a_array;
 
-    public Admins(){
-
-    }
-
-    public Admins(String user_id, String build_id, String comm_id, String who_add, String when_add, List<String> a_array) {
+    public Admins(String user_id, String build_id, String comm_id, String who_add, String when_add, String type, boolean isflatOwner, List<String> a_array) {
         this.user_id = user_id;
         this.build_id = build_id;
         this.comm_id = comm_id;
         this.who_add = who_add;
         this.when_add = when_add;
+        this.type = type;
+        this.isflatOwner = isflatOwner;
         this.a_array = a_array;
     }
 
@@ -62,6 +63,22 @@ public class Admins {
 
     public void setWhen_add(String when_add) {
         this.when_add = when_add;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public boolean isIsflatOwner() {
+        return isflatOwner;
+    }
+
+    public void setIsflatOwner(boolean isflatOwner) {
+        this.isflatOwner = isflatOwner;
     }
 
     public List<String> getA_array() {

@@ -95,8 +95,8 @@ public class GateAdapter extends RecyclerView.Adapter<GateAdapter.ListViewHolder
 
 
                 myInterface.showprogressbar();
-                firebaseFirestore.collection(context.getString(R.string.col_sworker)).document(swroker.getS_id())
-                        .collection(context.getString(R.string.col_sflats)).get().addOnCompleteListener(
+                firebaseFirestore.collection(context.getString(R.string.col_activeflat)).
+            whereEqualTo("build_id",buildid).get().addOnCompleteListener(
                         new OnCompleteListener<QuerySnapshot>() {
                             @Override
                             public void onComplete(@NonNull Task<QuerySnapshot> task) {
@@ -141,7 +141,7 @@ public class GateAdapter extends RecyclerView.Adapter<GateAdapter.ListViewHolder
                                             mm.put("build_id",buildid);
                                             mm.put("comm_id",commid);
                                             mm.put("isin",true);
-                                            mm.put("fam_array",farray);
+                                            mm.put("flat_array",farray);
                                             mm.put("time", FieldValue.serverTimestamp());
                                             firebaseFirestore.collection(context.getString(R.string.col_attendance)).document(auto_id)
                                                     .set(mm)
@@ -178,13 +178,13 @@ public class GateAdapter extends RecyclerView.Adapter<GateAdapter.ListViewHolder
                                         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                                             if(!view.isSelected()){
                                                 ActiveFlats aa=(ActiveFlats) lv.getItemAtPosition(position);
-                                                farray.add(aa.getFamily_id());
+                                                farray.add(aa.getFlat_id());
                                                 view.setSelected(true);
                                                 holder.total=holder.total+aa.getF_no()+" ";
                                             }
                                             else{
                                                 ActiveFlats aa=(ActiveFlats) lv.getItemAtPosition(position);
-                                                farray.remove(aa.getFamily_id());
+                                                farray.remove(aa.getFlat_id());
                                                 view.setSelected(true);
                                                 holder.total.replace(aa.getF_no()+" ","");
                                                // holder.total.replace(aa.getF_no()+" ","");

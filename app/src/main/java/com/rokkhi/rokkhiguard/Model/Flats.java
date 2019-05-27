@@ -8,30 +8,37 @@ public class Flats {
     private String build_id;
     private String comm_id;
     private String f_no;
-    private String f_troom;
-    private String f_size;
-    private String f_rent;
+    private int f_troom;
+    private int f_twashroom;
+    private int f_tbelcony;
+    private int f_tdd;
+    private int f_size;
+    private int f_rent;
     private String f_internet;
     private String f_dish;
     private String f_parking;
+    private boolean isVaratia;
     private List<String> f_array;
 
-    
     public Flats(){
 
     }
 
-    public Flats(String flat_id, String build_id, String comm_id, String f_no, String f_troom, String f_size, String f_rent, String f_internet, String f_dish, String f_parking, List<String> f_array) {
+    public Flats(String flat_id, String build_id, String comm_id, String f_no, int f_troom, int f_twashroom, int f_tbelcony, int f_tdd, int f_size, int f_rent, String f_internet, String f_dish, String f_parking, boolean isVaratia, List<String> f_array) {
         this.flat_id = flat_id;
         this.build_id = build_id;
         this.comm_id = comm_id;
         this.f_no = f_no;
         this.f_troom = f_troom;
+        this.f_twashroom = f_twashroom;
+        this.f_tbelcony = f_tbelcony;
+        this.f_tdd = f_tdd;
         this.f_size = f_size;
         this.f_rent = f_rent;
         this.f_internet = f_internet;
         this.f_dish = f_dish;
         this.f_parking = f_parking;
+        this.isVaratia = isVaratia;
         this.f_array = f_array;
     }
 
@@ -67,27 +74,51 @@ public class Flats {
         this.f_no = f_no;
     }
 
-    public String getF_troom() {
+    public int getF_troom() {
         return f_troom;
     }
 
-    public void setF_troom(String f_troom) {
+    public void setF_troom(int f_troom) {
         this.f_troom = f_troom;
     }
 
-    public String getF_size() {
+    public int getF_twashroom() {
+        return f_twashroom;
+    }
+
+    public void setF_twashroom(int f_twashroom) {
+        this.f_twashroom = f_twashroom;
+    }
+
+    public int getF_tbelcony() {
+        return f_tbelcony;
+    }
+
+    public void setF_tbelcony(int f_tbelcony) {
+        this.f_tbelcony = f_tbelcony;
+    }
+
+    public int getF_tdd() {
+        return f_tdd;
+    }
+
+    public void setF_tdd(int f_tdd) {
+        this.f_tdd = f_tdd;
+    }
+
+    public int getF_size() {
         return f_size;
     }
 
-    public void setF_size(String f_size) {
+    public void setF_size(int f_size) {
         this.f_size = f_size;
     }
 
-    public String getF_rent() {
+    public int getF_rent() {
         return f_rent;
     }
 
-    public void setF_rent(String f_rent) {
+    public void setF_rent(int f_rent) {
         this.f_rent = f_rent;
     }
 
@@ -113,6 +144,14 @@ public class Flats {
 
     public void setF_parking(String f_parking) {
         this.f_parking = f_parking;
+    }
+
+    public boolean isVaratia() {
+        return isVaratia;
+    }
+
+    public void setVaratia(boolean varatia) {
+        isVaratia = varatia;
     }
 
     public List<String> getF_array() {

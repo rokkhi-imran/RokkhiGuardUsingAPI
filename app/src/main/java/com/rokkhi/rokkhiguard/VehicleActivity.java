@@ -310,54 +310,65 @@ public class VehicleActivity extends AppCompatActivity {
     }
 
 
-//    private String build_id;
-//    private String comm_id;
+//    private String v_phone;
+//    private String v_name;
+//    private String v_pic;
+//    private String v_thumb;
+//    private String v_purpose;
+//    private String v_mail;
+//    private String v_where;
 //    private String flat_id;
-//    private String family_id;
-//    private String phone;
-//    private String vehicle_number;
-//    private Date checkin;
-//    private Date checkout;
-//    private String name;
-//    private String pic;
-//    private String thumb;
-//    private String id; //auto
-//    private List<String> vehicle_array;
+//    private String comm_id;
+//    private String build_id;
+//    private String v_vehicleno;
+//    private String v_gpass;
+//    private Date v_checkin;
+//    private Date v_checkout;
+//    private String v_uid;
+//    private boolean isin;
+//    private int response;
+//    private String v_type;
+//    private List<String> v_array;
 
     public void upload() {
 
         Log.d(TAG, "upload: yyyy");
 
         doc = new HashMap<>();
-        doc.put("checkin", FieldValue.serverTimestamp());
-        doc.put("checkout", FieldValue.serverTimestamp());
-        doc.put("phone", phone.getText().toString());
+        doc.put("v_checkin", FieldValue.serverTimestamp());
+        doc.put("v_checkout", FieldValue.serverTimestamp());
+        doc.put("v_phone", phone.getText().toString());
+        doc.put("v_purpose", "");
+        doc.put("v_mail", "");
+        doc.put("v_where", "");
         doc.put("build_id", buildid);
         doc.put("comm_id", commid);
-        doc.put("vehicle_number", vehicleno.getText().toString());
-        doc.put("name", name.getText().toString());
+        doc.put("v_vehicleno", vehicleno.getText().toString());
+        doc.put("v_name", name.getText().toString());
         doc.put("flat_id", flatselected.getFlat_id());
-        doc.put("family_id", flatselected.getFamily_id());
-        doc.put("pic", "");
-        doc.put("thumb", "");
+        doc.put("v_pic", "");
+        doc.put("v_thumb", "");
+        doc.put("v_gpass", "");
+        doc.put("response", 0);
+        doc.put("v_type", "vehicle");
         doc.put("isin", true);
 
         List<String>ll= normalfunc.splitstring(name.getText().toString());
         ll.add(flatselected.getF_no());
         ll.addAll(normalfunc.splitchar(vehicleno.getText().toString().toLowerCase()));
 
-        doc.put("vehicle_array",ll);
+        doc.put("v_array",ll);
 
 
         // [END get_child_ref]
 
         vehicleid = firebaseFirestore
-                .collection(getString(R.string.col_vehicle)).document().getId();
+                .collection(getString(R.string.col_visitors)).document().getId();
 
-        doc.put("id", vehicleid);
+        doc.put("v_uid", vehicleid);
 
         photoRef = FirebaseStorage.getInstance().getReference()
-                .child("vehicle/" + vehicleid + "/pic");
+                .child("/visitors/" + vehicleid + "/pic");
 
 
         // Upload file to Firebase Storage
@@ -380,13 +391,13 @@ public class VehicleActivity extends AppCompatActivity {
                             photoRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                                 @Override
                                 public void onSuccess(Uri uri) {
-                                    doc.put("pic", uri.toString());
-                                    doc.put("thumb", uri.toString());
+                                    doc.put("v_pic", uri.toString());
+                                    doc.put("v_thumb", uri.toString());
                                     // Log.d(TAG, "onSuccess: yyyy");
                                     WriteBatch batch = firebaseFirestore.batch();
 
                                     DocumentReference off = firebaseFirestore
-                                            .collection(getString(R.string.col_vehicle)).
+                                            .collection(getString(R.string.col_visitors)).
                                                     document(vehicleid);
                                     batch.set(off, doc);
 
@@ -423,7 +434,7 @@ public class VehicleActivity extends AppCompatActivity {
             WriteBatch batch = firebaseFirestore.batch();
 
             DocumentReference off = firebaseFirestore
-                    .collection(getString(R.string.col_vehicle)).
+                    .collection(getString(R.string.col_visitors)).
                             document(vehicleid);
             batch.set(off, doc);
 

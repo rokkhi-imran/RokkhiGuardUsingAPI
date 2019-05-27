@@ -8,10 +8,8 @@ public class Community {
     private String comm_id;
     private String c_name;
     private String c_mail;
-    private String c_tbuilding;
-    private String c_tgate;
-    private String c_internet;
-    private String c_dish;
+    private int c_tbuilding;
+    private int c_tgate;
     private String c_type;
     private boolean c_status;
     private List<String> c_array;
@@ -22,21 +20,18 @@ public class Community {
 
     }
 
-    public Community(String comm_id, String c_name, String c_mail, String c_tbuilding, String c_tgate, String c_internet, String c_dish, String c_type, boolean c_status, List<String> c_array, List<String> contacts, List<String> address) {
+    public Community(String comm_id, String c_name, String c_mail, int c_tbuilding, int c_tgate, String c_type, boolean c_status, List<String> c_array, List<String> contacts, List<String> address) {
         this.comm_id = comm_id;
         this.c_name = c_name;
         this.c_mail = c_mail;
         this.c_tbuilding = c_tbuilding;
         this.c_tgate = c_tgate;
-        this.c_internet = c_internet;
-        this.c_dish = c_dish;
         this.c_type = c_type;
         this.c_status = c_status;
         this.c_array = c_array;
         this.contacts = contacts;
         this.address = address;
     }
-
 
     public String getComm_id() {
         return comm_id;
@@ -62,36 +57,20 @@ public class Community {
         this.c_mail = c_mail;
     }
 
-    public String getC_tbuilding() {
+    public int getC_tbuilding() {
         return c_tbuilding;
     }
 
-    public void setC_tbuilding(String c_tbuilding) {
+    public void setC_tbuilding(int c_tbuilding) {
         this.c_tbuilding = c_tbuilding;
     }
 
-    public String getC_tgate() {
+    public int getC_tgate() {
         return c_tgate;
     }
 
-    public void setC_tgate(String c_tgate) {
+    public void setC_tgate(int c_tgate) {
         this.c_tgate = c_tgate;
-    }
-
-    public String getC_internet() {
-        return c_internet;
-    }
-
-    public void setC_internet(String c_internet) {
-        this.c_internet = c_internet;
-    }
-
-    public String getC_dish() {
-        return c_dish;
-    }
-
-    public void setC_dish(String c_dish) {
-        this.c_dish = c_dish;
     }
 
     public String getC_type() {

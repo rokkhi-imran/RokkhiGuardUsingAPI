@@ -1,11 +1,14 @@
 package com.rokkhi.rokkhiguard.Model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.util.List;
 
-public class Buildings {
+public class Buildings implements Parcelable {
 
     private String b_name;
-    private String b_contacts;
+    private List<String>  b_contacts;
     private String b_flatformat;
     private String b_houseno;
     private String b_roadno;
@@ -13,18 +16,17 @@ public class Buildings {
     private String b_area;
     private int b_tfloor;
     private int b_tflat;
-    private String b_tparking;
-    private String b_tgate;
+    private int b_tparking;
+    private int b_tgate;
     private String build_id;
     private String comm_id;
-    private String b_servicecharge;
+    private int b_servicecharge;
     private List<String> b_array;
 
     public Buildings(){
-
     }
 
-    public Buildings(String b_name, String b_contacts, String b_flatformat, String b_houseno, String b_roadno, String b_district, String b_area, int b_tfloor, int b_tflat, String b_tparking, String b_tgate, String build_id, String comm_id, String b_servicecharge, List<String> b_array) {
+    public Buildings(String b_name, List<String> b_contacts, String b_flatformat, String b_houseno, String b_roadno, String b_district, String b_area, int b_tfloor, int b_tflat, int b_tparking, int b_tgate, String build_id, String comm_id, int b_servicecharge, List<String> b_array) {
         this.b_name = b_name;
         this.b_contacts = b_contacts;
         this.b_flatformat = b_flatformat;
@@ -42,6 +44,59 @@ public class Buildings {
         this.b_array = b_array;
     }
 
+    protected Buildings(Parcel in) {
+        b_name = in.readString();
+        b_contacts = in.createStringArrayList();
+        b_flatformat = in.readString();
+        b_houseno = in.readString();
+        b_roadno = in.readString();
+        b_district = in.readString();
+        b_area = in.readString();
+        b_tfloor = in.readInt();
+        b_tflat = in.readInt();
+        b_tparking = in.readInt();
+        b_tgate = in.readInt();
+        build_id = in.readString();
+        comm_id = in.readString();
+        b_servicecharge = in.readInt();
+        b_array = in.createStringArrayList();
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(b_name);
+        dest.writeStringList(b_contacts);
+        dest.writeString(b_flatformat);
+        dest.writeString(b_houseno);
+        dest.writeString(b_roadno);
+        dest.writeString(b_district);
+        dest.writeString(b_area);
+        dest.writeInt(b_tfloor);
+        dest.writeInt(b_tflat);
+        dest.writeInt(b_tparking);
+        dest.writeInt(b_tgate);
+        dest.writeString(build_id);
+        dest.writeString(comm_id);
+        dest.writeInt(b_servicecharge);
+        dest.writeStringList(b_array);
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    public static final Creator<Buildings> CREATOR = new Creator<Buildings>() {
+        @Override
+        public Buildings createFromParcel(Parcel in) {
+            return new Buildings(in);
+        }
+
+        @Override
+        public Buildings[] newArray(int size) {
+            return new Buildings[size];
+        }
+    };
 
     public String getB_name() {
         return b_name;
@@ -51,11 +106,11 @@ public class Buildings {
         this.b_name = b_name;
     }
 
-    public String getB_contacts() {
+    public List<String> getB_contacts() {
         return b_contacts;
     }
 
-    public void setB_contacts(String b_contacts) {
+    public void setB_contacts(List<String> b_contacts) {
         this.b_contacts = b_contacts;
     }
 
@@ -115,19 +170,19 @@ public class Buildings {
         this.b_tflat = b_tflat;
     }
 
-    public String getB_tparking() {
+    public int getB_tparking() {
         return b_tparking;
     }
 
-    public void setB_tparking(String b_tparking) {
+    public void setB_tparking(int b_tparking) {
         this.b_tparking = b_tparking;
     }
 
-    public String getB_tgate() {
+    public int getB_tgate() {
         return b_tgate;
     }
 
-    public void setB_tgate(String b_tgate) {
+    public void setB_tgate(int b_tgate) {
         this.b_tgate = b_tgate;
     }
 
@@ -147,11 +202,11 @@ public class Buildings {
         this.comm_id = comm_id;
     }
 
-    public String getB_servicecharge() {
+    public int getB_servicecharge() {
         return b_servicecharge;
     }
 
-    public void setB_servicecharge(String b_servicecharge) {
+    public void setB_servicecharge(int b_servicecharge) {
         this.b_servicecharge = b_servicecharge;
     }
 
