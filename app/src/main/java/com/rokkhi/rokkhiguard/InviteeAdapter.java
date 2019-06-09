@@ -202,7 +202,7 @@ public class InviteeAdapter extends RecyclerView.Adapter<InviteeAdapter.InviteeV
                         ll.add(invitee.getI_phone().toLowerCase());
 
                         Visitors visitor=new Visitors(invitee.getI_phone(),invitee.getI_name(),invitee.getI_pic(),invitee.getI_thumb(),invitee.getI_purpose(),invitee.getI_mail(),""
-                        ,invitee.getFlat_id(),invitee.getComm_id(),invitee.getBuild_id(),"",
+                        ,invitee.getFlat_id(),invitee.getF_no(),invitee.getComm_id(),invitee.getBuild_id(),"",
                                 "",date,date,id,true,1,"invitee",ll);
 
                         batch.set(setvisitorinoffice,visitor);

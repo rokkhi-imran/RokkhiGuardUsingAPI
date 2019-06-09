@@ -19,9 +19,6 @@ public class Users {
     private String userid; //auto id
     private List<String> u_array;
 
-
-
-
     public Users() {
     }
 

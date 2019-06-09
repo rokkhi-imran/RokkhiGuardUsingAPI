@@ -1,7 +1,6 @@
 package com.rokkhi.rokkhiguard.Model;
 
 import java.util.Date;
-import java.util.List;
 
 public class Attendence {
 
@@ -10,20 +9,21 @@ public class Attendence {
     private String build_id;
     private String comm_id;
     private Date time;
-    private List<String> flat_array;
+    private String flat_id;
+    private String f_no;
     private boolean isin;
 
     public Attendence(){
-
     }
 
-    public Attendence(String auto_id, String employee_id, String build_id, String comm_id, Date time, List<String> flat_array, boolean isin) {
+    public Attendence(String auto_id, String employee_id, String build_id, String comm_id, Date time, String flat_id, String f_no, boolean isin) {
         this.auto_id = auto_id;
         this.employee_id = employee_id;
         this.build_id = build_id;
         this.comm_id = comm_id;
         this.time = time;
-        this.flat_array = flat_array;
+        this.flat_id = flat_id;
+        this.f_no = f_no;
         this.isin = isin;
     }
 
@@ -67,12 +67,20 @@ public class Attendence {
         this.time = time;
     }
 
-    public List<String> getFlat_array() {
-        return flat_array;
+    public String getFlat_id() {
+        return flat_id;
     }
 
-    public void setFlat_array(List<String> flat_array) {
-        this.flat_array = flat_array;
+    public void setFlat_id(String flat_id) {
+        this.flat_id = flat_id;
+    }
+
+    public String getF_no() {
+        return f_no;
+    }
+
+    public void setF_no(String f_no) {
+        this.f_no = f_no;
     }
 
     public boolean isIsin() {

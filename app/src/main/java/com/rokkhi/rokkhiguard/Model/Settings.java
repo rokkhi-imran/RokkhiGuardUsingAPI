@@ -7,20 +7,20 @@ public class Settings {
     private boolean gCanSeePhone;
     private boolean h_status;
     private int h_fee;
+    private String mobilepass;
     private int isgedit;
-
-
 
     public Settings(){
 
     }
 
-    public Settings(String build_id, String comm_id, boolean gCanSeePhone, boolean h_status, int h_fee, int isgedit) {
+    public Settings(String build_id, String comm_id, boolean gCanSeePhone, boolean h_status, int h_fee, String mobilepass, int isgedit) {
         this.build_id = build_id;
         this.comm_id = comm_id;
         this.gCanSeePhone = gCanSeePhone;
         this.h_status = h_status;
         this.h_fee = h_fee;
+        this.mobilepass = mobilepass;
         this.isgedit = isgedit;
     }
 
@@ -62,6 +62,14 @@ public class Settings {
 
     public void setH_fee(int h_fee) {
         this.h_fee = h_fee;
+    }
+
+    public String getMobilepass() {
+        return mobilepass;
+    }
+
+    public void setMobilepass(String mobilepass) {
+        this.mobilepass = mobilepass;
     }
 
     public int getIsgedit() {

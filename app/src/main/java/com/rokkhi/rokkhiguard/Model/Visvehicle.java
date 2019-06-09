@@ -8,6 +8,7 @@ public class Visvehicle {
     private String build_id;
     private String comm_id;
     private String flat_id;
+    private String f_no;
     private String phone;
     private String vehicle_number;
     private Date checkin;
@@ -22,10 +23,11 @@ public class Visvehicle {
     public Visvehicle(){
     }
 
-    public Visvehicle(String build_id, String comm_id, String flat_id, String phone, String vehicle_number, Date checkin, Date checkout, String name, String pic, String thumb, String id, boolean isin, List<String> vehicle_array) {
+    public Visvehicle(String build_id, String comm_id, String flat_id, String f_no, String phone, String vehicle_number, Date checkin, Date checkout, String name, String pic, String thumb, String id, boolean isin, List<String> vehicle_array) {
         this.build_id = build_id;
         this.comm_id = comm_id;
         this.flat_id = flat_id;
+        this.f_no = f_no;
         this.phone = phone;
         this.vehicle_number = vehicle_number;
         this.checkin = checkin;
@@ -37,6 +39,7 @@ public class Visvehicle {
         this.isin = isin;
         this.vehicle_array = vehicle_array;
     }
+
 
     public String getBuild_id() {
         return build_id;
@@ -60,6 +63,14 @@ public class Visvehicle {
 
     public void setFlat_id(String flat_id) {
         this.flat_id = flat_id;
+    }
+
+    public String getF_no() {
+        return f_no;
+    }
+
+    public void setF_no(String f_no) {
+        this.f_no = f_no;
     }
 
     public String getPhone() {

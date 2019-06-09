@@ -237,7 +237,7 @@ public class CreateProfileforGuards extends AppCompatActivity {
         date= calendar.getTime();
 
         final Guards guards= new Guards(buildid,commid,guardname.getText().toString()
-        ,normalfunc.getRandomNumberString5(),"",date,normalfunc.futuredate(),"","","",
+        ,normalfunc.getRandomNumberString5(),"",date,normalfunc.futuredate(),"","","","",
                 phoneno ,id,ll);
 
 

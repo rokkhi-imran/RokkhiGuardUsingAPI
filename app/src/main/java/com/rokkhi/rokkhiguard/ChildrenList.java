@@ -33,8 +33,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.messaging.FirebaseMessaging;
-import com.rokkhi.rokkhiguard.Model.Buildingchild;
-import com.rokkhi.rokkhiguard.Model.Visitors;
+import com.rokkhi.rokkhiguard.Model.Child;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -46,7 +45,7 @@ public class ChildrenList extends AppCompatActivity implements ChildAdapter.MyIn
     private DocumentSnapshot lastVisible=null;
     private boolean isLastItemReached = false;
     private static final String TAG = "ChildrenList";
-    ArrayList<Buildingchild> list;
+    ArrayList<Child> list;
     RecyclerView recyclerView;
     ChildAdapter childAdapter;
     FirebaseUser user;
@@ -97,7 +96,7 @@ public class ChildrenList extends AppCompatActivity implements ChildAdapter.MyIn
 
 
         childref=firebaseFirestore.
-                collection(getString(R.string.col_buildchild));
+                collection(getString(R.string.col_child));
 
 
         getFirstQuery=childref.whereEqualTo("build_id",buildid).whereEqualTo("isactivated",true)
@@ -139,7 +138,7 @@ public class ChildrenList extends AppCompatActivity implements ChildAdapter.MyIn
                     Log.d(TAG, "onComplete: kotoboro "+task.getResult().size());
                     list = new ArrayList<>();
                     for (DocumentSnapshot document : task.getResult()) {
-                        Buildingchild buildingchild = document.toObject(Buildingchild.class);
+                        Child buildingchild = document.toObject(Child.class);
                         list.add(buildingchild);
                     }
                     progressBar.setVisibility(View.GONE);
@@ -199,8 +198,8 @@ public class ChildrenList extends AppCompatActivity implements ChildAdapter.MyIn
                                         // list.clear();
 
                                         for (DocumentSnapshot d : t.getResult()) {
-                                            Buildingchild buildingchild = d.toObject(Buildingchild.class);
-                                            list.add(buildingchild);
+                                            Child child = d.toObject(Child.class);
+                                            list.add(child);
                                         }
                                         shouldscrol=true;
                                         progressBar.setVisibility(View.GONE);

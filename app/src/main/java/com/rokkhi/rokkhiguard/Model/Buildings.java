@@ -3,12 +3,13 @@ package com.rokkhi.rokkhiguard.Model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.google.type.LatLng;
+
 import java.util.List;
 
 public class Buildings implements Parcelable {
 
     private String b_name;
-    private List<String>  b_contacts;
     private String b_flatformat;
     private String b_houseno;
     private String b_roadno;
@@ -20,15 +21,17 @@ public class Buildings implements Parcelable {
     private int b_tgate;
     private String build_id;
     private String comm_id;
+    private List<String> picurl;
+    private LatLng location;
     private int b_servicecharge;
     private List<String> b_array;
+    private boolean b_status;
 
-    public Buildings(){
+    public Buildings() {
     }
 
-    public Buildings(String b_name, List<String> b_contacts, String b_flatformat, String b_houseno, String b_roadno, String b_district, String b_area, int b_tfloor, int b_tflat, int b_tparking, int b_tgate, String build_id, String comm_id, int b_servicecharge, List<String> b_array) {
+    public Buildings(String b_name, String b_flatformat, String b_houseno, String b_roadno, String b_district, String b_area, int b_tfloor, int b_tflat, int b_tparking, int b_tgate, String build_id, String comm_id, List<String> picurl, LatLng location, int b_servicecharge, List<String> b_array, boolean b_status) {
         this.b_name = b_name;
-        this.b_contacts = b_contacts;
         this.b_flatformat = b_flatformat;
         this.b_houseno = b_houseno;
         this.b_roadno = b_roadno;
@@ -40,13 +43,16 @@ public class Buildings implements Parcelable {
         this.b_tgate = b_tgate;
         this.build_id = build_id;
         this.comm_id = comm_id;
+        this.picurl = picurl;
+        this.location = location;
         this.b_servicecharge = b_servicecharge;
         this.b_array = b_array;
+        this.b_status = b_status;
     }
+
 
     protected Buildings(Parcel in) {
         b_name = in.readString();
-        b_contacts = in.createStringArrayList();
         b_flatformat = in.readString();
         b_houseno = in.readString();
         b_roadno = in.readString();
@@ -58,14 +64,15 @@ public class Buildings implements Parcelable {
         b_tgate = in.readInt();
         build_id = in.readString();
         comm_id = in.readString();
+        picurl = in.createStringArrayList();
         b_servicecharge = in.readInt();
         b_array = in.createStringArrayList();
+        b_status = in.readByte() != 0;
     }
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(b_name);
-        dest.writeStringList(b_contacts);
         dest.writeString(b_flatformat);
         dest.writeString(b_houseno);
         dest.writeString(b_roadno);
@@ -77,8 +84,10 @@ public class Buildings implements Parcelable {
         dest.writeInt(b_tgate);
         dest.writeString(build_id);
         dest.writeString(comm_id);
+        dest.writeStringList(picurl);
         dest.writeInt(b_servicecharge);
         dest.writeStringList(b_array);
+        dest.writeByte((byte) (b_status ? 1 : 0));
     }
 
     @Override
@@ -104,14 +113,6 @@ public class Buildings implements Parcelable {
 
     public void setB_name(String b_name) {
         this.b_name = b_name;
-    }
-
-    public List<String> getB_contacts() {
-        return b_contacts;
-    }
-
-    public void setB_contacts(List<String> b_contacts) {
-        this.b_contacts = b_contacts;
     }
 
     public String getB_flatformat() {
@@ -202,6 +203,22 @@ public class Buildings implements Parcelable {
         this.comm_id = comm_id;
     }
 
+    public List<String> getPicurl() {
+        return picurl;
+    }
+
+    public void setPicurl(List<String> picurl) {
+        this.picurl = picurl;
+    }
+
+    public LatLng getLocation() {
+        return location;
+    }
+
+    public void setLocation(LatLng location) {
+        this.location = location;
+    }
+
     public int getB_servicecharge() {
         return b_servicecharge;
     }
@@ -216,5 +233,13 @@ public class Buildings implements Parcelable {
 
     public void setB_array(List<String> b_array) {
         this.b_array = b_array;
+    }
+
+    public boolean isB_status() {
+        return b_status;
+    }
+
+    public void setB_status(boolean b_status) {
+        this.b_status = b_status;
     }
 }

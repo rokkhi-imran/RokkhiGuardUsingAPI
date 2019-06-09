@@ -1,5 +1,7 @@
 package com.rokkhi.rokkhiguard.Model;
 
+import com.google.type.LatLng;
+
 import java.util.List;
 
 public class Activebuilding {
@@ -14,12 +16,15 @@ public class Activebuilding {
     private int b_tflat;
     private String build_id;
     private String comm_id;
+    private boolean b_status;
     private List<String> b_array;
+    private List<String> picurl;
+    private LatLng location;
 
     public Activebuilding(){
     }
 
-    public Activebuilding(String b_name, String b_flatformat, String b_houseno, String b_roadno, String b_district, String b_area, int b_tfloor, int b_tflat, String build_id, String comm_id, List<String> b_array) {
+    public Activebuilding(String b_name, String b_flatformat, String b_houseno, String b_roadno, String b_district, String b_area, int b_tfloor, int b_tflat, String build_id, String comm_id, boolean b_status, List<String> b_array, List<String> picurl, LatLng location) {
         this.b_name = b_name;
         this.b_flatformat = b_flatformat;
         this.b_houseno = b_houseno;
@@ -30,9 +35,11 @@ public class Activebuilding {
         this.b_tflat = b_tflat;
         this.build_id = build_id;
         this.comm_id = comm_id;
+        this.b_status = b_status;
         this.b_array = b_array;
+        this.picurl = picurl;
+        this.location = location;
     }
-
 
     public String getB_name() {
         return b_name;
@@ -114,11 +121,35 @@ public class Activebuilding {
         this.comm_id = comm_id;
     }
 
+    public boolean isB_status() {
+        return b_status;
+    }
+
+    public void setB_status(boolean b_status) {
+        this.b_status = b_status;
+    }
+
     public List<String> getB_array() {
         return b_array;
     }
 
     public void setB_array(List<String> b_array) {
         this.b_array = b_array;
+    }
+
+    public List<String> getPicurl() {
+        return picurl;
+    }
+
+    public void setPicurl(List<String> picurl) {
+        this.picurl = picurl;
+    }
+
+    public LatLng getLocation() {
+        return location;
+    }
+
+    public void setLocation(LatLng location) {
+        this.location = location;
     }
 }

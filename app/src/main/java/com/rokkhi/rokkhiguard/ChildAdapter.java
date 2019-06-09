@@ -1,15 +1,9 @@
 package com.rokkhi.rokkhiguard;
 
-import android.Manifest;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
-import android.net.Uri;
-import android.os.Build;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
@@ -20,22 +14,12 @@ import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.rokkhi.rokkhiguard.Model.ActiveFlats;
-import com.rokkhi.rokkhiguard.Model.Buildingchild;
-import com.rokkhi.rokkhiguard.Model.Visitors;
+import com.rokkhi.rokkhiguard.Model.Child;
 import com.rokkhi.rokkhiguard.Utils.UniversalImageLoader;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.Locale;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -52,7 +36,7 @@ public class ChildAdapter extends RecyclerView.Adapter<ChildAdapter.ChildViewHol
     private MyInterface myInterface;
 
 
-    private ArrayList<Buildingchild> mchildFilterList;
+    private ArrayList<Child> mchildFilterList;
 
     private LayoutInflater mInflater;
 
@@ -60,14 +44,14 @@ public class ChildAdapter extends RecyclerView.Adapter<ChildAdapter.ChildViewHol
 
 
 
-    public ArrayList<Buildingchild> list;
+    public ArrayList<Child> list;
     private static final String TAG = "ChildAdapter";
     SharedPreferences sharedPref;
 
     private Context context;
     private FirebaseFirestore firebaseFirestore;
 
-    ChildAdapter(ArrayList<Buildingchild> list, Context context) {
+    ChildAdapter(ArrayList<Child> list, Context context) {
         this.list = list;
         mchildFilterList = list;
         this.context = context;
@@ -108,7 +92,7 @@ public class ChildAdapter extends RecyclerView.Adapter<ChildAdapter.ChildViewHol
     @Override
     public void onBindViewHolder(@NonNull final ChildViewHolder holder, int position) {
 
-        final Buildingchild child = list.get(position);
+        final Child child = list.get(position);
         holder.name.setText(child.getM_name());
         UniversalImageLoader.setImage(child.getM_thumb(), holder.propic, null, "");
         if(child.isIsactivated()){
@@ -123,7 +107,7 @@ public class ChildAdapter extends RecyclerView.Adapter<ChildAdapter.ChildViewHol
             @Override
             public void onClick(View view) {
 
-                myInterface.callparents(child.getWho_add_number());
+                myInterface.callparents(child.getWho_add());
 
             }
         });
@@ -180,11 +164,11 @@ public class ChildAdapter extends RecyclerView.Adapter<ChildAdapter.ChildViewHol
 
             if (constraint != null && constraint.length() > 0) {
 
-                ArrayList<Buildingchild> filterList = new ArrayList<>();
+                ArrayList<Child> filterList = new ArrayList<>();
 
                 for (int i = 0; i < mchildFilterList.size(); i++) {
                     if (mchildFilterList.get(i).getM_name().toLowerCase().contains(constraint.toString().toLowerCase())
-                            || mchildFilterList.get(i).getFlatno().toLowerCase().contains(constraint.toString().toLowerCase()
+                            || mchildFilterList.get(i).getF_no().toLowerCase().contains(constraint.toString().toLowerCase()
                     )) {
                         filterList.add(mchildFilterList.get(i));
                     }
@@ -213,7 +197,7 @@ public class ChildAdapter extends RecyclerView.Adapter<ChildAdapter.ChildViewHol
         protected void publishResults(CharSequence constraint,
                                       FilterResults results) {
 
-            list = (ArrayList<Buildingchild>) results.values;
+            list = (ArrayList<Child>) results.values;
 
             notifyDataSetChanged();
 

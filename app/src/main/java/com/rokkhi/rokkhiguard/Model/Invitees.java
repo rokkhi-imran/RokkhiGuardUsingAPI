@@ -10,8 +10,10 @@ public class Invitees implements Parcelable {
 
     private String i_mail;
     private String flat_id;
+    private String f_no;
     private String comm_id;
     private String build_id;
+    private String user_id;
     private  String i_name;
     private  String i_phone;
     private  String i_purpose;
@@ -28,11 +30,13 @@ public class Invitees implements Parcelable {
     public Invitees(){
     }
 
-    public Invitees(String i_mail, String flat_id, String comm_id, String build_id,  String i_name, String i_phone, String i_purpose, String i_pic, String i_thumb, Date i_mtime, int i_tmem, String i_uid, String i_token, boolean hasdone, List<String> i_array) {
+    public Invitees(String i_mail, String flat_id, String f_no, String comm_id, String build_id, String user_id, String i_name, String i_phone, String i_purpose, String i_pic, String i_thumb, Date i_mtime, int i_tmem, String i_uid, String i_token, boolean hasdone, List<String> i_array) {
         this.i_mail = i_mail;
         this.flat_id = flat_id;
+        this.f_no = f_no;
         this.comm_id = comm_id;
         this.build_id = build_id;
+        this.user_id = user_id;
         this.i_name = i_name;
         this.i_phone = i_phone;
         this.i_purpose = i_purpose;
@@ -46,11 +50,14 @@ public class Invitees implements Parcelable {
         this.i_array = i_array;
     }
 
+
     protected Invitees(Parcel in) {
         i_mail = in.readString();
         flat_id = in.readString();
+        f_no = in.readString();
         comm_id = in.readString();
         build_id = in.readString();
+        user_id = in.readString();
         i_name = in.readString();
         i_phone = in.readString();
         i_purpose = in.readString();
@@ -61,6 +68,31 @@ public class Invitees implements Parcelable {
         i_token = in.readString();
         hasdone = in.readByte() != 0;
         i_array = in.createStringArrayList();
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(i_mail);
+        dest.writeString(flat_id);
+        dest.writeString(f_no);
+        dest.writeString(comm_id);
+        dest.writeString(build_id);
+        dest.writeString(user_id);
+        dest.writeString(i_name);
+        dest.writeString(i_phone);
+        dest.writeString(i_purpose);
+        dest.writeString(i_pic);
+        dest.writeString(i_thumb);
+        dest.writeInt(i_tmem);
+        dest.writeString(i_uid);
+        dest.writeString(i_token);
+        dest.writeByte((byte) (hasdone ? 1 : 0));
+        dest.writeStringList(i_array);
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
     }
 
     public static final Creator<Invitees> CREATOR = new Creator<Invitees>() {
@@ -91,6 +123,14 @@ public class Invitees implements Parcelable {
         this.flat_id = flat_id;
     }
 
+    public String getF_no() {
+        return f_no;
+    }
+
+    public void setF_no(String f_no) {
+        this.f_no = f_no;
+    }
+
     public String getComm_id() {
         return comm_id;
     }
@@ -107,7 +147,13 @@ public class Invitees implements Parcelable {
         this.build_id = build_id;
     }
 
+    public String getUser_id() {
+        return user_id;
+    }
 
+    public void setUser_id(String user_id) {
+        this.user_id = user_id;
+    }
 
     public String getI_name() {
         return i_name;
@@ -196,29 +242,4 @@ public class Invitees implements Parcelable {
     public void setI_array(List<String> i_array) {
         this.i_array = i_array;
     }
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(i_mail);
-        dest.writeString(flat_id);
-        dest.writeString(comm_id);
-        dest.writeString(build_id);
-        dest.writeString(i_name);
-        dest.writeString(i_phone);
-        dest.writeString(i_purpose);
-        dest.writeString(i_pic);
-        dest.writeString(i_thumb);
-        dest.writeInt(i_tmem);
-        dest.writeString(i_uid);
-        dest.writeString(i_token);
-        dest.writeByte((byte) (hasdone ? 1 : 0));
-        dest.writeStringList(i_array);
-    }
-
-
 }

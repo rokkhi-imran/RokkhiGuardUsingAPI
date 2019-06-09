@@ -1,5 +1,6 @@
 package com.rokkhi.rokkhiguard.Model;
 
+import java.util.Date;
 import java.util.List;
 
 public class Admins {
@@ -9,12 +10,12 @@ public class Admins {
     private String build_id;
     private String comm_id;
     private String who_add;
-    private String when_add;
+    private Date when_add;
     private String type;
     private boolean isflatOwner;
     private List<String> a_array;
 
-    public Admins(String user_id, String build_id, String comm_id, String who_add, String when_add, String type, boolean isflatOwner, List<String> a_array) {
+    public Admins(String user_id, String build_id, String comm_id, String who_add, Date when_add, String type, boolean isflatOwner, List<String> a_array) {
         this.user_id = user_id;
         this.build_id = build_id;
         this.comm_id = comm_id;
@@ -57,11 +58,11 @@ public class Admins {
         this.who_add = who_add;
     }
 
-    public String getWhen_add() {
+    public Date getWhen_add() {
         return when_add;
     }
 
-    public void setWhen_add(String when_add) {
+    public void setWhen_add(Date when_add) {
         this.when_add = when_add;
     }
 

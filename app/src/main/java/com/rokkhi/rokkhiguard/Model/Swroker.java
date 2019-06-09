@@ -18,16 +18,11 @@ public class Swroker {
     private String nid;
     private String type;
     private String s_pass;
-   // private List<String> build_array;
-    //0123 //TODO ekhane flat name a alada collection thakbe
-    //private List<Integer> salary;     //0123 //TODO eitao ntn collection a add hbe
     private List<String> address;
     private List<String> s_array;
 
-
     public Swroker(){
     }
-
 
     public Swroker(String s_id, String s_name, String s_phone, String s_pic, String s_thumb, String s_mail, Date s_bday, Date experience, int starttime, int endtime, String nid, String type, String s_pass, List<String> address, List<String> s_array) {
         this.s_id = s_id;
@@ -46,6 +41,7 @@ public class Swroker {
         this.address = address;
         this.s_array = s_array;
     }
+
 
     public String getS_id() {
         return s_id;
@@ -158,7 +154,6 @@ public class Swroker {
     public void setAddress(List<String> address) {
         this.address = address;
     }
-
 
     public List<String> getS_array() {
         return s_array;

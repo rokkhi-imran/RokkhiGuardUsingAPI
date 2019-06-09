@@ -1,8 +1,11 @@
 package com.rokkhi.rokkhiguard.Model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.util.List;
 
-public class Vehicle {
+public class Vehicle implements Parcelable {
 
     private String description;
     private String type;
@@ -10,7 +13,7 @@ public class Vehicle {
     private String pic;
     private String thumb;
     private String vehicle_id; //auto
-    private String whose; //auto
+    private String whose; //userid
     private List<String> vehicle_array;
 
     public Vehicle(){
@@ -26,6 +29,29 @@ public class Vehicle {
         this.whose = whose;
         this.vehicle_array = vehicle_array;
     }
+
+    protected Vehicle(Parcel in) {
+        description = in.readString();
+        type = in.readString();
+        vehicle_number = in.readString();
+        pic = in.readString();
+        thumb = in.readString();
+        vehicle_id = in.readString();
+        whose = in.readString();
+        vehicle_array = in.createStringArrayList();
+    }
+
+    public static final Creator<Vehicle> CREATOR = new Creator<Vehicle>() {
+        @Override
+        public Vehicle createFromParcel(Parcel in) {
+            return new Vehicle(in);
+        }
+
+        @Override
+        public Vehicle[] newArray(int size) {
+            return new Vehicle[size];
+        }
+    };
 
     public String getDescription() {
         return description;
@@ -89,5 +115,22 @@ public class Vehicle {
 
     public void setVehicle_array(List<String> vehicle_array) {
         this.vehicle_array = vehicle_array;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(description);
+        dest.writeString(type);
+        dest.writeString(vehicle_number);
+        dest.writeString(pic);
+        dest.writeString(thumb);
+        dest.writeString(vehicle_id);
+        dest.writeString(whose);
+        dest.writeStringList(vehicle_array);
     }
 }
