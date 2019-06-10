@@ -3,8 +3,6 @@ package com.rokkhi.rokkhiguard.Model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.google.type.LatLng;
-
 import java.util.List;
 
 public class Buildings implements Parcelable {
@@ -22,15 +20,17 @@ public class Buildings implements Parcelable {
     private String build_id;
     private String comm_id;
     private List<String> picurl;
-    private LatLng location;
+    private double latitude;
+    private double longitude;
     private int b_servicecharge;
     private List<String> b_array;
     private boolean b_status;
 
-    public Buildings() {
+    public Buildings(){
     }
 
-    public Buildings(String b_name, String b_flatformat, String b_houseno, String b_roadno, String b_district, String b_area, int b_tfloor, int b_tflat, int b_tparking, int b_tgate, String build_id, String comm_id, List<String> picurl, LatLng location, int b_servicecharge, List<String> b_array, boolean b_status) {
+
+    public Buildings(String b_name, String b_flatformat, String b_houseno, String b_roadno, String b_district, String b_area, int b_tfloor, int b_tflat, int b_tparking, int b_tgate, String build_id, String comm_id, List<String> picurl, double latitude, double longitude, int b_servicecharge, List<String> b_array, boolean b_status) {
         this.b_name = b_name;
         this.b_flatformat = b_flatformat;
         this.b_houseno = b_houseno;
@@ -44,12 +44,12 @@ public class Buildings implements Parcelable {
         this.build_id = build_id;
         this.comm_id = comm_id;
         this.picurl = picurl;
-        this.location = location;
+        this.latitude = latitude;
+        this.longitude = longitude;
         this.b_servicecharge = b_servicecharge;
         this.b_array = b_array;
         this.b_status = b_status;
     }
-
 
     protected Buildings(Parcel in) {
         b_name = in.readString();
@@ -65,6 +65,8 @@ public class Buildings implements Parcelable {
         build_id = in.readString();
         comm_id = in.readString();
         picurl = in.createStringArrayList();
+        latitude = in.readDouble();
+        longitude = in.readDouble();
         b_servicecharge = in.readInt();
         b_array = in.createStringArrayList();
         b_status = in.readByte() != 0;
@@ -85,6 +87,8 @@ public class Buildings implements Parcelable {
         dest.writeString(build_id);
         dest.writeString(comm_id);
         dest.writeStringList(picurl);
+        dest.writeDouble(latitude);
+        dest.writeDouble(longitude);
         dest.writeInt(b_servicecharge);
         dest.writeStringList(b_array);
         dest.writeByte((byte) (b_status ? 1 : 0));
@@ -211,12 +215,20 @@ public class Buildings implements Parcelable {
         this.picurl = picurl;
     }
 
-    public LatLng getLocation() {
-        return location;
+    public double getLatitude() {
+        return latitude;
     }
 
-    public void setLocation(LatLng location) {
-        this.location = location;
+    public void setLatitude(double latitude) {
+        this.latitude = latitude;
+    }
+
+    public double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(double longitude) {
+        this.longitude = longitude;
     }
 
     public int getB_servicecharge() {

@@ -1,7 +1,5 @@
 package com.rokkhi.rokkhiguard.Model;
 
-import com.google.type.LatLng;
-
 import java.util.List;
 
 public class Activebuilding {
@@ -19,12 +17,13 @@ public class Activebuilding {
     private boolean b_status;
     private List<String> b_array;
     private List<String> picurl;
-    private LatLng location;
+    private double latitude;
+    private double longitude;
 
     public Activebuilding(){
     }
 
-    public Activebuilding(String b_name, String b_flatformat, String b_houseno, String b_roadno, String b_district, String b_area, int b_tfloor, int b_tflat, String build_id, String comm_id, boolean b_status, List<String> b_array, List<String> picurl, LatLng location) {
+    public Activebuilding(String b_name, String b_flatformat, String b_houseno, String b_roadno, String b_district, String b_area, int b_tfloor, int b_tflat, String build_id, String comm_id, boolean b_status, List<String> b_array, List<String> picurl, double latitude, double longitude) {
         this.b_name = b_name;
         this.b_flatformat = b_flatformat;
         this.b_houseno = b_houseno;
@@ -38,7 +37,8 @@ public class Activebuilding {
         this.b_status = b_status;
         this.b_array = b_array;
         this.picurl = picurl;
-        this.location = location;
+        this.latitude = latitude;
+        this.longitude = longitude;
     }
 
     public String getB_name() {
@@ -145,11 +145,19 @@ public class Activebuilding {
         this.picurl = picurl;
     }
 
-    public LatLng getLocation() {
-        return location;
+    public double getLatitude() {
+        return latitude;
     }
 
-    public void setLocation(LatLng location) {
-        this.location = location;
+    public void setLatitude(double latitude) {
+        this.latitude = latitude;
+    }
+
+    public double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(double longitude) {
+        this.longitude = longitude;
     }
 }

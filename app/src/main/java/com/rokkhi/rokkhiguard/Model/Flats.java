@@ -17,14 +17,13 @@ public class Flats {
     private String f_internet;
     private String f_dish;
     private String f_parking;
-    private boolean isVaratia;
+    private boolean isVacant;
     private List<String> f_array;
 
     public Flats(){
-
     }
 
-    public Flats(String flat_id, String build_id, String comm_id, String f_no, int f_troom, int f_twashroom, int f_tbelcony, int f_tdd, int f_size, int f_rent, String f_internet, String f_dish, String f_parking, boolean isVaratia, List<String> f_array) {
+    public Flats(String flat_id, String build_id, String comm_id, String f_no, int f_troom, int f_twashroom, int f_tbelcony, int f_tdd, int f_size, int f_rent, String f_internet, String f_dish, String f_parking, boolean isVacant, List<String> f_array) {
         this.flat_id = flat_id;
         this.build_id = build_id;
         this.comm_id = comm_id;
@@ -38,9 +37,10 @@ public class Flats {
         this.f_internet = f_internet;
         this.f_dish = f_dish;
         this.f_parking = f_parking;
-        this.isVaratia = isVaratia;
+        this.isVacant = isVacant;
         this.f_array = f_array;
     }
+
 
     public String getFlat_id() {
         return flat_id;
@@ -146,12 +146,12 @@ public class Flats {
         this.f_parking = f_parking;
     }
 
-    public boolean isVaratia() {
-        return isVaratia;
+    public boolean isVacant() {
+        return isVacant;
     }
 
-    public void setVaratia(boolean varatia) {
-        isVaratia = varatia;
+    public void setVacant(boolean vacant) {
+        isVacant = vacant;
     }
 
     public List<String> getF_array() {

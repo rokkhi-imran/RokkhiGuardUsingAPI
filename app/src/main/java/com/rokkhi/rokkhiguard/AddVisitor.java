@@ -442,7 +442,7 @@ public class AddVisitor extends AppCompatActivity implements InviteeAdapter.MyIn
 
 
         boolean approve;
-        if(!selected.isVaratia())approve=false;
+        if(!selected.isVacant())approve=false;
         else approve=true;
 
         Log.d(TAG, "dialogconfirmation:  approve "+ approve);

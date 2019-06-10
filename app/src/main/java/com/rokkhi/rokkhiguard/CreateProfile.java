@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.os.SystemClock;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -27,6 +28,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -35,13 +37,17 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.WriteBatch;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.rokkhi.rokkhiguard.Model.ActiveFlats;
+import com.rokkhi.rokkhiguard.Model.Flats;
+import com.rokkhi.rokkhiguard.Model.SLastHistory;
 import com.rokkhi.rokkhiguard.Utils.Normalfunc;
 import com.rokkhi.rokkhiguard.Utils.StringAdapter;
 import com.rokkhi.rokkhiguard.Utils.UniversalImageLoader;
@@ -68,8 +74,7 @@ public class CreateProfile extends AppCompatActivity {
     ArrayList<ActiveFlats> activeFlats;
     EditText username, phone,type,flats;
     Button done;
-    Map<String, Object> doc;
-
+    Map<String, Object> doc,shistory;
     String mFileUri = "";
     Context context;
     FirebaseFirestore firebaseFirestore;
@@ -78,7 +83,6 @@ public class CreateProfile extends AppCompatActivity {
     private static final String TAG = "CreateProfile";
 
     private long mLastClickTime = 0;
-
     SharedPreferences.Editor editor;
     SharedPreferences sharedPref;
     ProgressBar progressBar;
@@ -87,6 +91,8 @@ public class CreateProfile extends AppCompatActivity {
     String typeselected;
     ActiveFlats flatselected;
     Normalfunc normalfunc;
+    List<ActiveFlats> historyFlats;
+    String totaltext="";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -107,6 +113,7 @@ public class CreateProfile extends AppCompatActivity {
         myCalendar = Calendar.getInstance();
         type= findViewById(R.id.user_wtype);
         flats= findViewById(R.id.user_flat);
+        historyFlats=new ArrayList<>();
 
 
 
@@ -171,6 +178,10 @@ public class CreateProfile extends AppCompatActivity {
         final EditText editText = convertView.findViewById(R.id.sear);
         final ListView lv = (ListView) convertView.findViewById(R.id.listView1);
         final Button done = convertView.findViewById(R.id.done);
+        final TextView tt= convertView.findViewById(R.id.selected);
+        tt.setVisibility(View.VISIBLE);
+        totaltext="";
+
         alertcompany.setView(convertView);
         alertcompany.setCancelable(false);
         //valueAdapter.notifyDataSetChanged();
@@ -209,7 +220,24 @@ public class CreateProfile extends AppCompatActivity {
 //                type.setText(typeselected);
 //                alertcompany.dismiss();
 
-                view.setSelected(true);
+                ActiveFlats ss= (ActiveFlats) lv.getItemAtPosition(position);
+
+                if(!view.isSelected()){
+                    view.setSelected(true);
+                    view.setBackgroundColor(ContextCompat.getColor(context,R.color.grey));
+                    historyFlats.add(ss);
+                    totaltext=totaltext+" "+ss.getF_no();
+                    tt.setText(totaltext);
+                }
+                else{
+                    view.setSelected(false);
+                    view.setBackgroundColor(ContextCompat.getColor(context,R.color.white));
+                    historyFlats.remove(ss);
+                    totaltext= totaltext.replace(ss.getF_no(),"");
+                    tt.setText(totaltext);
+                }
+
+
             }
         });
 
@@ -409,6 +437,7 @@ public class CreateProfile extends AppCompatActivity {
 
         doc = new HashMap<>();
         doc.put("s_name", username.getText().toString());
+        doc.put("s_id", s_id);
         doc.put("s_phone", phone.getText().toString());
         doc.put("s_mail", "");
         doc.put("s_pic", "");
@@ -429,6 +458,9 @@ public class CreateProfile extends AppCompatActivity {
 
 
 
+
+
+
         photoRef = FirebaseStorage.getInstance().getReference()
                 .child("sworker/" + phone.getText().toString() + "/pic");
 
@@ -436,7 +468,7 @@ public class CreateProfile extends AppCompatActivity {
         // Upload file to Firebase Storage
         Log.d(TAG, "uploadFromUri:dst:" + photoRef.getPath());
         if (bitmap != null) {
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            final ByteArrayOutputStream baos = new ByteArrayOutputStream();
             bitmap.compress(Bitmap.CompressFormat.JPEG, 90, baos);
 
             byte[] data = baos.toByteArray();
@@ -455,8 +487,33 @@ public class CreateProfile extends AppCompatActivity {
                                 public void onSuccess(Uri uri) {
                                     doc.put("s_pic", uri.toString());
                                     doc.put("s_thumb", uri.toString());
-                                    firebaseFirestore.collection(getString(R.string.col_sworker))
-                                .document(s_id).set(doc).addOnCompleteListener(new OnCompleteListener<Void>() {
+
+                                    WriteBatch batch = firebaseFirestore.batch();
+
+
+
+
+
+                                    //office update
+
+                                    DocumentReference setsworker= firebaseFirestore.collection(getString(R.string.col_sworker))
+                                            .document(s_id);
+
+                                    batch.set(setsworker,doc);
+
+                                    for(int i=0;i<historyFlats.size();i++){
+                                        String flatid=historyFlats.get(i).getFlat_id();
+                                        String flatno=historyFlats.get(i).getF_no();
+                                        String buildid=historyFlats.get(i).getBuild_id();
+                                        SLastHistory sLastHistory=new SLastHistory(s_id,flatid,buildid,flatno,Calendar.getInstance().getTime());
+                                        DocumentReference setflat= firebaseFirestore.collection(getString(R.string.col_sworker))
+                                                .document(s_id).collection("shistory").document(flatid);
+
+                                        batch.set(setflat,sLastHistory);
+                                    }
+
+
+                                    batch.commit().addOnCompleteListener(new OnCompleteListener<Void>() {
                                         @Override
                                         public void onComplete(@NonNull Task<Void> task) {
                                             if(task.isSuccessful()){
@@ -487,8 +544,28 @@ public class CreateProfile extends AppCompatActivity {
                         }
                     });
         } else {
-            firebaseFirestore.collection(getString(R.string.col_sworker))
-                    .document(s_id).set(doc).addOnCompleteListener(new OnCompleteListener<Void>() {
+            WriteBatch batch = firebaseFirestore.batch();
+
+
+
+            DocumentReference setsworker= firebaseFirestore.collection(getString(R.string.col_sworker))
+                    .document(s_id);
+
+            batch.set(setsworker,doc);
+
+            for(int i=0;i<historyFlats.size();i++){
+                String flatid=historyFlats.get(i).getFlat_id();
+                String flatno=historyFlats.get(i).getF_no();
+                String buildid=historyFlats.get(i).getBuild_id();
+                SLastHistory sLastHistory=new SLastHistory(s_id,flatid,buildid,flatno,Calendar.getInstance().getTime());
+                DocumentReference setflat= firebaseFirestore.collection(getString(R.string.col_sworker))
+                        .document(s_id).collection("shistory").document(flatid);
+
+                batch.set(setflat,sLastHistory);
+            }
+
+
+            batch.commit().addOnCompleteListener(new OnCompleteListener<Void>() {
                 @Override
                 public void onComplete(@NonNull Task<Void> task) {
                     if(task.isSuccessful()){
