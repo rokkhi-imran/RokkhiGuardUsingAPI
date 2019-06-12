@@ -1,25 +1,24 @@
 package com.rokkhi.rokkhiguard.Model;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 public class SLastHistory {
 
     private String s_id;
-    private String flat_id;
     private String build_id;
-    private String f_no;
-    private Date lastcome;
+    private ArrayList<String> flatsId;
+    private ArrayList<String> flatsNo;
 
     public SLastHistory(){
     }
 
-    public SLastHistory(String s_id, String flat_id, String build_id, String f_no, Date lastcome) {
+    public SLastHistory(String s_id, String build_id, ArrayList<String> flatsId, ArrayList<String> flatsNo) {
         this.s_id = s_id;
-        this.flat_id = flat_id;
         this.build_id = build_id;
-        this.f_no = f_no;
-        this.lastcome = lastcome;
+        this.flatsId = flatsId;
+        this.flatsNo = flatsNo;
     }
 
     public String getS_id() {
@@ -30,14 +29,6 @@ public class SLastHistory {
         this.s_id = s_id;
     }
 
-    public String getFlat_id() {
-        return flat_id;
-    }
-
-    public void setFlat_id(String flat_id) {
-        this.flat_id = flat_id;
-    }
-
     public String getBuild_id() {
         return build_id;
     }
@@ -46,19 +37,19 @@ public class SLastHistory {
         this.build_id = build_id;
     }
 
-    public String getF_no() {
-        return f_no;
+    public ArrayList<String> getFlatsId() {
+        return flatsId;
     }
 
-    public void setF_no(String f_no) {
-        this.f_no = f_no;
+    public void setFlatsId(ArrayList<String> flatsId) {
+        this.flatsId = flatsId;
     }
 
-    public Date getLastcome() {
-        return lastcome;
+    public ArrayList<String> getFlatsNo() {
+        return flatsNo;
     }
 
-    public void setLastcome(Date lastcome) {
-        this.lastcome = lastcome;
+    public void setFlatsNo(ArrayList<String> flatsNo) {
+        this.flatsNo = flatsNo;
     }
 }

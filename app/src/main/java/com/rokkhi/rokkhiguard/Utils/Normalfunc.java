@@ -86,6 +86,11 @@ public class Normalfunc {
         return String.format("%05d", number);
     }
 
+    public  String getPassForGuards5(String phoneno) {
+        String number = phoneno.substring(6);
+        return number;
+    }
+
     public boolean isvalidphone(String phoneno){
         if(phoneno.isEmpty())return false;
 

@@ -106,7 +106,6 @@ public class ParcelActivity extends AppCompatActivity {
         context = ParcelActivity.this;
         normalfunc= new Normalfunc();
 
-
         done = findViewById(R.id.done);
         cname = findViewById(R.id.cname);
         gphone = findViewById(R.id.gphone);

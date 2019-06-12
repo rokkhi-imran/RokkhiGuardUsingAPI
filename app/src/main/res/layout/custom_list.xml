@@ -5,15 +5,18 @@
 
     android:layout_marginStart="20dp"
     android:layout_marginEnd="10dp"
-    android:layout_height="wrap_content" >
+    android:layout_height="match_parent" >
+
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
+        android:textStyle="bold"
+        android:textSize="17sp"
+        android:textColor="@color/orange"
         android:layout_marginEnd="5dp"
         android:id="@+id/selected"
-
         />
 
     <EditText
@@ -33,9 +36,12 @@
         />
     <ListView
         android:id="@+id/listView1"
+        android:focusableInTouchMode="true"
+        android:choiceMode="multipleChoice"
         android:layout_below="@+id/sear"
         android:layout_marginStart="10dp"
         android:layout_marginEnd="10dp"
+        android:layout_marginBottom="100dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" >
 
@@ -44,17 +50,14 @@
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="done"
+        android:text="Done"
         android:id="@+id/done"
-        android:background="@drawable/orange_rounded_button"
+        android:background="@drawable/less_round_button"
+        android:backgroundTint="@color/orange"
         android:textColor="@color/white"
-        android:layout_below="@+id/listView1"
-        android:layout_marginTop="20dp"
-        android:layout_marginBottom="50dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginEnd="10dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="30dp"
         />
-
 
 
 

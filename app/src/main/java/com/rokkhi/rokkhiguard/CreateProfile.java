@@ -14,12 +14,14 @@ import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.widget.AdapterView;
@@ -28,6 +30,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -47,7 +50,10 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.rokkhi.rokkhiguard.Model.ActiveFlats;
 import com.rokkhi.rokkhiguard.Model.Flats;
+import com.rokkhi.rokkhiguard.Model.Invitees;
 import com.rokkhi.rokkhiguard.Model.SLastHistory;
+import com.rokkhi.rokkhiguard.Model.Swroker;
+import com.rokkhi.rokkhiguard.Model.Vsearch;
 import com.rokkhi.rokkhiguard.Utils.Normalfunc;
 import com.rokkhi.rokkhiguard.Utils.StringAdapter;
 import com.rokkhi.rokkhiguard.Utils.UniversalImageLoader;
@@ -67,21 +73,20 @@ import java.util.Map;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 
-public class CreateProfile extends AppCompatActivity {
+public class CreateProfile extends AppCompatActivity implements ActiveFlatAdapter.MyInterface {
 
     CircleImageView userphoto;
     ArrayList<String> types;
     ArrayList<ActiveFlats> activeFlats;
-    EditText username, phone,type,flats;
+    EditText username, phone, type, flats;
     Button done;
-    Map<String, Object> doc,shistory;
+    Map<String, Object> doc, shistory;
     String mFileUri = "";
     Context context;
     FirebaseFirestore firebaseFirestore;
     private Bitmap bitmap = null;
     FirebaseUser firebaseUser;
     private static final String TAG = "CreateProfile";
-
     private long mLastClickTime = 0;
     SharedPreferences.Editor editor;
     SharedPreferences sharedPref;
@@ -90,9 +95,15 @@ public class CreateProfile extends AppCompatActivity {
     Calendar myCalendar;
     String typeselected;
     ActiveFlats flatselected;
+    AlertDialog alertDialog;
     Normalfunc normalfunc;
     List<ActiveFlats> historyFlats;
-    String totaltext="";
+    String totaltext = "";
+    boolean flag;
+    List<Swroker> list;
+    String buildid;
+
+    int mPosition = -1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,7 +111,8 @@ public class CreateProfile extends AppCompatActivity {
         setContentView(R.layout.activity_create_profile);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        normalfunc= new Normalfunc();
+        normalfunc = new Normalfunc();
+        flag = false;
 
         context = CreateProfile.this;
 
@@ -111,15 +123,15 @@ public class CreateProfile extends AppCompatActivity {
         userphoto = findViewById(R.id.user_photo);
         progressBar = findViewById(R.id.progressBar1);
         myCalendar = Calendar.getInstance();
-        type= findViewById(R.id.user_wtype);
-        flats= findViewById(R.id.user_flat);
-        historyFlats=new ArrayList<>();
-
+        type = findViewById(R.id.user_wtype);
+        flats = findViewById(R.id.user_flat);
+        historyFlats = new ArrayList<>();
 
 
         firebaseFirestore = FirebaseFirestore.getInstance();
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+        buildid = sharedPref.getString("buildid", "none");
         initonclick();
 
         firebaseFirestore.collection("stype").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -141,7 +153,7 @@ public class CreateProfile extends AppCompatActivity {
                 activeFlats = new ArrayList<>();
                 if (task.isSuccessful() && task.getResult() != null) {
                     for (DocumentSnapshot documentSnapshot : task.getResult()) {
-                        ActiveFlats activeFlat= documentSnapshot.toObject(ActiveFlats.class);
+                        ActiveFlats activeFlat = documentSnapshot.toObject(ActiveFlats.class);
                         activeFlats.add(activeFlat);
                     }
                 }
@@ -152,20 +164,21 @@ public class CreateProfile extends AppCompatActivity {
 
     Dialog mdialog;
 
-    public void initdialog(){
-        mdialog=new Dialog(this);
+    public void initdialog() {
+        mdialog = new Dialog(this);
 
         mdialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
 
         mdialog.setContentView(R.layout.custom_progress);
-        mdialog.getWindow ().setBackgroundDrawableResource (android.R.color.transparent);
+        mdialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
 
     }
 
-    public void showdialog(){
+    public void showdialog() {
         mdialog.show();
     }
-    public void dismissdialog(){
+
+    public void dismissdialog() {
         mdialog.dismiss();
     }
 
@@ -178,9 +191,10 @@ public class CreateProfile extends AppCompatActivity {
         final EditText editText = convertView.findViewById(R.id.sear);
         final ListView lv = (ListView) convertView.findViewById(R.id.listView1);
         final Button done = convertView.findViewById(R.id.done);
-        final TextView tt= convertView.findViewById(R.id.selected);
+        final TextView tt = convertView.findViewById(R.id.selected);
         tt.setVisibility(View.VISIBLE);
-        totaltext="";
+        totaltext = "";
+
 
         alertcompany.setView(convertView);
         alertcompany.setCancelable(false);
@@ -192,7 +206,7 @@ public class CreateProfile extends AppCompatActivity {
         done.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                flats.setText(editText.getText().toString());
+                flats.setText(totaltext);
                 alertcompany.dismiss();
             }
         });
@@ -212,6 +226,7 @@ public class CreateProfile extends AppCompatActivity {
             }
         });
 
+
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -220,21 +235,28 @@ public class CreateProfile extends AppCompatActivity {
 //                type.setText(typeselected);
 //                alertcompany.dismiss();
 
-                ActiveFlats ss= (ActiveFlats) lv.getItemAtPosition(position);
+                ActiveFlats ss = (ActiveFlats) lv.getItemAtPosition(position);
 
-                if(!view.isSelected()){
-                    view.setSelected(true);
-                    view.setBackgroundColor(ContextCompat.getColor(context,R.color.grey));
-                    historyFlats.add(ss);
-                    totaltext=totaltext+" "+ss.getF_no();
-                    tt.setText(totaltext);
-                }
-                else{
+
+                //selected na hoile selected er moto kaj korbe.. selection er subidhar jnno
+                if (lv.isItemChecked(position)) {
+
                     view.setSelected(false);
-                    view.setBackgroundColor(ContextCompat.getColor(context,R.color.white));
-                    historyFlats.remove(ss);
-                    totaltext= totaltext.replace(ss.getF_no(),"");
+                    view.setBackground(ContextCompat.getDrawable(context, R.color.orange_light));
+                    activeFlatAdapter.changedata(ss.getF_no(), true);
+                    historyFlats.add(ss);
+                    totaltext = totaltext + "  " + ss.getF_no();
                     tt.setText(totaltext);
+                    //activeFlatAdapter.notifyDataSetChanged();
+
+                } else {
+                    view.setSelected(true);
+                    view.setBackground(ContextCompat.getDrawable(context, R.color.white));
+                    activeFlatAdapter.changedata(ss.getF_no(), false);
+                    historyFlats.remove(ss);
+                    totaltext = totaltext.replace("  " + ss.getF_no(), "");
+                    tt.setText(totaltext);
+                    // activeFlatAdapter.notifyDataSetChanged();
                 }
 
 
@@ -290,10 +312,69 @@ public class CreateProfile extends AppCompatActivity {
                 alertcompany.dismiss();
             }
         });
-
     }
 
+
     public void initonclick() {
+
+        phone.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (s.length() == 11 && !flag) {
+                    String pp = s.toString();
+                    flag = true;
+
+                    firebaseFirestore.collection(getString(R.string.col_sworker)).whereEqualTo("s_phone",pp).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                            list = new ArrayList<>();
+                            for (DocumentSnapshot document : task.getResult()) {
+                                Swroker swroker = document.toObject(Swroker.class);
+                                list.add(swroker);
+                            }
+
+                            if(list.size()>0){
+                                alertDialog = new AlertDialog.Builder(context).create();
+                                alertDialog.setCancelable(false);
+                                LayoutInflater inflater = getLayoutInflater();
+                                View convertView = (View) inflater.inflate(R.layout.item_person, null);
+                                TextView name= convertView.findViewById(R.id.name);
+                                TextView gatepass = convertView.findViewById(R.id.pass);
+                                CircleImageView pic= convertView.findViewById(R.id.propic);
+                                Button cancel= convertView.findViewById(R.id.cancel);
+                                TextView cc= convertView.findViewById(R.id.cc);
+                                cc.setVisibility(View.GONE);
+                                cancel.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        finish();
+                                    }
+                                });
+
+                                name.setText(list.get(0).getS_name());
+                                gatepass.setText("Gatepass: "+ list.get(0).getS_pass());
+                                UniversalImageLoader.setImage(list.get(0).getS_thumb(), pic, null, "");
+
+                                alertDialog.setView(convertView);
+                                alertDialog.show();
+                            }
+                        }
+                    });
+
+                } else if (s.length() != 11) flag = false;
+            }
+
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
 
         type.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -382,7 +463,7 @@ public class CreateProfile extends AppCompatActivity {
                     cancel = true;
                 }
 
-                if(!normalfunc.isvalidphone(phoneno)){
+                if (!normalfunc.isvalidphone(phoneno)) {
                     phone.setError("Invalid Phone no");
                     focusView = phone;
                     cancel = true;
@@ -397,7 +478,7 @@ public class CreateProfile extends AppCompatActivity {
                     if (firebaseUser == null) return;
                     initdialog();
                     showdialog();
-                   // progressBar.setVisibility(View.VISIBLE);
+                    // progressBar.setVisibility(View.VISIBLE);
                     upload();
                 }
 
@@ -409,9 +490,7 @@ public class CreateProfile extends AppCompatActivity {
     }
 
 
-
-
-    private Date futuredate(){
+    private Date futuredate() {
         Calendar calendar = Calendar.getInstance();
         calendar.clear();
         calendar.set(Calendar.MONTH, 1);
@@ -421,19 +500,18 @@ public class CreateProfile extends AppCompatActivity {
     }
 
 
-
     public void upload() {
 
 
         Log.d(TAG, "upload: yyyy");
 
-        List<String>ll=normalfunc.splitstring(username.getText().toString());
+        List<String> ll = normalfunc.splitstring(username.getText().toString());
         ll.addAll(normalfunc.splitchar(phone.getText().toString().toLowerCase()));
         ll.addAll(normalfunc.splitchar(typeselected.toLowerCase()));
 //        ll.add(mail.getText().toString().toLowerCase());
 
 
-        final String s_id=firebaseFirestore.collection(getString(R.string.col_sworker)).document().getId();
+        final String s_id = firebaseFirestore.collection(getString(R.string.col_sworker)).document().getId();
 
         doc = new HashMap<>();
         doc.put("s_name", username.getText().toString());
@@ -448,17 +526,9 @@ public class CreateProfile extends AppCompatActivity {
         doc.put("endtime", 0);
         doc.put("nid", "");
         doc.put("type", typeselected);
-        doc.put("s_pass", normalfunc.getRandomNumberString5());
+        doc.put("s_pass", normalfunc.getPassForGuards5(phone.getText().toString()));
         doc.put("address", new ArrayList<>());
         doc.put("s_array", ll);
-
-
-
-
-
-
-
-
 
 
         photoRef = FirebaseStorage.getInstance().getReference()
@@ -491,38 +561,39 @@ public class CreateProfile extends AppCompatActivity {
                                     WriteBatch batch = firebaseFirestore.batch();
 
 
-
-
-
                                     //office update
 
-                                    DocumentReference setsworker= firebaseFirestore.collection(getString(R.string.col_sworker))
+                                    DocumentReference setsworker = firebaseFirestore.collection(getString(R.string.col_sworker))
                                             .document(s_id);
 
-                                    batch.set(setsworker,doc);
+                                    batch.set(setsworker, doc);
+                                    ArrayList<String>stringid= new ArrayList<>();
+                                    ArrayList<String>stringno= new ArrayList<>();
 
-                                    for(int i=0;i<historyFlats.size();i++){
-                                        String flatid=historyFlats.get(i).getFlat_id();
-                                        String flatno=historyFlats.get(i).getF_no();
-                                        String buildid=historyFlats.get(i).getBuild_id();
-                                        SLastHistory sLastHistory=new SLastHistory(s_id,flatid,buildid,flatno,Calendar.getInstance().getTime());
-                                        DocumentReference setflat= firebaseFirestore.collection(getString(R.string.col_sworker))
-                                                .document(s_id).collection("shistory").document(flatid);
-
-                                        batch.set(setflat,sLastHistory);
+                                    for (int i = 0; i < historyFlats.size(); i++) {
+                                        stringid.add(historyFlats.get(i).getFlat_id());
+                                        stringno.add(historyFlats.get(i).getF_no());
                                     }
+
+                                    SLastHistory sLastHistory = new SLastHistory(s_id,buildid ,stringid,stringno);
+                                    DocumentReference setflat = firebaseFirestore.collection(getString(R.string.col_sworker))
+                                            .document(s_id).collection("shistory").document(buildid);
+
+                                    batch.set(setflat, sLastHistory);
 
 
                                     batch.commit().addOnCompleteListener(new OnCompleteListener<Void>() {
                                         @Override
                                         public void onComplete(@NonNull Task<Void> task) {
-                                            if(task.isSuccessful()){
+                                            if (task.isSuccessful()) {
                                                 Log.d(TAG, "onComplete: yyyy");
                                                 //progressBar.setVisibility(View.GONE);
                                                 dismissdialog();
                                                 Toast.makeText(context, "Done!", Toast.LENGTH_SHORT).show();
                                                 username.setText("");
                                                 phone.setText("");
+                                                flats.setText("");
+                                                type.setText("");
                                                 UniversalImageLoader.setImage("", userphoto, null, "");
                                             }
                                         }
@@ -547,34 +618,38 @@ public class CreateProfile extends AppCompatActivity {
             WriteBatch batch = firebaseFirestore.batch();
 
 
-
-            DocumentReference setsworker= firebaseFirestore.collection(getString(R.string.col_sworker))
+            DocumentReference setsworker = firebaseFirestore.collection(getString(R.string.col_sworker))
                     .document(s_id);
 
-            batch.set(setsworker,doc);
+            batch.set(setsworker, doc);
 
-            for(int i=0;i<historyFlats.size();i++){
-                String flatid=historyFlats.get(i).getFlat_id();
-                String flatno=historyFlats.get(i).getF_no();
-                String buildid=historyFlats.get(i).getBuild_id();
-                SLastHistory sLastHistory=new SLastHistory(s_id,flatid,buildid,flatno,Calendar.getInstance().getTime());
-                DocumentReference setflat= firebaseFirestore.collection(getString(R.string.col_sworker))
-                        .document(s_id).collection("shistory").document(flatid);
+            ArrayList<String>stringid= new ArrayList<>();
+            ArrayList<String>stringno= new ArrayList<>();
 
-                batch.set(setflat,sLastHistory);
+            for (int i = 0; i < historyFlats.size(); i++) {
+                stringid.add(historyFlats.get(i).getFlat_id());
+                stringno.add(historyFlats.get(i).getF_no());
             }
+
+            SLastHistory sLastHistory = new SLastHistory(s_id,buildid ,stringid,stringno);
+            DocumentReference setflat = firebaseFirestore.collection(getString(R.string.col_sworker))
+                    .document(s_id).collection("shistory").document(buildid);
+
+            batch.set(setflat, sLastHistory);
 
 
             batch.commit().addOnCompleteListener(new OnCompleteListener<Void>() {
                 @Override
                 public void onComplete(@NonNull Task<Void> task) {
-                    if(task.isSuccessful()){
+                    if (task.isSuccessful()) {
                         Log.d(TAG, "onComplete: yyyy");
                         //progressBar.setVisibility(View.GONE);
                         dismissdialog();
                         Toast.makeText(context, "Done!", Toast.LENGTH_SHORT).show();
                         username.setText("");
                         phone.setText("");
+                        flats.setText("");
+                        type.setText("");
                         UniversalImageLoader.setImage("", userphoto, null, "");
                     }
                 }
@@ -582,4 +657,8 @@ public class CreateProfile extends AppCompatActivity {
         }
     }
 
+    @Override
+    public int foo() {
+        return mPosition;
+    }
 }

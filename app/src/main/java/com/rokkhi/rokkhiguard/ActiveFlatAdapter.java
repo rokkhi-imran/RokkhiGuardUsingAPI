@@ -1,39 +1,80 @@
 package com.rokkhi.rokkhiguard;
 
 import android.content.Context;
+import android.graphics.drawable.ColorDrawable;
+import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Filter;
 import android.widget.Filterable;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 
 import com.rokkhi.rokkhiguard.Model.ActiveFlats;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 
 public class ActiveFlatAdapter extends BaseAdapter implements Filterable {
 
+    public interface MyInterface{
+        public int foo();
+    }
+
+    private MyInterface listener;
+    private static final String TAG = "ActiveFlatAdapter";
+
+
     private ArrayList<ActiveFlats> activeFlats;
+    private Map<String,Boolean> bb= new HashMap<>();
 
     private ArrayList<ActiveFlats> mFlatFilterList;
 
     private LayoutInflater mInflater;
     private ValueFilter valueFilter;
+    Context context;
 
     public ActiveFlatAdapter(ArrayList<ActiveFlats> mStringList, Context context) {
 
         this.activeFlats = mStringList;
 
         this.mFlatFilterList = mStringList;
+        this.context=context;
 
         mInflater = LayoutInflater.from(context);
+        try {
+            listener = ((MyInterface) context);
+        } catch (ClassCastException e) {
+            Log.d(TAG, "ActiveFlatAdapter: sfsf");
+        }
 
         getFilter();
+
+        for(int i=0;i<activeFlats.size();i++){
+            bb.put(activeFlats.get(i).getF_no(),false);
+        }
     }
+
+    @Override
+
+    public int getViewTypeCount() {
+
+        return getCount();
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+
+        return position;
+    }
+
+
 
     //How many items are in the data set represented by this Adapter.
     @Override
@@ -56,6 +97,10 @@ public class ActiveFlatAdapter extends BaseAdapter implements Filterable {
         return position;
     }
 
+    public void changedata(String ss,Boolean value){
+        bb.put(ss,value);
+    }
+
     //Get a View that displays the data at the specified position in the data set.
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
@@ -69,22 +114,42 @@ public class ActiveFlatAdapter extends BaseAdapter implements Filterable {
             convertView = mInflater.inflate(R.layout.item_string, null);
 
             viewHolder.name = (TextView) convertView.findViewById(R.id.name);
+            viewHolder.lin= convertView.findViewById(R.id.lin);
+
 
             convertView.setTag(viewHolder);
 
         } else {
-
             viewHolder = (Holder) convertView.getTag();
         }
 
+
         viewHolder.name.setText(activeFlats.get(position).getF_no());
+        convertView.setSelected(true);
+
+        if(bb.get(activeFlats.get(position).getF_no())!=null){
+            Boolean flag=bb.get(activeFlats.get(position).getF_no());
+            if(flag!=null && flag){
+                convertView.setBackground(ContextCompat.getDrawable(context,R.color.orange_light));
+                convertView.setSelected(false);
+            }
+            else{
+                convertView.setBackground(ContextCompat.getDrawable(context,R.color.white));
+            }
+        }
 
         return convertView;
     }
 
     private class Holder {
 
+        LinearLayout lin;
         TextView name;
+    }
+
+    @Override
+    public void notifyDataSetChanged() {
+        super.notifyDataSetChanged();
     }
 
     //Returns a filter that can be used to constrain data with a filtering pattern.
@@ -137,6 +202,8 @@ public class ActiveFlatAdapter extends BaseAdapter implements Filterable {
                 results.values = mFlatFilterList;
 
             }
+
+
 
             return results;
         }

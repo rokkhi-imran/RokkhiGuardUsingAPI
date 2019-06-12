@@ -11,16 +11,21 @@ import android.os.Bundle;
 import android.os.SystemClock;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -30,12 +35,16 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.rokkhi.rokkhiguard.Model.Guards;
+import com.rokkhi.rokkhiguard.Model.Swroker;
 import com.rokkhi.rokkhiguard.Utils.Normalfunc;
+import com.rokkhi.rokkhiguard.Utils.UniversalImageLoader;
 import com.vansuita.pickimage.bean.PickResult;
 import com.vansuita.pickimage.bundle.PickSetup;
 import com.vansuita.pickimage.dialog.PickImageDialog;
@@ -74,6 +83,9 @@ public class CreateProfileforGuards extends AppCompatActivity {
     Calendar myCalendar;
     Normalfunc normalfunc;
     String flatid = "", buildid = "", commid = "";
+    private boolean flag;
+    AlertDialog alertDialog;
+    List<Guards> list;
 
 
     @Override
@@ -83,6 +95,7 @@ public class CreateProfileforGuards extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         normalfunc= new Normalfunc();
+        flag=false;
 
 
         context = CreateProfileforGuards.this;
@@ -124,6 +137,65 @@ public class CreateProfileforGuards extends AppCompatActivity {
     }
 
     public void initonclick() {
+
+        phone.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (s.length() == 11 && !flag) {
+                    String pp = s.toString();
+                    flag = true;
+
+                    firebaseFirestore.collection(getString(R.string.col_guards)).whereEqualTo("g_phone",pp).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                            list = new ArrayList<>();
+                            for (DocumentSnapshot document : task.getResult()) {
+                                Guards guards = document.toObject(Guards.class);
+                                list.add(guards);
+                            }
+
+                            if(list.size()>0){
+                                alertDialog = new AlertDialog.Builder(context).create();
+                                alertDialog.setCancelable(false);
+                                LayoutInflater inflater = getLayoutInflater();
+                                View convertView = (View) inflater.inflate(R.layout.item_person, null);
+                                TextView name= convertView.findViewById(R.id.name);
+                                TextView gatepass = convertView.findViewById(R.id.pass);
+                                CircleImageView pic= convertView.findViewById(R.id.propic);
+                                gatepass.setVisibility(View.GONE);
+                                Button cancel= convertView.findViewById(R.id.cancel);
+                                TextView cc= convertView.findViewById(R.id.cc);
+                                cc.setVisibility(View.GONE);
+                                cancel.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        finish();
+                                    }
+                                });
+
+                                name.setText(list.get(0).getG_name());
+                                UniversalImageLoader.setImage(list.get(0).getG_thumb(), pic, null, "");
+
+                                alertDialog.setView(convertView);
+                                alertDialog.show();
+                            }
+                        }
+                    });
+
+                } else if (s.length() != 11) flag = false;
+            }
+
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
 
         userphoto.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -183,7 +255,6 @@ public class CreateProfileforGuards extends AppCompatActivity {
                     guardname.setError(getString(R.string.error_field_required));
                     focusView = guardname;
                     cancel = true;
-
                 }
 
                 if (TextUtils.isEmpty(phonenumber)) {
