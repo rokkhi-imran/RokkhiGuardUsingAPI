@@ -1,5 +1,4 @@
 package com.rokkhi.rokkhiguard;
-
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
@@ -264,7 +263,7 @@ public class AddVisitor extends AppCompatActivity implements InviteeAdapter.MyIn
                                                                         public void onClick(View v) {
                                                                             username.setText(vsearch.getV_name());
                                                                             phone.setText(vsearch.getV_phone());
-                                                                            org.setText(vsearch.getV_org());
+                                                                            org.setText(vsearch.getV_where());
                                                                             if(!vsearch.getV_purpose().isEmpty())purpose.setText(vsearch.getV_purpose());
 
                                                                             email.setText(vsearch.getV_mail());
@@ -337,6 +336,7 @@ public class AddVisitor extends AppCompatActivity implements InviteeAdapter.MyIn
         doc.put("v_where", org.getText().toString());
         doc.put("v_gpass", idcardno.getText().toString());
         doc.put("flat_id", selected.getFlat_id());
+        doc.put("f_no", selected.getF_no());
         doc.put("comm_id", selected.getComm_id());
         doc.put("build_id", selected.getBuild_id());
         doc.put("v_vehicleno", "");

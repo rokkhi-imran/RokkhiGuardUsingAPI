@@ -1,5 +1,7 @@
 package com.rokkhi.rokkhiguard.Model;
 
+import java.util.Date;
+
 public class Vsearch {
 
     private String v_phone;
@@ -7,22 +9,24 @@ public class Vsearch {
     private String v_thumb;
     private String v_purpose;
     private String v_mail;
-    private String v_org;
-    private String o_mail;
-    private String v_type;
+    private String v_where;
+    private String flat_id;
+    private String f_no;
+    private Date lastDate;
 
     public Vsearch() {
     }
 
-    public Vsearch(String v_phone, String v_name, String v_thumb, String v_purpose, String v_mail, String v_org, String o_mail, String v_type) {
+    public Vsearch(String v_phone, String v_name, String v_thumb, String v_purpose, String v_mail, String v_where, String flat_id, String f_no, Date lastDate) {
         this.v_phone = v_phone;
         this.v_name = v_name;
         this.v_thumb = v_thumb;
         this.v_purpose = v_purpose;
         this.v_mail = v_mail;
-        this.v_org = v_org;
-        this.o_mail = o_mail;
-        this.v_type = v_type;
+        this.v_where = v_where;
+        this.flat_id = flat_id;
+        this.f_no = f_no;
+        this.lastDate = lastDate;
     }
 
     public String getV_phone() {
@@ -65,27 +69,36 @@ public class Vsearch {
         this.v_mail = v_mail;
     }
 
-    public String getV_org() {
-        return v_org;
+    public String getV_where() {
+        return v_where;
     }
 
-    public void setV_org(String v_org) {
-        this.v_org = v_org;
+    public void setV_where(String v_where) {
+        this.v_where = v_where;
     }
 
-    public String getO_mail() {
-        return o_mail;
+    public String getFlat_id() {
+        return flat_id;
     }
 
-    public void setO_mail(String o_mail) {
-        this.o_mail = o_mail;
+    public void setFlat_id(String flat_id) {
+        this.flat_id = flat_id;
     }
 
-    public String getV_type() {
-        return v_type;
+    public String getF_no() {
+        return f_no;
     }
 
-    public void setV_type(String v_type) {
-        this.v_type = v_type;
+    public void setF_no(String f_no) {
+        this.f_no = f_no;
     }
+
+    public Date getLastDate() {
+        return lastDate;
+    }
+
+    public void setLastDate(Date lastDate) {
+        this.lastDate = lastDate;
+    }
+
 }

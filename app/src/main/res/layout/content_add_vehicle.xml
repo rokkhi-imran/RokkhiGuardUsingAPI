@@ -164,7 +164,7 @@
                 android:layout_height="wrap_content"
                 android:background="@null"
                 android:textSize="24sp"
-                android:hint=" vehicle number"
+                android:hint="Vehicle number"
                 android:inputType="textNoSuggestions" />
 
         </LinearLayout>

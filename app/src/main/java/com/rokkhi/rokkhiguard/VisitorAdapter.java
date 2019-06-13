@@ -167,19 +167,7 @@ public class VisitorAdapter extends RecyclerView.Adapter<VisitorAdapter.VisitorV
         });
 
 
-        firebaseFirestore.collection(context.getString(R.string.col_activeflat))
-                .document(visitor.getFlat_id()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if (task.isSuccessful()) {
-                    DocumentSnapshot documentSnapshot = task.getResult();
-                    if (documentSnapshot != null && documentSnapshot.exists()) {
-                        ActiveFlats allMails = documentSnapshot.toObject(ActiveFlats.class);
-                        holder.flat.setText("To: " + allMails.getF_no());
-                    }
-                }
-            }
-        });
+        holder.flat.setText("To: " + visitor.getF_no());
 
     }
 
@@ -234,7 +222,8 @@ public class VisitorAdapter extends RecyclerView.Adapter<VisitorAdapter.VisitorV
 
                 for (int i = 0; i < mvisitorFilterList.size(); i++) {
                     if (mvisitorFilterList.get(i).getV_name().toLowerCase().contains(constraint.toString().toLowerCase())
-                            || mvisitorFilterList.get(i).getV_gpass().toLowerCase().contains(constraint.toString().toLowerCase()
+                            || mvisitorFilterList.get(i).getV_gpass().toLowerCase().contains(constraint.toString().toLowerCase())
+                            || mvisitorFilterList.get(i).getF_no().toLowerCase().contains(constraint.toString().toLowerCase()
                     )) {
                         filterList.add(mvisitorFilterList.get(i));
                     }

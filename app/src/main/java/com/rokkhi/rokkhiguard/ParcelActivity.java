@@ -490,8 +490,10 @@ public class ParcelActivity extends AppCompatActivity {
         if (guardselected != null) {
             doc.put("g_uid", guardselected.getG_uid());
         }
+        else doc.put("g_uid", "");
         doc.put("p_type", typeselected);
         doc.put("flat_id", flatselected.getFlat_id());
+        doc.put("f_no", flatselected.getF_no());
         doc.put("p_pic", "");
         doc.put("p_thumb", "");
 

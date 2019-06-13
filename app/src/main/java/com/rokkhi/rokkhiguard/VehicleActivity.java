@@ -81,7 +81,6 @@ public class VehicleActivity extends AppCompatActivity {
 
     private long mLastClickTime = 0;
     Timestamp out = new Timestamp(0, 0);
-
     SharedPreferences.Editor editor;
     SharedPreferences sharedPref;
     ProgressBar progressBar;
@@ -346,6 +345,7 @@ public class VehicleActivity extends AppCompatActivity {
         doc.put("v_vehicleno", vehicleno.getText().toString());
         doc.put("v_name", name.getText().toString());
         doc.put("flat_id", flatselected.getFlat_id());
+        doc.put("f_no", flatselected.getF_no());
         doc.put("v_pic", "");
         doc.put("v_thumb", "");
         doc.put("v_gpass", "");

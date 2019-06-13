@@ -208,6 +208,14 @@ public class GateAdapter extends RecyclerView.Adapter<GateAdapter.ListViewHolder
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 if(task.isSuccessful()){
                     DocumentSnapshot documentSnapshot=task.getResult();
+                    holder.flats.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+
+                            addallflats(holder);
+
+                        }
+                    });
                     if(documentSnapshot.exists()){
                         SLastHistory sLastHistory= documentSnapshot.toObject(SLastHistory.class);
                         holder.historyflatid=sLastHistory.getFlatsId();
@@ -217,14 +225,7 @@ public class GateAdapter extends RecyclerView.Adapter<GateAdapter.ListViewHolder
                             holder.flats.setText(holder.total);
 
                         }
-                        holder.flats.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
 
-                                addallflats(holder);
-
-                            }
-                        });
                     }
                 }
             }
