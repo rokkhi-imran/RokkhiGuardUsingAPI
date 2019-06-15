@@ -18,13 +18,15 @@ public class Swroker {
     private String nid;
     private String type;
     private String s_pass;
+    private String who_add;
+    private Date when_add;
     private List<String> address;
     private List<String> s_array;
 
     public Swroker(){
     }
 
-    public Swroker(String s_id, String s_name, String s_phone, String s_pic, String s_thumb, String s_mail, Date s_bday, Date experience, int starttime, int endtime, String nid, String type, String s_pass, List<String> address, List<String> s_array) {
+    public Swroker(String s_id, String s_name, String s_phone, String s_pic, String s_thumb, String s_mail, Date s_bday, Date experience, int starttime, int endtime, String nid, String type, String s_pass, String who_add, Date when_add, List<String> address, List<String> s_array) {
         this.s_id = s_id;
         this.s_name = s_name;
         this.s_phone = s_phone;
@@ -38,10 +40,11 @@ public class Swroker {
         this.nid = nid;
         this.type = type;
         this.s_pass = s_pass;
+        this.who_add = who_add;
+        this.when_add = when_add;
         this.address = address;
         this.s_array = s_array;
     }
-
 
     public String getS_id() {
         return s_id;
@@ -145,6 +148,22 @@ public class Swroker {
 
     public void setS_pass(String s_pass) {
         this.s_pass = s_pass;
+    }
+
+    public String getWho_add() {
+        return who_add;
+    }
+
+    public void setWho_add(String who_add) {
+        this.who_add = who_add;
+    }
+
+    public Date getWhen_add() {
+        return when_add;
+    }
+
+    public void setWhen_add(Date when_add) {
+        this.when_add = when_add;
     }
 
     public List<String> getAddress() {

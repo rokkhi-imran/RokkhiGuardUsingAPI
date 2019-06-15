@@ -42,6 +42,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.WriteBatch;
@@ -526,6 +527,8 @@ public class CreateProfile extends AppCompatActivity implements ActiveFlatAdapte
         doc.put("endtime", 0);
         doc.put("nid", "");
         doc.put("type", typeselected);
+        doc.put("who_add", firebaseUser.getUid());
+        doc.put("when_add", FieldValue.serverTimestamp());
         doc.put("s_pass", normalfunc.getPassForGuards5(phone.getText().toString()));
         doc.put("address", new ArrayList<>());
         doc.put("s_array", ll);
