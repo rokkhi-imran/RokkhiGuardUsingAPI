@@ -12,7 +12,7 @@ public class Activebuilding {
     private String b_area;
     private int b_tfloor;
     private int b_tflat;
-    private String build_id;
+    private String build_id; //doc id
     private String comm_id;
     private boolean b_status;
     private List<String> b_array;

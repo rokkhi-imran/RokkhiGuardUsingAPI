@@ -10,15 +10,17 @@ public class SLastHistory {
     private String build_id;
     private ArrayList<String> flatsId;
     private ArrayList<String> flatsNo;
+    private Date lastday;
 
     public SLastHistory(){
     }
 
-    public SLastHistory(String s_id, String build_id, ArrayList<String> flatsId, ArrayList<String> flatsNo) {
+    public SLastHistory(String s_id, String build_id, ArrayList<String> flatsId, ArrayList<String> flatsNo, Date lastday) {
         this.s_id = s_id;
         this.build_id = build_id;
         this.flatsId = flatsId;
         this.flatsNo = flatsNo;
+        this.lastday = lastday;
     }
 
     public String getS_id() {
@@ -51,5 +53,13 @@ public class SLastHistory {
 
     public void setFlatsNo(ArrayList<String> flatsNo) {
         this.flatsNo = flatsNo;
+    }
+
+    public Date getLastday() {
+        return lastday;
+    }
+
+    public void setLastday(Date lastday) {
+        this.lastday = lastday;
     }
 }

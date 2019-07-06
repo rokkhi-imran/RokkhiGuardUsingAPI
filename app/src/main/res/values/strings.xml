@@ -174,6 +174,7 @@
     <string name="col_employees">employees</string>
     <string name="col_admins">admins</string>
     <string name="col_guards">guards</string>
+    <string name="col_parkings">parkings</string>
     <string name="col_phoneguards">guardPhone</string>
     <string name="col_attendance">attendance</string>
     <string name="col_visitors">visitors</string>

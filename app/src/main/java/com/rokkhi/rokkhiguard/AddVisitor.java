@@ -108,7 +108,7 @@ public class AddVisitor extends AppCompatActivity implements InviteeAdapter.MyIn
     InviteeAdapter inviteeAdapter;
     Normalfunc normalfunc;
 
-    private int res;
+    private String res;
     ArrayList<Invitees> list;
     AlertDialog alertDialog;
     RecyclerView recyclerView;
@@ -342,10 +342,11 @@ public class AddVisitor extends AppCompatActivity implements InviteeAdapter.MyIn
         doc.put("v_vehicleno", "");
         doc.put("v_pic", "");
         doc.put("v_thumb", "");
-        doc.put("isin",false);
-        doc.put("response",1);
+        doc.put("in",false);
+        doc.put("response","pending");
         doc.put("v_type","visitor");
         doc.put("v_array",ll);
+        doc.put("responder",firebaseUser.getUid());
 
         if(!linkFromSearch.isEmpty()){
             doc.put("v_pic", linkFromSearch);
@@ -442,7 +443,7 @@ public class AddVisitor extends AppCompatActivity implements InviteeAdapter.MyIn
 
 
         boolean approve;
-        if(!selected.isVacant())approve=false;
+        if(selected.isVacant())approve=false;
         else approve=true;
 
         Log.d(TAG, "dialogconfirmation:  approve "+ approve);
@@ -465,7 +466,7 @@ public class AddVisitor extends AppCompatActivity implements InviteeAdapter.MyIn
             @Override
             public void onClick(View view) {
                 firebaseFirestore.collection(getString(R.string.col_visitors)).document(uid)
-                        .update("isin",true ,"response", 6).addOnCompleteListener(new OnCompleteListener<Void>() {
+                        .update("in",true ,"response", "accepted").addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         if(task.isSuccessful()){
@@ -502,7 +503,7 @@ public class AddVisitor extends AppCompatActivity implements InviteeAdapter.MyIn
             @Override
             public void onClick(View view) {
                 progressBar.setVisibility(View.VISIBLE);
-                if(res==2){
+                if(res.equals("rejected")){
                     firebaseFirestore.collection(getString(R.string.col_visitors)).document(uid)
                             .delete().addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
@@ -533,7 +534,7 @@ public class AddVisitor extends AppCompatActivity implements InviteeAdapter.MyIn
                 public void onTick(long millisUntilFinished) {
                 }
                 public void onFinish() {
-                    if(res!=2 && res!=3){
+                    if(!res.equals("accepted") && !res.equals("rejected")){
                         progressBar.setVisibility(View.GONE);
                         status.setText("No response ( সাড়া পাওয়া যায়নি )");
                         status.setTextColor(Color.BLUE);
@@ -557,7 +558,7 @@ public class AddVisitor extends AppCompatActivity implements InviteeAdapter.MyIn
 
                                 Visitors visitors= documentSnapshot.toObject(Visitors.class);
                                 res= visitors.getResponse();
-                                if(res==2){
+                                if(res.equals("rejected")){
 
                                     enter.setVisibility(View.GONE);
                                     cancel.setVisibility(View.GONE);
@@ -567,7 +568,7 @@ public class AddVisitor extends AppCompatActivity implements InviteeAdapter.MyIn
                                     status.setTextColor(Color.RED);
                                 }
 
-                                else if(res==3){
+                                else if(res.equals("accepted")){
                                     enter.setVisibility(View.GONE);
                                     cancel.setVisibility(View.GONE);
                                     submit.setVisibility(View.VISIBLE);

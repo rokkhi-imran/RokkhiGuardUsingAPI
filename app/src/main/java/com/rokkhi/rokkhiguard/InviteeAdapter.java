@@ -203,7 +203,7 @@ public class InviteeAdapter extends RecyclerView.Adapter<InviteeAdapter.InviteeV
 
                         Visitors visitor=new Visitors(invitee.getI_phone(),invitee.getI_name(),invitee.getI_pic(),invitee.getI_thumb(),invitee.getI_purpose(),invitee.getI_mail(),""
                         ,invitee.getFlat_id(),invitee.getF_no(),invitee.getComm_id(),invitee.getBuild_id(),"",
-                                "",date,date,id,true,1,"invitee",ll);
+                                "",date,date,id,true,"pending","invitee",ll,invitee.getUser_id());
 
                         batch.set(setvisitorinoffice,visitor);
 

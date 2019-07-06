@@ -21,10 +21,11 @@ public class Visitors{
     private Date v_checkin;
     private Date v_checkout;
     private String v_uid;
-    private boolean isin;
-    private int response;
+    private boolean in;
+    private String response;
     private String v_type;
     private List<String> v_array;
+    private String responder;
 
 
 
@@ -34,7 +35,7 @@ public class Visitors{
     }
 
 
-    public Visitors(String v_phone, String v_name, String v_pic, String v_thumb, String v_purpose, String v_mail, String v_where, String flat_id, String f_no, String comm_id, String build_id, String v_vehicleno, String v_gpass, Date v_checkin, Date v_checkout, String v_uid, boolean isin, int response, String v_type, List<String> v_array) {
+    public Visitors(String v_phone, String v_name, String v_pic, String v_thumb, String v_purpose, String v_mail, String v_where, String flat_id, String f_no, String comm_id, String build_id, String v_vehicleno, String v_gpass, Date v_checkin, Date v_checkout, String v_uid, boolean in, String response, String v_type, List<String> v_array, String responder) {
         this.v_phone = v_phone;
         this.v_name = v_name;
         this.v_pic = v_pic;
@@ -51,10 +52,11 @@ public class Visitors{
         this.v_checkin = v_checkin;
         this.v_checkout = v_checkout;
         this.v_uid = v_uid;
-        this.isin = isin;
+        this.in = in;
         this.response = response;
         this.v_type = v_type;
         this.v_array = v_array;
+        this.responder = responder;
     }
 
     public String getV_phone() {
@@ -185,19 +187,19 @@ public class Visitors{
         this.v_uid = v_uid;
     }
 
-    public boolean isIsin() {
-        return isin;
+    public boolean isIn() {
+        return in;
     }
 
-    public void setIsin(boolean isin) {
-        this.isin = isin;
+    public void setIn(boolean in) {
+        this.in = in;
     }
 
-    public int getResponse() {
+    public String getResponse() {
         return response;
     }
 
-    public void setResponse(int response) {
+    public void setResponse(String response) {
         this.response = response;
     }
 
@@ -215,5 +217,13 @@ public class Visitors{
 
     public void setV_array(List<String> v_array) {
         this.v_array = v_array;
+    }
+
+    public String getResponder() {
+        return responder;
+    }
+
+    public void setResponder(String responder) {
+        this.responder = responder;
     }
 }

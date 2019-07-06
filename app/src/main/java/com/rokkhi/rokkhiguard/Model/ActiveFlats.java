@@ -8,19 +8,19 @@ public class ActiveFlats {
     private String build_id;
     private String comm_id;
     private String f_no;
-    private boolean isVacant;
+    private boolean vacant;
     private List<String> f_array;
 
     public ActiveFlats(){
 
     }
 
-    public ActiveFlats(String flat_id, String build_id, String comm_id, String f_no, boolean isVacant, List<String> f_array) {
+    public ActiveFlats(String flat_id, String build_id, String comm_id, String f_no, boolean vacant, List<String> f_array) {
         this.flat_id = flat_id;
         this.build_id = build_id;
         this.comm_id = comm_id;
         this.f_no = f_no;
-        this.isVacant = isVacant;
+        this.vacant = vacant;
         this.f_array = f_array;
     }
 
@@ -57,11 +57,11 @@ public class ActiveFlats {
     }
 
     public boolean isVacant() {
-        return isVacant;
+        return vacant;
     }
 
     public void setVacant(boolean vacant) {
-        isVacant = vacant;
+        this.vacant = vacant;
     }
 
     public List<String> getF_array() {

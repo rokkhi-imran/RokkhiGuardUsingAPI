@@ -251,10 +251,10 @@ public class GateAdapter extends RecyclerView.Adapter<GateAdapter.ListViewHolder
                             .document().getId();
                     Map<String,Object> mm= new HashMap<>();
                     mm.put("auto_id",auto_id);
-                    mm.put("employee_id",swroker.getS_id());
+                    mm.put("s_id",swroker.getS_id());
                     mm.put("build_id",buildid);
                     mm.put("comm_id",commid);
-                    mm.put("isin",true);
+                    mm.put("in",true);
                     mm.put("flat_id",holder.historyflatid.get(i));
                     mm.put("f_no",holder.historyflatno.get(i));
                     mm.put("time", FieldValue.serverTimestamp());
@@ -264,7 +264,7 @@ public class GateAdapter extends RecyclerView.Adapter<GateAdapter.ListViewHolder
 
                     batch.set(setattendence, mm);
                 }
-                SLastHistory sLastHistory = new SLastHistory(swroker.getS_id(), buildid,holder.historyflatid,holder.historyflatno);
+                SLastHistory sLastHistory = new SLastHistory(swroker.getS_id(), buildid,holder.historyflatid,holder.historyflatno,Calendar.getInstance().getTime());
                 DocumentReference setflat = firebaseFirestore.collection(context.getString(R.string.col_sworker))
                         .document(swroker.getS_id()).collection("shistory").document(buildid);
                 batch.set(setflat, sLastHistory);
@@ -300,13 +300,14 @@ public class GateAdapter extends RecyclerView.Adapter<GateAdapter.ListViewHolder
                             .document().getId();
                     Map<String,Object> mm= new HashMap<>();
                     mm.put("auto_id",auto_id);
-                    mm.put("employee_id",swroker.getS_id());
+                    mm.put("s_id",swroker.getS_id());
                     mm.put("build_id",buildid);
                     mm.put("comm_id",commid);
-                    mm.put("isin",false);
+                    mm.put("in",false);
                     mm.put("flat_id",holder.historyflatid.get(i));
                     mm.put("f_no",holder.historyflatno.get(i));
                     mm.put("time", FieldValue.serverTimestamp());
+
 
                     DocumentReference setattendence = firebaseFirestore.collection(context.getString(R.string.col_attendance))
                             .document(auto_id);
@@ -326,14 +327,8 @@ public class GateAdapter extends RecyclerView.Adapter<GateAdapter.ListViewHolder
                         }
                     }
                 });
-
-
             }
         });
-
-
-
-
 
     }
 

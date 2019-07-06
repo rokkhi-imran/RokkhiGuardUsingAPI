@@ -578,7 +578,7 @@ public class CreateProfile extends AppCompatActivity implements ActiveFlatAdapte
                                         stringno.add(historyFlats.get(i).getF_no());
                                     }
 
-                                    SLastHistory sLastHistory = new SLastHistory(s_id,buildid ,stringid,stringno);
+                                    SLastHistory sLastHistory = new SLastHistory(s_id,buildid ,stringid,stringno,Calendar.getInstance().getTime());
                                     DocumentReference setflat = firebaseFirestore.collection(getString(R.string.col_sworker))
                                             .document(s_id).collection("shistory").document(buildid);
 
@@ -634,7 +634,7 @@ public class CreateProfile extends AppCompatActivity implements ActiveFlatAdapte
                 stringno.add(historyFlats.get(i).getF_no());
             }
 
-            SLastHistory sLastHistory = new SLastHistory(s_id,buildid ,stringid,stringno);
+            SLastHistory sLastHistory = new SLastHistory(s_id,buildid ,stringid,stringno,Calendar.getInstance().getTime());
             DocumentReference setflat = firebaseFirestore.collection(getString(R.string.col_sworker))
                     .document(s_id).collection("shistory").document(buildid);
 

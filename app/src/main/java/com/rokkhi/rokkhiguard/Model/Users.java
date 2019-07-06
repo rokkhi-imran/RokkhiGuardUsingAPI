@@ -7,7 +7,6 @@ import java.util.List;
 
 public class Users {
 
-
     private String name;
     private Date bday;
     private String gender;
@@ -15,15 +14,16 @@ public class Users {
     private String thumb;
     private String phone;
     private String mail;
-    private String token;
-    private boolean istoken;
-    private String userid; //auto id
+    private List<String> atoken;
+    private List<String> itoken;
+    private boolean token;
+    private String user_id; //auto id
     private List<String> u_array;
 
     public Users() {
     }
 
-    public Users(String name, Date bday, String gender, String pic, String thumb, String phone, String mail, String token, boolean istoken, String userid, List<String> u_array) {
+    public Users(String name, Date bday, String gender, String pic, String thumb, String phone, String mail, List<String> atoken, List<String> itoken, boolean token, String user_id, List<String> u_array) {
         this.name = name;
         this.bday = bday;
         this.gender = gender;
@@ -31,12 +31,12 @@ public class Users {
         this.thumb = thumb;
         this.phone = phone;
         this.mail = mail;
+        this.atoken = atoken;
+        this.itoken = itoken;
         this.token = token;
-        this.istoken = istoken;
-        this.userid = userid;
+        this.user_id = user_id;
         this.u_array = u_array;
     }
-
 
     public String getName() {
         return name;
@@ -94,28 +94,36 @@ public class Users {
         this.mail = mail;
     }
 
-    public String getToken() {
+    public List<String> getAtoken() {
+        return atoken;
+    }
+
+    public void setAtoken(List<String> atoken) {
+        this.atoken = atoken;
+    }
+
+    public List<String> getItoken() {
+        return itoken;
+    }
+
+    public void setItoken(List<String> itoken) {
+        this.itoken = itoken;
+    }
+
+    public boolean isToken() {
         return token;
     }
 
-    public void setToken(String token) {
+    public void setToken(boolean token) {
         this.token = token;
     }
 
-    public boolean isIstoken() {
-        return istoken;
+    public String getUser_id() {
+        return user_id;
     }
 
-    public void setIstoken(boolean istoken) {
-        this.istoken = istoken;
-    }
-
-    public String getUserid() {
-        return userid;
-    }
-
-    public void setUserid(String userid) {
-        this.userid = userid;
+    public void setUser_id(String user_id) {
+        this.user_id = user_id;
     }
 
     public List<String> getU_array() {

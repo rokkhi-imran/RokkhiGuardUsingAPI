@@ -22,8 +22,8 @@
                 android:textColor="@color/grey_1000"
                 android:text="Are you sure?  ( আপনি  নিশ্চিত? )"
                 android:layout_centerHorizontal="true"
-
                 />
+
 
 
             <RelativeLayout

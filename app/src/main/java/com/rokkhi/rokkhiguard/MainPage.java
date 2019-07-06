@@ -23,6 +23,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.rokkhi.rokkhiguard.Model.Activebuilding;
 import com.rokkhi.rokkhiguard.Model.Settings;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -35,6 +36,7 @@ public class MainPage extends AppCompatActivity {
     ImageButton settings;
     FirebaseFirestore firebaseFirestore;
     SharedPreferences sharedPref;
+    SharedPreferences.Editor editor;
     AlertDialog alertDialog;
     String  buildid = "", commid = "";
 
@@ -66,8 +68,28 @@ public class MainPage extends AppCompatActivity {
 
         firebaseFirestore= FirebaseFirestore.getInstance();
         sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
+        editor= sharedPref.edit();
         buildid = sharedPref.getString("buildid", "none");
         commid = sharedPref.getString("commid", "none");
+
+
+        firebaseFirestore.collection(getString(R.string.col_activebuild)).document(buildid)
+                .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if(task.isSuccessful()){
+                    DocumentSnapshot documentSnapshot= task.getResult();
+                    if(documentSnapshot.exists()){
+                        Activebuilding activebuilding= documentSnapshot.toObject(Activebuilding.class);
+                        int floorno=activebuilding.getB_tfloor();
+                        int flatno=activebuilding.getB_tflat();
+                        editor.putInt("floorno",floorno);
+                        editor.putInt("flatno",flatno);
+                        editor.apply();
+                    }
+                }
+            }
+        });
 
         logout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -81,7 +103,7 @@ public class MainPage extends AppCompatActivity {
         vehicle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(context, VehicleActivity.class);
+                Intent intent = new Intent(context, ParkingActivity.class);
                 startActivity(intent);
             }
         });
@@ -128,46 +150,48 @@ public class MainPage extends AppCompatActivity {
             public void onClick(View view) {
                 FirebaseUser firebaseUser= FirebaseAuth.getInstance().getCurrentUser();
                 if(firebaseUser!=null){
-                    firebaseFirestore.collection(getString(R.string.col_setting)).document(buildid).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                        @Override
-                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                            if(task.isSuccessful()){
-                                Log.d(TAG, "onComplete:  ggg2");
-                                DocumentSnapshot documentSnapshot= task.getResult();
-                                if(documentSnapshot!=null && documentSnapshot.exists()){
-                                    Settings settings= documentSnapshot.toObject(Settings.class);
-                                    boolean status= settings.isH_status();
-                                    Log.d(TAG, "onComplete: nasif "+ status);
-                                    if(status){
 
-
-                                        int isguardedit= settings.getIsgedit();
-                                        Log.d(TAG, "onComplete: nasif "+ isguardedit);
-                                        if(isguardedit==1){
-                                            shownegativedialog();
-                                        }
-                                        else{
-                                            if(isguardedit>1){
-                                                showposititivedialog(isguardedit);
-                                            }
-
-                                            else{
-                                                shownegativedialog();
-                                            }
-
-                                        }
-                                    }
-                                    else{
-                                        FirebaseAuth.getInstance().signOut();
-                                        Intent intent = new Intent(context, DaroanPass.class);
-                                        startActivity(intent);
-                                        finish();
-                                    }
-                                }
-                            }
-                            else Log.d(TAG, "onComplete: ggg1 ");
-                        }
-                    });
+                    showposititivedialog(4);
+//                    firebaseFirestore.collection(getString(R.string.col_setting)).document(buildid).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+//                        @Override
+//                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+//                            if(task.isSuccessful()){
+//                                Log.d(TAG, "onComplete:  ggg2");
+//                                DocumentSnapshot documentSnapshot= task.getResult();
+//                                if(documentSnapshot!=null && documentSnapshot.exists()){
+//                                    Settings settings= documentSnapshot.toObject(Settings.class);
+//                                    boolean status= settings.isH_status();
+//                                    Log.d(TAG, "onComplete: nasif "+ status);
+//                                    if(status){
+//
+//
+//                                        int isguardedit= settings.getIsgedit();
+//                                        Log.d(TAG, "onComplete: nasif "+ isguardedit);
+//                                        if(isguardedit==1){
+//                                            shownegativedialog();
+//                                        }
+//                                        else{
+//                                            if(isguardedit>1){
+//                                                showposititivedialog(isguardedit);
+//                                            }
+//
+//                                            else{
+//                                                shownegativedialog();
+//                                            }
+//
+//                                        }
+//                                    }
+//                                    else{
+//                                        FirebaseAuth.getInstance().signOut();
+//                                        Intent intent = new Intent(context, DaroanPass.class);
+//                                        startActivity(intent);
+//                                        finish();
+//                                    }
+//                                }
+//                            }
+//                            else Log.d(TAG, "onComplete: ggg1 ");
+//                        }
+//                    });
 
 
                 }

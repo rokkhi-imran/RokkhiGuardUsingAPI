@@ -94,8 +94,9 @@ public class ChildAdapter extends RecyclerView.Adapter<ChildAdapter.ChildViewHol
 
         final Child child = list.get(position);
         holder.name.setText(child.getM_name());
+        holder.flat.setText("Flat:  "+  child.getF_no());
         UniversalImageLoader.setImage(child.getM_thumb(), holder.propic, null, "");
-        if(child.isIsactivated()){
+        if(child.isActivated()){
             holder.active.setText("ACTIVE");
             holder.active.setTextColor(ContextCompat.getColor(context, R.color.green));
         }

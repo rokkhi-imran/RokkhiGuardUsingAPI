@@ -99,7 +99,8 @@ public class ChildrenList extends AppCompatActivity implements ChildAdapter.MyIn
                 collection(getString(R.string.col_child));
 
 
-        getFirstQuery=childref.whereEqualTo("build_id",buildid).whereEqualTo("isactivated",true)
+        list = new ArrayList<>();
+        getFirstQuery=childref.whereEqualTo("build_id",buildid).whereEqualTo("activated",true)
                 .whereGreaterThan("endtime",low)
                .limit(limit);
         getfirstdata();
@@ -110,7 +111,9 @@ public class ChildrenList extends AppCompatActivity implements ChildAdapter.MyIn
             }
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                childAdapter.getFilter().filter(s);
+                if(list.size()>0){
+                    childAdapter.getFilter().filter(s);
+                }
             }
             @Override
             public void afterTextChanged(Editable s) {
@@ -136,7 +139,7 @@ public class ChildrenList extends AppCompatActivity implements ChildAdapter.MyIn
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {
                     Log.d(TAG, "onComplete: kotoboro "+task.getResult().size());
-                    list = new ArrayList<>();
+
                     for (DocumentSnapshot document : task.getResult()) {
                         Child buildingchild = document.toObject(Child.class);
                         list.add(buildingchild);
@@ -187,7 +190,7 @@ public class ChildrenList extends AppCompatActivity implements ChildAdapter.MyIn
 
                             Log.d(TAG, "onScrolled: mmmmll dhukse");
                             Query nextQuery;
-                            nextQuery= childref.whereEqualTo("build_id",buildid).whereEqualTo("isactivated",true)
+                            nextQuery= childref.whereEqualTo("build_id",buildid).whereEqualTo("activated",true)
                                     .whereGreaterThan("endtime",low)
                                     .startAfter(lastVisible).limit(limit);
 

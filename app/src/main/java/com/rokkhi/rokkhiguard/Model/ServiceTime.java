@@ -5,17 +5,22 @@ import java.util.Date;
 public class ServiceTime {
 
     private int totalDay;
-    private String employee_id;
+    private int totalTimes;
+    private String s_id;
     private String flatid;
+    private String f_no;
     private Date lastday;
 
     public ServiceTime(){
     }
 
-    public ServiceTime(int totalDay, String employee_id, String flatid, Date lastday) {
+
+    public ServiceTime(int totalDay, int totalTimes, String s_id, String flatid, String f_no, Date lastday) {
         this.totalDay = totalDay;
-        this.employee_id = employee_id;
+        this.totalTimes = totalTimes;
+        this.s_id = s_id;
         this.flatid = flatid;
+        this.f_no = f_no;
         this.lastday = lastday;
     }
 
@@ -27,12 +32,20 @@ public class ServiceTime {
         this.totalDay = totalDay;
     }
 
-    public String getEmployee_id() {
-        return employee_id;
+    public int getTotalTimes() {
+        return totalTimes;
     }
 
-    public void setEmployee_id(String employee_id) {
-        this.employee_id = employee_id;
+    public void setTotalTimes(int totalTimes) {
+        this.totalTimes = totalTimes;
+    }
+
+    public String getS_id() {
+        return s_id;
+    }
+
+    public void setS_id(String s_id) {
+        this.s_id = s_id;
     }
 
     public String getFlatid() {
@@ -41,6 +54,14 @@ public class ServiceTime {
 
     public void setFlatid(String flatid) {
         this.flatid = flatid;
+    }
+
+    public String getF_no() {
+        return f_no;
+    }
+
+    public void setF_no(String f_no) {
+        this.f_no = f_no;
     }
 
     public Date getLastday() {

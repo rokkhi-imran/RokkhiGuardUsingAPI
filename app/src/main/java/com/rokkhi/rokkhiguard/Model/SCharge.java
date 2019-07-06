@@ -8,29 +8,30 @@ public class SCharge {
     private String f_no;
     private String build_id;
     private String receiver; //user_id
-    private String s_id; //auto_id
-    private int scharge_amount;
+    private String bill_id; //auto_id
+    private int amount;
     private int paid_amount;
-    private  boolean ispaid;
+    private  boolean paid;
     private Date paidtime;
-    private Date which_month;
+    private String which_month;
 
     public SCharge(){
     }
 
 
-    public SCharge(String flat_id, String f_no, String build_id, String receiver, String s_id, int scharge_amount, int paid_amount, boolean ispaid, Date paidtime, Date which_month) {
+    public SCharge(String flat_id, String f_no, String build_id, String receiver, String bill_id, int amount, int paid_amount, boolean paid, Date paidtime, String which_month) {
         this.flat_id = flat_id;
         this.f_no = f_no;
         this.build_id = build_id;
         this.receiver = receiver;
-        this.s_id = s_id;
-        this.scharge_amount = scharge_amount;
+        this.bill_id = bill_id;
+        this.amount = amount;
         this.paid_amount = paid_amount;
-        this.ispaid = ispaid;
+        this.paid = paid;
         this.paidtime = paidtime;
         this.which_month = which_month;
     }
+
 
     public String getFlat_id() {
         return flat_id;
@@ -64,20 +65,20 @@ public class SCharge {
         this.receiver = receiver;
     }
 
-    public String getS_id() {
-        return s_id;
+    public String getBill_id() {
+        return bill_id;
     }
 
-    public void setS_id(String s_id) {
-        this.s_id = s_id;
+    public void setBill_id(String bill_id) {
+        this.bill_id = bill_id;
     }
 
-    public int getScharge_amount() {
-        return scharge_amount;
+    public int getAmount() {
+        return amount;
     }
 
-    public void setScharge_amount(int scharge_amount) {
-        this.scharge_amount = scharge_amount;
+    public void setAmount(int amount) {
+        this.amount = amount;
     }
 
     public int getPaid_amount() {
@@ -88,12 +89,12 @@ public class SCharge {
         this.paid_amount = paid_amount;
     }
 
-    public boolean isIspaid() {
-        return ispaid;
+    public boolean isPaid() {
+        return paid;
     }
 
-    public void setIspaid(boolean ispaid) {
-        this.ispaid = ispaid;
+    public void setPaid(boolean paid) {
+        this.paid = paid;
     }
 
     public Date getPaidtime() {
@@ -104,11 +105,11 @@ public class SCharge {
         this.paidtime = paidtime;
     }
 
-    public Date getWhich_month() {
+    public String getWhich_month() {
         return which_month;
     }
 
-    public void setWhich_month(Date which_month) {
+    public void setWhich_month(String which_month) {
         this.which_month = which_month;
     }
 }

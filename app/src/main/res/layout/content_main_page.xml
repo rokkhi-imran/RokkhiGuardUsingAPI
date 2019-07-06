@@ -328,7 +328,7 @@
                         android:layout_below="@+id/vehicle"
                         android:layout_centerInParent="true"
                         android:layout_centerHorizontal="true"
-                        android:text="গাড়ি"
+                        android:text="পার্কিং"
                         android:layout_marginTop="5dp"
                         android:textSize="18sp"
                         android:textColor="@color/car_blue"

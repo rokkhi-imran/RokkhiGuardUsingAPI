@@ -146,7 +146,7 @@ public class VisitorAdapter extends RecyclerView.Adapter<VisitorAdapter.VisitorV
                                 .collection(context.getString(R.string.col_visitors)).document(visitor.getV_uid());
 
                         batch.update(updatehasdone, "v_checkout", FieldValue.serverTimestamp()
-                                , "isin", false);
+                                , "in", false);
 
 
                         batch.commit().addOnCompleteListener(new OnCompleteListener<Void>() {

@@ -46,9 +46,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.rokkhi.rokkhiguard.Model.ActiveFlats;
-import com.rokkhi.rokkhiguard.Model.Guards;
 import com.rokkhi.rokkhiguard.Utils.Normalfunc;
-import com.rokkhi.rokkhiguard.Utils.StringAdapter;
 import com.vansuita.pickimage.bean.PickResult;
 import com.vansuita.pickimage.bundle.PickSetup;
 import com.vansuita.pickimage.dialog.PickImageDialog;
@@ -57,7 +55,6 @@ import com.vansuita.pickimage.listeners.IPickResult;
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -65,7 +62,7 @@ import java.util.Map;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 
-public class VehicleActivity extends AppCompatActivity {
+public class AddVehicleActivity extends AppCompatActivity {
 
     CircleImageView vehiclephoto;
     EditText name, phone, vehicleno, flat;
@@ -77,7 +74,7 @@ public class VehicleActivity extends AppCompatActivity {
     ArrayList<ActiveFlats> allflats;
     private Bitmap bitmap = null;
     FirebaseUser firebaseUser;
-    private static final String TAG = "VehicleActivity";
+    private static final String TAG = "AddVehicleActivity";
 
     private long mLastClickTime = 0;
     Timestamp out = new Timestamp(0, 0);
@@ -91,6 +88,8 @@ public class VehicleActivity extends AppCompatActivity {
     Normalfunc normalfunc;
     String flatid = "", buildid = "", commid = "";
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -98,7 +97,7 @@ public class VehicleActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        context = VehicleActivity.this;
+        context = AddVehicleActivity.this;
         normalfunc= new Normalfunc();
 
 
@@ -184,7 +183,7 @@ public class VehicleActivity extends AppCompatActivity {
 
                         }
                     }
-                }).show(VehicleActivity.this);
+                }).show(AddVehicleActivity.this);
             }
         });
 
@@ -351,7 +350,7 @@ public class VehicleActivity extends AppCompatActivity {
         doc.put("v_gpass", "");
         doc.put("response", 0);
         doc.put("v_type", "vehicle");
-        doc.put("isin", true);
+        doc.put("in", true);
 
         List<String>ll= normalfunc.splitstring(name.getText().toString());
         ll.add(flatselected.getF_no());
@@ -453,7 +452,7 @@ public class VehicleActivity extends AppCompatActivity {
     }
 
     public void gomainpage(){
-        Intent intent= new Intent(VehicleActivity.this,MainPage.class);
+        Intent intent= new Intent(AddVehicleActivity.this,MainPage.class);
         startActivity(intent);
         finish();
     }

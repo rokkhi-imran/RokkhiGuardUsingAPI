@@ -5,26 +5,26 @@ import java.util.Date;
 public class Attendence {
 
     private String auto_id;
-    private String employee_id;
+    private String s_id;
     private String build_id;
     private String comm_id;
     private Date time;
     private String flat_id;
     private String f_no;
-    private boolean isin;
+    private boolean in;
 
     public Attendence(){
     }
 
-    public Attendence(String auto_id, String employee_id, String build_id, String comm_id, Date time, String flat_id, String f_no, boolean isin) {
+    public Attendence(String auto_id, String s_id, String build_id, String comm_id, Date time, String flat_id, String f_no, boolean in) {
         this.auto_id = auto_id;
-        this.employee_id = employee_id;
+        this.s_id = s_id;
         this.build_id = build_id;
         this.comm_id = comm_id;
         this.time = time;
         this.flat_id = flat_id;
         this.f_no = f_no;
-        this.isin = isin;
+        this.in = in;
     }
 
     public String getAuto_id() {
@@ -35,12 +35,12 @@ public class Attendence {
         this.auto_id = auto_id;
     }
 
-    public String getEmployee_id() {
-        return employee_id;
+    public String getS_id() {
+        return s_id;
     }
 
-    public void setEmployee_id(String employee_id) {
-        this.employee_id = employee_id;
+    public void setS_id(String s_id) {
+        this.s_id = s_id;
     }
 
     public String getBuild_id() {
@@ -83,11 +83,11 @@ public class Attendence {
         this.f_no = f_no;
     }
 
-    public boolean isIsin() {
-        return isin;
+    public boolean isIn() {
+        return in;
     }
 
-    public void setIsin(boolean isin) {
-        this.isin = isin;
+    public void setIn(boolean in) {
+        this.in = in;
     }
 }

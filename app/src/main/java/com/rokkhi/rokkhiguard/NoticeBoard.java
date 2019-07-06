@@ -47,7 +47,7 @@ public class NoticeBoard extends AppCompatActivity {
     ProgressBar progressBar;
     Context context;
     SharedPreferences sharedPref;
-    CollectionReference notifyDataSetChanged;
+    CollectionReference notificationCollection;
 
     private int limit = 10;
     NestedScrollView myNestedScroll;
@@ -80,16 +80,17 @@ public class NoticeBoard extends AppCompatActivity {
         commid = sharedPref.getString("commid", "none");
        // title= findViewById(R.id.title);
 
-        notifyDataSetChanged=firebaseFirestore.
+        notificationCollection=firebaseFirestore.
                 collection(getString(R.string.col_notification));
 
 
-        getFirstQuery=notifyDataSetChanged.whereEqualTo("build_id",buildid).
+        getFirstQuery=notificationCollection.whereEqualTo("build_id",buildid).
                 whereEqualTo("n_type","guard").orderBy("n_time", Query.Direction.DESCENDING).limit(limit);
-        getsecondquery=notifyDataSetChanged.whereEqualTo("build_id",buildid).
+        getsecondquery=notificationCollection.whereEqualTo("build_id",buildid).
                 whereEqualTo("n_type","all").
                 orderBy("n_time", Query.Direction.DESCENDING).limit(limit);
 
+        list = new ArrayList<>();
         getfirstdata();
 
 
@@ -102,7 +103,7 @@ public class NoticeBoard extends AppCompatActivity {
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {
                     Log.d(TAG, "onComplete: kotoboro "+task.getResult().size());
-                    list = new ArrayList<>();
+
                     for (DocumentSnapshot document : task.getResult()) {
                         Notifications notifications = document.toObject(Notifications.class);
                         list.add(notifications);
@@ -181,7 +182,7 @@ public class NoticeBoard extends AppCompatActivity {
 
                             Log.d(TAG, "onScrolled: mmmmll dhukse");
                             Query nextQuery;
-                            nextQuery= notifyDataSetChanged.whereEqualTo("build_id",buildid).
+                            nextQuery= notificationCollection.whereEqualTo("build_id",buildid).
                                     whereEqualTo("n_type","guard").orderBy("n_time", Query.Direction.DESCENDING).startAfter(lastVisible).limit(limit);
                             nextQuery.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                                 @Override
@@ -209,7 +210,7 @@ public class NoticeBoard extends AppCompatActivity {
 
 
                             Query nextQuery1;
-                            nextQuery1= notifyDataSetChanged.whereEqualTo("build_id",buildid).
+                            nextQuery1= notificationCollection.whereEqualTo("build_id",buildid).
                                     whereEqualTo("n_type" ,"all").
                                     orderBy("n_time", Query.Direction.DESCENDING).startAfter(lastVisible).limit(limit);
                             nextQuery1.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {

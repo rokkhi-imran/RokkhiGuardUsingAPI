@@ -7,11 +7,10 @@ public class Child {
 
     private String mem_id; //from members
     private String who_add;
-    private String calling_number;
     private String flat_id;
     private String build_id;
     private String f_no;
-    private boolean isactivated;
+    private boolean activated;
     private Date endtime;
     private String m_name;
     private String m_pic;
@@ -24,14 +23,13 @@ public class Child {
     }
 
 
-    public Child(String mem_id, String who_add, String calling_number, String flat_id, String build_id, String f_no, boolean isactivated, Date endtime, String m_name, String m_pic, String m_thumb, Date m_bday, String m_gender, List<String> m_array) {
+    public Child(String mem_id, String who_add, String flat_id, String build_id, String f_no, boolean activated, Date endtime, String m_name, String m_pic, String m_thumb, Date m_bday, String m_gender, List<String> m_array) {
         this.mem_id = mem_id;
         this.who_add = who_add;
-        this.calling_number = calling_number;
         this.flat_id = flat_id;
         this.build_id = build_id;
         this.f_no = f_no;
-        this.isactivated = isactivated;
+        this.activated = activated;
         this.endtime = endtime;
         this.m_name = m_name;
         this.m_pic = m_pic;
@@ -40,6 +38,7 @@ public class Child {
         this.m_gender = m_gender;
         this.m_array = m_array;
     }
+
 
     public String getMem_id() {
         return mem_id;
@@ -55,14 +54,6 @@ public class Child {
 
     public void setWho_add(String who_add) {
         this.who_add = who_add;
-    }
-
-    public String getCalling_number() {
-        return calling_number;
-    }
-
-    public void setCalling_number(String calling_number) {
-        this.calling_number = calling_number;
     }
 
     public String getFlat_id() {
@@ -89,12 +80,12 @@ public class Child {
         this.f_no = f_no;
     }
 
-    public boolean isIsactivated() {
-        return isactivated;
+    public boolean isActivated() {
+        return activated;
     }
 
-    public void setIsactivated(boolean isactivated) {
-        this.isactivated = isactivated;
+    public void setActivated(boolean activated) {
+        this.activated = activated;
     }
 
     public Date getEndtime() {

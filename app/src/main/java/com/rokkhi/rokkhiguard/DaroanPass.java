@@ -22,15 +22,22 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.WriteBatch;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
 import com.google.firebase.messaging.FirebaseMessaging;
+import com.rokkhi.rokkhiguard.Model.ActiveFlats;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import huwi.joldi.abrar.rokkhiguardo.Kotlin.CirclePinField;
 
@@ -87,6 +94,38 @@ public class DaroanPass extends AppCompatActivity implements View.OnClickListene
 
         firebaseFirestore= FirebaseFirestore.getInstance();
         editor=sharedPref.edit();
+
+//        firebaseFirestore.collection(getString(R.string.col_activeflat)).whereEqualTo("build_id","c7niuI2ozGcNAJLXpA1b")
+//                .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+//            @Override
+//            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+//                if(task.isSuccessful()){
+//                    WriteBatch batch=firebaseFirestore.batch();
+//                    for(DocumentSnapshot documentSnapshot: task.getResult()){
+//                        ActiveFlats activeFlats= documentSnapshot.toObject(ActiveFlats.class);
+//                        Map<String, Object> data = new HashMap<>();
+//                        data.put("flat_id", activeFlats.getFlat_id());
+//                        data.put("build_id", activeFlats.getBuild_id());
+//                        data.put("f_no", activeFlats.getF_no());
+//                        data.put("vacant",activeFlats.isVacant());
+//                        data.put("lastTime", FieldValue.serverTimestamp());
+//                        data.put("beforeLastTime", FieldValue.serverTimestamp());
+//                        data.put("vehicle_array", new ArrayList<>());
+//                        DocumentReference parking= firebaseFirestore.collection(getString(R.string.col_parkings)).document(activeFlats.getFlat_id());
+//                        batch.set(parking, data);
+//                    }
+//
+//                    batch.commit().addOnCompleteListener(new OnCompleteListener<Void>() {
+//                        @Override
+//                        public void onComplete(@NonNull Task<Void> task) {
+//                            if(task.isSuccessful()){
+//                                Toast.makeText(context,"Done",Toast.LENGTH_SHORT).show();
+//                            }
+//                        }
+//                    });
+//                }
+//            }
+//        });
 
         one= findViewById(R.id.propic);
         two= findViewById(R.id.two);

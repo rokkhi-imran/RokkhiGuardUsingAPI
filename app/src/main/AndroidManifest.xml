@@ -51,8 +51,9 @@
             android:name=".GeneralActivity"
             android:label="General Settings"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".VehicleActivity" />
+        <activity android:name=".AddVehicleActivity" />
         <activity android:name=".ChildrenList" />
+        <activity android:name=".ParkingActivity" />
 
         <provider
             android:name="android.support.v4.content.FileProvider"
