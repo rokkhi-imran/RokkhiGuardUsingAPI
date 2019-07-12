@@ -185,6 +185,7 @@
     <string name="col_notification">notifications</string>
     <string name="col_allmails">allmails</string>
     <string name="col_report">reports</string>
+    <string name="col_whitelists">whitelists</string>
 
 
 

@@ -44,6 +44,7 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.WriteBatch;
 import com.google.firebase.storage.FirebaseStorage;
@@ -148,7 +149,7 @@ public class CreateProfile extends AppCompatActivity implements ActiveFlatAdapte
             }
         });
 
-        firebaseFirestore.collection(getString(R.string.col_activeflat)).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+        firebaseFirestore.collection(getString(R.string.col_activeflat)).orderBy("f_no", Query.Direction.ASCENDING).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 activeFlats = new ArrayList<>();
@@ -240,9 +241,8 @@ public class CreateProfile extends AppCompatActivity implements ActiveFlatAdapte
 
 
                 //selected na hoile selected er moto kaj korbe.. selection er subidhar jnno
-                if (lv.isItemChecked(position)) {
+                if (!historyFlats.contains(ss)) {
 
-                    view.setSelected(false);
                     view.setBackground(ContextCompat.getDrawable(context, R.color.orange_light));
                     activeFlatAdapter.changedata(ss.getF_no(), true);
                     historyFlats.add(ss);
@@ -251,7 +251,6 @@ public class CreateProfile extends AppCompatActivity implements ActiveFlatAdapte
                     //activeFlatAdapter.notifyDataSetChanged();
 
                 } else {
-                    view.setSelected(true);
                     view.setBackground(ContextCompat.getDrawable(context, R.color.white));
                     activeFlatAdapter.changedata(ss.getF_no(), false);
                     historyFlats.remove(ss);

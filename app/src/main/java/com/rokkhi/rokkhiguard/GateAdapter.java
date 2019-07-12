@@ -9,6 +9,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,6 +26,7 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.SetOptions;
 import com.google.firebase.firestore.WriteBatch;
@@ -85,7 +87,8 @@ public class GateAdapter extends RecyclerView.Adapter<GateAdapter.ListViewHolder
         sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
         buildid = sharedPref.getString("buildid", "none");
         commid = sharedPref.getString("commid", "none");
-        firebaseFirestore.collection(context.getString(R.string.col_activeflat)).whereEqualTo("build_id",buildid)
+        firebaseFirestore.collection(context.getString(R.string.col_activeflat)).whereEqualTo("build_id",buildid).
+                orderBy("f_no", Query.Direction.ASCENDING)
                 .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
@@ -165,9 +168,10 @@ public class GateAdapter extends RecyclerView.Adapter<GateAdapter.ListViewHolder
 
 
                 //selected na hoile selected er moto kaj korbe.. selection er subidhar jnno
-                if (lv.isItemChecked(position)) {
+                if (!holder.historyflatno.contains(ss.getF_no())) {
 
-                    view.setSelected(false);
+                    Log.d(TAG, "onItemClick: rrr1");
+
                     view.setBackground(ContextCompat.getDrawable(context, R.color.orange_light));
                     activeFlatAdapter.changedata(ss.getF_no(), true);
                     holder.historyflatid.add(ss.getFlat_id());
@@ -177,11 +181,11 @@ public class GateAdapter extends RecyclerView.Adapter<GateAdapter.ListViewHolder
                     //activeFlatAdapter.notifyDataSetChanged();
 
                 } else {
-                    view.setSelected(true);
+                    Log.d(TAG, "onItemClick: rrr2");
                     view.setBackground(ContextCompat.getDrawable(context, R.color.white));
                     activeFlatAdapter.changedata(ss.getF_no(), false);
-                    holder.historyflatid.add(ss.getFlat_id());
-                    holder.historyflatno.add(ss.getF_no());
+                    holder.historyflatid.remove(ss.getFlat_id());
+                    holder.historyflatno.remove(ss.getF_no());
                     holder.total = holder.total.replace("  " + ss.getF_no(), "");
                     tt.setText(holder.total);
                     // activeFlatAdapter.notifyDataSetChanged();
@@ -368,7 +372,7 @@ public class GateAdapter extends RecyclerView.Adapter<GateAdapter.ListViewHolder
             flats= view.findViewById(R.id.flats);
             historyflatid= new ArrayList<>();
             historyflatno= new ArrayList<>();
-            total="";
+            total="  ";
 
         }
     }

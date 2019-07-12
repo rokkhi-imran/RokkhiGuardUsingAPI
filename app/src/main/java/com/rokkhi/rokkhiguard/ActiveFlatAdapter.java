@@ -125,13 +125,11 @@ public class ActiveFlatAdapter extends BaseAdapter implements Filterable {
 
 
         viewHolder.name.setText(activeFlats.get(position).getF_no());
-        convertView.setSelected(true);
 
         if(bb.get(activeFlats.get(position).getF_no())!=null){
             Boolean flag=bb.get(activeFlats.get(position).getF_no());
             if(flag!=null && flag){
                 convertView.setBackground(ContextCompat.getDrawable(context,R.color.orange_light));
-                convertView.setSelected(false);
             }
             else{
                 convertView.setBackground(ContextCompat.getDrawable(context,R.color.white));

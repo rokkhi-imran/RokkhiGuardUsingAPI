@@ -411,7 +411,7 @@ public class DaroanPass extends AppCompatActivity implements View.OnClickListene
                 finish();
             }
             else{
-                tabpass=sharedPref.getString("tabpass","none");
+                tabpass=sharedPref.getString("pass","none");
                 if(tabpass!=null && tabpass.equals(passtext)){
                     //passtext="";
 

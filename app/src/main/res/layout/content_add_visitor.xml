@@ -197,7 +197,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@null"
-                android:text="meeting"
+                android:text="visiting"
                 android:textSize="24sp"
                 android:layout_below="@+id/t1"
                 android:hint="Issue of visiting"
@@ -216,10 +216,38 @@
         </RelativeLayout>
 
         <LinearLayout
-            android:id="@+id/relmail"
+            android:id="@+id/relvehicle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/relpurpose"
+            android:layout_marginTop="15dp"
+            android:background="@drawable/grey_border_bottom"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="15dp"
+                android:text="Vehicle no    ( গাড়ি নং  )"
+                android:textColor="@color/orange"
+                android:textSize="20sp" />
+
+            <EditText
+                android:id="@+id/vehicle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@null"
+                android:textSize="24sp"
+                android:hint="Your vehicle no"
+                android:inputType="text" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/relmail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/relvehicle"
             android:layout_marginTop="15dp"
             android:background="@drawable/grey_border_bottom"
             android:orientation="vertical">
@@ -268,7 +296,7 @@
                 android:layout_height="wrap_content"
                 android:background="@null"
                 android:textSize="24sp"
-                android:hint="Office provided id card number(If given any)"
+                android:hint="House provided id card number(If given any)"
                 android:inputType="textNoSuggestions" />
 
         </LinearLayout>

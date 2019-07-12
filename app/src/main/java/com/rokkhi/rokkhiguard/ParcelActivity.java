@@ -40,6 +40,7 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.WriteBatch;
 import com.google.firebase.storage.FirebaseStorage;
@@ -134,6 +135,8 @@ public class ParcelActivity extends AppCompatActivity {
             }
         });
 
+        addallflats();
+
         initonclick();
 
     }
@@ -224,6 +227,55 @@ public class ParcelActivity extends AppCompatActivity {
 
     }
 
+    public void showallflats(){
+        final ActiveFlatAdapter valueAdapter = new ActiveFlatAdapter(allflats, context);
+        final AlertDialog alertcompany = new AlertDialog.Builder(context).create();
+        LayoutInflater inflater = getLayoutInflater();
+        View convertView = (View) inflater.inflate(R.layout.custom_list, null);
+        final EditText editText = convertView.findViewById(R.id.sear);
+        final ListView lv = (ListView) convertView.findViewById(R.id.listView1);
+        final Button done = convertView.findViewById(R.id.done);
+        alertcompany.setView(convertView);
+        alertcompany.setCancelable(false);
+        //valueAdapter.notifyDataSetChanged();
+
+        lv.setAdapter(valueAdapter);
+        alertcompany.show();
+
+        done.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                flat.setText(editText.getText().toString());
+                alertcompany.dismiss();
+            }
+        });
+        editText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                valueAdapter.getFilter().filter(s);
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        });
+
+        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                flatselected = (ActiveFlats) lv.getItemAtPosition(position);
+                //cname.setText(myoffice.getName());
+                flat.setText(flatselected.getF_no());
+                alertcompany.dismiss();
+
+            }
+        });
+    }
+
     public void addalltypes() {
 
         final StringAdapter valueAdapter = new StringAdapter(types, context);
@@ -280,7 +332,7 @@ public class ParcelActivity extends AppCompatActivity {
         flat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                addallflats();
+                showallflats();
 
             }
         });
@@ -398,9 +450,8 @@ public class ParcelActivity extends AppCompatActivity {
 
     public void addallflats() {
         allflats = new ArrayList<>();
-        progressBar.setVisibility(View.VISIBLE);
         firebaseFirestore.collection(getString(R.string.col_activeflat))
-                .whereEqualTo("build_id",buildid).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                .whereEqualTo("build_id",buildid).orderBy("f_no", Query.Direction.ASCENDING).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
 
@@ -411,54 +462,9 @@ public class ParcelActivity extends AppCompatActivity {
                         ActiveFlats activeFlat = documentSnapshot.toObject(ActiveFlats.class);
                         allflats.add(activeFlat);
                     }
-                    progressBar.setVisibility(View.GONE);
+                   // progressBar.setVisibility(View.GONE);
 
-                    final ActiveFlatAdapter valueAdapter = new ActiveFlatAdapter(allflats, context);
-                    final AlertDialog alertcompany = new AlertDialog.Builder(context).create();
-                    LayoutInflater inflater = getLayoutInflater();
-                    View convertView = (View) inflater.inflate(R.layout.custom_list, null);
-                    final EditText editText = convertView.findViewById(R.id.sear);
-                    final ListView lv = (ListView) convertView.findViewById(R.id.listView1);
-                    final Button done = convertView.findViewById(R.id.done);
-                    alertcompany.setView(convertView);
-                    alertcompany.setCancelable(false);
-                    //valueAdapter.notifyDataSetChanged();
 
-                    lv.setAdapter(valueAdapter);
-                    alertcompany.show();
-
-                    done.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            flat.setText(editText.getText().toString());
-                            alertcompany.dismiss();
-                        }
-                    });
-                    editText.addTextChangedListener(new TextWatcher() {
-                        @Override
-                        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                        }
-
-                        @Override
-                        public void onTextChanged(CharSequence s, int start, int before, int count) {
-                            valueAdapter.getFilter().filter(s);
-                        }
-
-                        @Override
-                        public void afterTextChanged(Editable s) {
-                        }
-                    });
-
-                    lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                        @Override
-                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                            flatselected = (ActiveFlats) lv.getItemAtPosition(position);
-                            //cname.setText(myoffice.getName());
-                            flat.setText(flatselected.getF_no());
-                            alertcompany.dismiss();
-
-                        }
-                    });
                 }
             }
         });

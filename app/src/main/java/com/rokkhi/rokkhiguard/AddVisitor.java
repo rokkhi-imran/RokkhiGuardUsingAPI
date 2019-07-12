@@ -80,7 +80,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class AddVisitor extends AppCompatActivity implements InviteeAdapter.MyInterface {
 
     CircleImageView userphoto;
-    EditText username, phone, purpose, idcardno, email, org, flat;
+    EditText username, phone, purpose, idcardno, email, org, flat,vehicle;
     Button done;
     Map<String, Object> doc;
 
@@ -108,7 +108,7 @@ public class AddVisitor extends AppCompatActivity implements InviteeAdapter.MyIn
     InviteeAdapter inviteeAdapter;
     Normalfunc normalfunc;
 
-    private String res;
+    private String res="";
     ArrayList<Invitees> list;
     AlertDialog alertDialog;
     RecyclerView recyclerView;
@@ -116,6 +116,7 @@ public class AddVisitor extends AppCompatActivity implements InviteeAdapter.MyIn
     ImageView cut;
 
     String linkFromSearch="";
+    boolean approve;
 
 
 
@@ -141,6 +142,7 @@ public class AddVisitor extends AppCompatActivity implements InviteeAdapter.MyIn
         purpose = findViewById(R.id.pupose);
         flat = findViewById(R.id.flat);
         email = findViewById(R.id.email);
+        vehicle= findViewById(R.id.vehicle);
         idcardno = findViewById(R.id.card_no);
         //changepic = findViewById(R.id.changeProfilePhoto);
         userphoto = findViewById(R.id.user_photo);
@@ -159,6 +161,8 @@ public class AddVisitor extends AppCompatActivity implements InviteeAdapter.MyIn
 
         initonclick();
         listener();
+
+        addallflats();
     }
 
     public void cleardata(){
@@ -200,104 +204,63 @@ public class AddVisitor extends AppCompatActivity implements InviteeAdapter.MyIn
                     flag=true;
 
                     Log.d(TAG, "onTextChanged:  nn1");
-                    firebaseFirestore.
-                            collection(getString(R.string.col_invitees))
-                            .whereEqualTo("i_phone",phone.getText().toString())
-                            .whereEqualTo("hasdone",false)
-                            .whereGreaterThan("i_mtime",low)
-                            .whereLessThan("i_mtime",high).
-                            orderBy("i_mtime", Query.Direction.ASCENDING).get().addOnCompleteListener(
-                            new OnCompleteListener<QuerySnapshot>() {
+                    firebaseFirestore.collection("search")
+                            .document(phone.getText().toString()).get()
+                            .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                                 @Override
-                                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                                     if(task.isSuccessful()){
-                                        list = new ArrayList<>();
-                                        for (DocumentSnapshot document : task.getResult()) {
-                                            Invitees invitee = document.toObject(Invitees.class);
-                                            list.add(invitee);
-                                        }
-                                        progressBar.setVisibility(View.GONE);
-                                        inviteeAdapter = new InviteeAdapter(list,context);
-                                        inviteeAdapter.setHasStableIds(true);
-
-                                        if(!list.isEmpty()){
-                                            Log.d(TAG, "onComplete: rrr2 ");
+                                        DocumentSnapshot documentSnapshot= task.getResult();
+                                        if(documentSnapshot!=null && documentSnapshot.exists()){
+                                            Log.d(TAG, "onComplete: rrr "+ "ashse ");
+                                            final Vsearch vsearch= documentSnapshot.toObject(Vsearch.class);
                                             alertDialog = new AlertDialog.Builder(context).create();
                                             alertDialog.setCancelable(false);
                                             LayoutInflater inflater = getLayoutInflater();
-                                            View convertView = (View) inflater.inflate(R.layout.dialog_showlist, null);
-                                            TextView hide= convertView.findViewById(R.id.text);
-                                            hide.setVisibility(View.GONE);
-                                            TextView header = convertView.findViewById(R.id.tik);
-                                            header.setText("He is invited today!");
-                                            recyclerView = convertView.findViewById(R.id.list);
-                                            recyclerView.setLayoutManager(new LinearLayoutManager(context));
-                                            recyclerView.setAdapter(inviteeAdapter);
+                                            View convertView = (View) inflater.inflate(R.layout.item_person, null);
+                                            CircleImageView propic= convertView.findViewById(R.id.propic);
+                                            TextView name= convertView.findViewById(R.id.name);
+                                            Button cancel= convertView.findViewById(R.id.cancel);
+                                            TextView pass= convertView.findViewById(R.id.pass);
+                                            RelativeLayout relativeLayout= convertView.findViewById(R.id.relativeLayout);
+                                            pass.setVisibility(View.GONE);
+
+
+                                            relativeLayout.setOnClickListener(new View.OnClickListener() {
+                                                @Override
+                                                public void onClick(View v) {
+                                                    username.setText(vsearch.getV_name());
+                                                    phone.setText(vsearch.getV_phone());
+                                                    org.setText(vsearch.getV_where());
+                                                    if(!vsearch.getV_purpose().isEmpty())purpose.setText(vsearch.getV_purpose());
+
+                                                    email.setText(vsearch.getV_mail());
+                                                    UniversalImageLoader.setImage(vsearch.getV_thumb(),userphoto, null, "");
+
+                                                    if(!vsearch.getV_thumb().isEmpty()){
+                                                        linkFromSearch= vsearch.getV_thumb();
+                                                    }
+                                                    username.requestFocus();
+                                                    alertDialog.dismiss();
+                                                }
+                                            });
+
+                                            name.setText(vsearch.getV_name());
+                                            UniversalImageLoader.setImage(vsearch.getV_thumb(),propic, null, "");
+
+                                            cancel.setOnClickListener(new View.OnClickListener() {
+                                                @Override
+                                                public void onClick(View v) {
+                                                    alertDialog.dismiss();
+                                                }
+                                            });
                                             alertDialog.setView(convertView);
                                             alertDialog.show();
-                                        }
 
-                                        else{
-                                            firebaseFirestore.collection("search")
-                                                    .document(phone.getText().toString()).get()
-                                                    .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                                                        @Override
-                                                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                                                            if(task.isSuccessful()){
-                                                                DocumentSnapshot documentSnapshot= task.getResult();
-                                                                if(documentSnapshot!=null && documentSnapshot.exists()){
-                                                                    Log.d(TAG, "onComplete: rrr "+ "ashse ");
-                                                                    final Vsearch vsearch= documentSnapshot.toObject(Vsearch.class);
-                                                                    alertDialog = new AlertDialog.Builder(context).create();
-                                                                    alertDialog.setCancelable(false);
-                                                                    LayoutInflater inflater = getLayoutInflater();
-                                                                    View convertView = (View) inflater.inflate(R.layout.item_person, null);
-                                                                    CircleImageView propic= convertView.findViewById(R.id.propic);
-                                                                    TextView name= convertView.findViewById(R.id.name);
-                                                                    Button cancel= convertView.findViewById(R.id.cancel);
-                                                                    RelativeLayout relativeLayout= convertView.findViewById(R.id.relativeLayout);
-
-
-                                                                    relativeLayout.setOnClickListener(new View.OnClickListener() {
-                                                                        @Override
-                                                                        public void onClick(View v) {
-                                                                            username.setText(vsearch.getV_name());
-                                                                            phone.setText(vsearch.getV_phone());
-                                                                            org.setText(vsearch.getV_where());
-                                                                            if(!vsearch.getV_purpose().isEmpty())purpose.setText(vsearch.getV_purpose());
-
-                                                                            email.setText(vsearch.getV_mail());
-                                                                            UniversalImageLoader.setImage(vsearch.getV_thumb(),userphoto, null, "");
-
-                                                                            if(!vsearch.getV_thumb().isEmpty()){
-                                                                                linkFromSearch= vsearch.getV_thumb();
-                                                                            }
-                                                                            username.requestFocus();
-                                                                            alertDialog.dismiss();
-                                                                        }
-                                                                    });
-
-                                                                    name.setText(vsearch.getV_name());
-                                                                    UniversalImageLoader.setImage(vsearch.getV_thumb(),propic, null, "");
-
-                                                                    cancel.setOnClickListener(new View.OnClickListener() {
-                                                                        @Override
-                                                                        public void onClick(View v) {
-                                                                            alertDialog.dismiss();
-                                                                        }
-                                                                    });
-                                                                    alertDialog.setView(convertView);
-                                                                    alertDialog.show();
-
-                                                                }
-                                                            }
-                                                        }
-                                                    });
                                         }
                                     }
                                 }
-                            }
-                    );
+                            });
                 }
 
                 else if(s.length()<11) flag=false;
@@ -310,6 +273,8 @@ public class AddVisitor extends AppCompatActivity implements InviteeAdapter.MyIn
             }
         });
     }
+
+
 
     public void upload() {
 
@@ -339,7 +304,7 @@ public class AddVisitor extends AppCompatActivity implements InviteeAdapter.MyIn
         doc.put("f_no", selected.getF_no());
         doc.put("comm_id", selected.getComm_id());
         doc.put("build_id", selected.getBuild_id());
-        doc.put("v_vehicleno", "");
+        doc.put("v_vehicleno", vehicle.getText().toString());
         doc.put("v_pic", "");
         doc.put("v_thumb", "");
         doc.put("in",false);
@@ -442,7 +407,6 @@ public class AddVisitor extends AppCompatActivity implements InviteeAdapter.MyIn
     public void dialogconfirmation(final String uid){
 
 
-        boolean approve;
         if(selected.isVacant())approve=false;
         else approve=true;
 
@@ -527,7 +491,17 @@ public class AddVisitor extends AppCompatActivity implements InviteeAdapter.MyIn
         });
 
 
-        if(approve){
+        if(true){
+
+            if(res.equals("whitelisted")){
+                Log.d(TAG, "dialogconfirmation: xxx");
+                enter.setVisibility(View.GONE);
+                cancel.setVisibility(View.GONE);
+                submit.setVisibility(View.VISIBLE);
+                progressBar.setVisibility(View.GONE);
+                status.setText("Accepted  ( গৃহীত )");
+                status.setTextColor(Color.GREEN);
+            }
 
             new CountDownTimer(60000, 100) {
 
@@ -596,74 +570,100 @@ public class AddVisitor extends AppCompatActivity implements InviteeAdapter.MyIn
     }
 
 
-
-
-
-    public void addallusers(){
-        allflats= new ArrayList<>();
-        progressBar.setVisibility(View.VISIBLE);
-        firebaseFirestore
-                .collection(getString(R.string.col_activeflat)).whereEqualTo("build_id",buildid).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+    public void addallflats() {
+        allflats = new ArrayList<>();
+        firebaseFirestore.collection(getString(R.string.col_activeflat))
+                .whereEqualTo("build_id",buildid).orderBy("f_no", Query.Direction.ASCENDING).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
 
-                if(task.isSuccessful()){
-                    allflats.clear();
-                    for(DocumentSnapshot documentSnapshot: task.getResult()){
-                        ActiveFlats activeFlat= documentSnapshot.toObject(ActiveFlats.class);
+                if (task.isSuccessful()) {
+                    Log.d(TAG, "onComplete: ");
+                    for (DocumentSnapshot documentSnapshot : task.getResult()) {
+                        ActiveFlats activeFlat = documentSnapshot.toObject(ActiveFlats.class);
                         allflats.add(activeFlat);
                     }
-                    progressBar.setVisibility(View.GONE);
+                    // progressBar.setVisibility(View.GONE);
 
-                    //TODO ekhane flat offline a dekhano jaite pare
 
-                    final ActiveFlatAdapter valueAdapter=new ActiveFlatAdapter(allflats,context);
-                    final AlertDialog alertcompany = new AlertDialog.Builder(context).create();
-                    LayoutInflater inflater = getLayoutInflater();
-                    View convertView = (View) inflater.inflate(R.layout.custom_list, null);
-                    final EditText editText=convertView.findViewById(R.id.sear);
-                    final ListView lv = (ListView) convertView.findViewById(R.id.listView1);
-                    final Button done = convertView.findViewById(R.id.done);
-                    alertcompany.setView(convertView);
-                    alertcompany.setCancelable(false);
-                    //valueAdapter.notifyDataSetChanged();
-
-                    lv.setAdapter(valueAdapter);
-                    alertcompany.show();
-
-                    done.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            flat.setText(editText.getText().toString());
-                            alertcompany.dismiss();
-                        }
-                    });
-                    editText.addTextChangedListener(new TextWatcher() {
-                        @Override
-                        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                        }
-                        @Override
-                        public void onTextChanged(CharSequence s, int start, int before, int count) {
-                            valueAdapter.getFilter().filter(s);
-                        }
-                        @Override
-                        public void afterTextChanged(Editable s) {
-                        }
-                    });
-
-                    lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                        @Override
-                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                            selected=(ActiveFlats) lv.getItemAtPosition(position);
-                            //cname.setText(myoffice.getName());
-                            flat.setText(selected.getF_no());
-                            alertcompany.dismiss();
-                        }
-                    });
                 }
             }
         });
     }
+
+
+    public void showallflats(){
+        final ActiveFlatAdapter valueAdapter = new ActiveFlatAdapter(allflats, context);
+        final AlertDialog alertcompany = new AlertDialog.Builder(context).create();
+        LayoutInflater inflater = getLayoutInflater();
+        View convertView = (View) inflater.inflate(R.layout.custom_list, null);
+        final EditText editText = convertView.findViewById(R.id.sear);
+        final ListView lv = (ListView) convertView.findViewById(R.id.listView1);
+        final Button done = convertView.findViewById(R.id.done);
+        alertcompany.setView(convertView);
+        alertcompany.setCancelable(false);
+        //valueAdapter.notifyDataSetChanged();
+
+        lv.setAdapter(valueAdapter);
+        alertcompany.show();
+
+        done.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                flat.setText(editText.getText().toString());
+                alertcompany.dismiss();
+            }
+        });
+        editText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                valueAdapter.getFilter().filter(s);
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        });
+
+        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                selected=(ActiveFlats) lv.getItemAtPosition(position);
+                //cname.setText(myoffice.getName());
+                flat.setText(selected.getF_no());
+                alertcompany.dismiss();
+
+
+                if(phone.getText().toString().length()==11)firebaseFirestore.collection(getString(R.string.col_whitelists)).whereEqualTo("w_phone",phone.getText().toString())
+                        .whereEqualTo("f_no",selected.getF_no())
+                        .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if(task.isSuccessful()){
+                            Log.d(TAG, "onComplete: xxx2");
+                            if(task.getResult().size()>0){
+                                Log.d(TAG, "onComplete: xxx3");
+                                res="whitelisted";
+                            }
+                            else Log.d(TAG, "onComplete: xxx4");
+                        }
+                        else{
+                            Log.d(TAG, "onComplete: xxx5");
+                        }
+                    }
+                });
+
+            }
+        });
+    }
+
+
+
+
 
 
 
@@ -673,7 +673,9 @@ public class AddVisitor extends AppCompatActivity implements InviteeAdapter.MyIn
         flat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                addallusers();
+                showallflats();
+
+
 
             }
         });

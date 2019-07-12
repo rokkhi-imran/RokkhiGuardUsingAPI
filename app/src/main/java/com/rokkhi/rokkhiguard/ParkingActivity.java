@@ -120,6 +120,8 @@ public class ParkingActivity extends AppCompatActivity  {
         getfirstdata();
 
 
+
+
     }
 
 
