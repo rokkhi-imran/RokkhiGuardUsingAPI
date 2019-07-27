@@ -69,7 +69,6 @@ public class GridAdapter extends RecyclerView.Adapter<GridAdapter.GridViewHolder
     public Filter getFilter() {
 
         if (valueFilter == null) {
-
             valueFilter = new ValueFilter();
         }
 
@@ -104,7 +103,11 @@ public class GridAdapter extends RecyclerView.Adapter<GridAdapter.GridViewHolder
 
     Dialog mdialog;
 
-    public void confirmdialog(final GridViewHolder holder,final Parkings parkings) {
+    public void confirmdialog(final GridViewHolder holder,final Parkings parkings , final int position) {
+
+
+        Parkings tempParking = list.get(position);
+
 
         alertDialog = new AlertDialog.Builder(context).create();
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -131,24 +134,21 @@ public class GridAdapter extends RecyclerView.Adapter<GridAdapter.GridViewHolder
                         .collection(context.getString(R.string.col_parkings)).document(parkings.getFlat_id());
 
                 if(parkings.isVacant()){
-                    Log.d(TAG, "onClick: yyy1 ");
+
                     batch.update(updatehasdone, "lastTime", FieldValue.serverTimestamp(),
                             "beforeLastTime",parkings.getLastTime()
                             , "vacant", false);
-
-                    holder.view.setBackgroundColor(ContextCompat.getColor(context,R.color.orange));
-                    holder.flatno.setTextColor(ContextCompat.getColor(context,R.color.white));
-
-
+                    list.get(position).setVacant(false);
+                    notifyDataSetChanged();
                 }
 
                 else{
-                    Log.d(TAG, "onClick: yyy2 ");
+
                     batch.update(updatehasdone, "lastTime", FieldValue.serverTimestamp(),
                             "beforeLastTime",parkings.getLastTime()
                             , "vacant", true);
-                    holder.view.setBackgroundColor(ContextCompat.getColor(context,R.color.white));
-                    holder.flatno.setTextColor(ContextCompat.getColor(context,R.color.orange));
+                    list.get(position).setVacant(true);
+                    notifyDataSetChanged();
                 }
 
 
@@ -156,7 +156,7 @@ public class GridAdapter extends RecyclerView.Adapter<GridAdapter.GridViewHolder
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful()) {
-                            Log.d(TAG, "onComplete: yyy3");
+
                             dismissdialog();
                             alertDialog.dismiss();
                         }
@@ -184,21 +184,17 @@ public class GridAdapter extends RecyclerView.Adapter<GridAdapter.GridViewHolder
     }
 
     @Override
-    public void onBindViewHolder(@NonNull final GridViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull final GridViewHolder holder, final int position) {
 
         final Parkings parkings = list.get(position);
         holder.flatno.setText(parkings.getF_no());
         count++;
-       // Log.d(TAG, "onBindViewHolder: yyy" + count + parkings.isVacant());
 
         if(!parkings.isVacant()){
-
-            Log.d(TAG, "onBindViewHolder: yyy99");
             holder.view.setBackgroundColor(ContextCompat.getColor(context,R.color.orange));
             holder.flatno.setTextColor(ContextCompat.getColor(context,R.color.white));
         }
         else{
-            Log.d(TAG, "onBindViewHolder: yyy89");
             holder.view.setBackgroundColor(ContextCompat.getColor(context,R.color.white));
             holder.flatno.setTextColor(ContextCompat.getColor(context,R.color.orange));
         }
@@ -206,7 +202,7 @@ public class GridAdapter extends RecyclerView.Adapter<GridAdapter.GridViewHolder
         holder.view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                confirmdialog(holder,parkings);
+                confirmdialog(holder,parkings , position);
             }
         });
 

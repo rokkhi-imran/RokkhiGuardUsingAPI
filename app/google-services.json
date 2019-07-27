@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "1098122328211-g95pbgpa8741q8583bsifpgt3k9l4rju.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.rokkhi.rokkhi",
+            "certificate_hash": "c9f676d663792f94603844023aa889963af6a2b6"
+          }
+        },
+        {
           "client_id": "1098122328211-644oq350g1i9tu3vl7rqv67u3cnnadq3.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
@@ -36,8 +44,59 @@
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "1098122328211-k68vk2h8642daekbgi4spokbehveh0dl.apps.googleusercontent.com",
+              "client_id": "1098122328211-d48cn5unitniloi1dd4bn2qgn2f0559i.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "1098122328211-tdd4jk917m3hf6arn2gmkjnkslkmjht5.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "ravtic.oauth"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1098122328211:android:ad73cdd84042cf93",
+        "android_client_info": {
+          "package_name": "com.rokkhi.rokkhiadminhome"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1098122328211-l07r1j0snvvgj5da9j92g10dgbk9d4t2.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.rokkhi.rokkhiadminhome",
+            "certificate_hash": "f1aabb6a92190f89abef8c6f204c85738ca58bd3"
+          }
+        },
+        {
+          "client_id": "1098122328211-k68vk2h8642daekbgi4spokbehveh0dl.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDoMvfTBdlLn1g5kJUXX5WICgd-rtfGhV0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1098122328211-d48cn5unitniloi1dd4bn2qgn2f0559i.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "1098122328211-tdd4jk917m3hf6arn2gmkjnkslkmjht5.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "ravtic.oauth"
+              }
             }
           ]
         }
@@ -51,6 +110,14 @@
         }
       },
       "oauth_client": [
+        {
+          "client_id": "1098122328211-0al2o6fpla5d1hth15b6t0ifv7rc021u.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.rokkhi.rokkhiguard",
+            "certificate_hash": "c9f676d663792f94603844023aa889963af6a2b6"
+          }
+        },
         {
           "client_id": "1098122328211-n462vjeci7i4ep9mfikdcc0me12gkkrc.apps.googleusercontent.com",
           "client_type": 1,
@@ -73,8 +140,15 @@
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "1098122328211-k68vk2h8642daekbgi4spokbehveh0dl.apps.googleusercontent.com",
+              "client_id": "1098122328211-d48cn5unitniloi1dd4bn2qgn2f0559i.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "1098122328211-tdd4jk917m3hf6arn2gmkjnkslkmjht5.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "ravtic.oauth"
+              }
             }
           ]
         }
