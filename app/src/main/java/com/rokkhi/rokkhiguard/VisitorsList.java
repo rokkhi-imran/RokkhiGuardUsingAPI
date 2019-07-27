@@ -94,9 +94,10 @@ public class VisitorsList extends AppCompatActivity implements VisitorAdapter.My
 
 
         getFirstQuery=visitorref.whereEqualTo("build_id",buildid).whereEqualTo("in",true)
-                .whereGreaterThan("v_checkin",low)
-                .whereLessThan("v_checkin",high).
-                orderBy("v_checkin", Query.Direction.ASCENDING).limit(limit);
+                .whereEqualTo("completed",false)
+                .whereGreaterThan("time",low)
+                .whereLessThan("time",high).
+                orderBy("time", Query.Direction.ASCENDING).limit(limit);
         getfirstdata();
 
         search.addTextChangedListener(new TextWatcher() {
@@ -111,9 +112,6 @@ public class VisitorsList extends AppCompatActivity implements VisitorAdapter.My
             public void afterTextChanged(Editable s) {
             }
         });
-
-
-
     }
 
     public void getdate(){
@@ -195,9 +193,9 @@ public class VisitorsList extends AppCompatActivity implements VisitorAdapter.My
                             Log.d(TAG, "onScrolled: mmmmll dhukse");
                             Query nextQuery;
                             nextQuery= visitorref.whereEqualTo("build_id",buildid).whereEqualTo("in",true)
-                                    .whereGreaterThan("v_checkin",low)
-                                    .whereLessThan("v_checkin",high).
-                                            orderBy("v_checkin", Query.Direction.ASCENDING)
+                                    .whereGreaterThan("time",low)
+                                    .whereLessThan("time",high).
+                                            orderBy("time", Query.Direction.ASCENDING)
                                     .startAfter(lastVisible).limit(limit);
 
                             nextQuery.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {

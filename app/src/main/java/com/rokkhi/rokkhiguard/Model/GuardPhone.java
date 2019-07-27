@@ -1,24 +1,26 @@
 package com.rokkhi.rokkhiguard.Model;
 
+import java.util.ArrayList;
+
 public class GuardPhone {
 
     private String phone;  //userid
     private boolean activated;
     private String g_token;
-    private String build_id;
     private String comm_id;
     private String mobilepass;
+    private ArrayList<String> build_array;
 
     public GuardPhone(){
     }
 
-    public GuardPhone(String phone, boolean activated, String g_token, String build_id, String comm_id, String mobilepass) {
+    public GuardPhone(String phone, boolean activated, String g_token, String comm_id, String mobilepass, ArrayList<String> build_array) {
         this.phone = phone;
         this.activated = activated;
         this.g_token = g_token;
-        this.build_id = build_id;
         this.comm_id = comm_id;
         this.mobilepass = mobilepass;
+        this.build_array = build_array;
     }
 
     public String getPhone() {
@@ -45,14 +47,6 @@ public class GuardPhone {
         this.g_token = g_token;
     }
 
-    public String getBuild_id() {
-        return build_id;
-    }
-
-    public void setBuild_id(String build_id) {
-        this.build_id = build_id;
-    }
-
     public String getComm_id() {
         return comm_id;
     }
@@ -67,5 +61,13 @@ public class GuardPhone {
 
     public void setMobilepass(String mobilepass) {
         this.mobilepass = mobilepass;
+    }
+
+    public ArrayList<String> getBuild_array() {
+        return build_array;
+    }
+
+    public void setBuild_array(ArrayList<String> build_array) {
+        this.build_array = build_array;
     }
 }

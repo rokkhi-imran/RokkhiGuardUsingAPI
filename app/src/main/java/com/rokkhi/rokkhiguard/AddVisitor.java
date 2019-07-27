@@ -33,7 +33,6 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -52,7 +51,6 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.rokkhi.rokkhiguard.Model.ActiveFlats;
-import com.rokkhi.rokkhiguard.Model.Flats;
 import com.rokkhi.rokkhiguard.Model.Invitees;
 import com.rokkhi.rokkhiguard.Model.Visitors;
 import com.rokkhi.rokkhiguard.Model.Vsearch;
@@ -108,12 +106,14 @@ public class AddVisitor extends AppCompatActivity implements InviteeAdapter.MyIn
     InviteeAdapter inviteeAdapter;
     Normalfunc normalfunc;
 
-    private String res="";
+    private String res="visitor";
     ArrayList<Invitees> list;
     AlertDialog alertDialog;
     RecyclerView recyclerView;
     boolean flag;
     ImageView cut;
+
+    ArrayList<String> wflats;
 
     String linkFromSearch="";
     boolean approve;
@@ -132,7 +132,6 @@ public class AddVisitor extends AppCompatActivity implements InviteeAdapter.MyIn
         context = AddVisitor.this;
         normalfunc= new Normalfunc();
         flag=false;
-
 
 
         done = findViewById(R.id.done);
@@ -202,6 +201,30 @@ public class AddVisitor extends AppCompatActivity implements InviteeAdapter.MyIn
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if(s.length()==11 && !flag){
                     flag=true;
+
+
+                    firebaseFirestore.collection(getString(R.string.col_whitelists)).whereEqualTo("w_phone",phone.getText().toString())
+                            .whereEqualTo("build_id",buildid)
+                            .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                            if(task.isSuccessful()){
+                                wflats=new ArrayList<>();
+
+                                for(DocumentSnapshot documentSnapshot: task.getResult()){
+                                    wflats.add(documentSnapshot.getString("flat_id"));
+                                }
+
+                                if(selected!=null){
+                                    if(wflats.contains(selected.getFlat_id()))res="whitelisted";
+                                    else res="visitor";
+                                }
+                            }
+                            else{
+                                Log.d(TAG, "onComplete: xxx5");
+                            }
+                        }
+                    });
 
                     Log.d(TAG, "onTextChanged:  nn1");
                     firebaseFirestore.collection("search")
@@ -292,8 +315,8 @@ public class AddVisitor extends AppCompatActivity implements InviteeAdapter.MyIn
 
 
         doc = new HashMap<>();
-        doc.put("v_checkin", FieldValue.serverTimestamp());
-        doc.put("v_checkout", FieldValue.serverTimestamp());
+        doc.put("time", FieldValue.serverTimestamp());
+        doc.put("another_uid", "");
         doc.put("v_name", username.getText().toString());
         doc.put("v_mail", email.getText().toString());
         doc.put("v_phone", phone.getText().toString());
@@ -307,9 +330,10 @@ public class AddVisitor extends AppCompatActivity implements InviteeAdapter.MyIn
         doc.put("v_vehicleno", vehicle.getText().toString());
         doc.put("v_pic", "");
         doc.put("v_thumb", "");
-        doc.put("in",false);
-        doc.put("response","pending");
-        doc.put("v_type","visitor");
+        doc.put("in",true);
+        doc.put("completed",false);
+        doc.put("response",res);
+        doc.put("v_type",res);
         doc.put("v_array",ll);
         doc.put("responder",firebaseUser.getUid());
 
@@ -430,7 +454,7 @@ public class AddVisitor extends AppCompatActivity implements InviteeAdapter.MyIn
             @Override
             public void onClick(View view) {
                 firebaseFirestore.collection(getString(R.string.col_visitors)).document(uid)
-                        .update("in",true ,"response", "accepted").addOnCompleteListener(new OnCompleteListener<Void>() {
+                        .update("response", "accepted").addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         if(task.isSuccessful()){
@@ -636,35 +660,18 @@ public class AddVisitor extends AppCompatActivity implements InviteeAdapter.MyIn
                 //cname.setText(myoffice.getName());
                 flat.setText(selected.getF_no());
                 alertcompany.dismiss();
-
-
-                if(phone.getText().toString().length()==11)firebaseFirestore.collection(getString(R.string.col_whitelists)).whereEqualTo("w_phone",phone.getText().toString())
-                        .whereEqualTo("f_no",selected.getF_no())
-                        .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if(task.isSuccessful()){
-                            Log.d(TAG, "onComplete: xxx2");
-                            if(task.getResult().size()>0){
-                                Log.d(TAG, "onComplete: xxx3");
-                                res="whitelisted";
-                            }
-                            else Log.d(TAG, "onComplete: xxx4");
-                        }
-                        else{
-                            Log.d(TAG, "onComplete: xxx5");
-                        }
+                if(wflats!=null){
+                    if(wflats.contains(selected.getFlat_id())){
+                        res="whitelisted";
                     }
-                });
+                    else{
+                        res= "visitor";
+                    }
+                }
 
             }
         });
     }
-
-
-
-
-
 
 
     public void initonclick() {

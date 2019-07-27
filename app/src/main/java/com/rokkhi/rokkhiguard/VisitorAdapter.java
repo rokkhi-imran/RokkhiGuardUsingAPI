@@ -6,6 +6,7 @@ import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -108,7 +109,7 @@ public class VisitorAdapter extends RecyclerView.Adapter<VisitorAdapter.VisitorV
         final Visitors visitor = list.get(position);
         holder.name.setText(visitor.getV_name());
         UniversalImageLoader.setImage(visitor.getV_thumb(), holder.propic, null, "");
-        Date date1 = visitor.getV_checkin();
+        Date date1 = visitor.getTime();
         Calendar cal = Calendar.getInstance();
         cal.setTime(date1);
 
@@ -129,26 +130,40 @@ public class VisitorAdapter extends RecyclerView.Adapter<VisitorAdapter.VisitorV
                 alertDialog.setCancelable(false);
                 alertDialog.show();
 
+
                 cancel.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         alertDialog.dismiss();
                     }
                 });
+
+
                 confirm.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
 
+
                         WriteBatch batch = firebaseFirestore.batch();
+                        String id= firebaseFirestore.collection(context.getString(R.string.col_visitors))
+                                .document().getId();
+                        Log.d(TAG, "onClick: hhh "+ visitor.getV_uid()+ " "+id);
+                        Visitors ovisitors=new Visitors(visitor.getV_phone(),visitor.getV_name(),
+                                visitor.getV_pic(),visitor.getV_thumb(),visitor.getV_purpose(),visitor.getV_mail()
+                        ,visitor.getV_where(),visitor.getFlat_id(),visitor.getF_no(),visitor.getComm_id(),visitor.getBuild_id()
+                        ,visitor.getV_vehicleno(),visitor.getV_gpass(),Calendar.getInstance().getTime(),visitor.getV_uid()
+                        ,id,false,true,visitor.getResponse(),visitor.getV_type(),visitor.getV_array(),visitor.getResponder());
 
 
+                        DocumentReference writehasdone = firebaseFirestore
+                                .collection(context.getString(R.string.col_visitors)).document(id);
+
+
+                        batch.set(writehasdone, ovisitors);
                         DocumentReference updatehasdone = firebaseFirestore
                                 .collection(context.getString(R.string.col_visitors)).document(visitor.getV_uid());
-
-                        batch.update(updatehasdone, "v_checkout", FieldValue.serverTimestamp()
-                                , "in", false);
-
-
+                        Log.d(TAG, "onClick: hhh "+ visitor.getV_uid()+ " "+id);
+                        batch.update(updatehasdone, "another_uid",id,"completed",true);
                         batch.commit().addOnCompleteListener(new OnCompleteListener<Void>() {
                             @Override
                             public void onComplete(@NonNull Task<Void> task) {
@@ -158,7 +173,6 @@ public class VisitorAdapter extends RecyclerView.Adapter<VisitorAdapter.VisitorV
                                 }
                             }
                         });
-
                     }
                 });
 

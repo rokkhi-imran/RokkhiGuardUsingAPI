@@ -32,6 +32,7 @@ import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.rokkhi.rokkhiguard.Model.ActiveFlats;
+import com.rokkhi.rokkhiguard.Model.GuardPhone;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -72,6 +73,7 @@ public class DaroanPass extends AppCompatActivity implements View.OnClickListene
     String tabpass="";
     String flatid = "", buildid = "", commid = "",userid="";
     TextView homename;
+
 
     int flag=0;
     private static final String TAG = "DaroanPass";
@@ -166,8 +168,6 @@ public class DaroanPass extends AppCompatActivity implements View.OnClickListene
 
 
                 else {
-
-
                     final String phoneno=firebaseUser.getPhoneNumber();
                     final String userid=firebaseUser.getUid();
 
@@ -182,7 +182,10 @@ public class DaroanPass extends AppCompatActivity implements View.OnClickListene
                                 Log.d(TAG, "onComplete: ck1 ");
                                 if(documentSnapshot!=null && documentSnapshot.exists()){
                                     Log.d(TAG, "onComplete: ck2");
-                                    buildid=documentSnapshot.getString("build_id");
+
+                                    GuardPhone guardPhone= documentSnapshot.toObject(GuardPhone.class);
+                                    ArrayList<String> arr= guardPhone.getBuild_array();
+                                    buildid=arr.get(0);
                                     commid= documentSnapshot.getString("comm_id");
                                     editor.putString("buildid",buildid);
                                     editor.putString("commid",commid);

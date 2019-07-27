@@ -13,6 +13,7 @@ public class Vsearch {
     private String flat_id;
     private String f_no;
     private Date lastDate;
+    private int totalVisit;
 
     public Vsearch() {
     }
@@ -28,6 +29,20 @@ public class Vsearch {
         this.f_no = f_no;
         this.lastDate = lastDate;
     }
+
+    public Vsearch(String v_phone, String v_name, String v_thumb, String v_purpose, String v_mail, String v_where, String flat_id, String f_no, Date lastDate, int totalVisit) {
+        this.v_phone = v_phone;
+        this.v_name = v_name;
+        this.v_thumb = v_thumb;
+        this.v_purpose = v_purpose;
+        this.v_mail = v_mail;
+        this.v_where = v_where;
+        this.flat_id = flat_id;
+        this.f_no = f_no;
+        this.lastDate = lastDate;
+        this.totalVisit = totalVisit;
+    }
+
 
     public String getV_phone() {
         return v_phone;
@@ -101,4 +116,11 @@ public class Vsearch {
         this.lastDate = lastDate;
     }
 
+    public int getTotalVisit() {
+        return totalVisit;
+    }
+
+    public void setTotalVisit(int totalVisit) {
+        this.totalVisit = totalVisit;
+    }
 }

@@ -3,7 +3,7 @@ package com.rokkhi.rokkhiguard.Model;
 import java.util.Date;
 import java.util.List;
 
-public class Visitors{
+public class Visitors {
 
     private String v_phone;
     private String v_name;
@@ -18,10 +18,11 @@ public class Visitors{
     private String build_id;
     private String v_vehicleno;
     private String v_gpass;
-    private Date v_checkin;
-    private Date v_checkout;
+    private Date time;
+    private String another_uid;
     private String v_uid;
     private boolean in;
+    private boolean completed;
     private String response;
     private String v_type;
     private List<String> v_array;
@@ -30,12 +31,11 @@ public class Visitors{
 
 
 
-
     public Visitors() {
     }
 
 
-    public Visitors(String v_phone, String v_name, String v_pic, String v_thumb, String v_purpose, String v_mail, String v_where, String flat_id, String f_no, String comm_id, String build_id, String v_vehicleno, String v_gpass, Date v_checkin, Date v_checkout, String v_uid, boolean in, String response, String v_type, List<String> v_array, String responder) {
+    public Visitors(String v_phone, String v_name, String v_pic, String v_thumb, String v_purpose, String v_mail, String v_where, String flat_id, String f_no, String comm_id, String build_id, String v_vehicleno, String v_gpass, Date time, String another_uid, String v_uid, boolean in, String response, String v_type, List<String> v_array, String responder) {
         this.v_phone = v_phone;
         this.v_name = v_name;
         this.v_pic = v_pic;
@@ -49,14 +49,48 @@ public class Visitors{
         this.build_id = build_id;
         this.v_vehicleno = v_vehicleno;
         this.v_gpass = v_gpass;
-        this.v_checkin = v_checkin;
-        this.v_checkout = v_checkout;
+        this.time = time;
+        this.another_uid = another_uid;
         this.v_uid = v_uid;
         this.in = in;
         this.response = response;
         this.v_type = v_type;
         this.v_array = v_array;
         this.responder = responder;
+    }
+
+    public Visitors(String v_phone, String v_name, String v_pic, String v_thumb, String v_purpose, String v_mail, String v_where, String flat_id, String f_no, String comm_id, String build_id, String v_vehicleno, String v_gpass, Date time, String another_uid, String v_uid, boolean in, boolean completed, String response, String v_type, List<String> v_array, String responder) {
+        this.v_phone = v_phone;
+        this.v_name = v_name;
+        this.v_pic = v_pic;
+        this.v_thumb = v_thumb;
+        this.v_purpose = v_purpose;
+        this.v_mail = v_mail;
+        this.v_where = v_where;
+        this.flat_id = flat_id;
+        this.f_no = f_no;
+        this.comm_id = comm_id;
+        this.build_id = build_id;
+        this.v_vehicleno = v_vehicleno;
+        this.v_gpass = v_gpass;
+        this.time = time;
+        this.another_uid = another_uid;
+        this.v_uid = v_uid;
+        this.in = in;
+        this.completed = completed;
+        this.response = response;
+        this.v_type = v_type;
+        this.v_array = v_array;
+        this.responder = responder;
+    }
+
+
+    public boolean isCompleted() {
+        return completed;
+    }
+
+    public void setCompleted(boolean completed) {
+        this.completed = completed;
     }
 
     public String getV_phone() {
@@ -163,20 +197,20 @@ public class Visitors{
         this.v_gpass = v_gpass;
     }
 
-    public Date getV_checkin() {
-        return v_checkin;
+    public Date getTime() {
+        return time;
     }
 
-    public void setV_checkin(Date v_checkin) {
-        this.v_checkin = v_checkin;
+    public void setTime(Date time) {
+        this.time = time;
     }
 
-    public Date getV_checkout() {
-        return v_checkout;
+    public String getAnother_uid() {
+        return another_uid;
     }
 
-    public void setV_checkout(Date v_checkout) {
-        this.v_checkout = v_checkout;
+    public void setAnother_uid(String another_uid) {
+        this.another_uid = another_uid;
     }
 
     public String getV_uid() {

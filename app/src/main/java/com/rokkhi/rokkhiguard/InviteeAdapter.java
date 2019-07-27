@@ -201,9 +201,7 @@ public class InviteeAdapter extends RecyclerView.Adapter<InviteeAdapter.InviteeV
                         ll.addAll(normalfunc.splitchar(invitee.getI_phone().toLowerCase()));
                         ll.add(invitee.getI_phone().toLowerCase());
 
-                        Visitors visitor=new Visitors(invitee.getI_phone(),invitee.getI_name(),invitee.getI_pic(),invitee.getI_thumb(),invitee.getI_purpose(),invitee.getI_mail(),""
-                        ,invitee.getFlat_id(),invitee.getF_no(),invitee.getComm_id(),invitee.getBuild_id(),"",
-                                "",date,date,id,true,"pending","invitee",ll,invitee.getUser_id());
+                        Visitors visitor=new Visitors();
 
                         batch.set(setvisitorinoffice,visitor);
 

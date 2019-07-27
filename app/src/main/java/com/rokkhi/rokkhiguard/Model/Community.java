@@ -17,7 +17,6 @@ public class Community {
     private List<String> address;
 
     public Community(){
-
     }
 
     public Community(String comm_id, String c_name, String c_mail, int c_tbuilding, int c_tgate, String c_type, boolean c_status, List<String> c_array, List<String> contacts, List<String> address) {

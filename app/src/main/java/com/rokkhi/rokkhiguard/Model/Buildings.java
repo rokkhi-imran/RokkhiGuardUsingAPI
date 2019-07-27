@@ -26,6 +26,7 @@ public class Buildings implements Parcelable {
     private List<String> b_array;
     private boolean b_status;
 
+
     public Buildings(){
     }
 
