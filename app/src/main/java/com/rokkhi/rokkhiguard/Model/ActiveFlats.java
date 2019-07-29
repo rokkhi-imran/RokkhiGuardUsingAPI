@@ -1,15 +1,25 @@
 package com.rokkhi.rokkhiguard.Model;
 
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.Ignore;
+import android.arch.persistence.room.PrimaryKey;
+
+import org.jetbrains.annotations.NotNull;
+
 import java.util.List;
 
+
+@Entity
 public class ActiveFlats {
 
-    private String flat_id;
+    @PrimaryKey
+    @NotNull  private String flat_id;
+
     private String build_id;
     private String comm_id;
     private String f_no;
     private boolean vacant;
-    private List<String> f_array;
+    @Ignore  private List<String> f_array;
 
     public ActiveFlats(){
 

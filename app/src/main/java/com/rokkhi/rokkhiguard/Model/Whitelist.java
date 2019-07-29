@@ -1,13 +1,22 @@
 package com.rokkhi.rokkhiguard.Model;
 
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.Ignore;
+import android.arch.persistence.room.PrimaryKey;
 import android.os.Parcel;
 import android.os.Parcelable;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Date;
 import java.util.List;
 
+
+@Entity
 public class Whitelist implements Parcelable {
 
+    @PrimaryKey
+    @NotNull  private String w_uid;
     private String w_mail;
     private String flat_id;
     private String f_no;
@@ -19,9 +28,9 @@ public class Whitelist implements Parcelable {
     private  String w_pic;
     private  String w_thumb;
     private  String w_relationship;
-    private Date w_mtime;
-    private String w_uid;
-    private List<String> w_array;
+    @Ignore private Date w_mtime;
+
+    @Ignore private List<String> w_array;
 
 
     public Whitelist(){

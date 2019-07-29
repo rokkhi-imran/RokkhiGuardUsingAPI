@@ -1,11 +1,13 @@
 package com.rokkhi.rokkhiguard;
 
+import android.arch.lifecycle.Observer;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -18,13 +20,24 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QuerySnapshot;
+import com.rokkhi.rokkhiguard.Model.ActiveFlats;
 import com.rokkhi.rokkhiguard.Model.Activebuilding;
 import com.rokkhi.rokkhiguard.Model.Settings;
+import com.rokkhi.rokkhiguard.Model.Whitelist;
+import com.rokkhi.rokkhiguard.data.FlatsRepository;
+import com.rokkhi.rokkhiguard.data.WhiteListDao;
+import com.rokkhi.rokkhiguard.data.WhiteListRepository;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -40,6 +53,9 @@ public class MainPage extends AppCompatActivity {
     AlertDialog alertDialog;
     String  buildid = "", commid = "";
 
+    ArrayList<ActiveFlats> allActiveFlats;
+    ArrayList<Whitelist> allWhiteLists;
+
 
 
     @Override
@@ -52,6 +68,7 @@ public class MainPage extends AppCompatActivity {
 
         Intent intent=getIntent();
         context= MainPage.this;
+
 
 
         gatepass= findViewById(R.id.gatepass);
@@ -299,21 +316,135 @@ public class MainPage extends AppCompatActivity {
 
 
 
+    public void getAllActiveFlatsAndSaveToLocalDatabase(){
+        allActiveFlats = new ArrayList<>();
+       // final FlatsRepository flatsRepository = new FlatsRepository(this);
+
+        FirebaseFirestore.getInstance().collection(getString(R.string.col_activeflat))
+                .whereEqualTo("build_id",buildid).orderBy("f_no", Query.Direction.ASCENDING).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    Log.d(TAG, "onComplete: ");
+                    for (DocumentSnapshot documentSnapshot : task.getResult()) {
+                        ActiveFlats activeFlat = documentSnapshot.toObject(ActiveFlats.class);
+                        FlatsRepository.deleteActiveFlat(activeFlat);
+                        FlatsRepository.insertActiveFlat(activeFlat);
+                        allActiveFlats.add(activeFlat);
+                    }
+                }
+            }
+        });
+    }
+
+
+    public void getAllWhiteListAndSaveToLocalDatabase(){
+        allWhiteLists = new ArrayList<>();
+        //final FlatsRepository flatsRepository = new FlatsRepository(this);
+
+
+        firebaseFirestore.collection(getString(R.string.col_whitelists))
+                .whereEqualTo("build_id",buildid)
+                .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if(task.isSuccessful()){
+
+
+                    for (DocumentSnapshot documentSnapshot : task.getResult()) {
+                        Whitelist whitelist = documentSnapshot.toObject(Whitelist.class);
+                        WhiteListRepository.deleteWhiteList(whitelist);
+                        WhiteListRepository.insert(whitelist);
+                    }
+
+                }
+                else{
+                    Log.d(TAG, "onComplete: xxx5");
+                }
+            }
+        });
+
+        FirebaseFirestore.getInstance().collection(getString(R.string.col_activeflat))
+                .whereEqualTo("build_id",buildid).orderBy("f_no", Query.Direction.ASCENDING).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    Log.d(TAG, "onComplete: ");
+                    for (DocumentSnapshot documentSnapshot : task.getResult()) {
+                        ActiveFlats activeFlat = documentSnapshot.toObject(ActiveFlats.class);
+                        FlatsRepository.deleteActiveFlat(activeFlat);
+                        FlatsRepository.insertActiveFlat(activeFlat);
+                        //allActiveFlats.add(activeFlat);
+                    }
+                }
+            }
+        });
+    }
+
+
+
     @Override
     protected void onStart() {
         super.onStart();
-        Log.d(TAG, "onStart: "+ "xxx");
+
+
+
+
+        FirebaseFirestore.getInstance().collection("b_flags").document(buildid).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                if(documentSnapshot.exists()){
+                    if ( documentSnapshot.contains("f_changed") &&  documentSnapshot.getBoolean("f_changed")) {
+                        Log.d("firebase" , "Getting new Flats data because data is changed or updated" );
+                        getAllActiveFlatsAndSaveToLocalDatabase();
+
+                    } else {
+                        Log.d("firebase" , " Flats data is not changed or updated" );
+                    }
+
+                    if(documentSnapshot.contains("wl_changed") && documentSnapshot.getBoolean("wl_changed")){
+                        getAllWhiteListAndSaveToLocalDatabase();
+                    }
+
+                }
+            }
+        });
+
+
+
+        //getting the data from repository example
+        final FlatsRepository flatsRepository = new FlatsRepository(this);
+        flatsRepository.getAllActiveFlats().observe(this, new Observer<List<ActiveFlats>>() {
+            @Override
+            public void onChanged(@Nullable List<ActiveFlats> allFlats) {
+                for(ActiveFlats flat : allFlats) {
+                    Log.d("room" , "found a new Flat   " + flat.getF_no()+"  -- > " + flat.getFlat_id());
+                }
+            }
+        });
+
+
+        //getting the data from repository example
+        final WhiteListRepository whiteListRepository = new WhiteListRepository(this);
+        whiteListRepository.getAllWhiteList().observe(this, new Observer<List<Whitelist>>() {
+            @Override
+            public void onChanged(@Nullable List<Whitelist> allWhiteLists) {
+                for(Whitelist whiteList : allWhiteLists) {
+                    Log.d("room" , "found a new WhiteList   " + whiteList.getF_no()+"  -- > " + whiteList.getFlat_id());
+                }
+            }
+        });
     }
+
+
 
     @Override
     protected void onStop() {
         super.onStop();
-        Log.d(TAG, "onStop: "+"xxx");
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        Log.d(TAG, "onResume: "+"xxx");
     }
 }

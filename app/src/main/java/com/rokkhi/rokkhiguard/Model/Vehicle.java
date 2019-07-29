@@ -5,6 +5,7 @@ import android.os.Parcelable;
 
 import java.util.List;
 
+
 public class Vehicle implements Parcelable {
 
     private String description;
