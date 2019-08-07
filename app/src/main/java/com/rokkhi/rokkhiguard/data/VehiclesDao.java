@@ -26,7 +26,7 @@ public interface VehiclesDao {
 
 
     @Query("SELECT * FROM Vehicle WHERE flat_id =:flatId")
-    LiveData<List<Vehicle>> fetchVehicleWithFlatId(int flatId );
+    LiveData<List<Vehicle>> fetchVehicleWithFlatId(String flatId );
 
 
 

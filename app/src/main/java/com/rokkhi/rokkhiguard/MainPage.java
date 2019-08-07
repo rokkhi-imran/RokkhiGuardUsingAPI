@@ -58,6 +58,8 @@ public class MainPage extends AppCompatActivity {
     ArrayList<ActiveFlats> allActiveFlats;
     ArrayList<Whitelist> allWhiteLists;
     ArrayList<Vehicle> allVehicles;
+    FlatsRepository flatsRepository ;
+
 
 
 
@@ -110,6 +112,8 @@ public class MainPage extends AppCompatActivity {
                 }
             }
         });
+
+        flatsRepository = new FlatsRepository(this);
 
         logout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -171,7 +175,7 @@ public class MainPage extends AppCompatActivity {
                 FirebaseUser firebaseUser= FirebaseAuth.getInstance().getCurrentUser();
                 if(firebaseUser!=null){
 
-                    showposititivedialog(4);
+                    showposititivedialog(4) ;
 //                    firebaseFirestore.collection(getString(R.string.col_setting)).document(buildid).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
 //                        @Override
 //                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
@@ -324,15 +328,15 @@ public class MainPage extends AppCompatActivity {
        // final FlatsRepository flatsRepository = new FlatsRepository(this);
 
         FirebaseFirestore.getInstance().collection(getString(R.string.col_activeflat))
-                .whereEqualTo("build_id",buildid).orderBy("f_no", Query.Direction.ASCENDING).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                .whereEqualTo("build_id",buildid).orderBy("f_no", Query.Direction.DESCENDING).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {
                     Log.d(TAG, "onComplete: ");
                     for (DocumentSnapshot documentSnapshot : task.getResult()) {
                         ActiveFlats activeFlat = documentSnapshot.toObject(ActiveFlats.class);
-                        FlatsRepository.deleteActiveFlat(activeFlat);
-                        FlatsRepository.insertActiveFlat(activeFlat);
+                        flatsRepository.deleteActiveFlat(activeFlat);
+                        flatsRepository.insertActiveFlat(activeFlat);
                         allActiveFlats.add(activeFlat);
                     }
                 }
@@ -435,7 +439,7 @@ public class MainPage extends AppCompatActivity {
 
 
         //getting the data from repository example
-        final FlatsRepository flatsRepository = new FlatsRepository(this);
+
 //        flatsRepository.getAllActiveFlats().observe(this, new Observer<List<ActiveFlats>>() {
 //            @Override
 //            public void onChanged(@Nullable List<ActiveFlats> allFlats) {

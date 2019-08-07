@@ -36,7 +36,7 @@ public class VehiclesRepository {
 
 
 
-    public LiveData<List<Vehicle>> getVehicleFromPhoneAndFlatId(int flat_id ) {
+    public LiveData<List<Vehicle>> getVehicleFromPhoneAndFlatId(String flat_id ) {
         return vehiclesDatabase.vehicleDao().fetchVehicleWithFlatId(flat_id );
     }
 

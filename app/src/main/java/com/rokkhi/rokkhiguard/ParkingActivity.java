@@ -1,6 +1,7 @@
 package com.rokkhi.rokkhiguard;
 
 import android.Manifest;
+import android.arch.lifecycle.Observer;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -9,6 +10,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
@@ -25,6 +27,7 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -38,10 +41,13 @@ import com.rokkhi.rokkhiguard.Model.ActiveFlats;
 import com.rokkhi.rokkhiguard.Model.Child;
 import com.rokkhi.rokkhiguard.Model.Notifications;
 import com.rokkhi.rokkhiguard.Model.Parkings;
+import com.rokkhi.rokkhiguard.Model.Vehicle;
+import com.rokkhi.rokkhiguard.data.VehiclesRepository;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 
 public class ParkingActivity extends AppCompatActivity  {
@@ -71,6 +77,8 @@ public class ParkingActivity extends AppCompatActivity  {
     Date d;
     String flatid = "", buildid = "", commid = "";
     int floorno,flatno;
+    VehiclesRepository vehiclesRepository ;
+    ArrayList<Vehicle> allVehicles;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,6 +107,7 @@ public class ParkingActivity extends AppCompatActivity  {
         recyclerView=findViewById(R.id.recyclerview);
         recyclerView.setNestedScrollingEnabled(false);
         recyclerView.setLayoutManager(new GridLayoutManager(this,flatno));
+        vehiclesRepository = new VehiclesRepository(this);
 
         parkingRef=firebaseFirestore.
                 collection(getString(R.string.col_parkings));
@@ -122,8 +131,65 @@ public class ParkingActivity extends AppCompatActivity  {
 
 
 
+
+
     }
 
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        FirebaseFirestore.getInstance().collection("b_flags").document(buildid).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                if(documentSnapshot.exists()){
+
+                    if(documentSnapshot.contains("v_changed") && documentSnapshot.getBoolean("v_changed")){
+                        Log.d("firebase" , "Getting new Vehicles data because data is changed or updated" );
+                        getVehiclesAndSaveToLocalDatabase();
+                    }
+
+                }
+            }
+        });
+
+    }
+
+    public void getVehiclesAndSaveToLocalDatabase(){
+        allVehicles = new ArrayList<>();
+        //final FlatsRepository flatsRepository = new FlatsRepository(this);
+
+
+        Log.d("room" , "getting new vehicle success " + buildid);
+        firebaseFirestore.collection(getString(R.string.col_vehicle))
+                .whereEqualTo("build_id",buildid)
+                .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if(task.isSuccessful()){
+                    Log.d("room" , "getting new vehicle success " + "adsf");
+                    for (DocumentSnapshot documentSnapshot : task.getResult()) {
+                        Vehicle vehicle = documentSnapshot.toObject(Vehicle.class);
+                        Log.d("room" , "getting new vehicle data found " + "adsf");
+                        vehiclesRepository.deleteVehicle(vehicle);
+                        vehiclesRepository.insert(vehicle);
+                    }
+
+                }
+                else{
+                    Log.d(TAG, "onComplete: xxx5");
+                }
+            }
+        });
+    }
+
+
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+    }
 
     public void getfirstdata(){
         getFirstQuery.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -141,6 +207,26 @@ public class ParkingActivity extends AppCompatActivity  {
                     gridAdapter = new GridAdapter(list,context);
                     gridAdapter.setHasStableIds(true);
                     recyclerView.setAdapter(gridAdapter);
+
+                    search.addTextChangedListener(new TextWatcher() {
+                        @Override
+                        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                        }
+
+                        @Override
+                        public void onTextChanged(CharSequence s, int start, int before, int count) {
+                            gridAdapter.getFilter().filter(s);
+                        }
+
+                        @Override
+                        public void afterTextChanged(Editable s) {
+
+                        }
+                    });
+
+
+
 
 
                 }

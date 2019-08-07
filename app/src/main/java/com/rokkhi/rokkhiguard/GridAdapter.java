@@ -1,12 +1,16 @@
 package com.rokkhi.rokkhiguard;
 
 import android.app.Dialog;
+import android.arch.lifecycle.LifecycleOwner;
+import android.arch.lifecycle.Observer;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -35,9 +39,12 @@ import com.google.firebase.firestore.WriteBatch;
 import com.rokkhi.rokkhiguard.Model.ActiveFlats;
 import com.rokkhi.rokkhiguard.Model.Invitees;
 import com.rokkhi.rokkhiguard.Model.Parkings;
+import com.rokkhi.rokkhiguard.Model.Vehicle;
 import com.rokkhi.rokkhiguard.Model.Visitors;
 import com.rokkhi.rokkhiguard.Utils.Normalfunc;
+import com.rokkhi.rokkhiguard.Utils.StringAdapter;
 import com.rokkhi.rokkhiguard.Utils.UniversalImageLoader;
+import com.rokkhi.rokkhiguard.data.VehiclesRepository;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -63,7 +70,9 @@ public class GridAdapter extends RecyclerView.Adapter<GridAdapter.GridViewHolder
     private LayoutInflater mInflater;
     // private ValueFilter valueFilter;
     private Normalfunc normalfunc;
-    int count=0;
+
+    VehiclesRepository vehiclesRepository ;
+    ArrayList<Vehicle> allVehicles;
 
     @Override
     public Filter getFilter() {
@@ -98,15 +107,64 @@ public class GridAdapter extends RecyclerView.Adapter<GridAdapter.GridViewHolder
         GridViewHolder gridViewHolder=new GridViewHolder(view);
         sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
         initdialog();
+        vehiclesRepository = new VehiclesRepository(context);
         return gridViewHolder;
     }
 
+
+
+
+
     Dialog mdialog;
 
-    public void confirmdialog(final GridViewHolder holder,final Parkings parkings , final int position) {
+    private void showVehicleDialog(final Parkings parkings,final int position){
+
+        //TODO allvehicle ene filter kora
 
 
-        Parkings tempParking = list.get(position);
+//        vehiclesRepository.getVehicleFromPhoneAndFlatId(parkings.getFlat_id()).observe((LifecycleOwner) context, new Observer<List<Vehicle>>() {
+//            @Override
+//            public void onChanged(@Nullable List<Vehicle> allVehicles) {
+//                for(Vehicle vehicle : allVehicles) {
+//
+//                    Log.d("room" , "found a new Vehicle   " + vehicle.getF_no()+"  -- > " + vehicle.getFlat_id());
+//                }
+//            }
+//        });
+
+        final AlertDialog alertDialog = new AlertDialog.Builder(context).create();
+        final StringAdapter stringAdapter= new
+        LayoutInflater  inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View convertView = (View) inflater.inflate(R.layout.custom_recycler, null);
+        final Button skip = convertView.findViewById(R.id.skip);
+        RecyclerView recyclerView= convertView.findViewById(R.id.listView1);
+        TextView flatno= convertView.findViewById(R.id.flatno);
+        String ftext="Flatno: "+ parkings.getF_no();
+
+        recyclerView.setLayoutManager(new LinearLayoutManager(context));
+
+
+        flatno.setText(ftext);
+
+        alertDialog.setView(convertView);
+        alertDialog.setCancelable(false);
+        alertDialog.show();
+
+    }
+
+    private void confirmdialog(final Parkings parkings , final int position) {
+
+
+
+//        vehiclesRepository.getAllVehicle().observe(this, new Observer<List<Vehicle>>() {
+//            @Override
+//            public void onChanged(@Nullable List<Vehicle> allVehicles) {
+//                for(Vehicle vehicle : allVehicles) {
+//                    Log.d("room" , "found a new Vehicle   " + vehicle.getF_no()+"  -- > " + vehicle.getFlat_id());
+//                }
+//            }
+//        });
+
 
 
         alertDialog = new AlertDialog.Builder(context).create();
@@ -138,26 +196,10 @@ public class GridAdapter extends RecyclerView.Adapter<GridAdapter.GridViewHolder
                 DocumentReference updatehasdone = firebaseFirestore
                         .collection(context.getString(R.string.col_parkings)).document(parkings.getFlat_id());
 
-                batch.update(updatehasdone, "lastTime", FieldValue.serverTimestamp(),
-                        "beforeLastTime",parkings.getLastTime()
+                batch.update(updatehasdone, "lastTime", FieldValue.serverTimestamp()
                         , "vacant", false);
                 list.get(position).setVacant(false);
                 notifyDataSetChanged();
-
-                if(parkings.isVacant()){
-
-
-                }
-
-                else{
-
-                    batch.update(updatehasdone, "lastTime", FieldValue.serverTimestamp(),
-                            "beforeLastTime",parkings.getLastTime()
-                            , "vacant", true);
-                    list.get(position).setVacant(true);
-                    notifyDataSetChanged();
-                }
-
 
                 batch.commit().addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
@@ -169,13 +211,31 @@ public class GridAdapter extends RecyclerView.Adapter<GridAdapter.GridViewHolder
                     }
                 });
 
+
             }
         });
 
         out.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                showdialog();
+                WriteBatch batch = firebaseFirestore.batch();
+                DocumentReference updatehasdone = firebaseFirestore
+                        .collection(context.getString(R.string.col_parkings)).document(parkings.getFlat_id());
+                batch.update(updatehasdone, "lastTime", FieldValue.serverTimestamp()
+                        , "vacant", true);
+                list.get(position).setVacant(true);
+                notifyDataSetChanged();
 
+                batch.commit().addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            dismissdialog();
+                            alertDialog.dismiss();
+                        }
+                    }
+                });
             }
         });
 
@@ -201,7 +261,6 @@ public class GridAdapter extends RecyclerView.Adapter<GridAdapter.GridViewHolder
 
         final Parkings parkings = list.get(position);
         holder.flatno.setText(parkings.getF_no());
-        count++;
 
         if(!parkings.isVacant()){
             holder.view.setBackgroundColor(ContextCompat.getColor(context,R.color.orange));
@@ -215,7 +274,7 @@ public class GridAdapter extends RecyclerView.Adapter<GridAdapter.GridViewHolder
         holder.view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                confirmdialog(holder,parkings , position);
+                confirmdialog(parkings , position);
             }
         });
 
@@ -265,7 +324,6 @@ public class GridAdapter extends RecyclerView.Adapter<GridAdapter.GridViewHolder
                         filterList.add(mflatFilterList.get(i));
                     }
                 }
-
 
                 results.count = filterList.size();
 
