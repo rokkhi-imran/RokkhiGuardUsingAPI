@@ -1,26 +1,35 @@
 package com.rokkhi.rokkhiguard.Model;
 
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.Ignore;
+import android.arch.persistence.room.PrimaryKey;
 import android.os.Parcel;
 import android.os.Parcelable;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Date;
 import java.util.List;
 
+@Entity
 
 public class Vehicle implements Parcelable {
 
+    @PrimaryKey
+    @NotNull
+    private String vehicle_id; //auto
     private String description;
     private String type;
     private String vehicle_number;
     private String pic;
     private String thumb;
-    private String vehicle_id; //auto
     private String whose; //userid
     private String flat_id;
     private String f_no;
     private String build_id;
-    private Date lastin;
-    private Date lastout;
+    @Ignore private Date lastin;
+    @Ignore private Date lastout;
+    @Ignore
     private List<String> vehicle_array;
 
     public Vehicle(){

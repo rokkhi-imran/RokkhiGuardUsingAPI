@@ -1,16 +1,27 @@
 package com.rokkhi.rokkhiguard.Model;
 
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.Ignore;
+import android.arch.persistence.room.PrimaryKey;
+
+import org.jetbrains.annotations.NotNull;
+
 import java.util.Date;
 import java.util.List;
 
+
+
+
 public class Parkings {
 
+    @PrimaryKey @NotNull
     private String flat_id;
     private String build_id;
     private String f_no;
     private boolean vacant;
     private Date lastTime;
     private String vehicleno;
+    @Ignore
     private List<String> p_array;
 
     public Parkings(){

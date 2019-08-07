@@ -31,8 +31,10 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.rokkhi.rokkhiguard.Model.ActiveFlats;
 import com.rokkhi.rokkhiguard.Model.Activebuilding;
 import com.rokkhi.rokkhiguard.Model.Settings;
+import com.rokkhi.rokkhiguard.Model.Vehicle;
 import com.rokkhi.rokkhiguard.Model.Whitelist;
 import com.rokkhi.rokkhiguard.data.FlatsRepository;
+import com.rokkhi.rokkhiguard.data.VehiclesRepository;
 import com.rokkhi.rokkhiguard.data.WhiteListDao;
 import com.rokkhi.rokkhiguard.data.WhiteListRepository;
 
@@ -55,6 +57,7 @@ public class MainPage extends AppCompatActivity {
 
     ArrayList<ActiveFlats> allActiveFlats;
     ArrayList<Whitelist> allWhiteLists;
+    ArrayList<Vehicle> allVehicles;
 
 
 
@@ -321,7 +324,7 @@ public class MainPage extends AppCompatActivity {
        // final FlatsRepository flatsRepository = new FlatsRepository(this);
 
         FirebaseFirestore.getInstance().collection(getString(R.string.col_activeflat))
-                .whereEqualTo("build_id",buildid).orderBy("f_no", Query.Direction.DESCENDING).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                .whereEqualTo("build_id",buildid).orderBy("f_no", Query.Direction.ASCENDING).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {
@@ -363,22 +366,37 @@ public class MainPage extends AppCompatActivity {
             }
         });
 
-        FirebaseFirestore.getInstance().collection(getString(R.string.col_activeflat))
-                .whereEqualTo("build_id",buildid).orderBy("f_no", Query.Direction.ASCENDING).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+    }
+
+    public void getVehiclesAndSaveToLocalDatabase(){
+        allVehicles = new ArrayList<>();
+        //final FlatsRepository flatsRepository = new FlatsRepository(this);
+
+
+        Log.d("room" , "getting new vehicle success " + buildid);
+        firebaseFirestore.collection(getString(R.string.col_vehicle))
+                .whereEqualTo("build_id",buildid)
+                .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if (task.isSuccessful()) {
-                    Log.d(TAG, "onComplete: ");
+                if(task.isSuccessful()){
+                    Log.d("room" , "getting new vehicle success " + "adsf");
                     for (DocumentSnapshot documentSnapshot : task.getResult()) {
-                        ActiveFlats activeFlat = documentSnapshot.toObject(ActiveFlats.class);
-                        FlatsRepository.deleteActiveFlat(activeFlat);
-                        FlatsRepository.insertActiveFlat(activeFlat);
-                        //allActiveFlats.add(activeFlat);
+                        Vehicle vehicle = documentSnapshot.toObject(Vehicle.class);
+
+                        Log.d("room" , "getting new vehicle data found " + "adsf");
+                        VehiclesRepository.deleteVehicle(vehicle);
+                        VehiclesRepository.insert(vehicle);
                     }
+
+                }
+                else{
+                    Log.d(TAG, "onComplete: xxx5");
                 }
             }
         });
     }
+
 
 
 
@@ -403,6 +421,11 @@ public class MainPage extends AppCompatActivity {
 
                     if(documentSnapshot.contains("wl_changed") && documentSnapshot.getBoolean("wl_changed")){
                         getAllWhiteListAndSaveToLocalDatabase();
+                    }
+
+                    if(documentSnapshot.contains("v_changed") && documentSnapshot.getBoolean("v_changed")){
+                        Log.d("firebase" , "Getting new Vehicles data because data is changed or updated" );
+                        getVehiclesAndSaveToLocalDatabase();
                     }
 
                 }
@@ -430,6 +453,18 @@ public class MainPage extends AppCompatActivity {
             public void onChanged(@Nullable List<Whitelist> allWhiteLists) {
                 for(Whitelist whiteList : allWhiteLists) {
                     Log.d("room" , "found a new WhiteList   " + whiteList.getF_no()+"  -- > " + whiteList.getFlat_id());
+                }
+            }
+        });
+
+
+
+        final VehiclesRepository vehiclesRepository = new VehiclesRepository(this);
+        vehiclesRepository.getAllVehicle().observe(this, new Observer<List<Vehicle>>() {
+            @Override
+            public void onChanged(@Nullable List<Vehicle> allVehicles) {
+                for(Vehicle vehicle : allVehicles) {
+                    Log.d("room" , "found a new Vehicle   " + vehicle.getF_no()+"  -- > " + vehicle.getFlat_id());
                 }
             }
         });
