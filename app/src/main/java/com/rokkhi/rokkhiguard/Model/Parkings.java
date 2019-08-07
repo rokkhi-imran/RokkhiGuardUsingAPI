@@ -10,22 +10,19 @@ public class Parkings {
     private String f_no;
     private boolean vacant;
     private Date lastTime;
-    private Date beforeLastTime;
-    private List<String> vehicle_array;
+    private String vehicleno;
     private List<String> p_array;
 
     public Parkings(){
-
     }
 
-    public Parkings(String flat_id, String build_id, String f_no, boolean vacant, Date lastTime, Date beforeLastTime, List<String> vehicle_array, List<String> p_array) {
+    public Parkings(String flat_id, String build_id, String f_no, boolean vacant, Date lastTime, String vehicleno, List<String> p_array) {
         this.flat_id = flat_id;
         this.build_id = build_id;
         this.f_no = f_no;
         this.vacant = vacant;
         this.lastTime = lastTime;
-        this.beforeLastTime = beforeLastTime;
-        this.vehicle_array = vehicle_array;
+        this.vehicleno = vehicleno;
         this.p_array = p_array;
     }
 
@@ -69,20 +66,12 @@ public class Parkings {
         this.lastTime = lastTime;
     }
 
-    public Date getBeforeLastTime() {
-        return beforeLastTime;
+    public String getVehicleno() {
+        return vehicleno;
     }
 
-    public void setBeforeLastTime(Date beforeLastTime) {
-        this.beforeLastTime = beforeLastTime;
-    }
-
-    public List<String> getVehicle_array() {
-        return vehicle_array;
-    }
-
-    public void setVehicle_array(List<String> vehicle_array) {
-        this.vehicle_array = vehicle_array;
+    public void setVehicleno(String vehicleno) {
+        this.vehicleno = vehicleno;
     }
 
     public List<String> getP_array() {

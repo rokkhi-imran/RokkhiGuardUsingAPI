@@ -111,9 +111,14 @@ public class GridAdapter extends RecyclerView.Adapter<GridAdapter.GridViewHolder
 
         alertDialog = new AlertDialog.Builder(context).create();
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View convertView = (View) inflater.inflate(R.layout.dialog_confirm, null);
+        View convertView = (View) inflater.inflate(R.layout.dialog_confirm_vehicle, null);
         final Button cancel = convertView.findViewById(R.id.cancel);
-        final Button confirm = convertView.findViewById(R.id.confirm);
+        final Button in = convertView.findViewById(R.id.in);
+        final Button out = convertView.findViewById(R.id.out);
+        TextView flatno= convertView.findViewById(R.id.flatno);
+        String ftext="Flatno: "+ parkings.getF_no();
+
+        flatno.setText(ftext);
 
         alertDialog.setView(convertView);
         alertDialog.setCancelable(false);
@@ -125,7 +130,7 @@ public class GridAdapter extends RecyclerView.Adapter<GridAdapter.GridViewHolder
                 alertDialog.dismiss();
             }
         });
-        confirm.setOnClickListener(new View.OnClickListener() {
+        in.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 showdialog();
@@ -133,13 +138,15 @@ public class GridAdapter extends RecyclerView.Adapter<GridAdapter.GridViewHolder
                 DocumentReference updatehasdone = firebaseFirestore
                         .collection(context.getString(R.string.col_parkings)).document(parkings.getFlat_id());
 
+                batch.update(updatehasdone, "lastTime", FieldValue.serverTimestamp(),
+                        "beforeLastTime",parkings.getLastTime()
+                        , "vacant", false);
+                list.get(position).setVacant(false);
+                notifyDataSetChanged();
+
                 if(parkings.isVacant()){
 
-                    batch.update(updatehasdone, "lastTime", FieldValue.serverTimestamp(),
-                            "beforeLastTime",parkings.getLastTime()
-                            , "vacant", false);
-                    list.get(position).setVacant(false);
-                    notifyDataSetChanged();
+
                 }
 
                 else{
@@ -156,12 +163,18 @@ public class GridAdapter extends RecyclerView.Adapter<GridAdapter.GridViewHolder
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful()) {
-
                             dismissdialog();
                             alertDialog.dismiss();
                         }
                     }
                 });
+
+            }
+        });
+
+        out.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
             }
         });

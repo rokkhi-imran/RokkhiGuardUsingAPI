@@ -9,8 +9,22 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:id="@+id/search"
+            android:background="@drawable/round_edittext"
+            android:layout_margin="10dp"
+            android:hint="Search for flatno"
+            android:paddingStart="10dp"
+            android:paddingEnd="5dp"
+
+            />
+
         <android.support.v7.widget.RecyclerView
             android:id="@+id/recyclerview"
+            android:layout_margin="5dp"
+            android:layout_below="@+id/search"
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
 

@@ -321,7 +321,7 @@ public class MainPage extends AppCompatActivity {
        // final FlatsRepository flatsRepository = new FlatsRepository(this);
 
         FirebaseFirestore.getInstance().collection(getString(R.string.col_activeflat))
-                .whereEqualTo("build_id",buildid).orderBy("f_no", Query.Direction.ASCENDING).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                .whereEqualTo("build_id",buildid).orderBy("f_no", Query.Direction.DESCENDING).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {
@@ -349,7 +349,6 @@ public class MainPage extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if(task.isSuccessful()){
-
 
                     for (DocumentSnapshot documentSnapshot : task.getResult()) {
                         Whitelist whitelist = documentSnapshot.toObject(Whitelist.class);
@@ -414,14 +413,14 @@ public class MainPage extends AppCompatActivity {
 
         //getting the data from repository example
         final FlatsRepository flatsRepository = new FlatsRepository(this);
-        flatsRepository.getAllActiveFlats().observe(this, new Observer<List<ActiveFlats>>() {
-            @Override
-            public void onChanged(@Nullable List<ActiveFlats> allFlats) {
-                for(ActiveFlats flat : allFlats) {
-                    Log.d("room" , "found a new Flat   " + flat.getF_no()+"  -- > " + flat.getFlat_id());
-                }
-            }
-        });
+//        flatsRepository.getAllActiveFlats().observe(this, new Observer<List<ActiveFlats>>() {
+//            @Override
+//            public void onChanged(@Nullable List<ActiveFlats> allFlats) {
+//                for(ActiveFlats flat : allFlats) {
+//                    Log.d("room" , "found a new Flat   " + flat.getF_no()+"  -- > " + flat.getFlat_id());
+//                }
+//            }
+//        });
 
 
         //getting the data from repository example

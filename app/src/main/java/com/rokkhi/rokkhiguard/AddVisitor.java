@@ -1,5 +1,6 @@
 package com.rokkhi.rokkhiguard;
 import android.app.Dialog;
+import android.arch.lifecycle.Observer;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -56,6 +57,7 @@ import com.rokkhi.rokkhiguard.Model.Visitors;
 import com.rokkhi.rokkhiguard.Model.Vsearch;
 import com.rokkhi.rokkhiguard.Utils.Normalfunc;
 import com.rokkhi.rokkhiguard.Utils.UniversalImageLoader;
+import com.rokkhi.rokkhiguard.data.FlatsRepository;
 import com.vansuita.pickimage.bean.PickResult;
 import com.vansuita.pickimage.bundle.PickSetup;
 import com.vansuita.pickimage.dialog.PickImageDialog;
@@ -162,6 +164,17 @@ public class AddVisitor extends AppCompatActivity implements InviteeAdapter.MyIn
         listener();
 
         addallflats();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
     }
 
     public void cleardata(){
@@ -596,23 +609,37 @@ public class AddVisitor extends AppCompatActivity implements InviteeAdapter.MyIn
 
     public void addallflats() {
         allflats = new ArrayList<>();
-        firebaseFirestore.collection(getString(R.string.col_activeflat))
-                .whereEqualTo("build_id",buildid).orderBy("f_no", Query.Direction.ASCENDING).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+
+
+        //getting the data from repository example
+        final FlatsRepository flatsRepository = new FlatsRepository(this);
+        flatsRepository.getAllActiveFlats().observe(this, new Observer<List<ActiveFlats>>() {
             @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-
-                if (task.isSuccessful()) {
-                    Log.d(TAG, "onComplete: ");
-                    for (DocumentSnapshot documentSnapshot : task.getResult()) {
-                        ActiveFlats activeFlat = documentSnapshot.toObject(ActiveFlats.class);
-                        allflats.add(activeFlat);
-                    }
-                    // progressBar.setVisibility(View.GONE);
-
-
+            public void onChanged(@android.support.annotation.Nullable List<ActiveFlats> allFlatss) {
+                for(ActiveFlats flat : allFlatss) {
+                    allflats.add(flat);
+                    Log.d("room" , "found a new Flat   " + flat.getF_no()+"  -- > " + flat.getFlat_id());
                 }
             }
         });
+
+//        firebaseFirestore.collection(getString(R.string.col_activeflat))
+//                .whereEqualTo("build_id",buildid).orderBy("f_no", Query.Direction.ASCENDING).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+//            @Override
+//            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+//
+//                if (task.isSuccessful()) {
+//                    Log.d(TAG, "onComplete: ");
+//                    for (DocumentSnapshot documentSnapshot : task.getResult()) {
+//                        ActiveFlats activeFlat = documentSnapshot.toObject(ActiveFlats.class);
+//                        allflats.add(activeFlat);
+//                    }
+//                    // progressBar.setVisibility(View.GONE);
+//
+//
+//                }
+//            }
+//        });
     }
 
 

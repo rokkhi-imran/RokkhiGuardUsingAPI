@@ -6,10 +6,12 @@ import java.util.List;
 public class UDetails {
 
     private String user_id;
+    private String phone;
     private String flat_id;
     private String f_no;
     private String build_id;
     private String comm_id;
+    private String who_add;
     private List<String> atoken;
     private List<String> itoken;
     private boolean admin;
@@ -18,18 +20,19 @@ public class UDetails {
     public UDetails(){
     }
 
-    public UDetails(String user_id, String flat_id, String f_no, String build_id, String comm_id, List<String> atoken, List<String> itoken, boolean admin, Date fjoindate) {
+    public UDetails(String user_id, String phone, String flat_id, String f_no, String build_id, String comm_id, String who_add, List<String> atoken, List<String> itoken, boolean admin, Date fjoindate) {
         this.user_id = user_id;
+        this.phone = phone;
         this.flat_id = flat_id;
         this.f_no = f_no;
         this.build_id = build_id;
         this.comm_id = comm_id;
+        this.who_add = who_add;
         this.atoken = atoken;
         this.itoken = itoken;
         this.admin = admin;
         this.fjoindate = fjoindate;
     }
-
 
     public String getUser_id() {
         return user_id;
@@ -37,6 +40,14 @@ public class UDetails {
 
     public void setUser_id(String user_id) {
         this.user_id = user_id;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 
     public String getFlat_id() {
@@ -69,6 +80,14 @@ public class UDetails {
 
     public void setComm_id(String comm_id) {
         this.comm_id = comm_id;
+    }
+
+    public String getWho_add() {
+        return who_add;
+    }
+
+    public void setWho_add(String who_add) {
+        this.who_add = who_add;
     }
 
     public List<String> getAtoken() {
