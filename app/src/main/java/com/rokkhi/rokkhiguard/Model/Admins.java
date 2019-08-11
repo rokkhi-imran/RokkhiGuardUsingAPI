@@ -12,20 +12,18 @@ public class Admins {
     private String who_add;
     private Date when_add;
     private String type;
-    private boolean flatOwner;
     private List<String> a_array;
 
     public Admins() {
     }
 
-    public Admins(String user_id, String build_id, String comm_id, String who_add, Date when_add, String type, boolean flatOwner, List<String> a_array) {
+    public Admins(String user_id, String build_id, String comm_id, String who_add, Date when_add, String type, List<String> a_array) {
         this.user_id = user_id;
         this.build_id = build_id;
         this.comm_id = comm_id;
         this.who_add = who_add;
         this.when_add = when_add;
         this.type = type;
-        this.flatOwner = flatOwner;
         this.a_array = a_array;
     }
 
@@ -76,14 +74,6 @@ public class Admins {
 
     public void setType(String type) {
         this.type = type;
-    }
-
-    public boolean isFlatOwner() {
-        return flatOwner;
-    }
-
-    public void setFlatOwner(boolean flatOwner) {
-        this.flatOwner = flatOwner;
     }
 
     public List<String> getA_array() {

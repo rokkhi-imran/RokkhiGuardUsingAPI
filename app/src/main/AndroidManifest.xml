@@ -44,7 +44,6 @@
         <activity android:name=".CreateProfile" />
         <activity android:name=".CreateProfileforGuards" />
         <activity android:name=".ParcelActivity" />
-        <activity android:name=".InvitedsList" />
         <activity android:name=".SettingsActivity" />
 
         <activity

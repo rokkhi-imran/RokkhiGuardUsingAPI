@@ -30,6 +30,7 @@ import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.rokkhi.rokkhiguard.Model.ActiveFlats;
 import com.rokkhi.rokkhiguard.Model.Activebuilding;
+import com.rokkhi.rokkhiguard.Model.BuildingChanges;
 import com.rokkhi.rokkhiguard.Model.Settings;
 import com.rokkhi.rokkhiguard.Model.Vehicle;
 import com.rokkhi.rokkhiguard.Model.Whitelist;
@@ -45,7 +46,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class MainPage extends AppCompatActivity {
 
-    CircleImageView gatepass,logout,addvis,vislist,notice,parcel,create,invitee,vehicle,child;
+    CircleImageView gatepass,logout,addvis,vislist,notice,parcel,create,vehicle,child;
     private static final String TAG = "MainPage";
     Context context;
     ImageButton settings;
@@ -59,6 +60,7 @@ public class MainPage extends AppCompatActivity {
     ArrayList<Whitelist> allWhiteLists;
     ArrayList<Vehicle> allVehicles;
     FlatsRepository flatsRepository ;
+    String thismobileuid;
 
 
 
@@ -83,7 +85,6 @@ public class MainPage extends AppCompatActivity {
         notice= findViewById(R.id.notice);
         parcel= findViewById(R.id.parcel);
         create= findViewById(R.id.profile);
-        invitee= findViewById(R.id.invitee);
         settings = findViewById(R.id.settings);
         vehicle = findViewById(R.id.vehicle);
         child = findViewById(R.id.child);
@@ -112,6 +113,8 @@ public class MainPage extends AppCompatActivity {
                 }
             }
         });
+
+        thismobileuid= FirebaseAuth.getInstance().getUid();
 
         flatsRepository = new FlatsRepository(this);
 
@@ -237,14 +240,7 @@ public class MainPage extends AppCompatActivity {
 
             }
         });
-        invitee.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent= new Intent(MainPage.this,InvitedsList.class);
-                startActivity(intent);
 
-            }
-        });
         settings.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -339,6 +335,9 @@ public class MainPage extends AppCompatActivity {
                         flatsRepository.insertActiveFlat(activeFlat);
                         allActiveFlats.add(activeFlat);
                     }
+
+
+
                 }
             }
         });
@@ -411,23 +410,30 @@ public class MainPage extends AppCompatActivity {
 
 
 
-        FirebaseFirestore.getInstance().collection("b_flags").document(buildid).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+        FirebaseFirestore.getInstance().collection("buildingChanges").document(buildid).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 if(documentSnapshot.exists()){
-                    if ( documentSnapshot.contains("f_changed") &&  documentSnapshot.getBoolean("f_changed")) {
+                    BuildingChanges buildingChanges=documentSnapshot.toObject(BuildingChanges.class);
+                    ArrayList<String> flats=buildingChanges.getFlats();
+                    ArrayList<String> whitelists= buildingChanges.getWhitelists();
+                    ArrayList<String> vehicles= buildingChanges.getVehicles();
+
+
+                    if ( !flats.contains(thismobileuid)) {
                         Log.d("firebase" , "Getting new Flats data because data is changed or updated" );
                         getAllActiveFlatsAndSaveToLocalDatabase();
+                        //TODO alhn ei uid add korte hbe database a
 
                     } else {
                         Log.d("firebase" , " Flats data is not changed or updated" );
                     }
 
-                    if(documentSnapshot.contains("wl_changed") && documentSnapshot.getBoolean("wl_changed")){
+                    if(!whitelists.contains(thismobileuid)){
                         getAllWhiteListAndSaveToLocalDatabase();
                     }
 
-                    if(documentSnapshot.contains("v_changed") && documentSnapshot.getBoolean("v_changed")){
+                    if(!vehicles.contains(thismobileuid)){
                         Log.d("firebase" , "Getting new Vehicles data because data is changed or updated" );
                         getVehiclesAndSaveToLocalDatabase();
                     }

@@ -20,28 +20,29 @@ public class Parkings {
     private String f_no;
     private boolean vacant;
     private Date lastTime;
-    private String vehicleno;
+    private String vehicleid;
     @Ignore
     private List<String> p_array;
 
     public Parkings(){
     }
 
-    public Parkings(String flat_id, String build_id, String f_no, boolean vacant, Date lastTime, String vehicleno, List<String> p_array) {
+    public Parkings(@NotNull String flat_id, String build_id, String f_no, boolean vacant, Date lastTime, String vehicleid, List<String> p_array) {
         this.flat_id = flat_id;
         this.build_id = build_id;
         this.f_no = f_no;
         this.vacant = vacant;
         this.lastTime = lastTime;
-        this.vehicleno = vehicleno;
+        this.vehicleid = vehicleid;
         this.p_array = p_array;
     }
 
+    @NotNull
     public String getFlat_id() {
         return flat_id;
     }
 
-    public void setFlat_id(String flat_id) {
+    public void setFlat_id(@NotNull String flat_id) {
         this.flat_id = flat_id;
     }
 
@@ -77,12 +78,12 @@ public class Parkings {
         this.lastTime = lastTime;
     }
 
-    public String getVehicleno() {
-        return vehicleno;
+    public String getVehicleid() {
+        return vehicleid;
     }
 
-    public void setVehicleno(String vehicleno) {
-        this.vehicleno = vehicleno;
+    public void setVehicleid(String vehicleid) {
+        this.vehicleid = vehicleid;
     }
 
     public List<String> getP_array() {

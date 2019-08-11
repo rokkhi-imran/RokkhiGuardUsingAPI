@@ -50,7 +50,7 @@ import java.util.Date;
 import java.util.List;
 
 
-public class ParkingActivity extends AppCompatActivity  {
+public class ParkingActivity extends AppCompatActivity implements GridAdapter.MyInterface  {
     FirebaseFirestore firebaseFirestore;
     private DocumentSnapshot lastVisible=null;
     private boolean isLastItemReached = false;
@@ -78,7 +78,7 @@ public class ParkingActivity extends AppCompatActivity  {
     String flatid = "", buildid = "", commid = "";
     int floorno,flatno;
     VehiclesRepository vehiclesRepository ;
-    ArrayList<Vehicle> allVehicles;
+    ArrayList<Vehicle> vehicles;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -139,6 +139,7 @@ public class ParkingActivity extends AppCompatActivity  {
     @Override
     protected void onStart() {
         super.onStart();
+        vehicles=new ArrayList<>();
 
         FirebaseFirestore.getInstance().collection("b_flags").document(buildid).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
@@ -154,10 +155,23 @@ public class ParkingActivity extends AppCompatActivity  {
             }
         });
 
+
+        vehiclesRepository.getAllVehicle().observe(this, new Observer<List<Vehicle>>() {
+            @Override
+            public void onChanged(@Nullable List<Vehicle> allVehicles) {
+
+                for(Vehicle vehicle : allVehicles) {
+                    vehicles.add(vehicle);
+
+                    Log.d("room" , "found a new Vehicle   " + vehicle.getF_no()+"  -- > " + vehicle.getFlat_id());
+                }
+            }
+        });
+
     }
 
     public void getVehiclesAndSaveToLocalDatabase(){
-        allVehicles = new ArrayList<>();
+        //vehicles = new ArrayList<>();
         //final FlatsRepository flatsRepository = new FlatsRepository(this);
 
 
@@ -239,7 +253,15 @@ public class ParkingActivity extends AppCompatActivity  {
     }
 
 
-
-
-
+    @Override
+    public ArrayList<Vehicle> fetchFlatVehicle(String flatid) {
+        ArrayList<Vehicle> tempvv;
+        tempvv=new ArrayList<>();
+        for(Vehicle vv: vehicles){
+            if(vv.getFlat_id().equals(flatid)){
+                tempvv.add(vv);
+            }
+        }
+        return tempvv;
+    }
 }

@@ -77,7 +77,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 
 
-public class AddVisitor extends AppCompatActivity implements InviteeAdapter.MyInterface {
+public class AddVisitor extends AppCompatActivity {
 
     CircleImageView userphoto;
     EditText username, phone, purpose, idcardno, email, org, flat,vehicle;
@@ -105,7 +105,6 @@ public class AddVisitor extends AppCompatActivity implements InviteeAdapter.MyIn
     ActiveFlats selected;
 
     Calendar myCalendar;
-    InviteeAdapter inviteeAdapter;
     Normalfunc normalfunc;
 
     private String res="visitor";
@@ -845,10 +844,5 @@ public class AddVisitor extends AppCompatActivity implements InviteeAdapter.MyIn
         mdialog.dismiss();
     }
 
-    @Override
-    public void loadagain() {
-        Intent intent= new Intent(this,VisitorsList.class);
-        startActivity(intent);
-        finish();
-    }
+
 }
