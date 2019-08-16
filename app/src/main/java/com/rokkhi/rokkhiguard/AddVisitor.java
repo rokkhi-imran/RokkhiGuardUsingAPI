@@ -579,7 +579,7 @@ public class AddVisitor extends AppCompatActivity {
     public void dialogconfirmation(final String uid) {
 
 
-        if (selected.isVacant()) approve = false;
+        if (selected.isVacant() || !selected.isUsing()) approve = false;
         else approve = true;
 
         Log.d(TAG, "dialogconfirmation:  approve " + approve);
@@ -647,7 +647,7 @@ public class AddVisitor extends AppCompatActivity {
         });
 
 
-        if (true) {
+        if (approve) {
 
             if (res.equals("whitelisted")) {
                 Log.d(TAG, "dialogconfirmation: xxx");
