@@ -19,19 +19,30 @@ public class ActiveFlats {
     private String comm_id;
     private String f_no;
     private boolean vacant;
+    private boolean using;
     @Ignore  private List<String> f_array;
 
     public ActiveFlats(){
 
     }
 
-    public ActiveFlats(String flat_id, String build_id, String comm_id, String f_no, boolean vacant, List<String> f_array) {
+
+    public ActiveFlats(@NotNull String flat_id, String build_id, String comm_id, String f_no, boolean vacant, boolean using, List<String> f_array) {
         this.flat_id = flat_id;
         this.build_id = build_id;
         this.comm_id = comm_id;
         this.f_no = f_no;
         this.vacant = vacant;
+        this.using = using;
         this.f_array = f_array;
+    }
+
+    public boolean isUsing() {
+        return using;
+    }
+
+    public void setUsing(boolean using) {
+        this.using = using;
     }
 
     public String getFlat_id() {

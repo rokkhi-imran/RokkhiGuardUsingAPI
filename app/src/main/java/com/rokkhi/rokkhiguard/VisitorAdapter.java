@@ -152,7 +152,7 @@ public class VisitorAdapter extends RecyclerView.Adapter<VisitorAdapter.VisitorV
                                 visitor.getV_pic(),visitor.getV_thumb(),visitor.getV_purpose(),visitor.getV_mail()
                         ,visitor.getV_where(),visitor.getFlat_id(),visitor.getF_no(),visitor.getComm_id(),visitor.getBuild_id()
                         ,visitor.getV_vehicleno(),visitor.getV_gpass(),Calendar.getInstance().getTime(),visitor.getV_uid()
-                        ,id,false,true,visitor.getResponse(),visitor.getV_type(),visitor.getV_array(),visitor.getResponder());
+                        ,id,false,true,visitor.getResponse(),"gone",visitor.getV_array(),visitor.getResponder());
 
 
                         DocumentReference writehasdone = firebaseFirestore

@@ -18,12 +18,13 @@ public class Flats {
     private String f_dish;
     private String f_parking;
     private boolean vacant;
+    private boolean using;
     private List<String> f_array;
 
     public Flats(){
     }
 
-    public Flats(String flat_id, String build_id, String comm_id, String f_no, int f_troom, int f_twashroom, int f_tbelcony, int f_tdd, int f_size, int f_rent, String f_internet, String f_dish, String f_parking, boolean vacant, List<String> f_array) {
+    public Flats(String flat_id, String build_id, String comm_id, String f_no, int f_troom, int f_twashroom, int f_tbelcony, int f_tdd, int f_size, int f_rent, String f_internet, String f_dish, String f_parking, boolean vacant, boolean using, List<String> f_array) {
         this.flat_id = flat_id;
         this.build_id = build_id;
         this.comm_id = comm_id;
@@ -38,6 +39,7 @@ public class Flats {
         this.f_dish = f_dish;
         this.f_parking = f_parking;
         this.vacant = vacant;
+        this.using = using;
         this.f_array = f_array;
     }
 
@@ -159,5 +161,13 @@ public class Flats {
 
     public void setF_array(List<String> f_array) {
         this.f_array = f_array;
+    }
+
+    public boolean isUsing() {
+        return using;
+    }
+
+    public void setUsing(boolean using) {
+        this.using = using;
     }
 }

@@ -1,4 +1,5 @@
 package com.rokkhi.rokkhiguard;
+
 import android.app.Dialog;
 import android.arch.lifecycle.Observer;
 import android.content.Context;
@@ -34,6 +35,7 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -48,16 +50,20 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.SetOptions;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.rokkhi.rokkhiguard.Model.ActiveFlats;
+import com.rokkhi.rokkhiguard.Model.BuildingChanges;
 import com.rokkhi.rokkhiguard.Model.Invitees;
 import com.rokkhi.rokkhiguard.Model.Visitors;
 import com.rokkhi.rokkhiguard.Model.Vsearch;
+import com.rokkhi.rokkhiguard.Model.Whitelist;
 import com.rokkhi.rokkhiguard.Utils.Normalfunc;
 import com.rokkhi.rokkhiguard.Utils.UniversalImageLoader;
 import com.rokkhi.rokkhiguard.data.FlatsRepository;
+import com.rokkhi.rokkhiguard.data.WhiteListRepository;
 import com.vansuita.pickimage.bean.PickResult;
 import com.vansuita.pickimage.bundle.PickSetup;
 import com.vansuita.pickimage.dialog.PickImageDialog;
@@ -76,11 +82,10 @@ import javax.annotation.Nullable;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 
-
 public class AddVisitor extends AppCompatActivity {
 
     CircleImageView userphoto;
-    EditText username, phone, purpose, idcardno, email, org, flat,vehicle;
+    EditText username, phone, purpose, idcardno, org, flat, vehicle;
     Button done;
     Map<String, Object> doc;
 
@@ -90,7 +95,7 @@ public class AddVisitor extends AppCompatActivity {
     ArrayList<ActiveFlats> allflats;
     private Bitmap bitmap = null;
     FirebaseUser firebaseUser;
-    Date low,high;
+    Date low, high;
     private static final String TAG = "AddVisitor";
 
     private long mLastClickTime = 0;
@@ -101,13 +106,13 @@ public class AddVisitor extends AppCompatActivity {
     ProgressBar progressBar;
     StorageReference photoRef;
     String visitorid;
-    String flatid = "", buildid = "", commid = "",famid="",userid="";
+    String flatid = "", buildid = "", commid = "", famid = "", userid = "";
     ActiveFlats selected;
 
     Calendar myCalendar;
     Normalfunc normalfunc;
 
-    private String res="visitor";
+    private String res = "pending",vtype="visitor";
     ArrayList<Invitees> list;
     AlertDialog alertDialog;
     RecyclerView recyclerView;
@@ -116,11 +121,11 @@ public class AddVisitor extends AppCompatActivity {
 
     ArrayList<String> wflats;
 
-    String linkFromSearch="";
+    String linkFromSearch = "";
     boolean approve;
-
-
-
+    String thismobileuid;
+    FlatsRepository flatsRepository;
+    WhiteListRepository whiteListRepository;
 
 
     @Override
@@ -131,8 +136,8 @@ public class AddVisitor extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         context = AddVisitor.this;
-        normalfunc= new Normalfunc();
-        flag=false;
+        normalfunc = new Normalfunc();
+        flag = false;
 
 
         done = findViewById(R.id.done);
@@ -141,33 +146,161 @@ public class AddVisitor extends AppCompatActivity {
         org = findViewById(R.id.fromwhere);
         purpose = findViewById(R.id.pupose);
         flat = findViewById(R.id.flat);
-        email = findViewById(R.id.email);
-        vehicle= findViewById(R.id.vehicle);
+        vehicle = findViewById(R.id.vehicle);
         idcardno = findViewById(R.id.card_no);
         //changepic = findViewById(R.id.changeProfilePhoto);
         userphoto = findViewById(R.id.user_photo);
         progressBar = findViewById(R.id.progressBar1);
         myCalendar = Calendar.getInstance();
-        cut= findViewById(R.id.cut);
+        cut = findViewById(R.id.cut);
 
         firebaseFirestore = FirebaseFirestore.getInstance();
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
         buildid = sharedPref.getString("buildid", "none");
         commid = sharedPref.getString("commid", "none");
-        editor= sharedPref.edit();
-
+        editor = sharedPref.edit();
+        thismobileuid = FirebaseAuth.getInstance().getUid();
+        flatsRepository = new FlatsRepository(this);
+        whiteListRepository = new WhiteListRepository(this);
 
 
         initonclick();
         listener();
 
-        addallflats();
+
+    }
+
+    public void getAllWhiteListAndSaveToLocalDatabase(final BuildingChanges buildingChanges) {
+        //allWhiteLists = new ArrayList<>();
+        //final FlatsRepository flatsRepository = new FlatsRepository(this);
+
+
+        firebaseFirestore.collection(getString(R.string.col_whitelists))
+                .whereEqualTo("build_id", buildid)
+                .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+
+                    for (DocumentSnapshot documentSnapshot : task.getResult()) {
+                        Whitelist whitelist = documentSnapshot.toObject(Whitelist.class);
+                        whiteListRepository.deleteWhiteList(whitelist);
+                        whiteListRepository.insert(whitelist);
+                    }
+
+
+                    Map<String, Object> data = new HashMap<>();
+                    ArrayList<String> wldata = new ArrayList<>();
+                    wldata = buildingChanges.getWhitelists();
+                    wldata.add(thismobileuid);
+                    data.put("whitelists", wldata);
+
+
+                    firebaseFirestore.collection("buildingChanges").document(buildid)
+                            .set(data, SetOptions.merge()).addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            Toast.makeText(context, "Whitelists data changed!", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+
+                } else {
+                    Log.d(TAG, "onComplete: xxx5");
+                }
+            }
+        });
+
+    }
+
+
+    public void getAllActiveFlatsAndSaveToLocalDatabase(final BuildingChanges buildingChanges) {
+        // allActiveFlats = new ArrayList<>();
+        // final FlatsRepository flatsRepository = new FlatsRepository(this);
+
+        firebaseFirestore.collection(getString(R.string.col_activeflat))
+                .whereEqualTo("build_id", buildid).orderBy("f_no", Query.Direction.ASCENDING).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    Log.d(TAG, "onComplete: ");
+                    for (DocumentSnapshot documentSnapshot : task.getResult()) {
+                        ActiveFlats activeFlat = documentSnapshot.toObject(ActiveFlats.class);
+                        flatsRepository.deleteActiveFlat(activeFlat);
+                        flatsRepository.insertActiveFlat(activeFlat);
+                        // allActiveFlats.add(activeFlat);
+                    }
+
+                    Map<String, Object> data = new HashMap<>();
+                    ArrayList<String> flatdata = new ArrayList<>();
+                    flatdata = buildingChanges.getFlats();
+                    flatdata.add(thismobileuid);
+                    data.put("flats", flatdata);
+
+
+                    firebaseFirestore.collection("buildingChanges").document(buildid)
+                            .set(data, SetOptions.merge()).addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            Toast.makeText(context, "Flat data changed!", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+
+                }
+            }
+        });
     }
 
     @Override
     protected void onStart() {
         super.onStart();
+
+
+
+        FirebaseFirestore.getInstance().collection("buildingChanges").document(buildid).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                if (documentSnapshot.exists()) {
+                    BuildingChanges buildingChanges = documentSnapshot.toObject(BuildingChanges.class);
+                    ArrayList<String> flats = buildingChanges.getFlats();
+                    ArrayList<String> whitelists = buildingChanges.getWhitelists();
+                    ArrayList<String> vehicles = buildingChanges.getVehicles();
+
+
+                    if (!flats.contains(thismobileuid)) {
+                        Log.d("firebase", "Getting new Flats data because data is changed or updated");
+                        getAllActiveFlatsAndSaveToLocalDatabase(buildingChanges);
+
+
+                        //TODO alhn ei uid add korte hbe database a
+
+                    } else {
+                        Log.d("firebase", " Flats data is not changed or updated");
+                    }
+
+
+                    if (!whitelists.contains(thismobileuid)) {
+                        getAllWhiteListAndSaveToLocalDatabase(buildingChanges);
+                    }
+
+
+                }
+            }
+        });
+
+
+        whiteListRepository.getAllWhiteList().observe(this, new Observer<List<Whitelist>>() {
+            @Override
+            public void onChanged(@Nullable List<Whitelist> allWhiteLists) {
+                wflats = new ArrayList<>();
+                for (Whitelist whiteList : allWhiteLists) {
+                    wflats.add(whiteList.getW_phone()+whiteList.getFlat_id());
+                    Log.d("room", "found a new WhiteList   " + whiteList.getF_no() + "  -- > " + whiteList.getFlat_id());
+                }
+            }
+        });
+
+        addallflats();
 
     }
 
@@ -176,13 +309,13 @@ public class AddVisitor extends AppCompatActivity {
         super.onStop();
     }
 
-    public void cleardata(){
-        Intent intent= new Intent(AddVisitor.this,AddVisitor.class);
+    public void cleardata() {
+        Intent intent = new Intent(AddVisitor.this, AddVisitor.class);
         startActivity(intent);
         finish();
     }
 
-    public void getdate(){
+    public void getdate() {
         Calendar cal = Calendar.getInstance(); //current date and time
         cal.add(Calendar.DAY_OF_MONTH, 0); //add a day
         cal.set(Calendar.HOUR_OF_DAY, 23); //set hour to last hour
@@ -190,18 +323,18 @@ public class AddVisitor extends AppCompatActivity {
         cal.set(Calendar.SECOND, 59); //set seconds to last second
         cal.set(Calendar.MILLISECOND, 999); //set milliseconds to last millisecond
 
-        high=cal.getTime();
+        high = cal.getTime();
         Calendar cal1 = Calendar.getInstance(); //current date and time
         cal1.add(Calendar.DAY_OF_MONTH, 0); //add a day
         cal1.set(Calendar.HOUR_OF_DAY, 0); //set hour to last hour
         cal1.set(Calendar.MINUTE, 0); //set minutes to last minute
         cal1.set(Calendar.SECOND, 0); //set seconds to last second
         cal1.set(Calendar.MILLISECOND, 0); //set milliseconds to last millisecond
-        low= cal1.getTime();
+        low = cal1.getTime();
 
     }
 
-    public void listener(){
+    public void listener() {
         getdate();
         phone.addTextChangedListener(new TextWatcher() {
             @Override
@@ -211,32 +344,31 @@ public class AddVisitor extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if(s.length()==11 && !flag){
-                    flag=true;
+                if (s.length() == 11 && !flag) {
+                    flag = true;
 
 
-                    firebaseFirestore.collection(getString(R.string.col_whitelists)).whereEqualTo("w_phone",phone.getText().toString())
-                            .whereEqualTo("build_id",buildid)
-                            .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                        @Override
-                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                            if(task.isSuccessful()){
-                                wflats=new ArrayList<>();
-
-                                for(DocumentSnapshot documentSnapshot: task.getResult()){
-                                    wflats.add(documentSnapshot.getString("flat_id"));
-                                }
-
-                                if(selected!=null){
-                                    if(wflats.contains(selected.getFlat_id()))res="whitelisted";
-                                    else res="visitor";
-                                }
-                            }
-                            else{
-                                Log.d(TAG, "onComplete: xxx5");
-                            }
-                        }
-                    });
+//                    firebaseFirestore.collection(getString(R.string.col_whitelists)).whereEqualTo("w_phone", phone.getText().toString())
+//                            .whereEqualTo("build_id", buildid)
+//                            .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+//                        @Override
+//                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+//                            if (task.isSuccessful()) {
+//                                wflats = new ArrayList<>();
+//
+//                                for (DocumentSnapshot documentSnapshot : task.getResult()) {
+//                                    wflats.add(documentSnapshot.getString("flat_id"));
+//                                }
+//
+//                                if (selected != null) {
+//                                    if (wflats.contains(selected.getFlat_id())) res = "whitelisted";
+//                                    else res = "visitor";
+//                                }
+//                            } else {
+//                                Log.d(TAG, "onComplete: xxx5");
+//                            }
+//                        }
+//                    });
 
                     Log.d(TAG, "onTextChanged:  nn1");
                     firebaseFirestore.collection("search")
@@ -244,21 +376,22 @@ public class AddVisitor extends AppCompatActivity {
                             .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                                 @Override
                                 public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                                    if(task.isSuccessful()){
-                                        DocumentSnapshot documentSnapshot= task.getResult();
-                                        if(documentSnapshot!=null && documentSnapshot.exists()){
-                                            Log.d(TAG, "onComplete: rrr "+ "ashse ");
-                                            final Vsearch vsearch= documentSnapshot.toObject(Vsearch.class);
+                                    if (task.isSuccessful()) {
+                                        DocumentSnapshot documentSnapshot = task.getResult();
+                                        if (documentSnapshot != null && documentSnapshot.exists()) {
+                                            Log.d(TAG, "onComplete: rrr " + "ashse ");
+                                            final Vsearch vsearch = documentSnapshot.toObject(Vsearch.class);
                                             alertDialog = new AlertDialog.Builder(context).create();
                                             alertDialog.setCancelable(false);
                                             LayoutInflater inflater = getLayoutInflater();
                                             View convertView = (View) inflater.inflate(R.layout.item_person, null);
-                                            CircleImageView propic= convertView.findViewById(R.id.propic);
-                                            TextView name= convertView.findViewById(R.id.name);
-                                            Button cancel= convertView.findViewById(R.id.cancel);
-                                            TextView pass= convertView.findViewById(R.id.pass);
-                                            RelativeLayout relativeLayout= convertView.findViewById(R.id.relativeLayout);
+                                            CircleImageView propic = convertView.findViewById(R.id.propic);
+                                            TextView name = convertView.findViewById(R.id.name);
+                                            Button cancel = convertView.findViewById(R.id.cancel);
+                                            TextView pass = convertView.findViewById(R.id.pass);
+                                            RelativeLayout relativeLayout = convertView.findViewById(R.id.relativeLayout);
                                             pass.setVisibility(View.GONE);
+
 
 
                                             relativeLayout.setOnClickListener(new View.OnClickListener() {
@@ -267,21 +400,21 @@ public class AddVisitor extends AppCompatActivity {
                                                     username.setText(vsearch.getV_name());
                                                     phone.setText(vsearch.getV_phone());
                                                     org.setText(vsearch.getV_where());
-                                                    if(!vsearch.getV_purpose().isEmpty())purpose.setText(vsearch.getV_purpose());
+                                                    if (!vsearch.getV_purpose().isEmpty())
+                                                        purpose.setText(vsearch.getV_purpose());
 
-                                                    email.setText(vsearch.getV_mail());
-                                                    UniversalImageLoader.setImage(vsearch.getV_thumb(),userphoto, null, "");
 
-                                                    if(!vsearch.getV_thumb().isEmpty()){
-                                                        linkFromSearch= vsearch.getV_thumb();
+                                                    if (!vsearch.getV_thumb().isEmpty()) {
+                                                        linkFromSearch = vsearch.getV_thumb();
                                                     }
                                                     username.requestFocus();
                                                     alertDialog.dismiss();
+                                                    UniversalImageLoader.setImage(vsearch.getV_thumb(), userphoto, null, "");
                                                 }
                                             });
 
                                             name.setText(vsearch.getV_name());
-                                            UniversalImageLoader.setImage(vsearch.getV_thumb(),propic, null, "");
+                                            UniversalImageLoader.setImage(vsearch.getV_thumb(), propic, null, "");
 
                                             cancel.setOnClickListener(new View.OnClickListener() {
                                                 @Override
@@ -296,9 +429,7 @@ public class AddVisitor extends AppCompatActivity {
                                     }
                                 }
                             });
-                }
-
-                else if(s.length()<11) flag=false;
+                } else if (s.length() < 11) flag = false;
             }
 
             @Override
@@ -310,27 +441,35 @@ public class AddVisitor extends AppCompatActivity {
     }
 
 
-
     public void upload() {
+
+        String wlcheck= phone.getText().toString()+selected.getFlat_id();
+        if(wflats.contains(wlcheck)){
+            res = "whitelisted";
+            vtype="whitelisted";
+
+        }
+        else{
+            res = "pending"; //TODO this should be pending
+            vtype="visitor";
+
+        }
 
         Log.d(TAG, "upload: yyyy");
 
-        List<String>ll= normalfunc.splitstring(username.getText().toString());
-        if(!email.getText().toString().isEmpty())ll.addAll(normalfunc.splitchar(email.getText().toString().toLowerCase()));
+        List<String> ll = normalfunc.splitstring(username.getText().toString());
         ll.addAll(normalfunc.splitchar(phone.getText().toString().toLowerCase()));
         ll.add(selected.getF_no());
-       // ll.add(selected.getE_login().replace("+88",""));
-        if(!org.getText().toString().isEmpty())ll.addAll(normalfunc.splitchar(org.getText().toString().toLowerCase()));
-
-
-
+        // ll.add(selected.getE_login().replace("+88",""));
+        if (!org.getText().toString().isEmpty())
+            ll.addAll(normalfunc.splitchar(org.getText().toString().toLowerCase()));
 
 
         doc = new HashMap<>();
         doc.put("time", FieldValue.serverTimestamp());
         doc.put("another_uid", "");
         doc.put("v_name", username.getText().toString());
-        doc.put("v_mail", email.getText().toString());
+        doc.put("v_mail", "");
         doc.put("v_phone", phone.getText().toString());
         doc.put("v_purpose", purpose.getText().toString());
         doc.put("v_where", org.getText().toString());
@@ -342,27 +481,24 @@ public class AddVisitor extends AppCompatActivity {
         doc.put("v_vehicleno", vehicle.getText().toString());
         doc.put("v_pic", "");
         doc.put("v_thumb", "");
-        doc.put("in",true);
-        doc.put("completed",false);
-        doc.put("response",res);
-        doc.put("v_type",res);
-        doc.put("v_array",ll);
-        doc.put("responder",firebaseUser.getUid());
+        doc.put("in", true);
+        doc.put("completed", false);
+        doc.put("response", res);
+        doc.put("v_type", res);
+        doc.put("v_array", ll);
+        doc.put("responder", firebaseUser.getUid());
 
-        if(!linkFromSearch.isEmpty()){
+        if (!linkFromSearch.isEmpty()) {
             doc.put("v_pic", linkFromSearch);
             doc.put("v_thumb", linkFromSearch);
         }
-
-
-
 
 
         // [END get_child_ref]
 
         visitorid = firebaseFirestore
                 .collection(getString(R.string.col_visitors)).document().getId();
-        doc.put("v_uid",visitorid);
+        doc.put("v_uid", visitorid);
 
         photoRef = FirebaseStorage.getInstance().getReference()
                 .child("/visitors/" + visitorid + "/pic");
@@ -440,37 +576,37 @@ public class AddVisitor extends AppCompatActivity {
         }
     }
 
-    public void dialogconfirmation(final String uid){
+    public void dialogconfirmation(final String uid) {
 
 
-        if(selected.isVacant())approve=false;
-        else approve=true;
+        if (selected.isVacant()) approve = false;
+        else approve = true;
 
-        Log.d(TAG, "dialogconfirmation:  approve "+ approve);
+        Log.d(TAG, "dialogconfirmation:  approve " + approve);
 
         final AlertDialog alertconfirm = new AlertDialog.Builder(context).create();
         LayoutInflater inflater = getLayoutInflater();
         View convertView = (View) inflater.inflate(R.layout.dialog_confrimation, null);
-        final TextView status= convertView.findViewById(R.id.status);
+        final TextView status = convertView.findViewById(R.id.status);
         final Button submit = convertView.findViewById(R.id.submit);
         final CircleImageView enter = convertView.findViewById(R.id.enter);
         final CircleImageView cancel = convertView.findViewById(R.id.cancel);
 
-        final  ProgressBar progressBar= convertView.findViewById(R.id.dialogprogress);
+        final ProgressBar progressBar = convertView.findViewById(R.id.dialogprogress);
         alertconfirm.setView(convertView);
         alertconfirm.setCancelable(false);
-
 
 
         enter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 firebaseFirestore.collection(getString(R.string.col_visitors)).document(uid)
-                        .update("response", "accepted").addOnCompleteListener(new OnCompleteListener<Void>() {
+                        .update("response", "accepted"
+                        ,"responder",FirebaseAuth.getInstance().getCurrentUser().getUid()).addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
-                        if(task.isSuccessful()){
-                            Toast.makeText(context,"Done!",Toast.LENGTH_SHORT).show();
+                        if (task.isSuccessful()) {
+                            Toast.makeText(context, "Done!", Toast.LENGTH_SHORT).show();
                             progressBar.setVisibility(View.GONE);
                             alertconfirm.dismiss();
                             cleardata();
@@ -485,11 +621,12 @@ public class AddVisitor extends AppCompatActivity {
             public void onClick(View view) {
                 progressBar.setVisibility(View.VISIBLE);
                 firebaseFirestore.collection(getString(R.string.col_visitors)).document(uid)
-                        .delete().addOnCompleteListener(new OnCompleteListener<Void>() {
+                        .update("response", "rejected"
+                                ,"responder",FirebaseAuth.getInstance().getCurrentUser().getUid()).addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
-                        if(task.isSuccessful()){
-                            Toast.makeText(context,"Done!",Toast.LENGTH_SHORT).show();
+                        if (task.isSuccessful()) {
+                            Toast.makeText(context, "Done!", Toast.LENGTH_SHORT).show();
                             progressBar.setVisibility(View.GONE);
                             alertconfirm.dismiss();
                             cleardata();
@@ -503,33 +640,16 @@ public class AddVisitor extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 progressBar.setVisibility(View.VISIBLE);
-                if(res.equals("rejected")){
-                    firebaseFirestore.collection(getString(R.string.col_visitors)).document(uid)
-                            .delete().addOnCompleteListener(new OnCompleteListener<Void>() {
-                        @Override
-                        public void onComplete(@NonNull Task<Void> task) {
-                            if(task.isSuccessful()){
-                                Toast.makeText(context,"Done!",Toast.LENGTH_SHORT).show();
-                                progressBar.setVisibility(View.GONE);
-                                alertconfirm.dismiss();
-                                cleardata();
-                            }
-                        }
-                    });
-                }
-                else{
-                    Toast.makeText(context,"Done!",Toast.LENGTH_SHORT).show();
-                    progressBar.setVisibility(View.GONE);
-                    alertconfirm.dismiss();
-                    cleardata();
-                }
+                progressBar.setVisibility(View.GONE);
+                alertconfirm.dismiss();
+                cleardata();
             }
         });
 
 
-        if(true){
+        if (true) {
 
-            if(res.equals("whitelisted")){
+            if (res.equals("whitelisted")) {
                 Log.d(TAG, "dialogconfirmation: xxx");
                 enter.setVisibility(View.GONE);
                 cancel.setVisibility(View.GONE);
@@ -543,13 +663,13 @@ public class AddVisitor extends AppCompatActivity {
 
                 public void onTick(long millisUntilFinished) {
                 }
+
                 public void onFinish() {
-                    if(!res.equals("accepted") && !res.equals("rejected")){
+                    if (res.equals("pending") ) {
                         progressBar.setVisibility(View.GONE);
                         status.setText("No response ( সাড়া পাওয়া যায়নি )");
                         status.setTextColor(Color.BLUE);
-                    }
-                    else{
+                    } else {
                         progressBar.setVisibility(View.GONE);
                     }
 
@@ -566,9 +686,9 @@ public class AddVisitor extends AppCompatActivity {
 
                             if (documentSnapshot != null && documentSnapshot.exists()) {
 
-                                Visitors visitors= documentSnapshot.toObject(Visitors.class);
-                                res= visitors.getResponse();
-                                if(res.equals("rejected")){
+                                Visitors visitors = documentSnapshot.toObject(Visitors.class);
+                                res = visitors.getResponse();
+                                if (res.equals("rejected")) {
 
                                     enter.setVisibility(View.GONE);
                                     cancel.setVisibility(View.GONE);
@@ -576,9 +696,7 @@ public class AddVisitor extends AppCompatActivity {
                                     progressBar.setVisibility(View.GONE);
                                     status.setText("Rejected  ( বাতিল )");
                                     status.setTextColor(Color.RED);
-                                }
-
-                                else if(res.equals("accepted")){
+                                } else if (res.equals("accepted")) {
                                     enter.setVisibility(View.GONE);
                                     cancel.setVisibility(View.GONE);
                                     submit.setVisibility(View.VISIBLE);
@@ -592,14 +710,11 @@ public class AddVisitor extends AppCompatActivity {
                             }
                         }
                     });
-        }
-
-        else{
+        } else {
             progressBar.setVisibility(View.GONE);
             status.setText("No response ( সাড়া পাওয়া যায়নি )");
             status.setTextColor(Color.BLUE);
         }
-
 
 
         alertconfirm.show();
@@ -607,42 +722,28 @@ public class AddVisitor extends AppCompatActivity {
 
 
     public void addallflats() {
-        allflats = new ArrayList<>();
+
 
 
         //getting the data from repository example
-        final FlatsRepository flatsRepository = new FlatsRepository(this);
+        //final FlatsRepository flatsRepository = new FlatsRepository(this);
         flatsRepository.getAllActiveFlats().observe(this, new Observer<List<ActiveFlats>>() {
             @Override
             public void onChanged(@android.support.annotation.Nullable List<ActiveFlats> allFlatss) {
-                for(ActiveFlats flat : allFlatss) {
+                allflats = new ArrayList<>();
+                for (ActiveFlats flat : allFlatss) {
                     allflats.add(flat);
-                    Log.d("room" , "found a new Flat   " + flat.getF_no()+"  -- > " + flat.getFlat_id());
+                    Log.d("room", "found a new Flat   " + flat.getF_no() + "  -- > " + flat.getFlat_id());
                 }
             }
         });
 
-//        firebaseFirestore.collection(getString(R.string.col_activeflat))
-//                .whereEqualTo("build_id",buildid).orderBy("f_no", Query.Direction.ASCENDING).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-//            @Override
-//            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-//
-//                if (task.isSuccessful()) {
-//                    Log.d(TAG, "onComplete: ");
-//                    for (DocumentSnapshot documentSnapshot : task.getResult()) {
-//                        ActiveFlats activeFlat = documentSnapshot.toObject(ActiveFlats.class);
-//                        allflats.add(activeFlat);
-//                    }
-//                    // progressBar.setVisibility(View.GONE);
-//
-//
-//                }
-//            }
-//        });
+
     }
 
 
-    public void showallflats(){
+    public void showallflats() {
+        Log.d(TAG, "showallflats: kk "+allflats.size());
         final ActiveFlatAdapter valueAdapter = new ActiveFlatAdapter(allflats, context);
         final AlertDialog alertcompany = new AlertDialog.Builder(context).create();
         LayoutInflater inflater = getLayoutInflater();
@@ -682,18 +783,10 @@ public class AddVisitor extends AppCompatActivity {
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                selected=(ActiveFlats) lv.getItemAtPosition(position);
+                selected = (ActiveFlats) lv.getItemAtPosition(position);
                 //cname.setText(myoffice.getName());
                 flat.setText(selected.getF_no());
                 alertcompany.dismiss();
-                if(wflats!=null){
-                    if(wflats.contains(selected.getFlat_id())){
-                        res="whitelisted";
-                    }
-                    else{
-                        res= "visitor";
-                    }
-                }
 
             }
         });
@@ -707,7 +800,6 @@ public class AddVisitor extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 showallflats();
-
 
 
             }
@@ -749,6 +841,7 @@ public class AddVisitor extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 purpose.setText("");
+                purpose.requestFocus();
             }
         });
 
@@ -797,7 +890,7 @@ public class AddVisitor extends AppCompatActivity {
                     cancel = true;
                 }
 
-                if (!normalfunc.isvalidphone(phoneno)){
+                if (!normalfunc.isvalidphone(phoneno)) {
                     phone.setError("Invalid phone no!");
                     focusView = phone;
                     cancel = true;
@@ -827,20 +920,21 @@ public class AddVisitor extends AppCompatActivity {
 
     Dialog mdialog;
 
-    public void initdialog(){
-        mdialog=new Dialog(this);
+    public void initdialog() {
+        mdialog = new Dialog(this);
 
         mdialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
 
         mdialog.setContentView(R.layout.custom_progress);
-        mdialog.getWindow ().setBackgroundDrawableResource (android.R.color.transparent);
+        mdialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
 
     }
 
-    public void showdialog(){
+    public void showdialog() {
         mdialog.show();
     }
-    public void dismissdialog(){
+
+    public void dismissdialog() {
         mdialog.dismiss();
     }
 
