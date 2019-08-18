@@ -186,47 +186,7 @@ public class MainPage extends AppCompatActivity {
                 FirebaseUser firebaseUser= FirebaseAuth.getInstance().getCurrentUser();
                 if(firebaseUser!=null){
 
-                    showposititivedialog(4) ;
-//                    firebaseFirestore.collection(getString(R.string.col_setting)).document(buildid).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-//                        @Override
-//                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-//                            if(task.isSuccessful()){
-//                                Log.d(TAG, "onComplete:  ggg2");
-//                                DocumentSnapshot documentSnapshot= task.getResult();
-//                                if(documentSnapshot!=null && documentSnapshot.exists()){
-//                                    Settings settings= documentSnapshot.toObject(Settings.class);
-//                                    boolean status= settings.isH_status();
-//                                    Log.d(TAG, "onComplete: nasif "+ status);
-//                                    if(status){
-//
-//
-//                                        int isguardedit= settings.getIsgedit();
-//                                        Log.d(TAG, "onComplete: nasif "+ isguardedit);
-//                                        if(isguardedit==1){
-//                                            shownegativedialog();
-//                                        }
-//                                        else{
-//                                            if(isguardedit>1){
-//                                                showposititivedialog(isguardedit);
-//                                            }
-//
-//                                            else{
-//                                                shownegativedialog();
-//                                            }
-//
-//                                        }
-//                                    }
-//                                    else{
-//                                        FirebaseAuth.getInstance().signOut();
-//                                        Intent intent = new Intent(context, DaroanPass.class);
-//                                        startActivity(intent);
-//                                        finish();
-//                                    }
-//                                }
-//                            }
-//                            else Log.d(TAG, "onComplete: ggg1 ");
-//                        }
-//                    });
+                    showposititivedialog() ;
 
 
                 }
@@ -286,7 +246,7 @@ public class MainPage extends AppCompatActivity {
         });
     }
 
-    public void showposititivedialog(int x){
+    public void showposititivedialog(){
         alertDialog = new AlertDialog.Builder(context).create();
         LayoutInflater inflater = (LayoutInflater) context.getSystemService( Context.LAYOUT_INFLATER_SERVICE );
         View convertView = (View) inflater.inflate(R.layout.dialog_select, null);
@@ -294,12 +254,6 @@ public class MainPage extends AppCompatActivity {
         final ConstraintLayout emp= convertView.findViewById(R.id.one);
         final ConstraintLayout grd= convertView.findViewById(R.id.two);
 
-        if(x==2){
-            emp.setVisibility(View.GONE);
-        }
-        if(x==3){
-            grd.setVisibility(View.GONE);
-        }
 
         alertDialog.setView(convertView);
         alertDialog.setCancelable(true);
@@ -328,7 +282,6 @@ public class MainPage extends AppCompatActivity {
 
 
     public void getAllActiveFlatsAndSaveToLocalDatabase(final BuildingChanges buildingChanges){
-        allActiveFlats = new ArrayList<>();
        // final FlatsRepository flatsRepository = new FlatsRepository(this);
 
         firebaseFirestore.collection(getString(R.string.col_activeflat))
@@ -341,7 +294,6 @@ public class MainPage extends AppCompatActivity {
                         ActiveFlats activeFlat = documentSnapshot.toObject(ActiveFlats.class);
                         flatsRepository.deleteActiveFlat(activeFlat);
                         flatsRepository.insertActiveFlat(activeFlat);
-                        allActiveFlats.add(activeFlat);
                     }
 
                     Map<String, Object> data = new HashMap<>();
@@ -369,7 +321,6 @@ public class MainPage extends AppCompatActivity {
 
 
     public void getAllWhiteListAndSaveToLocalDatabase(final BuildingChanges buildingChanges){
-        allWhiteLists = new ArrayList<>();
         //final FlatsRepository flatsRepository = new FlatsRepository(this);
 
 
@@ -413,7 +364,6 @@ public class MainPage extends AppCompatActivity {
     }
 
     public void getVehiclesAndSaveToLocalDatabase(final BuildingChanges buildingChanges){
-        allVehicles = new ArrayList<>();
         //final FlatsRepository flatsRepository = new FlatsRepository(this);
 
 
@@ -445,7 +395,7 @@ public class MainPage extends AppCompatActivity {
                             .set(data, SetOptions.merge()).addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
-                            Toast.makeText(context,"Whitelists data changed!",Toast.LENGTH_SHORT).show();
+                            Toast.makeText(context,"vehicle data changed!",Toast.LENGTH_SHORT).show();
                         }
                     });
 
@@ -506,14 +456,14 @@ public class MainPage extends AppCompatActivity {
 
         //getting the data from repository example
 
-        flatsRepository.getAllActiveFlats().observe(this, new Observer<List<ActiveFlats>>() {
-            @Override
-            public void onChanged(@Nullable List<ActiveFlats> allFlats) {
-                for(ActiveFlats flat : allFlats) {
-                    Log.d("room" , "found a new Flat   " + flat.getF_no()+"  -- > " + flat.getFlat_id());
-                }
-            }
-        });
+//        flatsRepository.getAllActiveFlats().observe(this, new Observer<List<ActiveFlats>>() {
+//            @Override
+//            public void onChanged(@Nullable List<ActiveFlats> allFlats) {
+//                for(ActiveFlats flat : allFlats) {
+//                    Log.d("room" , "found a new Flat   " + flat.getF_no()+"  -- > " + flat.getFlat_id());
+//                }
+//            }
+//        });
 
 
         //getting the data from repository example

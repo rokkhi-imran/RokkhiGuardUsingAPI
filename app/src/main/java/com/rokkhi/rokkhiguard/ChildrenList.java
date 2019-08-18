@@ -101,7 +101,6 @@ public class ChildrenList extends AppCompatActivity implements ChildAdapter.MyIn
 
         list = new ArrayList<>();
         getFirstQuery=childref.whereEqualTo("build_id",buildid).whereEqualTo("activated",true)
-                .whereGreaterThan("endtime",low)
                .limit(limit);
         getfirstdata();
 
@@ -191,7 +190,6 @@ public class ChildrenList extends AppCompatActivity implements ChildAdapter.MyIn
                             Log.d(TAG, "onScrolled: mmmmll dhukse");
                             Query nextQuery;
                             nextQuery= childref.whereEqualTo("build_id",buildid).whereEqualTo("activated",true)
-                                    .whereGreaterThan("endtime",low)
                                     .startAfter(lastVisible).limit(limit);
 
                             nextQuery.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {

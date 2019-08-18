@@ -9,6 +9,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -152,8 +153,8 @@ public class GridAdapter extends RecyclerView.Adapter<GridAdapter.GridViewHolder
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                selected = (Vehicle) listView.getItemAtPosition(position);
+            public void onItemClick(AdapterView<?> parent, View view, int pos, long id) {
+                selected = (Vehicle) listView.getItemAtPosition(pos);
                 //cname.setText(myoffice.getName());
                 alertDialog.dismiss();
                 confirmdialog(parkings,position);
@@ -207,6 +208,7 @@ public class GridAdapter extends RecyclerView.Adapter<GridAdapter.GridViewHolder
                         "vehicleid",v_no);
 
                 list.get(position).setVacant(false);
+                Log.d(TAG, "onClick: checkposition "+ position + " "+ parkings.getF_no());
                 notifyDataSetChanged();
 
                 batch.commit().addOnCompleteListener(new OnCompleteListener<Void>() {

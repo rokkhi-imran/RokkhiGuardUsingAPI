@@ -484,7 +484,7 @@ public class AddVisitor extends AppCompatActivity {
         doc.put("in", true);
         doc.put("completed", false);
         doc.put("response", res);
-        doc.put("v_type", res);
+        doc.put("v_type", vtype);
         doc.put("v_array", ll);
         doc.put("responder", firebaseUser.getUid());
 

@@ -36,8 +36,10 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.SetOptions;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.rokkhi.rokkhiguard.Model.ActiveFlats;
+import com.rokkhi.rokkhiguard.Model.BuildingChanges;
 import com.rokkhi.rokkhiguard.Model.Child;
 import com.rokkhi.rokkhiguard.Model.Notifications;
 import com.rokkhi.rokkhiguard.Model.Parkings;
@@ -47,7 +49,9 @@ import com.rokkhi.rokkhiguard.data.VehiclesRepository;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 public class ParkingActivity extends AppCompatActivity implements GridAdapter.MyInterface  {
@@ -71,6 +75,8 @@ public class ParkingActivity extends AppCompatActivity implements GridAdapter.My
 
     NestedScrollView myNestedScroll;
     boolean shouldscrol=true;
+
+    String thismobileuid;
 
 
     Query getFirstQuery;
@@ -108,23 +114,12 @@ public class ParkingActivity extends AppCompatActivity implements GridAdapter.My
         recyclerView.setNestedScrollingEnabled(false);
         recyclerView.setLayoutManager(new GridLayoutManager(this,flatno));
         vehiclesRepository = new VehiclesRepository(this);
+        thismobileuid= FirebaseAuth.getInstance().getUid();
 
         parkingRef=firebaseFirestore.
                 collection(getString(R.string.col_parkings));
 
         getFirstQuery= parkingRef.whereEqualTo("build_id",buildid).orderBy("f_no",Query.Direction.ASCENDING);
-
-//        firebaseFirestore.collection(getString(R.string.col_parkings)).document("0KL4jRqdvqRyA1u3EnZL")
-//                .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-//            @Override
-//            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-//                if(task.isSuccessful()){
-//                    Parkings parkings= task.getResult().toObject(Parkings.class);
-//                    Log.d(TAG, "onComplete: iii "+ parkings.isVacant());
-//
-//                }
-//            }
-//        });
 
         getfirstdata();
 
@@ -139,16 +134,21 @@ public class ParkingActivity extends AppCompatActivity implements GridAdapter.My
     @Override
     protected void onStart() {
         super.onStart();
-        vehicles=new ArrayList<>();
 
-        FirebaseFirestore.getInstance().collection("b_flags").document(buildid).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+
+        FirebaseFirestore.getInstance().collection("buildingChanges").document(buildid).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 if(documentSnapshot.exists()){
+                    BuildingChanges buildingChanges=documentSnapshot.toObject(BuildingChanges.class);
+                    ArrayList<String> flats=buildingChanges.getFlats();
+                    ArrayList<String> whitelists= buildingChanges.getWhitelists();
+                    ArrayList<String> vehicles= buildingChanges.getVehicles();
 
-                    if(documentSnapshot.contains("v_changed") && documentSnapshot.getBoolean("v_changed")){
+
+                    if(!vehicles.contains(thismobileuid)){
                         Log.d("firebase" , "Getting new Vehicles data because data is changed or updated" );
-                        getVehiclesAndSaveToLocalDatabase();
+                        getVehiclesAndSaveToLocalDatabase(buildingChanges);
                     }
 
                 }
@@ -159,7 +159,7 @@ public class ParkingActivity extends AppCompatActivity implements GridAdapter.My
         vehiclesRepository.getAllVehicle().observe(this, new Observer<List<Vehicle>>() {
             @Override
             public void onChanged(@Nullable List<Vehicle> allVehicles) {
-
+                vehicles=new ArrayList<>();
                 for(Vehicle vehicle : allVehicles) {
                     vehicles.add(vehicle);
 
@@ -170,9 +170,7 @@ public class ParkingActivity extends AppCompatActivity implements GridAdapter.My
 
     }
 
-    public void getVehiclesAndSaveToLocalDatabase(){
-        //vehicles = new ArrayList<>();
-        //final FlatsRepository flatsRepository = new FlatsRepository(this);
+    public void getVehiclesAndSaveToLocalDatabase(final BuildingChanges buildingChanges){
 
 
         Log.d("room" , "getting new vehicle success " + buildid);
@@ -185,10 +183,28 @@ public class ParkingActivity extends AppCompatActivity implements GridAdapter.My
                     Log.d("room" , "getting new vehicle success " + "adsf");
                     for (DocumentSnapshot documentSnapshot : task.getResult()) {
                         Vehicle vehicle = documentSnapshot.toObject(Vehicle.class);
+
                         Log.d("room" , "getting new vehicle data found " + "adsf");
                         vehiclesRepository.deleteVehicle(vehicle);
                         vehiclesRepository.insert(vehicle);
                     }
+
+
+                    Map<String, Object> data = new HashMap<>();
+                    ArrayList<String> vdata= new ArrayList<>();
+                    vdata= buildingChanges.getVehicles();
+                    vdata.add(thismobileuid);
+                    data.put("vehicles",vdata);
+
+
+                    firebaseFirestore.collection("buildingChanges").document(buildid)
+                            .set(data, SetOptions.merge()).addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            Toast.makeText(context,"Whitelists data changed!",Toast.LENGTH_SHORT).show();
+                        }
+                    });
+
 
                 }
                 else{
