@@ -145,6 +145,7 @@
 
 
     <string name="col_activebuild">activebuildings</string>
+    <string name="col_eintercom">eintercom</string>
     <string name="col_activecomm">activecommunities</string>
     <string name="col_activeflat">activeflats</string>
     <string name="col_vehicle">vehicles</string>

@@ -1,10 +1,12 @@
 package com.rokkhi.rokkhiguard;
 
+import android.Manifest;
 import android.app.Dialog;
 import android.arch.lifecycle.Observer;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.net.Uri;
@@ -13,6 +15,7 @@ import android.os.CountDownTimer;
 import android.os.SystemClock;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -88,6 +91,8 @@ public class AddVisitor extends AppCompatActivity {
     EditText username, phone, purpose, idcardno, org, flat, vehicle;
     Button done;
     Map<String, Object> doc;
+    String phoneno="";
+
 
     String mFileUri = "";
     Context context;
@@ -348,27 +353,6 @@ public class AddVisitor extends AppCompatActivity {
                     flag = true;
 
 
-//                    firebaseFirestore.collection(getString(R.string.col_whitelists)).whereEqualTo("w_phone", phone.getText().toString())
-//                            .whereEqualTo("build_id", buildid)
-//                            .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-//                        @Override
-//                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
-//                            if (task.isSuccessful()) {
-//                                wflats = new ArrayList<>();
-//
-//                                for (DocumentSnapshot documentSnapshot : task.getResult()) {
-//                                    wflats.add(documentSnapshot.getString("flat_id"));
-//                                }
-//
-//                                if (selected != null) {
-//                                    if (wflats.contains(selected.getFlat_id())) res = "whitelisted";
-//                                    else res = "visitor";
-//                                }
-//                            } else {
-//                                Log.d(TAG, "onComplete: xxx5");
-//                            }
-//                        }
-//                    });
 
                     Log.d(TAG, "onTextChanged:  nn1");
                     firebaseFirestore.collection("search")
@@ -447,7 +431,6 @@ public class AddVisitor extends AppCompatActivity {
         if(wflats.contains(wlcheck)){
             res = "whitelisted";
             vtype="whitelisted";
-
         }
         else{
             res = "pending"; //TODO this should be pending
@@ -582,6 +565,37 @@ public class AddVisitor extends AppCompatActivity {
         if (selected.isVacant() || !selected.isUsing()) approve = false;
         else approve = true;
 
+        firebaseFirestore.collection(getString(R.string.col_eintercom)).document(selected.getFlat_id())
+                .addSnapshotListener(new EventListener<DocumentSnapshot>() {
+                    @Override
+                    public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
+                        if(e!=null){
+                            Log.w(TAG, "Listen failed.", e);
+                            return;
+                        }
+
+                        if(documentSnapshot.exists()){
+                            phoneno= documentSnapshot.getString("number");
+                            Log.d(TAG, "onEvent: oooo "+ phoneno);
+                        }
+                    }
+                });
+
+
+
+//
+//                .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+//            @Override
+//            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+//                if(task.isSuccessful()){
+//                    DocumentSnapshot documentSnapshot= task.getResult();
+//                    if(documentSnapshot.exists()){
+//                        phoneno= documentSnapshot.getString("number");
+//                    }
+//                }
+//            }
+//        });
+
         Log.d(TAG, "dialogconfirmation:  approve " + approve);
 
         final AlertDialog alertconfirm = new AlertDialog.Builder(context).create();
@@ -589,6 +603,7 @@ public class AddVisitor extends AppCompatActivity {
         View convertView = (View) inflater.inflate(R.layout.dialog_confrimation, null);
         final TextView status = convertView.findViewById(R.id.status);
         final Button submit = convertView.findViewById(R.id.submit);
+        final Button call = convertView.findViewById(R.id.call);
         final CircleImageView enter = convertView.findViewById(R.id.enter);
         final CircleImageView cancel = convertView.findViewById(R.id.cancel);
 
@@ -646,6 +661,14 @@ public class AddVisitor extends AppCompatActivity {
             }
         });
 
+        call.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                onCallBtnClick();
+            }
+        });
+
 
         if (approve) {
 
@@ -669,6 +692,7 @@ public class AddVisitor extends AppCompatActivity {
                         progressBar.setVisibility(View.GONE);
                         status.setText("No response ( সাড়া পাওয়া যায়নি )");
                         status.setTextColor(Color.BLUE);
+                        call.setVisibility(View.VISIBLE);
                     } else {
                         progressBar.setVisibility(View.GONE);
                     }
@@ -711,9 +735,13 @@ public class AddVisitor extends AppCompatActivity {
                         }
                     });
         } else {
+
+
             progressBar.setVisibility(View.GONE);
             status.setText("No response ( সাড়া পাওয়া যায়নি )");
             status.setTextColor(Color.BLUE);
+            call.setVisibility(View.VISIBLE);
+
         }
 
 
@@ -936,6 +964,50 @@ public class AddVisitor extends AppCompatActivity {
 
     public void dismissdialog() {
         mdialog.dismiss();
+    }
+
+
+
+
+    private void onCallBtnClick(){
+        if (ActivityCompat.checkSelfPermission(context,
+                Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_GRANTED) {
+
+            phoneCall();
+        }else {
+            final String[] PERMISSIONS_STORAGE = {Manifest.permission.CALL_PHONE};
+            //Asking request Permissions
+            ActivityCompat.requestPermissions(this, PERMISSIONS_STORAGE, 9);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        boolean permissionGranted = false;
+        switch(requestCode){
+            case 9:
+                permissionGranted = grantResults[0]== PackageManager.PERMISSION_GRANTED;
+                break;
+        }
+        if(permissionGranted){
+            phoneCall();
+        }else {
+            Toast.makeText(context, "You don't assign permission.", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+
+
+    private void phoneCall(){
+        if (ActivityCompat.checkSelfPermission(context,
+                Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_GRANTED) {
+            Intent callIntent = new Intent(Intent.ACTION_CALL);
+            if (phoneno.isEmpty())callIntent.setData(Uri.parse("tel:01521110045"));
+            else callIntent.setData(Uri.parse("tel:"+ phoneno));
+            startActivity(callIntent);
+        }else{
+            Toast.makeText(context, "You don't assign permission.", Toast.LENGTH_SHORT).show();
+        }
     }
 
 

@@ -28,12 +28,28 @@
 
                 />
 
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="call"
+                android:drawableLeft="@drawable/ic_call"
+                android:textColor="@color/orange"
+                android:background="@drawable/less_round_button"
+                android:paddingStart="20dp"
+                android:paddingEnd="20dp"
+                android:layout_below="@+id/tik"
+                android:visibility="gone"
+                android:id="@+id/call"
+                android:layout_centerHorizontal="true"
+                android:layout_margin="10dp"
+                />
+
 
             <android.support.constraint.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_below="@+id/tik"
                 android:id="@+id/c1"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="80dp"
                 android:gravity="center_horizontal"
                 android:layout_height="wrap_content">
 
