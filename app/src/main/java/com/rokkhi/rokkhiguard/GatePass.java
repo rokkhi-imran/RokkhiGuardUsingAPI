@@ -5,18 +5,21 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.annotation.NonNull;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.appcompat.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -36,7 +39,6 @@ public class GatePass extends AppCompatActivity implements View.OnClickListener,
 
     //after gate pass-----> content add visitor
 
-    LinePinField linePinField;
     TextView one;
     TextView two;
     TextView three;
@@ -60,8 +62,10 @@ public class GatePass extends AppCompatActivity implements View.OnClickListener,
     GateAdapter gateAdapter;
     ProgressBar progressBar;
     Integer today;
+    Button search;
     private static final String TAG = "GatePass";
     String flatid = "", buildid = "", commid = "";
+    EditText phnno;
 
 
     @Override
@@ -74,7 +78,8 @@ public class GatePass extends AppCompatActivity implements View.OnClickListener,
 
         firebaseFirestore= FirebaseFirestore.getInstance();
 
-        linePinField= findViewById(R.id.linepin);
+        search= findViewById(R.id.search);
+        phnno= findViewById(R.id.phnno);
 
         sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
         buildid = sharedPref.getString("buildid", "none");
@@ -108,6 +113,16 @@ public class GatePass extends AppCompatActivity implements View.OnClickListener,
 
         initdialog();
 
+        search.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(phnno.getText().toString().length()==5){
+                    showdialogpin();
+                }
+                else Toast.makeText(context,"Pin must have 5 characters",Toast.LENGTH_SHORT).show();
+            }
+        });
+
 
     }
 
@@ -139,8 +154,8 @@ public class GatePass extends AppCompatActivity implements View.OnClickListener,
             TextView tt= (TextView) v;
             passtext=passtext+ tt.getText().toString();
         }
-        linePinField.setText(passtext);
-        if(passtext.length()==5){
+        phnno.setText(passtext);
+        if(passtext.length()==11){
             showdialog();
             return;
         }
@@ -159,11 +174,52 @@ public class GatePass extends AppCompatActivity implements View.OnClickListener,
         progressBar.setVisibility(View.VISIBLE);
 
         firebaseFirestore.collection(getString(R.string.col_sworker))
+                .whereEqualTo("s_phone", passtext).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                passtext="";
+                phnno.setText("");
+                progressBar.setVisibility(View.GONE);
+                if (task.isSuccessful()) {
+                    Log.d(TAG, "onComplete:  cjj2 " );
+                    list = new ArrayList<>();
+                    for (DocumentSnapshot document : task.getResult()) {
+                        Swroker swroker = document.toObject(Swroker.class);
+                        list.add(swroker);
+                    }
+                    if(list.isEmpty())nomatch.setVisibility(View.VISIBLE);
+                    gateAdapter = new GateAdapter(list,context);
+                    gateAdapter.setHasStableIds(true);
+                    recyclerView.setAdapter(gateAdapter);
+
+                }
+                else Log.d(TAG, "onComplete:  cjj3");
+
+            }
+        });
+
+        alertDialog.setView(convertView);
+        alertDialog.show();
+
+
+    }
+
+    private void showdialogpin() {
+        alertDialog = new AlertDialog.Builder(context).create();
+        LayoutInflater inflater = getLayoutInflater();
+        View convertView = (View) inflater.inflate(R.layout.dialog_showlist, null);
+        recyclerView = convertView.findViewById(R.id.list);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        progressBar= convertView.findViewById(R.id.progressBar1);
+        nomatch= convertView.findViewById(R.id.nomatch);
+        progressBar.setVisibility(View.VISIBLE);
+
+        firebaseFirestore.collection(getString(R.string.col_sworker))
                 .whereEqualTo("s_pass", passtext).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 passtext="";
-                linePinField.setText("");
+                phnno.setText("");
                 progressBar.setVisibility(View.GONE);
                 if (task.isSuccessful()) {
                     Log.d(TAG, "onComplete:  cjj2 " );

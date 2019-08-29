@@ -8,7 +8,7 @@ public class Visitors {
     private String v_phone;
     private String v_name;
     private String v_pic;
-    private String v_thumb;
+    private String thumb_v_pic;
     private String v_purpose;
     private String v_mail;
     private String v_where;
@@ -35,35 +35,11 @@ public class Visitors {
     }
 
 
-    public Visitors(String v_phone, String v_name, String v_pic, String v_thumb, String v_purpose, String v_mail, String v_where, String flat_id, String f_no, String comm_id, String build_id, String v_vehicleno, String v_gpass, Date time, String another_uid, String v_uid, boolean in, String response, String v_type, List<String> v_array, String responder) {
+    public Visitors(String v_phone, String v_name, String v_pic, String thumb_v_pic, String v_purpose, String v_mail, String v_where, String flat_id, String f_no, String comm_id, String build_id, String v_vehicleno, String v_gpass, Date time, String another_uid, String v_uid, boolean in, boolean completed, String response, String v_type, List<String> v_array, String responder) {
         this.v_phone = v_phone;
         this.v_name = v_name;
         this.v_pic = v_pic;
-        this.v_thumb = v_thumb;
-        this.v_purpose = v_purpose;
-        this.v_mail = v_mail;
-        this.v_where = v_where;
-        this.flat_id = flat_id;
-        this.f_no = f_no;
-        this.comm_id = comm_id;
-        this.build_id = build_id;
-        this.v_vehicleno = v_vehicleno;
-        this.v_gpass = v_gpass;
-        this.time = time;
-        this.another_uid = another_uid;
-        this.v_uid = v_uid;
-        this.in = in;
-        this.response = response;
-        this.v_type = v_type;
-        this.v_array = v_array;
-        this.responder = responder;
-    }
-
-    public Visitors(String v_phone, String v_name, String v_pic, String v_thumb, String v_purpose, String v_mail, String v_where, String flat_id, String f_no, String comm_id, String build_id, String v_vehicleno, String v_gpass, Date time, String another_uid, String v_uid, boolean in, boolean completed, String response, String v_type, List<String> v_array, String responder) {
-        this.v_phone = v_phone;
-        this.v_name = v_name;
-        this.v_pic = v_pic;
-        this.v_thumb = v_thumb;
+        this.thumb_v_pic = thumb_v_pic;
         this.v_purpose = v_purpose;
         this.v_mail = v_mail;
         this.v_where = v_where;
@@ -84,14 +60,6 @@ public class Visitors {
         this.responder = responder;
     }
 
-
-    public boolean isCompleted() {
-        return completed;
-    }
-
-    public void setCompleted(boolean completed) {
-        this.completed = completed;
-    }
 
     public String getV_phone() {
         return v_phone;
@@ -117,12 +85,12 @@ public class Visitors {
         this.v_pic = v_pic;
     }
 
-    public String getV_thumb() {
-        return v_thumb;
+    public String getThumb_v_pic() {
+        return thumb_v_pic;
     }
 
-    public void setV_thumb(String v_thumb) {
-        this.v_thumb = v_thumb;
+    public void setThumb_v_pic(String thumb_v_pic) {
+        this.thumb_v_pic = thumb_v_pic;
     }
 
     public String getV_purpose() {
@@ -227,6 +195,14 @@ public class Visitors {
 
     public void setIn(boolean in) {
         this.in = in;
+    }
+
+    public boolean isCompleted() {
+        return completed;
+    }
+
+    public void setCompleted(boolean completed) {
+        this.completed = completed;
     }
 
     public String getResponse() {

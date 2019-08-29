@@ -15,6 +15,7 @@ public class Vsearch {
     private Date lastDate;
     private int totalVisit;
 
+
     public Vsearch() {
     }
 

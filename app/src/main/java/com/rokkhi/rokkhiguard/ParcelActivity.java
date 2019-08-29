@@ -8,12 +8,13 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Parcel;
 import android.os.SystemClock;
 import android.preference.PreferenceManager;
-import android.support.annotation.NonNull;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -28,7 +29,6 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
-
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -48,6 +48,7 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.rokkhi.rokkhiguard.Model.ActiveFlats;
 import com.rokkhi.rokkhiguard.Model.Guards;
+import com.rokkhi.rokkhiguard.Model.Parcels;
 import com.rokkhi.rokkhiguard.Utils.Normalfunc;
 import com.rokkhi.rokkhiguard.Utils.StringAdapter;
 import com.vansuita.pickimage.bean.PickResult;
@@ -58,7 +59,6 @@ import com.vansuita.pickimage.listeners.IPickResult;
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -66,12 +66,11 @@ import java.util.Map;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 
-public class ParcelActivity extends AppCompatActivity {
+public class ParcelActivity extends AppCompatActivity implements IPickResult{
 
     CircleImageView parcelphoto;
     EditText cname, gphone, ptype, flat;
     Button done;
-    Map<String, Object> doc;
     String mFileUri = "";
     Context context;
     FirebaseFirestore firebaseFirestore;
@@ -354,33 +353,23 @@ public class ParcelActivity extends AppCompatActivity {
         parcelphoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                PickSetup setup = new PickSetup().setWidth(100).setHeight(100)
+                PickSetup setup = new PickSetup()
                         .setTitle("Choose Photo")
                         .setBackgroundColor(Color.WHITE)
                         .setButtonOrientation(LinearLayout.HORIZONTAL)
                         .setGalleryButtonText("Gallery")
                         .setCameraIcon(R.mipmap.camera_colored)
-                        .setGalleryIcon(R.mipmap.gallery_colored);
+                        .setGalleryIcon(R.mipmap.gallery_colored)
+                        .setCameraToPictures(false)
+                        .setWidth(480)
+                        .setHeight(640)
+                        .setMaxSize(300);
+
+                PickImageDialog.build(setup)
+                        //.setOnClick(this)
+                        .show(ParcelActivity.this);
 
 
-                PickImageDialog.build(setup, new IPickResult() {
-                    @Override
-                    public void onPickResult(PickResult r) {
-                        if (r.getError() == null) {
-                            //progressBar.setVisibility(View.VISIBLE);
-                            parcelphoto.setImageURI(null);
-
-                            mFileUri = r.getUri().toString();
-                            bitmap = r.getBitmap();
-                            parcelphoto.setImageBitmap(r.getBitmap());
-
-
-                        } else {
-                            Toast.makeText(context, r.getError().getMessage(), Toast.LENGTH_LONG).show();
-
-                        }
-                    }
-                }).show(ParcelActivity.this);
             }
         });
 
@@ -488,26 +477,12 @@ public class ParcelActivity extends AppCompatActivity {
 
         Log.d(TAG, "upload: yyyy");
 
-        doc = new HashMap<>();
-        doc.put("p_rtime", FieldValue.serverTimestamp());
-        doc.put("p_com", cname.getText().toString());
-        doc.put("build_id", buildid);
-        doc.put("comm_id", commid);
-        if (guardselected != null) {
-            doc.put("g_uid", guardselected.getG_uid());
-        }
-        else doc.put("g_uid", "");
-        doc.put("p_type", typeselected);
-        doc.put("flat_id", flatselected.getFlat_id());
-        doc.put("f_no", flatselected.getF_no());
-        doc.put("p_pic", "");
-        doc.put("p_thumb", "");
+
 
         List<String>ll= normalfunc.splitstring(cname.getText().toString());
         ll.add(flatselected.getF_no());
         ll.addAll(normalfunc.splitchar(guardselected.getG_phone()));
 
-        doc.put("p_array",ll);
 
 
         // [END get_child_ref]
@@ -515,17 +490,20 @@ public class ParcelActivity extends AppCompatActivity {
         parcelid = firebaseFirestore
                 .collection(getString(R.string.col_parcels)).document().getId();
 
-        doc.put("p_uid", parcelid);
+
+        final Parcels parcels= new Parcels(buildid,commid,flatselected.getFlat_id(),flatselected.getF_no()
+        ,cname.getText().toString(),guardselected.getG_uid(),Calendar.getInstance().getTime()
+        ,typeselected,"","",parcelid,ll);
 
         photoRef = FirebaseStorage.getInstance().getReference()
-                .child("parcels/" + parcelid + "/pic");
+                .child("parcels/" + parcelid + "/p_pic");
 
 
         // Upload file to Firebase Storage
         Log.d(TAG, "uploadFromUri:dst:" + photoRef.getPath());
         if (bitmap != null) {
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 70, baos);
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
 
             byte[] data = baos.toByteArray();
 
@@ -541,15 +519,15 @@ public class ParcelActivity extends AppCompatActivity {
                             photoRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                                 @Override
                                 public void onSuccess(Uri uri) {
-                                    doc.put("p_pic", uri.toString());
-                                    doc.put("p_thumb", uri.toString());
+                                    parcels.setP_pic(uri.toString());
+                                   // doc.put("p_thumb", uri.toString());
                                     // Log.d(TAG, "onSuccess: yyyy");
                                     WriteBatch batch = firebaseFirestore.batch();
 
                                     DocumentReference off = firebaseFirestore
                                             .collection(getString(R.string.col_parcels)).
                                                     document(parcelid);
-                                    batch.set(off, doc);
+                                    batch.set(off, parcels);
 
                                     batch.commit().addOnCompleteListener(new OnCompleteListener<Void>() {
                                         @Override
@@ -586,7 +564,7 @@ public class ParcelActivity extends AppCompatActivity {
             DocumentReference off = firebaseFirestore
                     .collection(getString(R.string.col_parcels)).
                             document(parcelid);
-            batch.set(off, doc);
+            batch.set(off, parcels);
 
             batch.commit().addOnCompleteListener(new OnCompleteListener<Void>() {
                 @Override
@@ -608,4 +586,32 @@ public class ParcelActivity extends AppCompatActivity {
         finish();
     }
 
+    @Override
+    public void onPickResult(PickResult r) {
+        if (r.getError() == null) {
+            //If you want the Uri.
+            //Mandatory to refresh image from Uri.
+            //getImageView().setImageURI(null);
+
+            //Setting the real returned image.
+            //getImageView().setImageURI(r.getUri());
+
+            //If you want the Bitmap.
+
+            parcelphoto.setImageURI(null);
+
+            mFileUri = r.getUri().toString();
+            bitmap = r.getBitmap();
+            //parcelphoto.setImageBitmap(r.getBitmap());
+            parcelphoto.setImageURI(r.getUri());
+
+            //r.getPath();
+        } else {
+            //Handle possible errors
+            //TODO: do what you have to do with r.getError();
+            Toast.makeText(this, r.getError().getMessage(), Toast.LENGTH_LONG).show();
+        }
+
+        //scrollToTop();
+    }
 }

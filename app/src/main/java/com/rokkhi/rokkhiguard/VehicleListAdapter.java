@@ -1,23 +1,18 @@
 package com.rokkhi.rokkhiguard;
 
 import android.content.Context;
-import android.support.v4.content.ContextCompat;
+import androidx.core.content.ContextCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.Filter;
-import android.widget.Filterable;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.rokkhi.rokkhiguard.Model.ActiveFlats;
 import com.rokkhi.rokkhiguard.Model.Vehicle;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 
 public class VehicleListAdapter extends BaseAdapter  {

@@ -1,10 +1,12 @@
 package com.rokkhi.rokkhiguard.Model;
 
-import android.arch.persistence.room.Entity;
-import android.arch.persistence.room.Ignore;
-import android.arch.persistence.room.PrimaryKey;
+
 import android.os.Parcel;
 import android.os.Parcelable;
+
+import androidx.room.Entity;
+import androidx.room.Ignore;
+import androidx.room.PrimaryKey;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -22,12 +24,13 @@ public class Vehicle implements Parcelable {
     private String type;
     private String vehicle_number;
     private String pic;
-    private String thumb;
+    private String thumb_pic;
     private String whose; //userid
     private String flat_id;
     private String f_no;
     private String build_id;
-    @Ignore private Date lastin;
+    @Ignore
+    private Date lastin;
     @Ignore private Date lastout;
     @Ignore
     private List<String> vehicle_array;
@@ -35,12 +38,12 @@ public class Vehicle implements Parcelable {
     public Vehicle(){
     }
 
-    public Vehicle(String description, String type, String vehicle_number, String pic, String thumb, String vehicle_id, String whose, String flat_id, String f_no, String build_id, Date lastin, Date lastout, List<String> vehicle_array) {
+    public Vehicle(String description, String type, String vehicle_number, String pic, String thumb_pic, String vehicle_id, String whose, String flat_id, String f_no, String build_id, Date lastin, Date lastout, List<String> vehicle_array) {
         this.description = description;
         this.type = type;
         this.vehicle_number = vehicle_number;
         this.pic = pic;
-        this.thumb = thumb;
+        this.thumb_pic = thumb_pic;
         this.vehicle_id = vehicle_id;
         this.whose = whose;
         this.flat_id = flat_id;
@@ -56,7 +59,7 @@ public class Vehicle implements Parcelable {
         type = in.readString();
         vehicle_number = in.readString();
         pic = in.readString();
-        thumb = in.readString();
+        thumb_pic = in.readString();
         vehicle_id = in.readString();
         whose = in.readString();
         flat_id = in.readString();
@@ -71,7 +74,7 @@ public class Vehicle implements Parcelable {
         dest.writeString(type);
         dest.writeString(vehicle_number);
         dest.writeString(pic);
-        dest.writeString(thumb);
+        dest.writeString(thumb_pic);
         dest.writeString(vehicle_id);
         dest.writeString(whose);
         dest.writeString(flat_id);
@@ -96,6 +99,15 @@ public class Vehicle implements Parcelable {
             return new Vehicle[size];
         }
     };
+
+    @NotNull
+    public String getVehicle_id() {
+        return vehicle_id;
+    }
+
+    public void setVehicle_id(@NotNull String vehicle_id) {
+        this.vehicle_id = vehicle_id;
+    }
 
     public String getDescription() {
         return description;
@@ -129,20 +141,12 @@ public class Vehicle implements Parcelable {
         this.pic = pic;
     }
 
-    public String getThumb() {
-        return thumb;
+    public String getThumb_pic() {
+        return thumb_pic;
     }
 
-    public void setThumb(String thumb) {
-        this.thumb = thumb;
-    }
-
-    public String getVehicle_id() {
-        return vehicle_id;
-    }
-
-    public void setVehicle_id(String vehicle_id) {
-        this.vehicle_id = vehicle_id;
+    public void setThumb_pic(String thumb_pic) {
+        this.thumb_pic = thumb_pic;
     }
 
     public String getWhose() {
@@ -199,5 +203,9 @@ public class Vehicle implements Parcelable {
 
     public void setVehicle_array(List<String> vehicle_array) {
         this.vehicle_array = vehicle_array;
+    }
+
+    public static Creator<Vehicle> getCREATOR() {
+        return CREATOR;
     }
 }

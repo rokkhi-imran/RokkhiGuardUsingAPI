@@ -1,10 +1,12 @@
 package com.rokkhi.rokkhiguard.Model;
 
-import android.arch.persistence.room.Entity;
-import android.arch.persistence.room.Ignore;
-import android.arch.persistence.room.PrimaryKey;
+
 import android.os.Parcel;
 import android.os.Parcelable;
+
+import androidx.room.Entity;
+import androidx.room.Ignore;
+import androidx.room.PrimaryKey;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -26,9 +28,10 @@ public class Whitelist implements Parcelable {
     private  String w_name;
     private  String w_phone;
     private  String w_pic;
-    private  String w_thumb;
+    private  String thumb_w_pic;
     private  String w_relationship;
-    @Ignore private Date w_mtime;
+    @Ignore
+    private Date w_mtime;
 
     @Ignore private List<String> w_array;
 
@@ -36,7 +39,7 @@ public class Whitelist implements Parcelable {
     public Whitelist(){
     }
 
-    public Whitelist(String w_mail, String flat_id, String f_no, String comm_id, String build_id, String user_id, String w_name, String w_phone, String w_pic, String w_thumb, String w_relationship, Date w_mtime, String w_uid, List<String> w_array) {
+    public Whitelist(String w_mail, String flat_id, String f_no, String comm_id, String build_id, String user_id, String w_name, String w_phone, String w_pic, String thumb_w_pic, String w_relationship, Date w_mtime, String w_uid, List<String> w_array) {
         this.w_mail = w_mail;
         this.flat_id = flat_id;
         this.f_no = f_no;
@@ -46,7 +49,7 @@ public class Whitelist implements Parcelable {
         this.w_name = w_name;
         this.w_phone = w_phone;
         this.w_pic = w_pic;
-        this.w_thumb = w_thumb;
+        this.thumb_w_pic = thumb_w_pic;
         this.w_relationship = w_relationship;
         this.w_mtime = w_mtime;
         this.w_uid = w_uid;
@@ -64,7 +67,7 @@ public class Whitelist implements Parcelable {
         w_name = in.readString();
         w_phone = in.readString();
         w_pic = in.readString();
-        w_thumb = in.readString();
+        thumb_w_pic = in.readString();
         w_relationship = in.readString();
         w_uid = in.readString();
         w_array = in.createStringArrayList();
@@ -154,12 +157,16 @@ public class Whitelist implements Parcelable {
         this.w_pic = w_pic;
     }
 
-    public String getW_thumb() {
-        return w_thumb;
+    public String getThumb_w_pic() {
+        return thumb_w_pic;
     }
 
-    public void setW_thumb(String w_thumb) {
-        this.w_thumb = w_thumb;
+    public void setThumb_w_pic(String thumb_w_pic) {
+        this.thumb_w_pic = thumb_w_pic;
+    }
+
+    public static Creator<Whitelist> getCREATOR() {
+        return CREATOR;
     }
 
     public String getW_relationship() {
@@ -210,7 +217,7 @@ public class Whitelist implements Parcelable {
         dest.writeString(w_name);
         dest.writeString(w_phone);
         dest.writeString(w_pic);
-        dest.writeString(w_thumb);
+        dest.writeString(thumb_w_pic);
         dest.writeString(w_relationship);
         dest.writeString(w_uid);
         dest.writeStringList(w_array);

@@ -14,7 +14,7 @@ public class Child {
     private Date endtime;
     private String m_name;
     private String m_pic;
-    private String m_thumb;
+    private String thumb_m_pic;
     private Date m_bday;
     private String m_gender;
     private List<String> m_array;
@@ -23,7 +23,7 @@ public class Child {
     }
 
 
-    public Child(String mem_id, String who_add, String flat_id, String build_id, String f_no, boolean activated, Date endtime, String m_name, String m_pic, String m_thumb, Date m_bday, String m_gender, List<String> m_array) {
+    public Child(String mem_id, String who_add, String flat_id, String build_id, String f_no, boolean activated, Date endtime, String m_name, String m_pic, String thumb_m_pic, Date m_bday, String m_gender, List<String> m_array) {
         this.mem_id = mem_id;
         this.who_add = who_add;
         this.flat_id = flat_id;
@@ -33,12 +33,11 @@ public class Child {
         this.endtime = endtime;
         this.m_name = m_name;
         this.m_pic = m_pic;
-        this.m_thumb = m_thumb;
+        this.thumb_m_pic = thumb_m_pic;
         this.m_bday = m_bday;
         this.m_gender = m_gender;
         this.m_array = m_array;
     }
-
 
     public String getMem_id() {
         return mem_id;
@@ -112,12 +111,12 @@ public class Child {
         this.m_pic = m_pic;
     }
 
-    public String getM_thumb() {
-        return m_thumb;
+    public String getThumb_m_pic() {
+        return thumb_m_pic;
     }
 
-    public void setM_thumb(String m_thumb) {
-        this.m_thumb = m_thumb;
+    public void setThumb_m_pic(String thumb_m_pic) {
+        this.thumb_m_pic = thumb_m_pic;
     }
 
     public Date getM_bday() {

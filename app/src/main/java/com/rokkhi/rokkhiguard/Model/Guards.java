@@ -17,7 +17,7 @@ public class Guards {
     private String g_org;
     private String g_pic;
     private String g_address;
-    private String g_thumb;
+    private String thumb_g_pic;
     private String g_phone;
     private String g_uid; //auto id
     private List<String> g_array;
@@ -28,7 +28,7 @@ public class Guards {
     public Guards() {
     }
 
-    public Guards(String build_id, String comm_id, String g_name, String g_password, String g_nid, Date g_joining, Date g_bday, String g_org, String g_pic, String g_address, String g_thumb, String g_phone, String g_uid, List<String> g_array) {
+    public Guards(String build_id, String comm_id, String g_name, String g_password, String g_nid, Date g_joining, Date g_bday, String g_org, String g_pic, String g_address, String thumb_g_pic, String g_phone, String g_uid, List<String> g_array) {
         this.build_id = build_id;
         this.comm_id = comm_id;
         this.g_name = g_name;
@@ -39,7 +39,7 @@ public class Guards {
         this.g_org = g_org;
         this.g_pic = g_pic;
         this.g_address = g_address;
-        this.g_thumb = g_thumb;
+        this.thumb_g_pic = thumb_g_pic;
         this.g_phone = g_phone;
         this.g_uid = g_uid;
         this.g_array = g_array;
@@ -125,12 +125,12 @@ public class Guards {
         this.g_address = g_address;
     }
 
-    public String getG_thumb() {
-        return g_thumb;
+    public String getThumb_g_pic() {
+        return thumb_g_pic;
     }
 
-    public void setG_thumb(String g_thumb) {
-        this.g_thumb = g_thumb;
+    public void setThumb_g_pic(String thumb_g_pic) {
+        this.thumb_g_pic = thumb_g_pic;
     }
 
     public String getG_phone() {

@@ -2,7 +2,7 @@ package com.rokkhi.rokkhiguard;
 
 import android.Manifest;
 import android.app.Dialog;
-import android.arch.lifecycle.Observer;
+import androidx.lifecycle.Observer;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -14,13 +14,12 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.SystemClock;
 import android.preference.PreferenceManager;
-import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
+import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.appcompat.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -59,7 +58,6 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.rokkhi.rokkhiguard.Model.ActiveFlats;
 import com.rokkhi.rokkhiguard.Model.BuildingChanges;
-import com.rokkhi.rokkhiguard.Model.Invitees;
 import com.rokkhi.rokkhiguard.Model.Visitors;
 import com.rokkhi.rokkhiguard.Model.Vsearch;
 import com.rokkhi.rokkhiguard.Model.Whitelist;
@@ -85,7 +83,10 @@ import javax.annotation.Nullable;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 
-public class AddVisitor extends AppCompatActivity {
+public class AddVisitor extends AppCompatActivity implements IPickResult{
+
+    private static final int PERMISSION_REQUEST_READ_PHONE_STATE = 1;
+
 
     CircleImageView userphoto;
     EditText username, phone, purpose, idcardno, org, flat, vehicle;
@@ -118,7 +119,6 @@ public class AddVisitor extends AppCompatActivity {
     Normalfunc normalfunc;
 
     private String res = "pending",vtype="visitor";
-    ArrayList<Invitees> list;
     AlertDialog alertDialog;
     RecyclerView recyclerView;
     boolean flag;
@@ -463,7 +463,7 @@ public class AddVisitor extends AppCompatActivity {
         doc.put("build_id", selected.getBuild_id());
         doc.put("v_vehicleno", vehicle.getText().toString());
         doc.put("v_pic", "");
-        doc.put("v_thumb", "");
+        doc.put("thumb_v_pic", "");
         doc.put("in", true);
         doc.put("completed", false);
         doc.put("response", res);
@@ -473,7 +473,7 @@ public class AddVisitor extends AppCompatActivity {
 
         if (!linkFromSearch.isEmpty()) {
             doc.put("v_pic", linkFromSearch);
-            doc.put("v_thumb", linkFromSearch);
+            doc.put("thumb_v_pic", linkFromSearch);
         }
 
 
@@ -484,14 +484,16 @@ public class AddVisitor extends AppCompatActivity {
         doc.put("v_uid", visitorid);
 
         photoRef = FirebaseStorage.getInstance().getReference()
-                .child("/visitors/" + visitorid + "/pic");
+                .child("visitors/" + visitorid + "/v_pic");
+
+
 
 
         // Upload file to Firebase Storage
         Log.d(TAG, "uploadFromUri:dst:" + photoRef.getPath());
         if (bitmap != null) {
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 90, baos);
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
 
             byte[] data = baos.toByteArray();
 
@@ -508,7 +510,7 @@ public class AddVisitor extends AppCompatActivity {
                                 @Override
                                 public void onSuccess(Uri uri) {
                                     doc.put("v_pic", uri.toString());
-                                    doc.put("v_thumb", uri.toString());
+                                    doc.put("thumb_v_pic", uri.toString());
 
 
                                     firebaseFirestore
@@ -757,7 +759,7 @@ public class AddVisitor extends AppCompatActivity {
         //final FlatsRepository flatsRepository = new FlatsRepository(this);
         flatsRepository.getAllActiveFlats().observe(this, new Observer<List<ActiveFlats>>() {
             @Override
-            public void onChanged(@android.support.annotation.Nullable List<ActiveFlats> allFlatss) {
+            public void onChanged(@androidx.annotation.Nullable List<ActiveFlats> allFlatss) {
                 allflats = new ArrayList<>();
                 for (ActiveFlats flat : allFlatss) {
                     allflats.add(flat);
@@ -836,32 +838,24 @@ public class AddVisitor extends AppCompatActivity {
         userphoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                PickSetup setup = new PickSetup().setWidth(100).setHeight(100)
+                PickSetup setup = new PickSetup()
                         .setTitle("Choose Photo")
                         .setBackgroundColor(Color.WHITE)
                         .setButtonOrientation(LinearLayout.HORIZONTAL)
                         .setGalleryButtonText("Gallery")
                         .setCameraIcon(R.mipmap.camera_colored)
-                        .setGalleryIcon(R.mipmap.gallery_colored);
+                        .setGalleryIcon(R.mipmap.gallery_colored)
+                        .setCameraToPictures(false)
+                        .setWidth(480)
+                        .setHeight(640)
+                        .setMaxSize(300);
+
+                PickImageDialog.build(setup)
+                        //.setOnClick(this)
+                        .show(AddVisitor.this);
 
 
-                PickImageDialog.build(setup, new IPickResult() {
-                    @Override
-                    public void onPickResult(PickResult r) {
-                        if (r.getError() == null) {
-                            //progressBar.setVisibility(View.VISIBLE);
 
-                            mFileUri = r.getUri().toString();
-                            bitmap = r.getBitmap();
-                            userphoto.setImageBitmap(r.getBitmap());
-
-
-                        } else {
-                            Toast.makeText(context, r.getError().getMessage(), Toast.LENGTH_LONG).show();
-
-                        }
-                    }
-                }).show(AddVisitor.this);
             }
         });
 
@@ -970,24 +964,33 @@ public class AddVisitor extends AppCompatActivity {
 
 
     private void onCallBtnClick(){
-        if (ActivityCompat.checkSelfPermission(context,
-                Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_GRANTED) {
 
-            phoneCall();
-        }else {
-            final String[] PERMISSIONS_STORAGE = {Manifest.permission.CALL_PHONE};
-            //Asking request Permissions
-            ActivityCompat.requestPermissions(this, PERMISSIONS_STORAGE, 9);
+        if (checkSelfPermission(Manifest.permission.READ_PHONE_STATE) == PackageManager.PERMISSION_DENIED || checkSelfPermission(Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_DENIED) {
+            String[] permissions = {Manifest.permission.READ_PHONE_STATE, Manifest.permission.CALL_PHONE};
+            requestPermissions(permissions, PERMISSION_REQUEST_READ_PHONE_STATE);
         }
+
+        else phoneCall();
+
+
     }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         boolean permissionGranted = false;
+
+
         switch(requestCode){
-            case 9:
-                permissionGranted = grantResults[0]== PackageManager.PERMISSION_GRANTED;
-                break;
+            case PERMISSION_REQUEST_READ_PHONE_STATE: {
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    Toast.makeText(this, "Permission granted: " + PERMISSION_REQUEST_READ_PHONE_STATE, Toast.LENGTH_SHORT).show();
+                    permissionGranted=true;
+                } else {
+                    Toast.makeText(this, "Permission NOT granted: " + PERMISSION_REQUEST_READ_PHONE_STATE, Toast.LENGTH_SHORT).show();
+                }
+
+
+            }
         }
         if(permissionGranted){
             phoneCall();
@@ -1011,4 +1014,27 @@ public class AddVisitor extends AppCompatActivity {
     }
 
 
+    @Override
+    public void onPickResult(PickResult r) {
+        if (r.getError() == null) {
+            //If you want the Uri.
+            //Mandatory to refresh image from Uri.
+            //getImageView().setImageURI(null);
+
+            //Setting the real returned image.
+            //getImageView().setImageURI(r.getUri());
+
+            mFileUri = r.getUri().toString();
+            bitmap = r.getBitmap();
+            if(bitmap==null) Log.d(TAG, "onPickResult: bitmapnull");
+            else Log.d(TAG, "onPickResult:  bitmapnullna");
+            userphoto.setImageBitmap(r.getBitmap());
+
+            //r.getPath();
+        } else {
+            //Handle possible errors
+            //TODO: do what you have to do with r.getError();
+            Toast.makeText(this, r.getError().getMessage(), Toast.LENGTH_LONG).show();
+        }
+    }
 }

@@ -9,7 +9,7 @@ public class Swroker {
     private  String s_name;
     private  String s_phone;
     private  String s_pic;
-    private  String s_thumb;
+    private  String thumb_s_pic;
     private String s_mail;
     private Date s_bday;
     private Date experience;
@@ -26,12 +26,12 @@ public class Swroker {
     public Swroker(){
     }
 
-    public Swroker(String s_id, String s_name, String s_phone, String s_pic, String s_thumb, String s_mail, Date s_bday, Date experience, int starttime, int endtime, String nid, String type, String s_pass, String who_add, Date when_add, List<String> address, List<String> s_array) {
+    public Swroker(String s_id, String s_name, String s_phone, String s_pic, String thumb_s_pic, String s_mail, Date s_bday, Date experience, int starttime, int endtime, String nid, String type, String s_pass, String who_add, Date when_add, List<String> address, List<String> s_array) {
         this.s_id = s_id;
         this.s_name = s_name;
         this.s_phone = s_phone;
         this.s_pic = s_pic;
-        this.s_thumb = s_thumb;
+        this.thumb_s_pic = thumb_s_pic;
         this.s_mail = s_mail;
         this.s_bday = s_bday;
         this.experience = experience;
@@ -45,6 +45,7 @@ public class Swroker {
         this.address = address;
         this.s_array = s_array;
     }
+
 
     public String getS_id() {
         return s_id;
@@ -78,12 +79,12 @@ public class Swroker {
         this.s_pic = s_pic;
     }
 
-    public String getS_thumb() {
-        return s_thumb;
+    public String getThumb_s_pic() {
+        return thumb_s_pic;
     }
 
-    public void setS_thumb(String s_thumb) {
-        this.s_thumb = s_thumb;
+    public void setThumb_s_pic(String thumb_s_pic) {
+        this.thumb_s_pic = thumb_s_pic;
     }
 
     public String getS_mail() {

@@ -3,9 +3,9 @@ package com.rokkhi.rokkhiguard;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
-import android.support.annotation.NonNull;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.recyclerview.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,11 +19,8 @@ import android.widget.TextView;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.WriteBatch;
-import com.rokkhi.rokkhiguard.Model.ActiveFlats;
 import com.rokkhi.rokkhiguard.Model.Visitors;
 import com.rokkhi.rokkhiguard.Utils.UniversalImageLoader;
 
@@ -63,7 +60,6 @@ public class VisitorAdapter extends RecyclerView.Adapter<VisitorAdapter.VisitorV
 
     private Context context;
     private FirebaseFirestore firebaseFirestore;
-
     VisitorAdapter(ArrayList<Visitors> list, Context context) {
         this.list = list;
         mvisitorFilterList = list;
@@ -108,7 +104,7 @@ public class VisitorAdapter extends RecyclerView.Adapter<VisitorAdapter.VisitorV
 
         final Visitors visitor = list.get(position);
         holder.name.setText(visitor.getV_name());
-        UniversalImageLoader.setImage(visitor.getV_thumb(), holder.propic, null, "");
+        UniversalImageLoader.setImage(visitor.getThumb_v_pic(), holder.propic, null, "");
         Date date1 = visitor.getTime();
         Calendar cal = Calendar.getInstance();
         cal.setTime(date1);
@@ -149,7 +145,7 @@ public class VisitorAdapter extends RecyclerView.Adapter<VisitorAdapter.VisitorV
                                 .document().getId();
                         Log.d(TAG, "onClick: hhh "+ visitor.getV_uid()+ " "+id);
                         Visitors ovisitors=new Visitors(visitor.getV_phone(),visitor.getV_name(),
-                                visitor.getV_pic(),visitor.getV_thumb(),visitor.getV_purpose(),visitor.getV_mail()
+                                visitor.getV_pic(),visitor.getThumb_v_pic(),visitor.getV_purpose(),visitor.getV_mail()
                         ,visitor.getV_where(),visitor.getFlat_id(),visitor.getF_no(),visitor.getComm_id(),visitor.getBuild_id()
                         ,visitor.getV_vehicleno(),visitor.getV_gpass(),Calendar.getInstance().getTime(),visitor.getV_uid()
                         ,id,false,true,visitor.getResponse(),"gone",visitor.getV_array(),visitor.getResponder());

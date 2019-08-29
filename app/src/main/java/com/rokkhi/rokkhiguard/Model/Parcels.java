@@ -14,14 +14,14 @@ public class Parcels {
     private Date p_rtime;
     private String p_type;
     private String p_pic;
-    private String p_thumb;
+    private String thumb_p_pic;
     private String p_uid; //auto
     private List<String> p_array;
 
     public Parcels(){
     }
 
-    public Parcels(String build_id, String comm_id, String flat_id, String f_no, String p_com, String g_uid, Date p_rtime, String p_type, String p_pic, String p_thumb, String p_uid, List<String> p_array) {
+    public Parcels(String build_id, String comm_id, String flat_id, String f_no, String p_com, String g_uid, Date p_rtime, String p_type, String p_pic, String thumb_p_pic, String p_uid, List<String> p_array) {
         this.build_id = build_id;
         this.comm_id = comm_id;
         this.flat_id = flat_id;
@@ -31,7 +31,7 @@ public class Parcels {
         this.p_rtime = p_rtime;
         this.p_type = p_type;
         this.p_pic = p_pic;
-        this.p_thumb = p_thumb;
+        this.thumb_p_pic = thumb_p_pic;
         this.p_uid = p_uid;
         this.p_array = p_array;
     }
@@ -108,12 +108,12 @@ public class Parcels {
         this.p_pic = p_pic;
     }
 
-    public String getP_thumb() {
-        return p_thumb;
+    public String getThumb_p_pic() {
+        return thumb_p_pic;
     }
 
-    public void setP_thumb(String p_thumb) {
-        this.p_thumb = p_thumb;
+    public void setThumb_p_pic(String thumb_p_pic) {
+        this.thumb_p_pic = thumb_p_pic;
     }
 
     public String getP_uid() {

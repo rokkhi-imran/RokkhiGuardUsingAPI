@@ -73,7 +73,7 @@ public class GuardAdapter extends BaseAdapter implements Filterable {
         viewHolder.green.setVisibility(View.GONE);
         viewHolder.org.setText(guard.getG_org());
         viewHolder.name.setText(guard.getG_name());
-        UniversalImageLoader.setImage(guard.getG_thumb(), viewHolder.pic, null, "");
+        UniversalImageLoader.setImage(guard.getThumb_g_pic(), viewHolder.pic, null, "");
         return convertView;
     }
 

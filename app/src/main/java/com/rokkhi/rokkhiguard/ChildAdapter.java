@@ -3,10 +3,10 @@ package com.rokkhi.rokkhiguard;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
-import android.support.annotation.NonNull;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
+import androidx.appcompat.app.AlertDialog;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -95,7 +95,7 @@ public class ChildAdapter extends RecyclerView.Adapter<ChildAdapter.ChildViewHol
         final Child child = list.get(position);
         holder.name.setText(child.getM_name());
         holder.flat.setText("Flat:  "+  child.getF_no());
-        UniversalImageLoader.setImage(child.getM_thumb(), holder.propic, null, "");
+        UniversalImageLoader.setImage(child.getThumb_m_pic(), holder.propic, null, "");
         if(child.isActivated()){
             holder.active.setText("ACTIVE");
             holder.active.setTextColor(ContextCompat.getColor(context, R.color.green));

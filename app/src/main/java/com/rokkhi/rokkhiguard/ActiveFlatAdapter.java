@@ -1,8 +1,8 @@
 package com.rokkhi.rokkhiguard;
 
 import android.content.Context;
-import android.graphics.drawable.ColorDrawable;
-import android.support.v4.content.ContextCompat;
+
+import androidx.core.content.ContextCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -61,18 +61,7 @@ public class ActiveFlatAdapter extends BaseAdapter implements Filterable {
         }
     }
 
-    @Override
 
-    public int getViewTypeCount() {
-
-        return getCount();
-    }
-
-    @Override
-    public int getItemViewType(int position) {
-
-        return position;
-    }
 
 
 

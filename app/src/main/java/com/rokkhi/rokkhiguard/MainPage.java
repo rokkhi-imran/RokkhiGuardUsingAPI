@@ -1,16 +1,16 @@
 package com.rokkhi.rokkhiguard;
 
-import android.arch.lifecycle.Observer;
+import androidx.lifecycle.Observer;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.constraint.ConstraintLayout;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -33,17 +33,14 @@ import com.google.firebase.firestore.SetOptions;
 import com.rokkhi.rokkhiguard.Model.ActiveFlats;
 import com.rokkhi.rokkhiguard.Model.Activebuilding;
 import com.rokkhi.rokkhiguard.Model.BuildingChanges;
-import com.rokkhi.rokkhiguard.Model.Settings;
 import com.rokkhi.rokkhiguard.Model.Vehicle;
 import com.rokkhi.rokkhiguard.Model.Whitelist;
 import com.rokkhi.rokkhiguard.data.FlatsRepository;
 import com.rokkhi.rokkhiguard.data.VehiclesRepository;
-import com.rokkhi.rokkhiguard.data.WhiteListDao;
 import com.rokkhi.rokkhiguard.data.WhiteListRepository;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;

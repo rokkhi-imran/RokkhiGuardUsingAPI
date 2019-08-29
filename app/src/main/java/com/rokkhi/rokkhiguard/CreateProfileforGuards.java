@@ -10,10 +10,10 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.preference.PreferenceManager;
-import android.support.annotation.NonNull;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -42,7 +42,6 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.rokkhi.rokkhiguard.Model.Guards;
-import com.rokkhi.rokkhiguard.Model.Swroker;
 import com.rokkhi.rokkhiguard.Utils.Normalfunc;
 import com.rokkhi.rokkhiguard.Utils.UniversalImageLoader;
 import com.vansuita.pickimage.bean.PickResult;
@@ -59,7 +58,7 @@ import java.util.List;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 
-public class CreateProfileforGuards extends AppCompatActivity {
+public class CreateProfileforGuards extends AppCompatActivity implements IPickResult {
 
     CircleImageView userphoto;
     EditText guardname, phone;
@@ -179,7 +178,7 @@ public class CreateProfileforGuards extends AppCompatActivity {
                                 });
 
                                 name.setText(list.get(0).getG_name());
-                                UniversalImageLoader.setImage(list.get(0).getG_thumb(), pic, null, "");
+                                UniversalImageLoader.setImage(list.get(0).getThumb_g_pic(), pic, null, "");
 
                                 alertDialog.setView(convertView);
                                 alertDialog.show();
@@ -200,29 +199,24 @@ public class CreateProfileforGuards extends AppCompatActivity {
         userphoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                PickSetup setup = new PickSetup().setWidth(100).setHeight(100)
+                PickSetup setup = new PickSetup()
                         .setTitle("Choose Photo")
                         .setBackgroundColor(Color.WHITE)
                         .setButtonOrientation(LinearLayout.HORIZONTAL)
                         .setGalleryButtonText("Gallery")
                         .setCameraIcon(R.mipmap.camera_colored)
-                        .setGalleryIcon(R.mipmap.gallery_colored);
+                        .setGalleryIcon(R.mipmap.gallery_colored)
+                        .setCameraToPictures(false)
+                        .setWidth(480)
+                        .setHeight(640)
+                        .setMaxSize(300);
+
+                PickImageDialog.build(setup)
+                        //.setOnClick(this)
+                        .show(CreateProfileforGuards.this);
 
 
-                PickImageDialog.build(setup, new IPickResult() {
-                    @Override
-                    public void onPickResult(PickResult r) {
-                        if (r.getError() == null) {
-                            mFileUri = r.getUri().toString();
-                            bitmap = r.getBitmap();
-                            userphoto.setImageBitmap(r.getBitmap());
 
-                        } else {
-                            Toast.makeText(context, r.getError().getMessage(), Toast.LENGTH_LONG).show();
-
-                        }
-                    }
-                }).show(CreateProfileforGuards.this);
             }
         });
 
@@ -289,6 +283,34 @@ public class CreateProfileforGuards extends AppCompatActivity {
         });
     }
 
+    @Override
+    public void onPickResult(PickResult r) {
+        if (r.getError() == null) {
+            //If you want the Uri.
+            //Mandatory to refresh image from Uri.
+            //getImageView().setImageURI(null);
+
+            //Setting the real returned image.
+            //getImageView().setImageURI(r.getUri());
+
+            //If you want the Bitmap.
+
+            userphoto.setImageURI(null);
+
+            mFileUri = r.getUri().toString();
+            bitmap = r.getBitmap();
+            userphoto.setImageBitmap(r.getBitmap());
+
+            //r.getPath();
+        } else {
+            //Handle possible errors
+            //TODO: do what you have to do with r.getError();
+            Toast.makeText(this, r.getError().getMessage(), Toast.LENGTH_LONG).show();
+        }
+
+        //scrollToTop();
+    }
+
 
 
     public void upload() {
@@ -318,14 +340,14 @@ public class CreateProfileforGuards extends AppCompatActivity {
 
 
         photoRef = FirebaseStorage.getInstance().getReference()
-                .child("guards/" + id + "/pic");
+                .child("guards/" + id + "/g_pic");
 
 
         // Upload file to Firebase Storage
         Log.d(TAG, "uploadFromUri:dst:" + photoRef.getPath());
         if (bitmap != null) {
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 90, baos);
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
 
             byte[] data = baos.toByteArray();
 
@@ -341,7 +363,6 @@ public class CreateProfileforGuards extends AppCompatActivity {
                                 @Override
                                 public void onSuccess(Uri uri) {
                                     guards.setG_pic(uri.toString());
-                                    guards.setG_thumb(uri.toString());
                                     // Log.d(TAG, "onSuccess: yyyy");
                                     firebaseFirestore.collection(getString(R.string.col_guards))
                                 .document(id).set(guards).addOnCompleteListener(new OnCompleteListener<Void>() {

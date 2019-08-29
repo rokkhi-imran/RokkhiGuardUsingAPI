@@ -3,10 +3,10 @@ package com.rokkhi.rokkhiguard;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
-import android.support.annotation.NonNull;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
+import androidx.appcompat.app.AlertDialog;
+import androidx.recyclerview.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -28,20 +28,17 @@ import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.google.firebase.firestore.SetOptions;
 import com.google.firebase.firestore.WriteBatch;
 import com.rokkhi.rokkhiguard.Model.ActiveFlats;
+import com.rokkhi.rokkhiguard.Model.Attendence;
 import com.rokkhi.rokkhiguard.Model.SLastHistory;
 import com.rokkhi.rokkhiguard.Model.Swroker;
 import com.rokkhi.rokkhiguard.Utils.UniversalImageLoader;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -202,7 +199,7 @@ public class GateAdapter extends RecyclerView.Adapter<GateAdapter.ListViewHolder
 
         final Swroker swroker = list.get(position);
         holder.ename.setText(swroker.getS_name());
-        UniversalImageLoader.setImage(swroker.getS_thumb(), holder.propic, null, "");
+        UniversalImageLoader.setImage(swroker.getThumb_s_pic(), holder.propic, null, "");
 
 
         firebaseFirestore.collection(context.getString(R.string.col_sworker))
@@ -253,20 +250,17 @@ public class GateAdapter extends RecyclerView.Adapter<GateAdapter.ListViewHolder
 
                     String auto_id= firebaseFirestore.collection(context.getString(R.string.col_attendance))
                             .document().getId();
-                    Map<String,Object> mm= new HashMap<>();
-                    mm.put("auto_id",auto_id);
-                    mm.put("s_id",swroker.getS_id());
-                    mm.put("build_id",buildid);
-                    mm.put("comm_id",commid);
-                    mm.put("in",true);
-                    mm.put("flat_id",holder.historyflatid.get(i));
-                    mm.put("f_no",holder.historyflatno.get(i));
-                    mm.put("time", FieldValue.serverTimestamp());
+
+                    Attendence attendence= new Attendence(auto_id,swroker.getS_id(),buildid,commid
+                    ,Calendar.getInstance().getTime(),holder.historyflatid.get(i),
+                            holder.historyflatno.get(i),true);
+
+
 
                     DocumentReference setattendence = firebaseFirestore.collection(context.getString(R.string.col_attendance))
                             .document(auto_id);
 
-                    batch.set(setattendence, mm);
+                    batch.set(setattendence, attendence);
                 }
                 SLastHistory sLastHistory = new SLastHistory(swroker.getS_id(), buildid,holder.historyflatid,holder.historyflatno,Calendar.getInstance().getTime());
                 DocumentReference setflat = firebaseFirestore.collection(context.getString(R.string.col_sworker))
@@ -302,21 +296,18 @@ public class GateAdapter extends RecyclerView.Adapter<GateAdapter.ListViewHolder
 
                     String auto_id= firebaseFirestore.collection(context.getString(R.string.col_attendance))
                             .document().getId();
-                    Map<String,Object> mm= new HashMap<>();
-                    mm.put("auto_id",auto_id);
-                    mm.put("s_id",swroker.getS_id());
-                    mm.put("build_id",buildid);
-                    mm.put("comm_id",commid);
-                    mm.put("in",false);
-                    mm.put("flat_id",holder.historyflatid.get(i));
-                    mm.put("f_no",holder.historyflatno.get(i));
-                    mm.put("time", FieldValue.serverTimestamp());
+
+                    Attendence attendence= new Attendence(auto_id,swroker.getS_id(),buildid,commid
+                            ,Calendar.getInstance().getTime(),holder.historyflatid.get(i),
+                            holder.historyflatno.get(i),false);
+
+
 
 
                     DocumentReference setattendence = firebaseFirestore.collection(context.getString(R.string.col_attendance))
                             .document(auto_id);
 
-                    batch.set(setattendence, mm);
+                    batch.set(setattendence, attendence);
                 }
 
 
