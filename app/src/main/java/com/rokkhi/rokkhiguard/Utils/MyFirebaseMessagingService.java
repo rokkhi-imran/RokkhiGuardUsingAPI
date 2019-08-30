@@ -65,7 +65,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
         // Check if message contains a notification payload.
         if (remoteMessage.getNotification() != null) {
-           // handleNow(remoteMessage);
+            handleNow(remoteMessage);
             Log.d(TAG, "Message Notification Body: " + remoteMessage.getNotification().getBody());
         }
 
@@ -128,12 +128,10 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
         int mNotificationID = (int)System.currentTimeMillis();
         NotificationManager manager = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            NotificationChannel channel = new NotificationChannel("home",
-                    "Default channel", NotificationManager.IMPORTANCE_HIGH);
+        NotificationChannel channel = new NotificationChannel("home",
+                "Default channel", NotificationManager.IMPORTANCE_HIGH);
 
-            manager.createNotificationChannel(channel);
-        }
+        manager.createNotificationChannel(channel);
         manager.notify(mNotificationID,mBuilder.build());
 
         Log.d(TAG, "Short lived task is done.");
