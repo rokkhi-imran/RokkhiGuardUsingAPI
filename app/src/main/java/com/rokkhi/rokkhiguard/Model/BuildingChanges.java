@@ -8,9 +8,9 @@ public class BuildingChanges {
 
 
     //sobgula array tei guardphone er UI thakbe... konta change hoy bujhar jnno
-    private ArrayList<String> flats;
-    private ArrayList<String> whitelists;
-    private ArrayList<String> vehicles;
+    private ArrayList<String> flats= new ArrayList<>();
+    private ArrayList<String> whitelists= new ArrayList<>();
+    private ArrayList<String> vehicles= new ArrayList<>();
 
     public BuildingChanges() {
     }

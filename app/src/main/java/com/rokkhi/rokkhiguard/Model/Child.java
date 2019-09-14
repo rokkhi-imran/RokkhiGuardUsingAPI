@@ -1,23 +1,24 @@
 package com.rokkhi.rokkhiguard.Model;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 public class Child {
 
-    private String mem_id; //from members
-    private String who_add;
-    private String flat_id;
-    private String build_id;
-    private String f_no;
-    private boolean activated;
-    private Date endtime;
-    private String m_name;
-    private String m_pic;
-    private String thumb_m_pic;
-    private Date m_bday;
-    private String m_gender;
-    private List<String> m_array;
+    private String mem_id="none"; //from members
+    private String who_add="none";
+    private String flat_id="none";
+    private String build_id="none";
+    private String f_no="none";
+    private boolean activated=false;
+    private Date endtime= new Date();
+    private String m_name="none";
+    private String m_pic="none";
+    private String thumb_m_pic="none";
+    private Date m_bday= new Date();
+    private String m_gender="none";
+    private List<String> m_array= new ArrayList<>();
 
     public Child(){
     }

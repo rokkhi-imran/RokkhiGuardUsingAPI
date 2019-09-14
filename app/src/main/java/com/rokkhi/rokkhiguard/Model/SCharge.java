@@ -4,16 +4,16 @@ import java.util.Date;
 
 public class SCharge {
 
-    private String flat_id;
-    private String f_no;
-    private String build_id;
-    private String receiver; //user_id
-    private String bill_id; //auto_id
-    private int amount;
-    private int paid_amount;
-    private  boolean paid;
-    private Date paidtime;
-    private String which_month;
+    private String flat_id="none";
+    private String f_no="none";
+    private String build_id="none";
+    private String receiver="none"; //user_id
+    private String bill_id="none"; //auto_id
+    private int amount=0;
+    private int paid_amount=0;
+    private  boolean paid=false;
+    private Date paidtime= new Date();
+    private String which_month="none";
 
     public SCharge(){
     }

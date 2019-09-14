@@ -1,15 +1,16 @@
 package com.rokkhi.rokkhiguard.Model;
 
 
+import java.util.ArrayList;
 import java.util.List;
 
 
 public class Users {
 
-    private String name;
-    private String thumb;
-    private String user_id; //auto id
-    private List<String> u_array;
+    private String name="none";
+    private String thumb="none";
+    private String user_id="none"; //auto id
+    private List<String> u_array= new ArrayList<>();
 
     public Users() {
     }

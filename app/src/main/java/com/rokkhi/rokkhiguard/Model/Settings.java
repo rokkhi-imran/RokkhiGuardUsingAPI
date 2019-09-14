@@ -2,13 +2,13 @@ package com.rokkhi.rokkhiguard.Model;
 
 public class Settings {
 
-    private String build_id; // document id
-    private String comm_id;
-    private boolean gCanSeePhone;
-    private boolean h_status;
-    private int h_fee;
-    private String mobilepass;
-    private int isgedit;
+    private String build_id="none"; // document id
+    private String comm_id="none";
+    private boolean gCanSeePhone=false;
+    private boolean h_status=false;
+    private int h_fee=0;
+    private String mobilepass="none";
+    private int isgedit=0;
 
     public Settings(){
 

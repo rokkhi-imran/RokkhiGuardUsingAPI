@@ -4,14 +4,14 @@ import java.util.Date;
 
 public class Attendence {
 
-    private String auto_id;
-    private String s_id;
-    private String build_id;
-    private String comm_id;
-    private Date time;
-    private String flat_id;
-    private String f_no;
-    private boolean in;
+    private String auto_id="none";
+    private String s_id="none";
+    private String build_id="none";
+    private String comm_id="none";
+    private Date time= new Date();
+    private String flat_id="none";
+    private String f_no="none";
+    private boolean in=false;
 
     public Attendence(){
     }

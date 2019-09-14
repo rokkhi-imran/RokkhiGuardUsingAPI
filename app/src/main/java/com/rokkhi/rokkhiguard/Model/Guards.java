@@ -1,26 +1,27 @@
 package com.rokkhi.rokkhiguard.Model;
 
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 
 public class Guards {
 
-    private String build_id;
-    private String comm_id;
-    private String g_name;
-    private String g_password;
-    private String g_nid;
-    private Date g_joining;
-    private Date g_bday;
-    private String g_org;
-    private String g_pic;
-    private String g_address;
-    private String thumb_g_pic;
-    private String g_phone;
-    private String g_uid; //auto id
-    private List<String> g_array;
+    private String build_id="none";
+    private String comm_id="none";
+    private String g_name="none";
+    private String g_password="none";
+    private String g_nid="none";
+    private Date g_joining= new Date();
+    private Date g_bday= new Date();
+    private String g_org ="none";
+    private String g_pic="none";
+    private String g_address="none";
+    private String thumb_g_pic="none";
+    private String g_phone="none";
+    private String g_uid="none"; //auto id
+    private List<String> g_array= new ArrayList<>();
 
 
 

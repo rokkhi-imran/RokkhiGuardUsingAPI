@@ -6,11 +6,11 @@ import java.util.List;
 
 public class SLastHistory {
 
-    private String s_id;
-    private String build_id;
-    private ArrayList<String> flatsId;
-    private ArrayList<String> flatsNo;
-    private Date lastday;
+    private String s_id="none";
+    private String build_id="none";
+    private ArrayList<String> flatsId= new ArrayList<>();
+    private ArrayList<String> flatsNo= new ArrayList<>();
+    private Date lastday=new Date();
 
     public SLastHistory(){
     }

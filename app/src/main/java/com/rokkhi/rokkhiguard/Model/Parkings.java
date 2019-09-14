@@ -1,33 +1,24 @@
 package com.rokkhi.rokkhiguard.Model;
 
-import androidx.room.Entity;
-import androidx.room.Ignore;
-import androidx.room.PrimaryKey;
-
-import org.jetbrains.annotations.NotNull;
-
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-
-
-
 public class Parkings {
 
-    @PrimaryKey @NotNull
-    private String flat_id;
-    private String build_id;
-    private String f_no;
-    private boolean vacant;
-    private Date lastTime;
-    private String vehicleid;
-    @Ignore
-    private List<String> p_array;
+    private String flat_id="none";
+    private String build_id="none";
+    private String f_no="none";
+    private boolean vacant=false;
+    private Date lastTime= new Date();
+    private String vehicleid="none";
+    private List<String> p_array= new ArrayList<>();
 
     public Parkings(){
+
     }
 
-    public Parkings(@NotNull String flat_id, String build_id, String f_no, boolean vacant, Date lastTime, String vehicleid, List<String> p_array) {
+    public Parkings(String flat_id, String build_id, String f_no, boolean vacant, Date lastTime, String vehicleid, List<String> p_array) {
         this.flat_id = flat_id;
         this.build_id = build_id;
         this.f_no = f_no;
@@ -37,12 +28,12 @@ public class Parkings {
         this.p_array = p_array;
     }
 
-    @NotNull
+
     public String getFlat_id() {
         return flat_id;
     }
 
-    public void setFlat_id(@NotNull String flat_id) {
+    public void setFlat_id(String flat_id) {
         this.flat_id = flat_id;
     }
 

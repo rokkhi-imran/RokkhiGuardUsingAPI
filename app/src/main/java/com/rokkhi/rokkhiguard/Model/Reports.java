@@ -4,11 +4,11 @@ import java.util.Date;
 
 public class Reports {
 
-    private String subject;
-    private String user_id;
-    private String flat_id;
-    private String body;
-    private Date when;
+    private String subject="none";
+    private String user_id="none";
+    private String flat_id="none";
+    private String body="none";
+    private Date when= new Date();
 
 
     public Reports() {

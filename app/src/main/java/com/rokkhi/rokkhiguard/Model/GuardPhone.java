@@ -4,12 +4,12 @@ import java.util.ArrayList;
 
 public class GuardPhone {
 
-    private String phone;  //userid
-    private boolean activated;
-    private String g_token;
-    private String comm_id;
-    private String mobilepass;
-    private ArrayList<String> build_array;
+    private String phone="none";  //userid
+    private boolean activated=false;
+    private String g_token="none";
+    private String comm_id="none";
+    private String mobilepass="none";
+    private ArrayList<String> build_array= new ArrayList<>();
 
     public GuardPhone(){
     }

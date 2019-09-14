@@ -6,6 +6,7 @@ import androidx.room.PrimaryKey;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -13,14 +14,14 @@ import java.util.List;
 public class ActiveFlats {
 
     @PrimaryKey
-    @NotNull  private String flat_id;
+    @NotNull  private String flat_id ="none";
 
-    private String build_id;
-    private String comm_id;
-    private String f_no;
-    private boolean vacant;
-    private boolean using;
-    @Ignore  private List<String> f_array;
+    private String build_id="none";
+    private String comm_id="none";
+    private String f_no="none";
+    private boolean vacant=true;
+    private boolean using=false;
+    @Ignore  private List<String> f_array= new ArrayList<>();
 
     public ActiveFlats(){
 

@@ -5,23 +5,23 @@ import java.util.List;
 
 public class Swroker {
 
-    private String s_id;
-    private  String s_name;
-    private  String s_phone;
-    private  String s_pic;
-    private  String thumb_s_pic;
-    private String s_mail;
-    private Date s_bday;
-    private Date experience;
-    private int starttime;
-    private int endtime;
-    private String nid;
-    private String type;
-    private String s_pass;
+    private String s_id;//
+    private  String s_name;//
+    private  String s_phone;//
+    private  String s_pic;//
+    private  String thumb_s_pic;//
+    private String s_mail;//
+    private Date s_bday;//
+    private Date experience;//
+    private int starttime;//
+    private int endtime;//
+    private String nid;//
+    private String type;//
+    private String s_pass;//
     private String who_add;
     private Date when_add;
-    private List<String> address;
-    private List<String> s_array;
+    private List<String> address;//
+    private List<String> s_array;//
 
     public Swroker(){
     }

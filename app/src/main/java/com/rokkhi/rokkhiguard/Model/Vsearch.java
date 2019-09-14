@@ -4,16 +4,16 @@ import java.util.Date;
 
 public class Vsearch {
 
-    private String v_phone;
-    private String v_name;
-    private String v_thumb;
-    private String v_purpose;
-    private String v_mail;
-    private String v_where;
-    private String flat_id;
-    private String f_no;
-    private Date lastDate;
-    private int totalVisit;
+    private String v_phone="none";
+    private String v_name="none";
+    private String v_thumb="none";
+    private String v_purpose="none";
+    private String v_mail="none";
+    private String v_where="none";
+    private String flat_id="none";
+    private String f_no="none";
+    private Date lastDate= new Date();
+    private int totalVisit=0;
 
 
     public Vsearch() {

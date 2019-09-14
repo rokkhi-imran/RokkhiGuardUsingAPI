@@ -1,22 +1,23 @@
 package com.rokkhi.rokkhiguard.Model;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 public class Parcels {
 
-    private String build_id;
-    private String comm_id;
-    private String flat_id;
-    private String f_no;
-    private String p_com;
-    private String g_uid;
-    private Date p_rtime;
-    private String p_type;
-    private String p_pic;
-    private String thumb_p_pic;
-    private String p_uid; //auto
-    private List<String> p_array;
+    private String build_id="none";
+    private String comm_id="none";
+    private String flat_id="none";
+    private String f_no="none";
+    private String p_com="none";
+    private String g_uid="none";
+    private Date p_rtime= new Date();
+    private String p_type="none";
+    private String p_pic="none";
+    private String thumb_p_pic="none";
+    private String p_uid="none"; //auto
+    private List<String> p_array= new ArrayList<>();
 
     public Parcels(){
     }

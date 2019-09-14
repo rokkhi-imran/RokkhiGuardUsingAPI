@@ -1,39 +1,27 @@
 package com.rokkhi.rokkhiguard.Model;
 
-
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import androidx.room.Entity;
-import androidx.room.Ignore;
-import androidx.room.PrimaryKey;
-
-import org.jetbrains.annotations.NotNull;
-
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-@Entity
-
 public class Vehicle implements Parcelable {
 
-    @PrimaryKey
-    @NotNull
-    private String vehicle_id; //auto
-    private String description;
-    private String type;
-    private String vehicle_number;
-    private String pic;
-    private String thumb_pic;
-    private String whose; //userid
-    private String flat_id;
-    private String f_no;
-    private String build_id;
-    @Ignore
-    private Date lastin;
-    @Ignore private Date lastout;
-    @Ignore
-    private List<String> vehicle_array;
+    private String description="none";
+    private String type="none";
+    private String vehicle_number="none";
+    private String pic="none";
+    private String thumb_pic="none";
+    private String vehicle_id="none"; //auto
+    private String whose="none"; //userid
+    private String flat_id="none";
+    private String f_no="none";
+    private String build_id="none";
+    private Date lastin= new Date();
+    private Date lastout= new Date();
+    private List<String> vehicle_array= new ArrayList<>();
 
     public Vehicle(){
     }
@@ -100,15 +88,6 @@ public class Vehicle implements Parcelable {
         }
     };
 
-    @NotNull
-    public String getVehicle_id() {
-        return vehicle_id;
-    }
-
-    public void setVehicle_id(@NotNull String vehicle_id) {
-        this.vehicle_id = vehicle_id;
-    }
-
     public String getDescription() {
         return description;
     }
@@ -147,6 +126,14 @@ public class Vehicle implements Parcelable {
 
     public void setThumb_pic(String thumb_pic) {
         this.thumb_pic = thumb_pic;
+    }
+
+    public String getVehicle_id() {
+        return vehicle_id;
+    }
+
+    public void setVehicle_id(String vehicle_id) {
+        this.vehicle_id = vehicle_id;
     }
 
     public String getWhose() {
@@ -203,9 +190,5 @@ public class Vehicle implements Parcelable {
 
     public void setVehicle_array(List<String> vehicle_array) {
         this.vehicle_array = vehicle_array;
-    }
-
-    public static Creator<Vehicle> getCREATOR() {
-        return CREATOR;
     }
 }

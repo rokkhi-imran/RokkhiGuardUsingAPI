@@ -1,32 +1,33 @@
 package com.rokkhi.rokkhiguard.Model;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 public class Visitors {
 
-    private String v_phone;
-    private String v_name;
-    private String v_pic;
-    private String thumb_v_pic;
-    private String v_purpose;
-    private String v_mail;
-    private String v_where;
-    private String flat_id;
-    private String f_no;
-    private String comm_id;
-    private String build_id;
-    private String v_vehicleno;
-    private String v_gpass;
-    private Date time;
-    private String another_uid;
-    private String v_uid;
-    private boolean in;
-    private boolean completed;
-    private String response;
-    private String v_type;
-    private List<String> v_array;
-    private String responder;
+    private String v_phone="none";
+    private String v_name="none";
+    private String v_pic="none";
+    private String thumb_v_pic="none";
+    private String v_purpose="none";
+    private String v_mail="none";
+    private String v_where="none";
+    private String flat_id="none";
+    private String f_no="none";
+    private String comm_id="none";
+    private String build_id="none";
+    private String v_vehicleno="none";
+    private String v_gpass="none";
+    private Date time= new Date();
+    private String another_uid="none";
+    private String v_uid="none";
+    private boolean in=false;
+    private boolean completed=false;
+    private String response="none";
+    private String v_type="none";
+    private List<String> v_array=new ArrayList<>();
+    private String responder="none";
 
 
 

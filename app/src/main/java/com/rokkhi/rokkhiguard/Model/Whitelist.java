@@ -10,6 +10,7 @@ import androidx.room.PrimaryKey;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -18,22 +19,22 @@ import java.util.List;
 public class Whitelist implements Parcelable {
 
     @PrimaryKey
-    @NotNull  private String w_uid;
-    private String w_mail;
-    private String flat_id;
-    private String f_no;
-    private String comm_id;
-    private String build_id;
-    private String user_id;
-    private  String w_name;
-    private  String w_phone;
-    private  String w_pic;
-    private  String thumb_w_pic;
-    private  String w_relationship;
+    @NotNull  private String w_uid="none";
+    private String w_mail="none";
+    private String flat_id="none";
+    private String f_no="none";
+    private String comm_id="none";
+    private String build_id="none";
+    private String user_id="none";
+    private  String w_name="none";
+    private  String w_phone="none";
+    private  String w_pic="none";
+    private  String thumb_w_pic="none";
+    private  String w_relationship="none";
     @Ignore
-    private Date w_mtime;
+    private Date w_mtime= new Date();
 
-    @Ignore private List<String> w_array;
+    @Ignore private List<String> w_array= new ArrayList<>();
 
 
     public Whitelist(){

@@ -4,14 +4,14 @@ import java.util.Date;
 
 public class Notifications {
 
-    private String who_add; //userid
-    private String build_id;
-    private String comm_id;
-    private Date n_time;
-    private String n_type;
-    private String n_body;
-    private String n_title;
-    private String n_uid; //auto
+    private String who_add="none"; //userid
+    private String build_id="none";
+    private String comm_id="none";
+    private Date n_time= new Date();
+    private String n_type="none";
+    private String n_body="none";
+    private String n_title="none";
+    private String n_uid="none"; //auto
 
 
 

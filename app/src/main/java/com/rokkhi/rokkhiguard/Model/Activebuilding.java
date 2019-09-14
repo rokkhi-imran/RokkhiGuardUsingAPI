@@ -1,24 +1,25 @@
 package com.rokkhi.rokkhiguard.Model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Activebuilding {
 
-    private String b_name;
-    private String b_flatformat;
-    private String b_houseno;
-    private String b_roadno;
-    private String b_district;
-    private String b_area;
-    private int b_tfloor;
-    private int b_tflat;
-    private String build_id; //doc id
-    private String comm_id;
-    private boolean b_status;
-    private List<String> b_array;
-    private List<String> picurl;
-    private double latitude;
-    private double longitude;
+    private String b_name="none";
+    private String b_flatformat="none";
+    private String b_houseno="none";
+    private String b_roadno="none";
+    private String b_district="none";
+    private String b_area="none";
+    private int b_tfloor=0;
+    private int b_tflat=0;
+    private String build_id="none"; //doc id
+    private String comm_id="none";
+    private boolean b_status=false;
+    private List<String> b_array= new ArrayList<>();
+    private List<String> picurl= new ArrayList<>();
+    private double latitude=0.0;
+    private double longitude=0.0;
 
     public Activebuilding(){
     }

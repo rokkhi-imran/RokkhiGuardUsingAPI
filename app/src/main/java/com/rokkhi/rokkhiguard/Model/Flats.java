@@ -1,25 +1,26 @@
 package com.rokkhi.rokkhiguard.Model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Flats {
 
-    private String flat_id;
-    private String build_id;
-    private String comm_id;
-    private String f_no;
-    private int f_troom;
-    private int f_twashroom;
-    private int f_tbelcony;
-    private int f_tdd;
-    private int f_size;
-    private int f_rent;
-    private String f_internet;
-    private String f_dish;
-    private String f_parking;
-    private boolean vacant;
-    private boolean using;
-    private List<String> f_array;
+    private String flat_id="none";
+    private String build_id="none";
+    private String comm_id="none";
+    private String f_no="none";
+    private int f_troom=0;
+    private int f_twashroom=0;
+    private int f_tbelcony=0;
+    private int f_tdd=0;
+    private int f_size=0;
+    private int f_rent=0;
+    private String f_internet="none";
+    private String f_dish="none";
+    private String f_parking="none";
+    private boolean vacant=true;
+    private boolean using=false;
+    private List<String> f_array= new ArrayList<>();
 
     public Flats(){
     }

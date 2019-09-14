@@ -4,12 +4,12 @@ import java.util.Date;
 
 public class ServiceTime {
 
-    private int totalDay;
-    private int totalTimes;
-    private String s_id;
-    private String flatid;
-    private String f_no;
-    private Date lastday;
+    private int totalDay=0;
+    private int totalTimes=0;
+    private String s_id="none";
+    private String flatid="none";
+    private String f_no="none";
+    private Date lastday= new Date();
 
     public ServiceTime(){
     }

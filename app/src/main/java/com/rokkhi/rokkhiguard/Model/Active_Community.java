@@ -1,16 +1,17 @@
 package com.rokkhi.rokkhiguard.Model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Active_Community {
 
    // private String build_id;
-    private String comm_id;
-    private String c_mail;
-    private String c_name;
-    private boolean c_status;
-    private List<String> c_array; //search
-    private List<String> address; //0 house no, 1 road no, 2 area ,3 district
+    private String comm_id="none";
+    private String c_mail="none";
+    private String c_name="none";
+    private boolean c_status=false;
+    private List<String> c_array=new ArrayList<>(); //search
+    private List<String> address= new ArrayList<>(); //0 house no, 1 road no, 2 area ,3 district
 
     public Active_Community(){
 
