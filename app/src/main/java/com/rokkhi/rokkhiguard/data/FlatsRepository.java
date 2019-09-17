@@ -35,9 +35,9 @@ public class FlatsRepository {
 
 
 
-    public LiveData<ActiveFlats> getFlatWithId(int flat_id) {
-        return activeFlatsDatabase.roomDao().getActiveFlat(flat_id);
-    }
+//    public LiveData<ActiveFlats> getFlatWithId(int flat_id) {
+//        return activeFlatsDatabase.roomDao().getActiveFlat(flat_id);
+//    }
 
     public LiveData<List<ActiveFlats>> getAllActiveFlats() {
         return activeFlatsDatabase.roomDao().fetchAllActiveFlats();
@@ -57,18 +57,16 @@ public class FlatsRepository {
 //        }.execute();
 //    }
 //
-//    public void deleteTask(final int id) {
-//        final LiveData<ActiveFlats> task = getTask(id);
-//        if(task != null) {
-//            new AsyncTask<Void, Void, Void>() {
-//                @Override
-//                protected Void doInBackground(Void... voids) {
-//                    activeFlatsDatabase.daoAccess().deleteTask(task.getValue());
-//                    return null;
-//                }
-//            }.execute();
-//        }
-//    }
+    public static void deleteTask(final String build_id) {
+        //final LiveData<ActiveFlats> task = getTask(id);
+        new AsyncTask<Void, Void, Void>() {
+            @Override
+            protected Void doInBackground(Void... voids) {
+                activeFlatsDatabase.roomDao().getActiveFlatsforDeletion(build_id);
+                return null;
+            }
+        }.execute();
+    }
 //
     public static void deleteActiveFlat(final ActiveFlats activeFlats) {
         new AsyncTask<Void, Void, Void>() {

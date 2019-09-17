@@ -210,6 +210,8 @@ public class AddVisitor extends AppCompatActivity implements IPickResult{
                         }
                     });
 
+                    whiteListRepository.deleteTask(buildid);
+
                 } else {
                     Log.d(TAG, "onComplete: xxx5");
                 }
@@ -352,11 +354,13 @@ public class AddVisitor extends AppCompatActivity implements IPickResult{
                 if (s.length() == 11 && !flag) {
                     flag = true;
 
+                    String xx="+88"+ phone.getText().toString();
+
 
 
                     Log.d(TAG, "onTextChanged:  nn1");
                     firebaseFirestore.collection("search")
-                            .document(phone.getText().toString()).get()
+                            .document(xx).get()
                             .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                                 @Override
                                 public void onComplete(@NonNull Task<DocumentSnapshot> task) {
@@ -470,7 +474,9 @@ public class AddVisitor extends AppCompatActivity implements IPickResult{
         doc.put("v_type", vtype);
         doc.put("v_array", ll);
         doc.put("responder", firebaseUser.getUid());
-
+        
+        
+        
         if (!linkFromSearch.isEmpty()) {
             doc.put("v_pic", linkFromSearch);
             doc.put("thumb_v_pic", linkFromSearch);
@@ -544,17 +550,23 @@ public class AddVisitor extends AppCompatActivity implements IPickResult{
                     });
         } else {
 
+            Log.d(TAG, "upload: yyy1  ");
 
             firebaseFirestore
                     .collection(getString(R.string.col_visitors)).document(visitorid)
-                    .set(doc).addOnCompleteListener(new OnCompleteListener<Void>() {
+                    .set(doc).
+                    addOnCompleteListener(new OnCompleteListener<Void>() {
                 @Override
                 public void onComplete(@NonNull Task<Void> task) {
                     if (task.isSuccessful()) {
+                        Log.d(TAG, "onComplete: yyy2 ");
                         dialogconfirmation(visitorid);
                         //progressBar.setVisibility(View.GONE);
                         dismissdialog();
                         Toast.makeText(context, "Done!", Toast.LENGTH_SHORT).show();
+                    }
+                    else{
+                        Log.d(TAG, "onComplete: yyy3");
                     }
                 }
             });
@@ -585,18 +597,8 @@ public class AddVisitor extends AppCompatActivity implements IPickResult{
 
 
 
-//
-//                .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-//            @Override
-//            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-//                if(task.isSuccessful()){
-//                    DocumentSnapshot documentSnapshot= task.getResult();
-//                    if(documentSnapshot.exists()){
-//                        phoneno= documentSnapshot.getString("number");
-//                    }
-//                }
-//            }
-//        });
+
+        
 
         Log.d(TAG, "dialogconfirmation:  approve " + approve);
 

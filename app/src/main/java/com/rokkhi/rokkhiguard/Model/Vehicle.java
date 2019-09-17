@@ -3,10 +3,17 @@ package com.rokkhi.rokkhiguard.Model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import androidx.room.Entity;
+import androidx.room.Ignore;
+import androidx.room.PrimaryKey;
+
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+@Entity
 public class Vehicle implements Parcelable {
 
     private String description="none";
@@ -14,13 +21,18 @@ public class Vehicle implements Parcelable {
     private String vehicle_number="none";
     private String pic="none";
     private String thumb_pic="none";
+    @NotNull
+    @PrimaryKey
     private String vehicle_id="none"; //auto
     private String whose="none"; //userid
     private String flat_id="none";
     private String f_no="none";
     private String build_id="none";
+    @Ignore
     private Date lastin= new Date();
+    @Ignore
     private Date lastout= new Date();
+    @Ignore
     private List<String> vehicle_array= new ArrayList<>();
 
     public Vehicle(){

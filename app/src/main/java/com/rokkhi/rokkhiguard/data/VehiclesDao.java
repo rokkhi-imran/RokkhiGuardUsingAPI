@@ -28,6 +28,9 @@ public interface VehiclesDao {
     @Query("SELECT * FROM Vehicle WHERE flat_id =:flatId")
     LiveData<List<Vehicle>> fetchVehicleWithFlatId(String flatId );
 
+    @Query("DELETE  FROM Vehicle WHERE build_id !=:buildId")
+    void getVehiclesforDeletion(String buildId);
+
 
 
     @Delete

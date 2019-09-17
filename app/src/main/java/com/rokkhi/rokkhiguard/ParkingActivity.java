@@ -198,6 +198,9 @@ public class ParkingActivity extends AppCompatActivity implements GridAdapter.My
                     });
 
 
+                    vehiclesRepository.deleteTask(buildid);
+
+
                 }
                 else{
                     Log.d(TAG, "onComplete: xxx5");

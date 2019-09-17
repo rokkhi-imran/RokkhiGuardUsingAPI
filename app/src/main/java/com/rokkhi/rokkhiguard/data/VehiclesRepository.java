@@ -34,6 +34,17 @@ public class VehiclesRepository {
         }.execute();
     }
 
+    public static void deleteTask(final String build_id) {
+        //final LiveData<ActiveFlats> task = getTask(id);
+        new AsyncTask<Void, Void, Void>() {
+            @Override
+            protected Void doInBackground(Void... voids) {
+                vehiclesDatabase.vehicleDao().getVehiclesforDeletion(build_id);
+                return null;
+            }
+        }.execute();
+    }
+
 
 
     public LiveData<List<Vehicle>> getVehicleFromPhoneAndFlatId(String flat_id ) {

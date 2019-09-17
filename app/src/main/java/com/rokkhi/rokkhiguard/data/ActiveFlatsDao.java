@@ -23,8 +23,11 @@ public interface ActiveFlatsDao {
     LiveData<List<ActiveFlats>> fetchAllActiveFlats();
 
 
-    @Query("SELECT * FROM ActiveFlats WHERE flat_id =:flatId")
-    LiveData<ActiveFlats> getActiveFlat(int flatId);
+//    @Query("SELECT * FROM ActiveFlats WHERE flat_id =:flatId")
+//    LiveData<ActiveFlats> getActiveFlat(int flatId);
+
+    @Query("DELETE  FROM ActiveFlats WHERE build_id !=:buildId")
+    void getActiveFlatsforDeletion(String buildId);
 
 
     @Update

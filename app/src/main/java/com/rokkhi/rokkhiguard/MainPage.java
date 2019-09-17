@@ -1,16 +1,19 @@
 package com.rokkhi.rokkhiguard;
 
 import androidx.lifecycle.Observer;
+
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -41,13 +44,14 @@ import com.rokkhi.rokkhiguard.data.WhiteListRepository;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class MainPage extends AppCompatActivity {
 
-    CircleImageView gatepass,logout,addvis,vislist,notice,parcel,create,vehicle,child;
+    CircleImageView gatepass, logout, addvis, vislist, notice, parcel, create, vehicle, child;
     private static final String TAG = "MainPage";
     Context context;
     ImageButton settings;
@@ -55,17 +59,15 @@ public class MainPage extends AppCompatActivity {
     SharedPreferences sharedPref;
     SharedPreferences.Editor editor;
     AlertDialog alertDialog;
-    String  buildid = "", commid = "";
+    String buildid = "", commid = "";
 
     ArrayList<ActiveFlats> allActiveFlats;
     ArrayList<Whitelist> allWhiteLists;
     ArrayList<Vehicle> allVehicles;
-    FlatsRepository flatsRepository ;
+    FlatsRepository flatsRepository;
     WhiteListRepository whiteListRepository;
     VehiclesRepository vehiclesRepository;
     String thismobileuid;
-
-
 
 
     @Override
@@ -76,25 +78,24 @@ public class MainPage extends AppCompatActivity {
 
         Log.d(TAG, "onCreate: " + "xxx");
 
-        Intent intent=getIntent();
-        context= MainPage.this;
+        Intent intent = getIntent();
+        context = MainPage.this;
 
 
-
-        gatepass= findViewById(R.id.gatepass);
-        logout= findViewById(R.id.logout);
-        addvis= findViewById(R.id.addvis);
-        vislist= findViewById(R.id.vislist);
-        notice= findViewById(R.id.notice);
-        parcel= findViewById(R.id.parcel);
-        create= findViewById(R.id.profile);
+        gatepass = findViewById(R.id.gatepass);
+        logout = findViewById(R.id.logout);
+        addvis = findViewById(R.id.addvis);
+        vislist = findViewById(R.id.vislist);
+        notice = findViewById(R.id.notice);
+        parcel = findViewById(R.id.parcel);
+        create = findViewById(R.id.profile);
         settings = findViewById(R.id.settings);
         vehicle = findViewById(R.id.vehicle);
         child = findViewById(R.id.child);
 
-        firebaseFirestore= FirebaseFirestore.getInstance();
+        firebaseFirestore = FirebaseFirestore.getInstance();
         sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
-        editor= sharedPref.edit();
+        editor = sharedPref.edit();
         buildid = sharedPref.getString("buildid", "none");
         commid = sharedPref.getString("commid", "none");
 
@@ -103,21 +104,21 @@ public class MainPage extends AppCompatActivity {
                 .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if(task.isSuccessful()){
-                    DocumentSnapshot documentSnapshot= task.getResult();
-                    if(documentSnapshot.exists()){
-                        Activebuilding activebuilding= documentSnapshot.toObject(Activebuilding.class);
-                        int floorno=activebuilding.getB_tfloor();
-                        int flatno=activebuilding.getB_tflat();
-                        editor.putInt("floorno",floorno);
-                        editor.putInt("flatno",flatno);
+                if (task.isSuccessful()) {
+                    DocumentSnapshot documentSnapshot = task.getResult();
+                    if (documentSnapshot.exists()) {
+                        Activebuilding activebuilding = documentSnapshot.toObject(Activebuilding.class);
+                        int floorno = activebuilding.getB_tfloor();
+                        int flatno = activebuilding.getB_tflat();
+                        editor.putInt("floorno", floorno);
+                        editor.putInt("flatno", flatno);
                         editor.apply();
                     }
                 }
             }
         });
 
-        thismobileuid= FirebaseAuth.getInstance().getUid();
+        thismobileuid = FirebaseAuth.getInstance().getUid();
 
         flatsRepository = new FlatsRepository(this);
         whiteListRepository = new WhiteListRepository(this);
@@ -151,28 +152,28 @@ public class MainPage extends AppCompatActivity {
         gatepass.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent= new Intent(MainPage.this,GatePass.class);
+                Intent intent = new Intent(MainPage.this, GatePass.class);
                 startActivity(intent);
             }
         });
         addvis.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent= new Intent(MainPage.this,AddVisitor.class);
+                Intent intent = new Intent(MainPage.this, AddVisitor.class);
                 startActivity(intent);
             }
         });
         vislist.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent= new Intent(MainPage.this,VisitorsList.class);
+                Intent intent = new Intent(MainPage.this, VisitorsList.class);
                 startActivity(intent);
             }
         });
         notice.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent= new Intent(MainPage.this,NoticeBoard.class);
+                Intent intent = new Intent(MainPage.this, NoticeBoard.class);
                 startActivity(intent);
 
             }
@@ -180,19 +181,17 @@ public class MainPage extends AppCompatActivity {
         create.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                FirebaseUser firebaseUser= FirebaseAuth.getInstance().getCurrentUser();
-                if(firebaseUser!=null){
+                FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+                if (firebaseUser != null) {
 
-                    showposititivedialog() ;
+                    showposititivedialog();
 
 
-                }
-                else{
+                } else {
                     FirebaseAuth.getInstance().signOut();
-                    Intent intent= new Intent(MainPage.this,DaroanPass.class);
+                    Intent intent = new Intent(MainPage.this, DaroanPass.class);
                     startActivity(intent);
                 }
-
 
 
             }
@@ -200,7 +199,7 @@ public class MainPage extends AppCompatActivity {
         parcel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent= new Intent(MainPage.this,ParcelActivity.class);
+                Intent intent = new Intent(MainPage.this, ParcelActivity.class);
                 startActivity(intent);
 
             }
@@ -209,23 +208,23 @@ public class MainPage extends AppCompatActivity {
         settings.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent= new Intent(MainPage.this,SettingsActivity.class);
+                Intent intent = new Intent(MainPage.this, SettingsActivity.class);
                 startActivity(intent);
             }
         });
 
     }
 
-    public void shownegativedialog(){
+    public void shownegativedialog() {
         alertDialog = new AlertDialog.Builder(context).create();
-        LayoutInflater inflater = (LayoutInflater) context.getSystemService( Context.LAYOUT_INFLATER_SERVICE );
+        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View convertView = (View) inflater.inflate(R.layout.done, null);
 
         final Button ok = convertView.findViewById(R.id.okay);
         final ImageView tik = convertView.findViewById(R.id.tik);
         final TextView text = convertView.findViewById(R.id.text);
 
-        tik.setImageDrawable(getResources().getDrawable(R.drawable.cross,null));
+        tik.setImageDrawable(getResources().getDrawable(R.drawable.cross, null));
         text.setText("You are not allowed to use this feature.");
 
 
@@ -243,13 +242,13 @@ public class MainPage extends AppCompatActivity {
         });
     }
 
-    public void showposititivedialog(){
+    public void showposititivedialog() {
         alertDialog = new AlertDialog.Builder(context).create();
-        LayoutInflater inflater = (LayoutInflater) context.getSystemService( Context.LAYOUT_INFLATER_SERVICE );
+        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View convertView = (View) inflater.inflate(R.layout.dialog_select, null);
 
-        final ConstraintLayout emp= convertView.findViewById(R.id.one);
-        final ConstraintLayout grd= convertView.findViewById(R.id.two);
+        final ConstraintLayout emp = convertView.findViewById(R.id.one);
+        final ConstraintLayout grd = convertView.findViewById(R.id.two);
 
 
         alertDialog.setView(convertView);
@@ -261,7 +260,7 @@ public class MainPage extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 alertDialog.dismiss();
-                Intent intent= new Intent(MainPage.this,CreateProfile.class);
+                Intent intent = new Intent(MainPage.this, CreateProfile.class);
                 startActivity(intent);
             }
         });
@@ -269,7 +268,7 @@ public class MainPage extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 alertDialog.dismiss();
-                Intent intent= new Intent(MainPage.this,CreateProfileforGuards.class);
+                Intent intent = new Intent(MainPage.this, CreateProfileforGuards.class);
                 startActivity(intent);
             }
         });
@@ -277,12 +276,11 @@ public class MainPage extends AppCompatActivity {
     }
 
 
-
-    public void getAllActiveFlatsAndSaveToLocalDatabase(final BuildingChanges buildingChanges){
-       // final FlatsRepository flatsRepository = new FlatsRepository(this);
+    public void getAllActiveFlatsAndSaveToLocalDatabase(final BuildingChanges buildingChanges) {
+        // final FlatsRepository flatsRepository = new FlatsRepository(this);
 
         firebaseFirestore.collection(getString(R.string.col_activeflat))
-                .whereEqualTo("build_id",buildid).orderBy("f_no", Query.Direction.ASCENDING).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                .whereEqualTo("build_id", buildid).orderBy("f_no", Query.Direction.ASCENDING).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {
@@ -294,22 +292,23 @@ public class MainPage extends AppCompatActivity {
                     }
 
                     Map<String, Object> data = new HashMap<>();
-                    ArrayList<String> flatdata= new ArrayList<>();
-                    flatdata= buildingChanges.getFlats();
+                    ArrayList<String> flatdata = new ArrayList<>();
+                    flatdata = buildingChanges.getFlats();
                     flatdata.add(thismobileuid);
-                    data.put("flats",flatdata);
+                    data.put("flats", flatdata);
 
 
                     firebaseFirestore.collection("buildingChanges").document(buildid)
                             .set(data, SetOptions.merge()).addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
-                            Toast.makeText(context,"Flat data changed!",Toast.LENGTH_SHORT).show();
+                            Toast.makeText(context, "Flat data changed!", Toast.LENGTH_SHORT).show();
                         }
                     });
 
-                }
-                else{
+                    flatsRepository.deleteTask(buildid);
+
+                } else {
                     Log.d(TAG, "onComplete: pppp1");
                 }
             }
@@ -317,16 +316,16 @@ public class MainPage extends AppCompatActivity {
     }
 
 
-    public void getAllWhiteListAndSaveToLocalDatabase(final BuildingChanges buildingChanges){
+    public void getAllWhiteListAndSaveToLocalDatabase(final BuildingChanges buildingChanges) {
         //final FlatsRepository flatsRepository = new FlatsRepository(this);
 
 
         firebaseFirestore.collection(getString(R.string.col_whitelists))
-                .whereEqualTo("build_id",buildid)
+                .whereEqualTo("build_id", buildid)
                 .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if(task.isSuccessful()){
+                if (task.isSuccessful()) {
 
                     for (DocumentSnapshot documentSnapshot : task.getResult()) {
                         Whitelist whitelist = documentSnapshot.toObject(Whitelist.class);
@@ -335,24 +334,25 @@ public class MainPage extends AppCompatActivity {
                     }
 
 
-
                     Map<String, Object> data = new HashMap<>();
-                    ArrayList<String> wldata= new ArrayList<>();
-                    wldata= buildingChanges.getWhitelists();
+                    ArrayList<String> wldata = new ArrayList<>();
+                    wldata = buildingChanges.getWhitelists();
                     wldata.add(thismobileuid);
-                    data.put("whitelists",wldata);
+                    data.put("whitelists", wldata);
 
 
                     firebaseFirestore.collection("buildingChanges").document(buildid)
                             .set(data, SetOptions.merge()).addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
-                            Toast.makeText(context,"Whitelists data changed!",Toast.LENGTH_SHORT).show();
+                            Toast.makeText(context, "Whitelists data changed!", Toast.LENGTH_SHORT).show();
                         }
                     });
 
-                }
-                else{
+                    whiteListRepository.deleteTask(buildid);
+
+
+                } else {
                     Log.d(TAG, "onComplete: xxx5");
                 }
             }
@@ -360,52 +360,80 @@ public class MainPage extends AppCompatActivity {
 
     }
 
-    public void getVehiclesAndSaveToLocalDatabase(final BuildingChanges buildingChanges){
+    public void matchanddelete(ArrayList<Vehicle>check, Vehicle vehicle){
+        boolean flag=false;
+
+        for(int i=0;i<check.size();i++){
+            if(check.get(i).getVehicle_id().equals(vehicle.getVehicle_id())){
+                //vehiclesRepository.deleteVehicle(vehicle);
+                Log.d(TAG, "matchanddelete: hhhh " );
+                flag=true;
+            }
+        }
+        if(!flag)vehiclesRepository.deleteVehicle(vehicle);
+
+    }
+
+    public void getVehiclesAndSaveToLocalDatabase(final BuildingChanges buildingChanges) {
         //final FlatsRepository flatsRepository = new FlatsRepository(this);
 
 
-        Log.d("room" , "getting new vehicle success " + buildid);
+        Log.d("room", "getting new vehicle success " + buildid);
         firebaseFirestore.collection(getString(R.string.col_vehicle))
-                .whereEqualTo("build_id",buildid)
+                .whereEqualTo("build_id", buildid)
                 .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if(task.isSuccessful()){
-                    Log.d("room" , "getting new vehicle success " + "adsf");
+                if (task.isSuccessful()) {
+
+                    final ArrayList<Vehicle> check = new ArrayList<>();
+                    Log.d("room", "getting new vehicle success " + "adsf");
                     for (DocumentSnapshot documentSnapshot : task.getResult()) {
                         Vehicle vehicle = documentSnapshot.toObject(Vehicle.class);
 
-                        Log.d("room" , "getting new vehicle data found " + "adsf");
+                        Log.d("room", "getting new vehicle data found " + "adsf");
                         vehiclesRepository.deleteVehicle(vehicle);
                         vehiclesRepository.insert(vehicle);
+                        check.add(vehicle);
                     }
+
+                    Log.d(TAG, "onComplete: kkk "+ check );
+
+                    vehiclesRepository.getAllVehicle().observe(MainPage.this, new Observer<List<Vehicle>>() {
+                        @Override
+                        public void onChanged(@Nullable List<Vehicle> allVehicles) {
+                            for (Vehicle vehicle : allVehicles) {
+                                matchanddelete(check,vehicle);
+                                Log.d(TAG, "onChanged: yyyyy "+check.size());
+                                Log.d("room yyyyy", "found a new Vehicle   " + vehicle.getF_no() + "  -- > " + vehicle.getFlat_id());
+                            }
+                        }
+                    });
 
 
                     Map<String, Object> data = new HashMap<>();
-                    ArrayList<String> vdata= new ArrayList<>();
-                    vdata= buildingChanges.getVehicles();
+                    ArrayList<String> vdata = new ArrayList<>();
+                    vdata = buildingChanges.getVehicles();
                     vdata.add(thismobileuid);
-                    data.put("vehicles",vdata);
+                    data.put("vehicles", vdata);
 
 
                     firebaseFirestore.collection("buildingChanges").document(buildid)
                             .set(data, SetOptions.merge()).addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
-                            Toast.makeText(context,"vehicle data changed!",Toast.LENGTH_SHORT).show();
+                            Toast.makeText(context, "vehicle data changed!", Toast.LENGTH_SHORT).show();
                         }
                     });
+                    vehiclesRepository.deleteTask(buildid);
 
 
-                }
-                else{
+                } else {
                     Log.d(TAG, "onComplete: xxx5");
                 }
             }
         });
     }
-
-
 
 
     @Override
@@ -413,42 +441,39 @@ public class MainPage extends AppCompatActivity {
         super.onStart();
 
 
-
-
         FirebaseFirestore.getInstance().collection("buildingChanges").document(buildid).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
-                if(documentSnapshot.exists()){
-                    BuildingChanges buildingChanges=documentSnapshot.toObject(BuildingChanges.class);
-                    ArrayList<String> flats=buildingChanges.getFlats();
-                    ArrayList<String> whitelists= buildingChanges.getWhitelists();
-                    ArrayList<String> vehicles= buildingChanges.getVehicles();
+                if (documentSnapshot.exists()) {
+                    BuildingChanges buildingChanges = documentSnapshot.toObject(BuildingChanges.class);
+                    ArrayList<String> flats = buildingChanges.getFlats();
+                    ArrayList<String> whitelists = buildingChanges.getWhitelists();
+                    ArrayList<String> vehicles = buildingChanges.getVehicles();
 
 
-                    if ( !flats.contains(thismobileuid)) {
-                        Log.d("firebase" , "Getting new Flats data because data is changed or updated" );
+                    if (!flats.contains(thismobileuid)) {
+                        Log.d("firebase", "Getting new Flats data because data is changed or updated");
                         getAllActiveFlatsAndSaveToLocalDatabase(buildingChanges);
 
 
                         //TODO alhn ei uid add korte hbe database a
 
                     } else {
-                        Log.d("firebase" , " Flats data is not changed or updated" );
+                        Log.d("firebase", " Flats data is not changed or updated");
                     }
 
-                    if(!whitelists.contains(thismobileuid)){
+                    if (!whitelists.contains(thismobileuid)) {
                         getAllWhiteListAndSaveToLocalDatabase(buildingChanges);
                     }
 
-                    if(!vehicles.contains(thismobileuid)){
-                        Log.d("firebase" , "Getting new Vehicles data because data is changed or updated" );
+                    if (!vehicles.contains(thismobileuid)) {
+                        Log.d("firebase", "Getting new Vehicles data because data is changed or updated");
                         getVehiclesAndSaveToLocalDatabase(buildingChanges);
                     }
 
                 }
             }
         });
-
 
 
         //getting the data from repository example
@@ -486,7 +511,6 @@ public class MainPage extends AppCompatActivity {
 //            }
 //        });
     }
-
 
 
     @Override
