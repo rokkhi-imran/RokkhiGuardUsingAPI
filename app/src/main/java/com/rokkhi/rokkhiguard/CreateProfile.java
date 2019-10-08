@@ -47,6 +47,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.rokkhi.rokkhiguard.Model.ActiveFlats;
+import com.rokkhi.rokkhiguard.Model.Guards;
 import com.rokkhi.rokkhiguard.Model.SLastHistory;
 import com.rokkhi.rokkhiguard.Model.Swroker;
 import com.rokkhi.rokkhiguard.Utils.Normalfunc;
@@ -96,7 +97,7 @@ public class CreateProfile extends AppCompatActivity implements ActiveFlatAdapte
     String totaltext = "";
     boolean flag;
     List<Swroker> list;
-    String buildid;
+    String buildid, commid = "";
 
     int mPosition = -1;
 
@@ -127,6 +128,7 @@ public class CreateProfile extends AppCompatActivity implements ActiveFlatAdapte
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
         buildid = sharedPref.getString("buildid", "none");
+        commid = sharedPref.getString("commid", "none");
         initonclick();
 
         firebaseFirestore.collection("stype").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -138,6 +140,7 @@ public class CreateProfile extends AppCompatActivity implements ActiveFlatAdapte
                         String name = documentSnapshot.getId();
                         types.add(name);
                     }
+                    types.add("Other");
                 }
             }
         });
@@ -182,10 +185,12 @@ public class CreateProfile extends AppCompatActivity implements ActiveFlatAdapte
         final ActiveFlatAdapter activeFlatAdapter = new ActiveFlatAdapter(activeFlats, context);
         final AlertDialog alertcompany = new AlertDialog.Builder(context).create();
         LayoutInflater inflater = getLayoutInflater();
-        View convertView = (View) inflater.inflate(R.layout.custom_list, null);
+        View convertView = (View) inflater.inflate(R.layout.custom_list_multiple, null);
         final EditText editText = convertView.findViewById(R.id.sear);
         final ListView lv = (ListView) convertView.findViewById(R.id.listView1);
         final Button done = convertView.findViewById(R.id.done);
+        final Button selectbutton = convertView.findViewById(R.id.select);
+        final Button unselectbutton = convertView.findViewById(R.id.deselect);
         final TextView tt = convertView.findViewById(R.id.selected);
         tt.setVisibility(View.VISIBLE);
         totaltext = "";
@@ -203,6 +208,38 @@ public class CreateProfile extends AppCompatActivity implements ActiveFlatAdapte
             public void onClick(View view) {
                 flats.setText(totaltext);
                 alertcompany.dismiss();
+            }
+        });
+
+        selectbutton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                for(int i=0;i<activeFlats.size();i++){
+//                    view.setBackground(ContextCompat.getDrawable(context, R.color.orange_light));
+                    activeFlatAdapter.changedata(activeFlats.get(i).getF_no(), true);
+                    activeFlatAdapter.notifyDataSetChanged();
+                    historyFlats.add(activeFlats.get(i));
+                    totaltext = totaltext + "  " + activeFlats.get(i).getF_no();
+                    tt.setText(totaltext);
+                    unselectbutton.setVisibility(View.VISIBLE);
+                    selectbutton.setVisibility(View.GONE);
+                }
+            }
+        });
+
+        unselectbutton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                for(int i=0;i<activeFlats.size();i++){
+//                    view.setBackground(ContextCompat.getDrawable(context, R.color.orange_light));
+                    activeFlatAdapter.changedata(activeFlats.get(i).getF_no(), false);
+                    activeFlatAdapter.notifyDataSetChanged();
+                    historyFlats.remove(activeFlats.get(i));
+                    totaltext = totaltext.replace("  " + activeFlats.get(i).getF_no(), "");
+                    tt.setText(totaltext);
+                    unselectbutton.setVisibility(View.GONE);
+                    selectbutton.setVisibility(View.VISIBLE);
+                }
             }
         });
 
@@ -236,18 +273,20 @@ public class CreateProfile extends AppCompatActivity implements ActiveFlatAdapte
                 //selected na hoile selected er moto kaj korbe.. selection er subidhar jnno
                 if (!historyFlats.contains(ss)) {
 
-                    view.setBackground(ContextCompat.getDrawable(context, R.color.orange_light));
+                    //view.setBackground(ContextCompat.getDrawable(context, R.color.orange_light));
                     activeFlatAdapter.changedata(ss.getF_no(), true);
                     historyFlats.add(ss);
+                    activeFlatAdapter.notifyDataSetChanged();
                     totaltext = totaltext + "  " + ss.getF_no();
                     tt.setText(totaltext);
                     //activeFlatAdapter.notifyDataSetChanged();
 
                 } else {
-                    view.setBackground(ContextCompat.getDrawable(context, R.color.white));
+                    //view.setBackground(ContextCompat.getDrawable(context, R.color.white));
                     activeFlatAdapter.changedata(ss.getF_no(), false);
                     historyFlats.remove(ss);
                     totaltext = totaltext.replace("  " + ss.getF_no(), "");
+                    activeFlatAdapter.notifyDataSetChanged();
                     tt.setText(totaltext);
                     // activeFlatAdapter.notifyDataSetChanged();
                 }
@@ -269,6 +308,7 @@ public class CreateProfile extends AppCompatActivity implements ActiveFlatAdapte
         final Button done = convertView.findViewById(R.id.done);
         alertcompany.setView(convertView);
         alertcompany.setCancelable(false);
+        editText.setVisibility(View.GONE);
         //valueAdapter.notifyDataSetChanged();
 
         lv.setAdapter(valueAdapter);
@@ -277,7 +317,7 @@ public class CreateProfile extends AppCompatActivity implements ActiveFlatAdapte
         done.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                type.setText(editText.getText().toString());
+                //type.setText(editText.getText().toString());
                 alertcompany.dismiss();
             }
         });
@@ -493,6 +533,7 @@ public class CreateProfile extends AppCompatActivity implements ActiveFlatAdapte
         List<String> ll = normalfunc.splitstring(username.getText().toString());
         ll.addAll(normalfunc.splitchar(phone.getText().toString().toLowerCase()));
         ll.addAll(normalfunc.splitchar(typeselected.toLowerCase()));
+        final List<String> ll1= ll;
 //        ll.add(mail.getText().toString().toLowerCase());
 
 
@@ -542,8 +583,9 @@ public class CreateProfile extends AppCompatActivity implements ActiveFlatAdapte
                             photoRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                                 @Override
                                 public void onSuccess(Uri uri) {
-                                    doc.put("s_pic", uri.toString());
-                                    doc.put("thumb_s_pic", uri.toString());
+                                    String picurl=uri.toString();
+                                    doc.put("s_pic", picurl);
+                                    doc.put("thumb_s_pic", picurl);
 
                                     WriteBatch batch = firebaseFirestore.batch();
 
@@ -554,6 +596,19 @@ public class CreateProfile extends AppCompatActivity implements ActiveFlatAdapte
                                             .document(s_id);
 
                                     batch.set(setsworker, doc);
+
+                                    if(typeselected.equals("guard")){
+
+                                        final Guards guards= new Guards(buildid,commid,username.getText().toString()
+                                                ,normalfunc.getRandomNumberString5(),"",Calendar.getInstance().getTime(),normalfunc.futuredate(),"",picurl,"",picurl,
+                                                phone.getText().toString() ,s_id,ll1);
+                                        DocumentReference setguard = firebaseFirestore.collection(getString(R.string.col_guards))
+                                                .document(s_id);
+
+                                        batch.set(setguard, guards);
+
+                                    }
+
                                     ArrayList<String>stringid= new ArrayList<>();
                                     ArrayList<String>stringno= new ArrayList<>();
 
@@ -609,6 +664,18 @@ public class CreateProfile extends AppCompatActivity implements ActiveFlatAdapte
                     .document(s_id);
 
             batch.set(setsworker, doc);
+
+            if(typeselected.equals("guard")){
+
+                final Guards guards= new Guards(buildid,commid,username.getText().toString()
+                        ,normalfunc.getRandomNumberString5(),"",Calendar.getInstance().getTime(),normalfunc.futuredate(),"","","","",
+                        phone.getText().toString() ,s_id,ll1);
+                DocumentReference setguard = firebaseFirestore.collection(getString(R.string.col_guards))
+                        .document(s_id);
+
+                batch.set(setguard, guards);
+
+            }
 
             ArrayList<String>stringid= new ArrayList<>();
             ArrayList<String>stringno= new ArrayList<>();

@@ -243,35 +243,37 @@ public class MainPage extends AppCompatActivity {
     }
 
     public void showposititivedialog() {
-        alertDialog = new AlertDialog.Builder(context).create();
-        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View convertView = (View) inflater.inflate(R.layout.dialog_select, null);
-
-        final ConstraintLayout emp = convertView.findViewById(R.id.one);
-        final ConstraintLayout grd = convertView.findViewById(R.id.two);
-
-
-        alertDialog.setView(convertView);
-        alertDialog.setCancelable(true);
-        alertDialog.show();
-
-
-        emp.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                alertDialog.dismiss();
-                Intent intent = new Intent(MainPage.this, CreateProfile.class);
-                startActivity(intent);
-            }
-        });
-        grd.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                alertDialog.dismiss();
-                Intent intent = new Intent(MainPage.this, CreateProfileforGuards.class);
-                startActivity(intent);
-            }
-        });
+        Intent intent = new Intent(MainPage.this, CreateProfile.class);
+        startActivity(intent);
+//        alertDialog = new AlertDialog.Builder(context).create();
+//        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+//        View convertView = (View) inflater.inflate(R.layout.dialog_select, null);
+//
+//        final ConstraintLayout emp = convertView.findViewById(R.id.one);
+//        final ConstraintLayout grd = convertView.findViewById(R.id.two);
+//
+//
+//        alertDialog.setView(convertView);
+//        alertDialog.setCancelable(true);
+//        alertDialog.show();
+//
+//
+//        emp.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                alertDialog.dismiss();
+//                Intent intent = new Intent(MainPage.this, CreateProfile.class);
+//                startActivity(intent);
+//            }
+//        });
+//        grd.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                alertDialog.dismiss();
+//                Intent intent = new Intent(MainPage.this, CreateProfileforGuards.class);
+//                startActivity(intent);
+//            }
+//        });
 
     }
 
