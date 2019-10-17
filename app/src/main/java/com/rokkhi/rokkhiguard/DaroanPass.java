@@ -22,12 +22,15 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.WriteBatch;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.rokkhi.rokkhiguard.Model.GuardPhone;
+import com.rokkhi.rokkhiguard.Utils.Normalfunc;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -90,37 +93,7 @@ public class DaroanPass extends AppCompatActivity implements View.OnClickListene
         firebaseFirestore= FirebaseFirestore.getInstance();
         editor=sharedPref.edit();
 
-//        firebaseFirestore.collection(getString(R.string.col_activeflat)).whereEqualTo("build_id","c7niuI2ozGcNAJLXpA1b")
-//                .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-//            @Override
-//            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-//                if(task.isSuccessful()){
-//                    WriteBatch batch=firebaseFirestore.batch();
-//                    for(DocumentSnapshot documentSnapshot: task.getResult()){
-//                        ActiveFlats activeFlats= documentSnapshot.toObject(ActiveFlats.class);
-//                        Map<String, Object> data = new HashMap<>();
-//                        data.put("flat_id", activeFlats.getFlat_id());
-//                        data.put("build_id", activeFlats.getBuild_id());
-//                        data.put("f_no", activeFlats.getF_no());
-//                        data.put("vacant",activeFlats.isVacant());
-//                        data.put("lastTime", FieldValue.serverTimestamp());
-//                        data.put("beforeLastTime", FieldValue.serverTimestamp());
-//                        data.put("vehicle_array", new ArrayList<>());
-//                        DocumentReference parking= firebaseFirestore.collection(getString(R.string.col_parkings)).document(activeFlats.getFlat_id());
-//                        batch.set(parking, data);
-//                    }
-//
-//                    batch.commit().addOnCompleteListener(new OnCompleteListener<Void>() {
-//                        @Override
-//                        public void onComplete(@NonNull Task<Void> task) {
-//                            if(task.isSuccessful()){
-//                                Toast.makeText(context,"Done",Toast.LENGTH_SHORT).show();
-//                            }
-//                        }
-//                    });
-//                }
-//            }
-//        });
+
 
         one= findViewById(R.id.propic);
         two= findViewById(R.id.two);
@@ -190,6 +163,8 @@ public class DaroanPass extends AppCompatActivity implements View.OnClickListene
                                     editor.apply();
 
 
+
+
                                     firebaseFirestore.collection(getString(R.string.col_build)).document(buildid).get()
                                             .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                                                 @Override
@@ -201,24 +176,7 @@ public class DaroanPass extends AppCompatActivity implements View.OnClickListene
                                                             homename.setText(hname);
 
 
-                                                            String topic= buildid;
-                                                            topic=topic+"guard";
-                                                            FirebaseMessaging.getInstance().subscribeToTopic(topic).addOnSuccessListener(new OnSuccessListener<Void>() {
-                                                                @Override
-                                                                public void onSuccess(Void aVoid) {
 
-                                                                }
-                                                            });
-
-                                                            String topic1= buildid;
-                                                            topic1=topic1+"all";
-
-                                                            FirebaseMessaging.getInstance().subscribeToTopic(topic1).addOnSuccessListener(new OnSuccessListener<Void>() {
-                                                                @Override
-                                                                public void onSuccess(Void aVoid) {
-
-                                                                }
-                                                            });
                                                         }
                                                     }
                                                 }
@@ -240,24 +198,7 @@ public class DaroanPass extends AppCompatActivity implements View.OnClickListene
                                                     }
                                                     else{
                                                         //homename.setText(hname);
-                                                        String topic= commid.replace("@","_");
-                                                        topic=topic+"guard";
-                                                        FirebaseMessaging.getInstance().subscribeToTopic(topic).addOnSuccessListener(new OnSuccessListener<Void>() {
-                                                            @Override
-                                                            public void onSuccess(Void aVoid) {
 
-                                                            }
-                                                        });
-
-                                                        String topic1= commid.replace("@","_");
-                                                        topic1=topic1+"all";
-
-                                                        FirebaseMessaging.getInstance().subscribeToTopic(topic1).addOnSuccessListener(new OnSuccessListener<Void>() {
-                                                            @Override
-                                                            public void onSuccess(Void aVoid) {
-
-                                                            }
-                                                        });
                                                     }
                                                 }
                                             }
@@ -275,16 +216,68 @@ public class DaroanPass extends AppCompatActivity implements View.OnClickListene
 
                                             String tempToken=instanceIdResult.getToken();
 
-                                            if(!tempToken.equals(token))firebaseFirestore.collection(getString(R.string.col_phoneguards)).document(phoneno).update("g_token",instanceIdResult.getToken()
-                                            ,"activated",true)
-                                                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                            if(!tempToken.equals(token)){
+
+                                                if(token.isEmpty() || token.equals("none")){
+                                                    String phone= firebaseUser.getPhoneNumber();
+                                                    String uid= firebaseUser.getUid();
+
+                                                    Normalfunc normalfunc= new Normalfunc();
+                                                    normalfunc.addUser(tempToken,phone,uid,"guard","","Guard");
+
+
+                                                    String topic= buildid;
+                                                    topic=topic+"guard"+"android";
+                                                    FirebaseMessaging.getInstance().subscribeToTopic(topic).addOnSuccessListener(new OnSuccessListener<Void>() {
                                                         @Override
-                                                        public void onComplete(@NonNull Task<Void> task) {
-                                                            if(task.isSuccessful()){
-                                                                Toast.makeText(context,"Welcome!",Toast.LENGTH_SHORT).show();
-                                                            }
+                                                        public void onSuccess(Void aVoid) {
+
                                                         }
                                                     });
+
+                                                    String topic1= buildid;
+                                                    topic1=topic1+"all"+"android";
+
+                                                    FirebaseMessaging.getInstance().subscribeToTopic(topic1).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                        @Override
+                                                        public void onSuccess(Void aVoid) {
+
+                                                        }
+                                                    });
+
+
+                                                    String topic2= commid.replace("@","_");
+                                                    topic2=topic2+"guard"+"android";
+                                                    FirebaseMessaging.getInstance().subscribeToTopic(topic2).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                        @Override
+                                                        public void onSuccess(Void aVoid) {
+
+                                                        }
+                                                    });
+
+                                                    String topic3= commid.replace("@","_");
+                                                    topic3=topic3+"all"+"android";
+
+                                                    FirebaseMessaging.getInstance().subscribeToTopic(topic3).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                        @Override
+                                                        public void onSuccess(Void aVoid) {
+
+                                                        }
+                                                    });
+                                                }
+
+
+                                                firebaseFirestore.collection(getString(R.string.col_phoneguards)).document(phoneno).update("g_token",instanceIdResult.getToken()
+                                                        ,"activated",true)
+                                                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                            @Override
+                                                            public void onComplete(@NonNull Task<Void> task) {
+                                                                if(task.isSuccessful()){
+                                                                    Toast.makeText(context,"Welcome!",Toast.LENGTH_SHORT).show();
+                                                                }
+                                                            }
+                                                        });
+                                            }
 
 
 

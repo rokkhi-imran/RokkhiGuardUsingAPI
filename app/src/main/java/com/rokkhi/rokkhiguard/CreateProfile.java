@@ -50,6 +50,7 @@ import com.rokkhi.rokkhiguard.Model.ActiveFlats;
 import com.rokkhi.rokkhiguard.Model.Guards;
 import com.rokkhi.rokkhiguard.Model.SLastHistory;
 import com.rokkhi.rokkhiguard.Model.Swroker;
+import com.rokkhi.rokkhiguard.Model.Types;
 import com.rokkhi.rokkhiguard.Utils.Normalfunc;
 import com.rokkhi.rokkhiguard.Utils.StringAdapter;
 import com.rokkhi.rokkhiguard.Utils.UniversalImageLoader;
@@ -72,10 +73,10 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class CreateProfile extends AppCompatActivity implements ActiveFlatAdapter.MyInterface, IPickResult {
 
     CircleImageView userphoto;
-    ArrayList<String> types;
+    ArrayList<Types> types;
     ArrayList<ActiveFlats> activeFlats;
-    EditText username, phone, type, flats;
-    Button done;
+    EditText username, phone, type, flats,pins;
+    Button done,generate;
     Map<String, Object> doc, shistory;
     String mFileUri = "";
     Context context;
@@ -89,7 +90,7 @@ public class CreateProfile extends AppCompatActivity implements ActiveFlatAdapte
     ProgressBar progressBar;
     StorageReference photoRef;
     Calendar myCalendar;
-    String typeselected;
+    Types typeselected;
     ActiveFlats flatselected;
     AlertDialog alertDialog;
     Normalfunc normalfunc;
@@ -121,6 +122,8 @@ public class CreateProfile extends AppCompatActivity implements ActiveFlatAdapte
         myCalendar = Calendar.getInstance();
         type = findViewById(R.id.user_wtype);
         flats = findViewById(R.id.user_flat);
+        pins= findViewById(R.id.user_pin);
+        generate= findViewById(R.id.generatepin);
         historyFlats = new ArrayList<>();
 
 
@@ -138,10 +141,10 @@ public class CreateProfile extends AppCompatActivity implements ActiveFlatAdapte
                 types = new ArrayList<>();
                 if (task.isSuccessful() && task.getResult() != null) {
                     for (DocumentSnapshot documentSnapshot : task.getResult()) {
-                        String name = documentSnapshot.getId();
-                        types.add(name);
+                        Types types1= documentSnapshot.toObject(Types.class);
+
+                        types.add(types1);
                     }
-                    types.add("Other");
                 }
             }
         });
@@ -160,6 +163,33 @@ public class CreateProfile extends AppCompatActivity implements ActiveFlatAdapte
                         Log.d(TAG, "onComplete: showflat "+ activeFlat.getF_no());
                     }
                 }
+            }
+        });
+        generate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String ss= normalfunc.getRandomNumberString5();
+                pins.setText(ss);
+            }
+        });
+
+        phone.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if(s.length()>6){
+                    String ss=s.toString().substring(6);
+                    pins.setText(ss);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
             }
         });
 
@@ -304,7 +334,7 @@ public class CreateProfile extends AppCompatActivity implements ActiveFlatAdapte
 
     public void addalltypes() {
 
-        final StringAdapter valueAdapter = new StringAdapter(types, context);
+        final TypesAdapter valueAdapter = new TypesAdapter(types, context);
         final AlertDialog alertcompany = new AlertDialog.Builder(context).create();
         LayoutInflater inflater = getLayoutInflater();
         View convertView = (View) inflater.inflate(R.layout.custom_list, null);
@@ -344,9 +374,9 @@ public class CreateProfile extends AppCompatActivity implements ActiveFlatAdapte
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                typeselected = (String) lv.getItemAtPosition(position);
+                typeselected = (Types) lv.getItemAtPosition(position);
                 //cname.setText(myoffice.getName());
-                type.setText(typeselected);
+                type.setText(typeselected.getBangla());
                 alertcompany.dismiss();
             }
         });
@@ -469,6 +499,7 @@ public class CreateProfile extends AppCompatActivity implements ActiveFlatAdapte
                 final String iname = username.getText().toString();
                 final String phoneno = phone.getText().toString();
                 final String typetext = type.getText().toString();
+                final String pintext = pins.getText().toString();
 
 
                 boolean cancel = false;
@@ -482,7 +513,7 @@ public class CreateProfile extends AppCompatActivity implements ActiveFlatAdapte
 
                 }
 
-                if (TextUtils.isEmpty(phoneno)) {
+                if (TextUtils.isEmpty(phoneno) && TextUtils.isEmpty(pintext)) {
                     phone.setError(getString(R.string.error_field_required));
                     focusView = phone;
                     cancel = true;
@@ -537,7 +568,7 @@ public class CreateProfile extends AppCompatActivity implements ActiveFlatAdapte
 
         List<String> ll = normalfunc.splitstring(username.getText().toString());
         ll.addAll(normalfunc.splitchar(phone.getText().toString().toLowerCase()));
-        ll.addAll(normalfunc.splitchar(typeselected.toLowerCase()));
+        ll.addAll(normalfunc.splitchar(typeselected.getEnglish().toLowerCase()));
         final List<String> ll1= ll;
 //        ll.add(mail.getText().toString().toLowerCase());
 
@@ -556,12 +587,13 @@ public class CreateProfile extends AppCompatActivity implements ActiveFlatAdapte
         doc.put("starttime", 0);
         doc.put("endtime", 0);
         doc.put("nid", "");
-        doc.put("type", typeselected);
+        doc.put("type", typeselected.getEnglish());
         doc.put("who_add", firebaseUser.getUid());
         doc.put("when_add", FieldValue.serverTimestamp());
-        doc.put("s_pass", normalfunc.getPassForGuards5(phone.getText().toString()));
+        doc.put("s_pass", pins.getText().toString());
         doc.put("address", new ArrayList<>());
         doc.put("s_array", ll);
+
 
 
         photoRef = FirebaseStorage.getInstance().getReference()
@@ -602,7 +634,7 @@ public class CreateProfile extends AppCompatActivity implements ActiveFlatAdapte
 
                                     batch.set(setsworker, doc);
 
-                                    if(typeselected.equals("guard")){
+                                    if(typeselected.getEnglish().equals("guard")){
 
                                         final Guards guards= new Guards(buildid,commid,username.getText().toString()
                                                 ,normalfunc.getRandomNumberString5(),"",Calendar.getInstance().getTime(),normalfunc.futuredate(),"",picurl,"",picurl,
@@ -670,7 +702,7 @@ public class CreateProfile extends AppCompatActivity implements ActiveFlatAdapte
 
             batch.set(setsworker, doc);
 
-            if(typeselected.equals("guard")){
+            if(typeselected.getEnglish().equals("guard")){
 
                 final Guards guards= new Guards(buildid,commid,username.getText().toString()
                         ,normalfunc.getRandomNumberString5(),"",Calendar.getInstance().getTime(),normalfunc.futuredate(),"","","","",

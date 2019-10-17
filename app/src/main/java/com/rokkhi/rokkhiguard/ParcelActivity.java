@@ -49,6 +49,7 @@ import com.google.firebase.storage.UploadTask;
 import com.rokkhi.rokkhiguard.Model.ActiveFlats;
 import com.rokkhi.rokkhiguard.Model.Guards;
 import com.rokkhi.rokkhiguard.Model.Parcels;
+import com.rokkhi.rokkhiguard.Model.Types;
 import com.rokkhi.rokkhiguard.Utils.Normalfunc;
 import com.rokkhi.rokkhiguard.Utils.StringAdapter;
 import com.vansuita.pickimage.bean.PickResult;
@@ -57,6 +58,7 @@ import com.vansuita.pickimage.dialog.PickImageDialog;
 import com.vansuita.pickimage.listeners.IPickResult;
 
 import java.io.ByteArrayOutputStream;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -76,7 +78,7 @@ public class ParcelActivity extends AppCompatActivity implements IPickResult{
     FirebaseFirestore firebaseFirestore;
     ArrayList<Guards> guards;
     ArrayList<ActiveFlats> allflats;
-    ArrayList<String> types;
+    ArrayList<Types> types;
     private Bitmap bitmap = null;
     FirebaseUser firebaseUser;
     private static final String TAG = "ParcelActivity";
@@ -89,7 +91,7 @@ public class ParcelActivity extends AppCompatActivity implements IPickResult{
     ProgressBar progressBar;
     StorageReference photoRef;
     String parcelid;
-    String typeselected;
+    Types typeselected;
     ActiveFlats flatselected;
     Guards guardselected;
     Calendar myCalendar;
@@ -127,8 +129,8 @@ public class ParcelActivity extends AppCompatActivity implements IPickResult{
                 types = new ArrayList<>();
                 if (task.isSuccessful() && task.getResult() != null) {
                     for (DocumentSnapshot documentSnapshot : task.getResult()) {
-                        String name = documentSnapshot.getId();
-                        types.add(name);
+                        Types types1= documentSnapshot.toObject(Types.class);
+                        types.add(types1);
                     }
                 }
             }
@@ -277,7 +279,7 @@ public class ParcelActivity extends AppCompatActivity implements IPickResult{
 
     public void addalltypes() {
 
-        final StringAdapter valueAdapter = new StringAdapter(types, context);
+        final TypesAdapter valueAdapter = new TypesAdapter(types, context);
         final AlertDialog alertcompany = new AlertDialog.Builder(context).create();
         LayoutInflater inflater = getLayoutInflater();
         View convertView = (View) inflater.inflate(R.layout.custom_list, null);
@@ -316,9 +318,9 @@ public class ParcelActivity extends AppCompatActivity implements IPickResult{
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                typeselected = (String) lv.getItemAtPosition(position);
+                typeselected = (Types) lv.getItemAtPosition(position);
                 //cname.setText(myoffice.getName());
-                ptype.setText(typeselected);
+                ptype.setText(typeselected.getBangla());
                 alertcompany.dismiss();
             }
         });
@@ -493,7 +495,7 @@ public class ParcelActivity extends AppCompatActivity implements IPickResult{
 
         final Parcels parcels= new Parcels(buildid,commid,flatselected.getFlat_id(),flatselected.getF_no()
         ,cname.getText().toString(),guardselected.getG_uid(),Calendar.getInstance().getTime()
-        ,typeselected,"","",parcelid,ll);
+        ,typeselected.getEnglish(),"","",parcelid,ll);
 
         photoRef = FirebaseStorage.getInstance().getReference()
                 .child("parcels/" + parcelid + "/p_pic");

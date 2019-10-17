@@ -4,6 +4,13 @@ import android.graphics.Bitmap;
 import android.graphics.Matrix;
 import android.util.Log;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.WriteBatch;
+import com.rokkhi.rokkhiguard.Model.UDetails;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -50,6 +57,43 @@ public class Normalfunc {
             width = (int) (height * bitmapRatio);
         }
         return Bitmap.createScaledBitmap(image, width, height, true);
+    }
+
+
+    public void addUser(String utoken, String ulogin,String userid,String gender,String mailid,String name) {
+        // Create the arguments to the callable function.
+        Calendar calendar = Calendar.getInstance();
+        calendar.clear();
+        calendar.set(Calendar.MONTH, 1);
+        calendar.set(Calendar.YEAR, 4000);
+        Date date = calendar.getTime();
+
+        List<String> ll= new ArrayList<>();
+        List<String> tokens= new ArrayList<>();
+        tokens.add(utoken);
+        // Log.d(TAG, "onSuccess: tokenxx "+ useertoken +"xx"+ utoken);
+
+        UDetails uDetails= new UDetails(userid,name,"","",date,gender,mailid,true,ulogin,"","","","","",tokens,new ArrayList<String>()
+                ,false,Calendar.getInstance().getTime(),Calendar.getInstance().getTime(),false,ll);
+
+
+        FirebaseFirestore firebaseFirestore= FirebaseFirestore.getInstance();
+
+        WriteBatch batch= firebaseFirestore.batch();
+
+        DocumentReference userset1 = firebaseFirestore.collection("userdetails").document(userid);
+        batch.set(userset1, uDetails);
+
+        batch.commit().addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete( Task<Void> task) {
+                if(task.isSuccessful()){
+
+                }
+            }
+        });
+
+
     }
 
 

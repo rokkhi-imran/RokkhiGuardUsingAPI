@@ -215,64 +215,11 @@ public class MainPage extends AppCompatActivity {
 
     }
 
-    public void shownegativedialog() {
-        alertDialog = new AlertDialog.Builder(context).create();
-        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View convertView = (View) inflater.inflate(R.layout.done, null);
-
-        final Button ok = convertView.findViewById(R.id.okay);
-        final ImageView tik = convertView.findViewById(R.id.tik);
-        final TextView text = convertView.findViewById(R.id.text);
-
-        tik.setImageDrawable(getResources().getDrawable(R.drawable.cross, null));
-        text.setText("You are not allowed to use this feature.");
-
-
-        alertDialog.setView(convertView);
-        alertDialog.setCancelable(true);
-        alertDialog.show();
-
-
-        ok.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                alertDialog.dismiss();
-
-            }
-        });
-    }
 
     public void showposititivedialog() {
         Intent intent = new Intent(MainPage.this, CreateProfile.class);
         startActivity(intent);
-//        alertDialog = new AlertDialog.Builder(context).create();
-//        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-//        View convertView = (View) inflater.inflate(R.layout.dialog_select, null);
-//
-//        final ConstraintLayout emp = convertView.findViewById(R.id.one);
-//        final ConstraintLayout grd = convertView.findViewById(R.id.two);
-//
-//
-//        alertDialog.setView(convertView);
-//        alertDialog.setCancelable(true);
-//        alertDialog.show();
-//
-//
-//        emp.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                alertDialog.dismiss();
-//                Intent intent = new Intent(MainPage.this, CreateProfile.class);
-//                startActivity(intent);
-//            }
-//        });
-//        grd.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                alertDialog.dismiss();
-//                startActivity(intent);
-//            }
-//        });
+
 
     }
 
