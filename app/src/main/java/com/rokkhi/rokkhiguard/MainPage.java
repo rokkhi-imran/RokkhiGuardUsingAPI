@@ -270,7 +270,6 @@ public class MainPage extends AppCompatActivity {
 //            @Override
 //            public void onClick(View view) {
 //                alertDialog.dismiss();
-//                Intent intent = new Intent(MainPage.this, CreateProfileforGuards.class);
 //                startActivity(intent);
 //            }
 //        });

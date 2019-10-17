@@ -13,6 +13,18 @@
         android:padding="20dp">
 
         <Button
+            android:background="@drawable/orange_rounded_button"
+            android:id="@+id/submit"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="20dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="500dp"
+            android:layout_width="match_parent"
+            android:text="Submit"
+            android:textColor="@color/white"
+            android:visibility="gone" />
+
+        <Button
             android:background="@drawable/less_round_button"
             android:drawableStart="@drawable/ic_call"
             android:id="@+id/call"
@@ -23,22 +35,11 @@
             android:layout_width="wrap_content"
             android:paddingEnd="20dp"
             android:paddingStart="20dp"
-            android:text="call"
+            android:text=" কল করুন"
             android:textColor="@color/orange"
             android:visibility="visible" />
 
-        <Button
-            android:background="@drawable/orange_rounded_button"
-            android:id="@+id/submit"
-            android:layout_below="@+id/call"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="20dp"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="350dp"
-            android:layout_width="match_parent"
-            android:text="Submit"
-            android:textColor="@color/white"
-            android:visibility="gone" />
+
 
         <ProgressBar
             android:id="@+id/dialogprogress"
@@ -102,7 +103,7 @@
                 android:layout_height="25dp"
                 android:layout_marginTop="15dp"
                 android:layout_marginBottom="8dp"
-                android:text=" status:"
+                android:text="  ফলাফল:"
                 android:textColor="@color/black"
                 android:textSize="18sp"
                 android:textStyle="bold"
@@ -116,7 +117,7 @@
                 android:id="@+id/status"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="no status  ( এখনও পাওয়া যায় নি"
+                android:text=" এখনও পাওয়া যায় নি"
                 android:textSize="18sp"
                 android:layout_marginBottom="10dp"
                 android:layout_marginTop="10dp"

@@ -43,7 +43,6 @@
         <activity android:name=".VisitorsList" />
         <activity android:name=".NoticeBoard" />
         <activity android:name=".CreateProfile" />
-        <activity android:name=".CreateProfileforGuards" />
         <activity android:name=".ParcelActivity" />
         <activity android:name=".SettingsActivity" />
         <activity

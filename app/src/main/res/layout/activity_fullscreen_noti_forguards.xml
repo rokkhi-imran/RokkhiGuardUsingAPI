@@ -27,7 +27,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Notice by: "
+            android:text=" নোটিশ দিয়েছেন : "
             android:layout_below="@+id/logo"
             android:id="@+id/name"
             android:layout_centerHorizontal="true"
@@ -97,7 +97,7 @@
             android:layout_marginBottom="32dp"
             android:background="@drawable/less_round_button"
             android:backgroundTint="@color/orange"
-            android:text="Okay"
+            android:text="Okay  (বুঝেছি)"
             android:layout_below="@+id/body"
             android:textColor="@color/white"
             />

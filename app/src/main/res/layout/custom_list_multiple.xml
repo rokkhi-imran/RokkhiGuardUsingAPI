@@ -82,7 +82,7 @@
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Done"
+        android:text=" কাজ শেষ"
         android:id="@+id/done"
         android:background="@drawable/less_round_button"
         android:backgroundTint="@color/orange"

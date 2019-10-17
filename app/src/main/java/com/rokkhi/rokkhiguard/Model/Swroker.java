@@ -4,7 +4,6 @@ import java.util.Date;
 import java.util.List;
 
 public class Swroker {
-
     private String s_id;//
     private  String s_name;//
     private  String s_phone;//

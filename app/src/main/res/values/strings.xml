@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Rokkhi Home</string>
+    <string name="app_name"> রক্ষী গার্ড</string>
 
-    <string name="sign_in">Sign In</string>
-    <string name="create_account">Create Account</string>
-    <string name="sign_out">Sign Out</string>
-    <string name="disconnect">Disconnect</string>
-    <string name="loading">Loading…</string>
-    <string name="signed_out">Signed Out</string>
-    <string name="verify">Verify</string>
+    <string name="sign_in"> সাইন ইন</string>
+    <string name="create_account"> একাউন্ট তৈরি করুন</string>
+    <string name="sign_out"> সাইন আউট</string>
+    <string name="disconnect"> বিচ্ছিন্ন </string>
+    <string name="loading"> লোডিং…</string>
+    <string name="signed_out"> সাইন আউট  হইছে</string>
+    <string name="verify">  নিশ্চিত  করুন</string>
 
 
-    <string name="logout">Logout?</string>
-    <string name="hint_email">Email</string>
-    <string name="hint_password">Password</string>
-    <string name="hint_name">Name</string>
-    <string name="hint_photo">Photo URL</string>
+    <string name="logout"> লগআউট?</string>
+    <string name="hint_email"> ইমেইল</string>
+    <string name="hint_password"> পাসওয়ার্ড</string>
+    <string name="hint_name"> নাম</string>
+    <string name="hint_photo"> ছবির লিঙ্ক</string>
     <string name="title_activity_verify">VerifyActivity</string>
     <string name="title_activity_invite">InviteActivity</string>
     <string name="title_activity_notice_board">NoticeBoard</string>
@@ -25,7 +25,7 @@
     <!-- Strings related to Settings -->
 
     <!-- Example General settings -->
-    <string name="pref_header_general">General</string>
+    <string name="pref_header_general"> সাধারণ</string>
 
     <string name="pref_title_social_recommendations">Enable social recommendations</string>
     <string name="pref_description_social_recommendations">Recommendations for people to contact

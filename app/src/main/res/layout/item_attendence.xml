@@ -43,7 +43,7 @@
         android:layout_marginEnd="16dp"
         android:background="@drawable/round_edittext2"
         android:id="@+id/flats"
-        android:hint="Select flats"
+        android:hint=" ফ্ল্যাট সিলেক্ট করুন"
         android:focusable="false"
         android:paddingStart="10dp"
         android:paddingEnd="10dp"

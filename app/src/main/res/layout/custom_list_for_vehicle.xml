@@ -25,7 +25,7 @@
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="skip"
+        android:text=" দরকার নাই"
         android:id="@+id/skip"
         android:background="@drawable/less_round_button"
         android:textColor="@color/orange"

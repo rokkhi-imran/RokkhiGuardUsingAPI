@@ -131,6 +131,7 @@ public class CreateProfile extends AppCompatActivity implements ActiveFlatAdapte
         commid = sharedPref.getString("commid", "none");
         initonclick();
 
+        types = new ArrayList<>();
         firebaseFirestore.collection("stype").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
@@ -144,8 +145,11 @@ public class CreateProfile extends AppCompatActivity implements ActiveFlatAdapte
                 }
             }
         });
+        activeFlats = new ArrayList<>();
 
-        firebaseFirestore.collection(getString(R.string.col_activeflat)).orderBy("f_no", Query.Direction.ASCENDING).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+        firebaseFirestore.collection(getString(R.string.col_activeflat))
+                .whereEqualTo("build_id",buildid)
+                .orderBy("f_no", Query.Direction.ASCENDING).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 activeFlats = new ArrayList<>();
@@ -153,6 +157,7 @@ public class CreateProfile extends AppCompatActivity implements ActiveFlatAdapte
                     for (DocumentSnapshot documentSnapshot : task.getResult()) {
                         ActiveFlats activeFlat = documentSnapshot.toObject(ActiveFlats.class);
                         activeFlats.add(activeFlat);
+                        Log.d(TAG, "onComplete: showflat "+ activeFlat.getF_no());
                     }
                 }
             }

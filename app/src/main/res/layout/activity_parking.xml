@@ -13,11 +13,12 @@
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:id="@+id/search"
-            android:background="@drawable/round_edittext"
+            android:background="@drawable/round_edittext2"
             android:layout_margin="10dp"
-            android:hint="Search for flatno"
+            android:hint=" ফ্ল্যাট নাম্বার দিয়ে খুঁজতে পারেন"
             android:paddingStart="10dp"
-            android:paddingEnd="5dp"
+            android:paddingEnd="15dp"
+            android:drawableEnd="@drawable/ic_search"
 
             />
 

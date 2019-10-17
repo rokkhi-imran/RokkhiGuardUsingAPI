@@ -24,7 +24,7 @@
             android:layout_marginEnd="24dp"
             android:background="@drawable/round_edittext2"
             android:focusableInTouchMode="false"
-            android:hint="mobile no or pin "
+            android:hint=" মোবাইল নাম্বার বা পিন "
             android:inputType="numberDecimal"
             android:paddingStart="10dp"
             android:paddingEnd="10dp"
@@ -42,7 +42,7 @@
             android:layout_marginEnd="24dp"
 
             android:background="@drawable/less_round_button"
-            android:text="search"
+            android:text=" সার্চ করুন"
             android:textColor="@color/orange"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
