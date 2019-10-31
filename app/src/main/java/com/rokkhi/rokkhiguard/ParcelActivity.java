@@ -363,8 +363,6 @@ public class ParcelActivity extends AppCompatActivity implements IPickResult{
                         .setCameraIcon(R.mipmap.camera_colored)
                         .setGalleryIcon(R.mipmap.gallery_colored)
                         .setCameraToPictures(false)
-                        .setWidth(480)
-                        .setHeight(640)
                         .setMaxSize(300);
 
                 PickImageDialog.build(setup)

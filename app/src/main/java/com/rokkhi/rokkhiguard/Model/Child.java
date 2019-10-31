@@ -8,6 +8,7 @@ public class Child {
 
     private String mem_id="none"; //from members
     private String who_add="none";
+    private String phoneno="none";
     private String flat_id="none";
     private String build_id="none";
     private String f_no="none";
@@ -23,10 +24,10 @@ public class Child {
     public Child(){
     }
 
-
-    public Child(String mem_id, String who_add, String flat_id, String build_id, String f_no, boolean activated, Date endtime, String m_name, String m_pic, String thumb_m_pic, Date m_bday, String m_gender, List<String> m_array) {
+    public Child(String mem_id, String who_add, String phoneno, String flat_id, String build_id, String f_no, boolean activated, Date endtime, String m_name, String m_pic, String thumb_m_pic, Date m_bday, String m_gender, List<String> m_array) {
         this.mem_id = mem_id;
         this.who_add = who_add;
+        this.phoneno = phoneno;
         this.flat_id = flat_id;
         this.build_id = build_id;
         this.f_no = f_no;
@@ -39,6 +40,7 @@ public class Child {
         this.m_gender = m_gender;
         this.m_array = m_array;
     }
+
 
     public String getMem_id() {
         return mem_id;
@@ -54,6 +56,14 @@ public class Child {
 
     public void setWho_add(String who_add) {
         this.who_add = who_add;
+    }
+
+    public String getPhoneno() {
+        return phoneno;
+    }
+
+    public void setPhoneno(String phoneno) {
+        this.phoneno = phoneno;
     }
 
     public String getFlat_id() {

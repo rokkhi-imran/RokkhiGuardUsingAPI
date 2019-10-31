@@ -468,8 +468,6 @@ public class CreateProfile extends AppCompatActivity implements ActiveFlatAdapte
                         .setCameraIcon(R.mipmap.camera_colored)
                         .setGalleryIcon(R.mipmap.gallery_colored)
                         .setCameraToPictures(false)
-                        .setWidth(480)
-                        .setHeight(640)
                         .setMaxSize(300);
 
                 PickImageDialog.build(setup)

@@ -34,8 +34,6 @@ public class ChildAdapter extends RecyclerView.Adapter<ChildAdapter.ChildViewHol
     }
 
     private MyInterface myInterface;
-
-
     private ArrayList<Child> mchildFilterList;
 
     private LayoutInflater mInflater;
@@ -108,7 +106,7 @@ public class ChildAdapter extends RecyclerView.Adapter<ChildAdapter.ChildViewHol
             @Override
             public void onClick(View view) {
 
-                myInterface.callparents(child.getWho_add());
+                myInterface.callparents(child.getPhoneno());
 
             }
         });

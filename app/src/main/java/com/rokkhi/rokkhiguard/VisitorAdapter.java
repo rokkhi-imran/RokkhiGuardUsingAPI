@@ -53,7 +53,6 @@ public class VisitorAdapter extends RecyclerView.Adapter<VisitorAdapter.VisitorV
     private ValueFilter valueFilter;
 
 
-
     public ArrayList<Visitors> list;
     private static final String TAG = "VisitorAdapter";
     SharedPreferences sharedPref;
@@ -212,7 +211,6 @@ public class VisitorAdapter extends RecyclerView.Adapter<VisitorAdapter.VisitorV
             intime = view.findViewById(R.id.starttime);
             outtime = view.findViewById(R.id.endtime);
             out = view.findViewById(R.id.out);
-
             flat = view.findViewById(R.id.towhom);
         }
     }

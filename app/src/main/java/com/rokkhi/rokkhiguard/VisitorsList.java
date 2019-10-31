@@ -44,7 +44,6 @@ public class VisitorsList extends AppCompatActivity implements VisitorAdapter.My
     VisitorAdapter visitorAdapter;
     FirebaseUser user;
     View mrootView;
-    Toolbar toolbar;
     ProgressBar progressBar;
     Context context;
     SharedPreferences sharedPref;
@@ -52,11 +51,9 @@ public class VisitorsList extends AppCompatActivity implements VisitorAdapter.My
     EditText search;
     SharedPreferences.Editor editor;
 
-
     private int limit = 10;
     NestedScrollView myNestedScroll;
     boolean shouldscrol=true;
-
 
     Query getFirstQuery;
     Date d;
@@ -92,8 +89,10 @@ public class VisitorsList extends AppCompatActivity implements VisitorAdapter.My
         visitorref=firebaseFirestore.
                 collection(getString(R.string.col_visitors));
 
+        Log.d(TAG, "onCreate: yyy "+ low+"  "+ high +" "+ buildid);
 
-        getFirstQuery=visitorref.whereEqualTo("build_id",buildid).whereEqualTo("in",true)
+
+        getFirstQuery= visitorref.whereEqualTo("build_id",buildid).whereEqualTo("in",true)
                 .whereEqualTo("completed",false)
                 .whereGreaterThan("time",low)
                 .whereLessThan("time",high).
@@ -165,8 +164,6 @@ public class VisitorsList extends AppCompatActivity implements VisitorAdapter.My
 
     public void loadmoredata(){
 
-
-
         myNestedScroll.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
             @Override
             public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
@@ -193,6 +190,7 @@ public class VisitorsList extends AppCompatActivity implements VisitorAdapter.My
                             Log.d(TAG, "onScrolled: mmmmll dhukse");
                             Query nextQuery;
                             nextQuery= visitorref.whereEqualTo("build_id",buildid).whereEqualTo("in",true)
+                                    .whereEqualTo("completed",false)
                                     .whereGreaterThan("time",low)
                                     .whereLessThan("time",high).
                                             orderBy("time", Query.Direction.ASCENDING)

@@ -37,7 +37,6 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -85,16 +84,13 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class AddVisitor extends AppCompatActivity implements IPickResult{
 
+
     private static final int PERMISSION_REQUEST_READ_PHONE_STATE = 1;
-
-
     CircleImageView userphoto;
     EditText username, phone, purpose, idcardno, org, flat, vehicle;
     Button done;
     Map<String, Object> doc;
     String phoneno="";
-
-
     String mFileUri = "";
     Context context;
     FirebaseFirestore firebaseFirestore;
@@ -125,6 +121,7 @@ public class AddVisitor extends AppCompatActivity implements IPickResult{
     ImageView cut;
 
     ArrayList<String> wflats;
+    ArrayList<Whitelist> whitelists;
 
     String linkFromSearch = "";
     boolean approve;
@@ -221,6 +218,7 @@ public class AddVisitor extends AppCompatActivity implements IPickResult{
     }
 
 
+
     public void getAllActiveFlatsAndSaveToLocalDatabase(final BuildingChanges buildingChanges) {
         // allActiveFlats = new ArrayList<>();
         // final FlatsRepository flatsRepository = new FlatsRepository(this);
@@ -300,8 +298,10 @@ public class AddVisitor extends AppCompatActivity implements IPickResult{
             @Override
             public void onChanged(@Nullable List<Whitelist> allWhiteLists) {
                 wflats = new ArrayList<>();
+                whitelists= new ArrayList<>();
                 for (Whitelist whiteList : allWhiteLists) {
                     wflats.add(whiteList.getW_phone()+whiteList.getFlat_id());
+                    whitelists.add(whiteList);
                     Log.d("room", "found a new WhiteList   " + whiteList.getF_no() + "  -- > " + whiteList.getFlat_id());
                 }
             }
@@ -355,6 +355,8 @@ public class AddVisitor extends AppCompatActivity implements IPickResult{
                     flag = true;
 
                     String xx="+88"+ phone.getText().toString();
+
+
 
 
 
@@ -640,8 +642,9 @@ public class AddVisitor extends AppCompatActivity implements IPickResult{
             public void onClick(View view) {
                 progressBar.setVisibility(View.VISIBLE);
                 firebaseFirestore.collection(getString(R.string.col_visitors)).document(uid)
-                        .update("response", "rejected"
-                                ,"responder",FirebaseAuth.getInstance().getCurrentUser().getUid()).addOnCompleteListener(new OnCompleteListener<Void>() {
+                        .update("response", "rejected",
+                                "in",false,"responder",
+                                FirebaseAuth.getInstance().getCurrentUser().getUid()).addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful()) {
@@ -817,12 +820,15 @@ public class AddVisitor extends AppCompatActivity implements IPickResult{
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 selected = (ActiveFlats) lv.getItemAtPosition(position);
                 //cname.setText(myoffice.getName());
+
+
                 flat.setText(selected.getF_no());
                 alertcompany.dismiss();
 
             }
         });
     }
+
 
 
     public void initonclick() {
@@ -848,8 +854,6 @@ public class AddVisitor extends AppCompatActivity implements IPickResult{
                         .setCameraIcon(R.mipmap.camera_colored)
                         .setGalleryIcon(R.mipmap.gallery_colored)
                         .setCameraToPictures(false)
-                        .setWidth(480)
-                        .setHeight(640)
                         .setMaxSize(300);
 
                 PickImageDialog.build(setup)

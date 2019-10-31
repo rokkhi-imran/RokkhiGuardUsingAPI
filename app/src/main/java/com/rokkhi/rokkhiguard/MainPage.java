@@ -219,8 +219,6 @@ public class MainPage extends AppCompatActivity {
     public void showposititivedialog() {
         Intent intent = new Intent(MainPage.this, CreateProfile.class);
         startActivity(intent);
-
-
     }
 
 
