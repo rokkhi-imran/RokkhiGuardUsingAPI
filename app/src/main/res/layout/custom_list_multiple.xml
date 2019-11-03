@@ -65,7 +65,8 @@
         android:background="@drawable/less_round_button"
         android:textColor="@color/orange"
         />
-    <ListView
+    <GridView
+        android:numColumns="2"
         android:id="@+id/listView1"
         android:focusableInTouchMode="true"
         android:choiceMode="multipleChoice"
@@ -77,7 +78,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" >
 
-    </ListView>
+    </GridView>
 
     <Button
         android:layout_width="match_parent"

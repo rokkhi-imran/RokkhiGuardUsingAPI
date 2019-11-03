@@ -1,7 +1,6 @@
 package com.rokkhi.rokkhiguard;
 
 import android.content.Context;
-import androidx.core.content.ContextCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -88,7 +87,7 @@ public class VehicleListAdapter extends BaseAdapter  {
 
             viewHolder = new Holder();
 
-            convertView = mInflater.inflate(R.layout.item_string, null);
+            convertView = mInflater.inflate(R.layout.item_string_with_bg, null);
 
             viewHolder.name = (TextView) convertView.findViewById(R.id.name);
             viewHolder.lin= convertView.findViewById(R.id.lin);

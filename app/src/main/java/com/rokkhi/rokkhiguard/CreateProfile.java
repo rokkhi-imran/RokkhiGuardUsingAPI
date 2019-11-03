@@ -10,7 +10,6 @@ import android.os.Bundle;
 import android.os.SystemClock;
 import android.preference.PreferenceManager;
 import androidx.annotation.NonNull;
-import androidx.core.content.ContextCompat;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -24,6 +23,7 @@ import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.GridView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
@@ -52,7 +52,6 @@ import com.rokkhi.rokkhiguard.Model.SLastHistory;
 import com.rokkhi.rokkhiguard.Model.Swroker;
 import com.rokkhi.rokkhiguard.Model.Types;
 import com.rokkhi.rokkhiguard.Utils.Normalfunc;
-import com.rokkhi.rokkhiguard.Utils.StringAdapter;
 import com.rokkhi.rokkhiguard.Utils.UniversalImageLoader;
 import com.vansuita.pickimage.bean.PickResult;
 import com.vansuita.pickimage.bundle.PickSetup;
@@ -222,7 +221,8 @@ public class CreateProfile extends AppCompatActivity implements ActiveFlatAdapte
         LayoutInflater inflater = getLayoutInflater();
         View convertView = (View) inflater.inflate(R.layout.custom_list_multiple, null);
         final EditText editText = convertView.findViewById(R.id.sear);
-        final ListView lv = (ListView) convertView.findViewById(R.id.listView1);
+        //change Listview to Gridview
+        final GridView lv = (GridView) convertView.findViewById(R.id.listView1);
         final Button done = convertView.findViewById(R.id.done);
         final Button selectbutton = convertView.findViewById(R.id.select);
         final Button unselectbutton = convertView.findViewById(R.id.deselect);
@@ -337,8 +337,9 @@ public class CreateProfile extends AppCompatActivity implements ActiveFlatAdapte
         final TypesAdapter valueAdapter = new TypesAdapter(types, context);
         final AlertDialog alertcompany = new AlertDialog.Builder(context).create();
         LayoutInflater inflater = getLayoutInflater();
-        View convertView = (View) inflater.inflate(R.layout.custom_list, null);
+        View convertView = (View) inflater.inflate(R.layout.custom_designation_list, null);
         final EditText editText = convertView.findViewById(R.id.sear);
+
         final ListView lv = (ListView) convertView.findViewById(R.id.listView1);
         final Button done = convertView.findViewById(R.id.done);
         alertcompany.setView(convertView);
@@ -396,6 +397,7 @@ public class CreateProfile extends AppCompatActivity implements ActiveFlatAdapte
                 if (s.length() == 11 && !flag) {
                     String pp = s.toString();
                     flag = true;
+                    pp=normalfunc.makephone14(pp);
 
                     firebaseFirestore.collection(getString(R.string.col_sworker)).whereEqualTo("s_phone",pp).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                         @Override
@@ -565,7 +567,8 @@ public class CreateProfile extends AppCompatActivity implements ActiveFlatAdapte
         Log.d(TAG, "upload: yyyy");
 
         List<String> ll = normalfunc.splitstring(username.getText().toString());
-        ll.addAll(normalfunc.splitchar(phone.getText().toString().toLowerCase()));
+        ll.add(normalfunc.makephone11(phone.getText().toString()));
+        ll.add(normalfunc.makephone14(phone.getText().toString()));
         ll.addAll(normalfunc.splitchar(typeselected.getEnglish().toLowerCase()));
         final List<String> ll1= ll;
 //        ll.add(mail.getText().toString().toLowerCase());
@@ -576,7 +579,7 @@ public class CreateProfile extends AppCompatActivity implements ActiveFlatAdapte
         doc = new HashMap<>();
         doc.put("s_name", username.getText().toString());
         doc.put("s_id", s_id);
-        doc.put("s_phone", phone.getText().toString());
+        doc.put("s_phone", normalfunc.makephone14(phone.getText().toString()));
         doc.put("s_mail", "");
         doc.put("s_pic", "");
         doc.put("thumb_s_pic", "");
@@ -636,7 +639,7 @@ public class CreateProfile extends AppCompatActivity implements ActiveFlatAdapte
 
                                         final Guards guards= new Guards(buildid,commid,username.getText().toString()
                                                 ,normalfunc.getRandomNumberString5(),"",Calendar.getInstance().getTime(),normalfunc.futuredate(),"",picurl,"",picurl,
-                                                phone.getText().toString() ,s_id,ll1);
+                                              normalfunc.makephone14(phone.getText().toString())   ,s_id,ll1);
                                         DocumentReference setguard = firebaseFirestore.collection(getString(R.string.col_guards))
                                                 .document(s_id);
 
@@ -704,7 +707,7 @@ public class CreateProfile extends AppCompatActivity implements ActiveFlatAdapte
 
                 final Guards guards= new Guards(buildid,commid,username.getText().toString()
                         ,normalfunc.getRandomNumberString5(),"",Calendar.getInstance().getTime(),normalfunc.futuredate(),"","","","",
-                        phone.getText().toString() ,s_id,ll1);
+                        normalfunc.makephone14(phone.getText().toString())  ,s_id,ll1);
                 DocumentReference setguard = firebaseFirestore.collection(getString(R.string.col_guards))
                         .document(s_id);
 

@@ -127,6 +127,54 @@ public class Normalfunc {
     }
 
 
+    public boolean isvalidphone14(String phoneno){
+        if(phoneno.isEmpty())return false;
+
+        if(phoneno.charAt(0)=='8'){
+            phoneno=phoneno.substring(2);
+        }
+        if(phoneno.charAt(0)=='+'){
+            phoneno=phoneno.substring(3);
+        }
+        if(phoneno.charAt(0)!='0')return false;
+        phoneno=phoneno.replace("+88","");
+
+        Log.d(TAG, "isvalidphone: bb "+ phoneno +" "+phoneno.length());
+        if(phoneno.length()!=11)return false;
+        for(int i=0;i<11;i++){
+            char xx= phoneno.charAt(i);
+            if(xx< '0' || xx>'9')return false;
+        }
+
+        return true;
+    }
+
+    public String makephone14(String phoneno){
+        if(isvalidphone14(phoneno))return phoneno;
+        if(isvalidphone11(phoneno))return "+88"+phoneno;
+        else return "error";
+    }
+    public String makephone11(String phoneno){
+        if(isvalidphone14(phoneno))return phoneno.replace("+88",phoneno);
+        if(isvalidphone11(phoneno))return phoneno;
+        else return "error";
+    }
+
+    public boolean isvalidphone11(String phoneno){
+        if(phoneno.isEmpty())return false;
+        if(phoneno.charAt(0)!='0')return false;
+
+        Log.d(TAG, "isvalidphone: bb "+ phoneno +" "+phoneno.length());
+        if(phoneno.length()!=11)return false;
+        for(int i=0;i<11;i++){
+            char xx= phoneno.charAt(i);
+            if(xx< '0' || xx>'9')return false;
+        }
+
+        return true;
+    }
+
+
     public  boolean isValidEmail(String target) {
         if (target == null)
             return false;
@@ -156,27 +204,27 @@ public class Normalfunc {
     }
 
     public boolean isvalidphone(String phoneno){
-        if(phoneno.isEmpty())return false;
+
+
+        if(phoneno.charAt(0)!='0')return false;
+
+        if(phoneno.length()!=11)return false;
+        for(int i=1;i<11;i++){
+            char xx= phoneno.charAt(i);
+            if(xx< '0' || xx>'9')return false;
+        }
+        return true;
+    }
+
+    public String getvalidphone(String phoneno){
 
         if(phoneno.charAt(0)=='8'){
             phoneno=phoneno.substring(2);
         }
-        if(phoneno.charAt(0)=='+'){
-            phoneno=phoneno.substring(3);
-        }
-        if(phoneno.charAt(0)!='0')return false;
         phoneno=phoneno.replace("-","");
         phoneno=phoneno.replace("+88","");
         phoneno = phoneno.replace(" ","");
-
-        Log.d(TAG, "isvalidphone: bb "+ phoneno +" "+phoneno.length());
-        if(phoneno.length()!=11)return false;
-        for(int i=0;i<11;i++){
-            char xx= phoneno.charAt(i);
-            if(xx< '0' || xx>'9')return false;
-        }
-
-        return true;
+        return phoneno;
     }
 
 }

@@ -8,7 +8,6 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Parcel;
 import android.os.SystemClock;
 import android.preference.PreferenceManager;
 import androidx.annotation.NonNull;
@@ -25,6 +24,7 @@ import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.GridView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
@@ -38,7 +38,6 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -51,19 +50,15 @@ import com.rokkhi.rokkhiguard.Model.Guards;
 import com.rokkhi.rokkhiguard.Model.Parcels;
 import com.rokkhi.rokkhiguard.Model.Types;
 import com.rokkhi.rokkhiguard.Utils.Normalfunc;
-import com.rokkhi.rokkhiguard.Utils.StringAdapter;
 import com.vansuita.pickimage.bean.PickResult;
 import com.vansuita.pickimage.bundle.PickSetup;
 import com.vansuita.pickimage.dialog.PickImageDialog;
 import com.vansuita.pickimage.listeners.IPickResult;
 
 import java.io.ByteArrayOutputStream;
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -180,7 +175,8 @@ public class ParcelActivity extends AppCompatActivity implements IPickResult{
                     final GuardAdapter valueAdapter = new GuardAdapter(guards, context);
                     final AlertDialog alertcompany = new AlertDialog.Builder(context).create();
                     LayoutInflater inflater = getLayoutInflater();
-                    View convertView = (View) inflater.inflate(R.layout.custom_list, null);
+                    //change custom_list xml to custom_guard_list xml
+                    View convertView = (View) inflater.inflate(R.layout.custom_guard_list, null);
                     final EditText editText = convertView.findViewById(R.id.sear);
                     final ListView lv = (ListView) convertView.findViewById(R.id.listView1);
                     final Button done = convertView.findViewById(R.id.done);
@@ -234,7 +230,8 @@ public class ParcelActivity extends AppCompatActivity implements IPickResult{
         LayoutInflater inflater = getLayoutInflater();
         View convertView = (View) inflater.inflate(R.layout.custom_list, null);
         final EditText editText = convertView.findViewById(R.id.sear);
-        final ListView lv = (ListView) convertView.findViewById(R.id.listView1);
+        //change lsitview to gridview
+        final GridView lv = (GridView) convertView.findViewById(R.id.listView1);
         final Button done = convertView.findViewById(R.id.done);
         alertcompany.setView(convertView);
         alertcompany.setCancelable(false);
@@ -282,8 +279,11 @@ public class ParcelActivity extends AppCompatActivity implements IPickResult{
         final TypesAdapter valueAdapter = new TypesAdapter(types, context);
         final AlertDialog alertcompany = new AlertDialog.Builder(context).create();
         LayoutInflater inflater = getLayoutInflater();
-        View convertView = (View) inflater.inflate(R.layout.custom_list, null);
+        View convertView = (View) inflater.inflate(R.layout.custom_percel_list, null);
         final EditText editText = convertView.findViewById(R.id.sear);
+
+        //change lsitview to gridview
+
         final ListView lv = (ListView) convertView.findViewById(R.id.listView1);
         final Button done = convertView.findViewById(R.id.done);
         alertcompany.setView(convertView);

@@ -55,7 +55,7 @@ public class StringAdapter extends BaseAdapter implements Filterable {
         final String type= Stringlist.get(position);
         if (convertView == null) {
             viewHolder = new Holder();
-            convertView = mInflater.inflate(R.layout.item_string, null);
+            convertView = mInflater.inflate(R.layout.item_string_with_bg, null);
             viewHolder.name = (TextView) convertView.findViewById(R.id.name);
             convertView.setTag(viewHolder);
 

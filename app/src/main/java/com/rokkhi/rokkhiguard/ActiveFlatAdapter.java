@@ -100,7 +100,7 @@ public class ActiveFlatAdapter extends BaseAdapter implements Filterable {
 
             viewHolder = new Holder();
 
-            convertView = mInflater.inflate(R.layout.item_string, null);
+            convertView = mInflater.inflate(R.layout.item_string_with_bg, null);
 
             viewHolder.name = (TextView) convertView.findViewById(R.id.name);
             viewHolder.lin= convertView.findViewById(R.id.lin);

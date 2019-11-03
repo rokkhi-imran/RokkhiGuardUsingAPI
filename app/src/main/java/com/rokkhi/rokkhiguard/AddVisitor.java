@@ -30,6 +30,7 @@ import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -220,6 +221,9 @@ public class AddVisitor extends AppCompatActivity implements IPickResult{
 
 
     public void getAllActiveFlatsAndSaveToLocalDatabase(final BuildingChanges buildingChanges) {
+
+
+
         // allActiveFlats = new ArrayList<>();
         // final FlatsRepository flatsRepository = new FlatsRepository(this);
 
@@ -228,9 +232,12 @@ public class AddVisitor extends AppCompatActivity implements IPickResult{
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {
-                    Log.d(TAG, "onComplete: ");
+                    Log.d(TAG, "onComplete: Data Loaded");
+
                     for (DocumentSnapshot documentSnapshot : task.getResult()) {
+
                         ActiveFlats activeFlat = documentSnapshot.toObject(ActiveFlats.class);
+
                         flatsRepository.deleteActiveFlat(activeFlat);
                         flatsRepository.insertActiveFlat(activeFlat);
                         // allActiveFlats.add(activeFlat);
@@ -261,7 +268,6 @@ public class AddVisitor extends AppCompatActivity implements IPickResult{
         super.onStart();
 
 
-
         FirebaseFirestore.getInstance().collection("buildingChanges").document(buildid).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
@@ -274,6 +280,7 @@ public class AddVisitor extends AppCompatActivity implements IPickResult{
 
                     if (!flats.contains(thismobileuid)) {
                         Log.d("firebase", "Getting new Flats data because data is changed or updated");
+
                         getAllActiveFlatsAndSaveToLocalDatabase(buildingChanges);
 
 
@@ -354,7 +361,7 @@ public class AddVisitor extends AppCompatActivity implements IPickResult{
                 if (s.length() == 11 && !flag) {
                     flag = true;
 
-                    String xx="+88"+ phone.getText().toString();
+                    String xx=normalfunc.makephone14(phone.getText().toString());
 
 
 
@@ -388,7 +395,7 @@ public class AddVisitor extends AppCompatActivity implements IPickResult{
                                                 @Override
                                                 public void onClick(View v) {
                                                     username.setText(vsearch.getV_name());
-                                                    phone.setText(vsearch.getV_phone());
+                                                    phone.setText(normalfunc.makephone11(vsearch.getV_phone()));
                                                     org.setText(vsearch.getV_where());
                                                     if (!vsearch.getV_purpose().isEmpty())
                                                         purpose.setText(vsearch.getV_purpose());
@@ -447,8 +454,9 @@ public class AddVisitor extends AppCompatActivity implements IPickResult{
         Log.d(TAG, "upload: yyyy");
 
         List<String> ll = normalfunc.splitstring(username.getText().toString());
-        ll.addAll(normalfunc.splitchar(phone.getText().toString().toLowerCase()));
         ll.add(selected.getF_no());
+        ll.add(normalfunc.makephone11(phone.getText().toString().toLowerCase()));
+        ll.add(normalfunc.makephone14(phone.getText().toString().toLowerCase()));
         // ll.add(selected.getE_login().replace("+88",""));
         if (!org.getText().toString().isEmpty())
             ll.addAll(normalfunc.splitchar(org.getText().toString().toLowerCase()));
@@ -459,7 +467,7 @@ public class AddVisitor extends AppCompatActivity implements IPickResult{
         doc.put("another_uid", "");
         doc.put("v_name", username.getText().toString());
         doc.put("v_mail", "");
-        doc.put("v_phone", phone.getText().toString());
+        doc.put("v_phone",normalfunc.makephone14(phone.getText().toString()) );
         doc.put("v_purpose", purpose.getText().toString());
         doc.put("v_where", org.getText().toString());
         doc.put("v_gpass", idcardno.getText().toString());
@@ -778,13 +786,15 @@ public class AddVisitor extends AppCompatActivity implements IPickResult{
 
 
     public void showallflats() {
+
         Log.d(TAG, "showallflats: kk "+allflats.size());
+
         final ActiveFlatAdapter valueAdapter = new ActiveFlatAdapter(allflats, context);
         final AlertDialog alertcompany = new AlertDialog.Builder(context).create();
         LayoutInflater inflater = getLayoutInflater();
         View convertView = (View) inflater.inflate(R.layout.custom_list, null);
         final EditText editText = convertView.findViewById(R.id.sear);
-        final ListView lv = (ListView) convertView.findViewById(R.id.listView1);
+        final GridView lv = (GridView) convertView.findViewById(R.id.listView1);
         final Button done = convertView.findViewById(R.id.done);
         alertcompany.setView(convertView);
         alertcompany.setCancelable(false);
@@ -1011,8 +1021,7 @@ public class AddVisitor extends AppCompatActivity implements IPickResult{
         if (ActivityCompat.checkSelfPermission(context,
                 Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_GRANTED) {
             Intent callIntent = new Intent(Intent.ACTION_CALL);
-            if (phoneno.isEmpty())callIntent.setData(Uri.parse("tel:01521110045"));
-            else callIntent.setData(Uri.parse("tel:"+ phoneno));
+            if (!phoneno.isEmpty())callIntent.setData(Uri.parse("tel:"+ phoneno));
             startActivity(callIntent);
         }else{
             Toast.makeText(context, "You don't assign permission.", Toast.LENGTH_SHORT).show();

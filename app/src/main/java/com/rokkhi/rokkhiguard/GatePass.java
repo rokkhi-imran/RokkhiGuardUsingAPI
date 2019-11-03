@@ -28,6 +28,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.rokkhi.rokkhiguard.Model.Swroker;
+import com.rokkhi.rokkhiguard.Utils.Normalfunc;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -164,6 +165,8 @@ public class GatePass extends AppCompatActivity implements View.OnClickListener,
 
 
     private void showdialog() {
+        Normalfunc normalfunc=new Normalfunc();
+        String newtext= normalfunc.makephone14(passtext);
         alertDialog = new AlertDialog.Builder(context).create();
         LayoutInflater inflater = getLayoutInflater();
         View convertView = (View) inflater.inflate(R.layout.dialog_showlist, null);
@@ -174,7 +177,7 @@ public class GatePass extends AppCompatActivity implements View.OnClickListener,
         progressBar.setVisibility(View.VISIBLE);
 
         firebaseFirestore.collection(getString(R.string.col_sworker))
-                .whereEqualTo("s_phone", passtext).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                .whereEqualTo("s_phone", newtext).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 passtext="";
