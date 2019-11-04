@@ -19,6 +19,7 @@ import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -279,7 +280,8 @@ public class GridAdapter extends RecyclerView.Adapter<GridAdapter.GridViewHolder
         holder.flatno.setText(parkings.getF_no());
 
         if(!parkings.isVacant()){
-            holder.view.setBackgroundColor(ContextCompat.getColor(context,R.color.orange));
+//            holder.view.setBackgroundColor(ContextCompat.getColor(context,R.color.orange));
+            holder.view.setBackground(ContextCompat.getDrawable(context,R.drawable.rectangletextviewwithbg));
             holder.flatno.setTextColor(ContextCompat.getColor(context,R.color.white));
         }
         else{

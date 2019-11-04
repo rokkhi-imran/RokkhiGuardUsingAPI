@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.GridView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -110,7 +111,8 @@ public class GateAdapter extends RecyclerView.Adapter<GateAdapter.ListViewHolder
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View convertView = (View) inflater.inflate(R.layout.custom_list, null);
         final EditText editText = convertView.findViewById(R.id.sear);
-        final ListView lv = (ListView) convertView.findViewById(R.id.listView1);
+       //convert listView to gridView
+        final GridView lv = (GridView) convertView.findViewById(R.id.listView1);
         final Button done = convertView.findViewById(R.id.done);
         final TextView tt = convertView.findViewById(R.id.selected);
         tt.setVisibility(View.VISIBLE);
