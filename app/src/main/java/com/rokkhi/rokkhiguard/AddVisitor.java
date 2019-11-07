@@ -100,10 +100,8 @@ public class AddVisitor extends AppCompatActivity implements IPickResult{
     FirebaseUser firebaseUser;
     Date low, high;
     private static final String TAG = "AddVisitor";
-
     private long mLastClickTime = 0;
     Timestamp out = new Timestamp(0, 0);
-
     SharedPreferences.Editor editor;
     SharedPreferences sharedPref;
     ProgressBar progressBar;
@@ -248,8 +246,6 @@ public class AddVisitor extends AppCompatActivity implements IPickResult{
                     flatdata = buildingChanges.getFlats();
                     flatdata.add(thismobileuid);
                     data.put("flats", flatdata);
-
-
                     firebaseFirestore.collection("buildingChanges").document(buildid)
                             .set(data, SetOptions.merge()).addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override

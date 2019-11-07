@@ -1,36 +1,37 @@
 package com.rokkhi.rokkhiguard.Model;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class Activebuilding {
 
-    private String b_name="none";
-    private String b_flatformat="none";
-    private String b_houseno="none";
-    private String b_roadno="none";
-    private String b_district="none";
-    private String b_area="none";
-    private int b_tfloor=0;
-    private int b_tflat=0;
-    private String build_id="none"; //doc id
-    private String comm_id="none";
-    private boolean b_status=false;
-    private List<String> b_array= new ArrayList<>();
-    private List<String> picurl= new ArrayList<>();
-    private double latitude=0.0;
-    private double longitude=0.0;
+    private String b_name;
+    private String b_flatformat;
+    private String b_houseno;
+    private String b_roadno;
+    private String b_district;
+    private String b_area;
+    private String b_code;
+    private int b_tfloor;
+    private int b_tflat;
+    private String build_id; //doc id
+    private String comm_id;
+    private boolean b_status;
+    private List<String> b_array;
+    private List<String> picurl;
+    private double latitude;
+    private double longitude;
 
     public Activebuilding(){
     }
 
-    public Activebuilding(String b_name, String b_flatformat, String b_houseno, String b_roadno, String b_district, String b_area, int b_tfloor, int b_tflat, String build_id, String comm_id, boolean b_status, List<String> b_array, List<String> picurl, double latitude, double longitude) {
+    public Activebuilding(String b_name, String b_flatformat, String b_houseno, String b_roadno, String b_district, String b_area, String b_code, int b_tfloor, int b_tflat, String build_id, String comm_id, boolean b_status, List<String> b_array, List<String> picurl, double latitude, double longitude) {
         this.b_name = b_name;
         this.b_flatformat = b_flatformat;
         this.b_houseno = b_houseno;
         this.b_roadno = b_roadno;
         this.b_district = b_district;
         this.b_area = b_area;
+        this.b_code = b_code;
         this.b_tfloor = b_tfloor;
         this.b_tflat = b_tflat;
         this.build_id = build_id;
@@ -88,6 +89,14 @@ public class Activebuilding {
 
     public void setB_area(String b_area) {
         this.b_area = b_area;
+    }
+
+    public String getB_code() {
+        return b_code;
+    }
+
+    public void setB_code(String b_code) {
+        this.b_code = b_code;
     }
 
     public int getB_tfloor() {
