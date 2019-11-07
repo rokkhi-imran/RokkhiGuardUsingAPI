@@ -26,12 +26,12 @@ public class Buildings implements Parcelable {
     private int b_servicecharge;
     private List<String> b_array;
     private boolean b_status;
+    private String b_roadname;
 
     public Buildings(){
     }
 
-
-    public Buildings(String b_name, String b_flatformat, String b_houseno, String b_roadno, String b_district, String b_area, String b_code, int b_tfloor, int b_tflat, int b_tparking, int b_tgate, String build_id, String comm_id, List<String> picurl, double latitude, double longitude, int b_servicecharge, List<String> b_array, boolean b_status) {
+    public Buildings(String b_name, String b_flatformat, String b_houseno, String b_roadno, String b_district, String b_area, String b_code, int b_tfloor, int b_tflat, int b_tparking, int b_tgate, String build_id, String comm_id, List<String> picurl, double latitude, double longitude, int b_servicecharge, List<String> b_array, boolean b_status, String b_roadname) {
         this.b_name = b_name;
         this.b_flatformat = b_flatformat;
         this.b_houseno = b_houseno;
@@ -51,6 +51,7 @@ public class Buildings implements Parcelable {
         this.b_servicecharge = b_servicecharge;
         this.b_array = b_array;
         this.b_status = b_status;
+        this.b_roadname = b_roadname;
     }
 
     protected Buildings(Parcel in) {
@@ -73,6 +74,7 @@ public class Buildings implements Parcelable {
         b_servicecharge = in.readInt();
         b_array = in.createStringArrayList();
         b_status = in.readByte() != 0;
+        b_roadname = in.readString();
     }
 
     @Override
@@ -96,6 +98,7 @@ public class Buildings implements Parcelable {
         dest.writeInt(b_servicecharge);
         dest.writeStringList(b_array);
         dest.writeByte((byte) (b_status ? 1 : 0));
+        dest.writeString(b_roadname);
     }
 
     @Override
@@ -265,5 +268,13 @@ public class Buildings implements Parcelable {
 
     public void setB_status(boolean b_status) {
         this.b_status = b_status;
+    }
+
+    public String getB_roadname() {
+        return b_roadname;
+    }
+
+    public void setB_roadname(String b_roadname) {
+        this.b_roadname = b_roadname;
     }
 }

@@ -20,11 +20,12 @@ public class Activebuilding {
     private List<String> picurl;
     private double latitude;
     private double longitude;
+    private String b_roadname;
 
     public Activebuilding(){
     }
 
-    public Activebuilding(String b_name, String b_flatformat, String b_houseno, String b_roadno, String b_district, String b_area, String b_code, int b_tfloor, int b_tflat, String build_id, String comm_id, boolean b_status, List<String> b_array, List<String> picurl, double latitude, double longitude) {
+    public Activebuilding(String b_name, String b_flatformat, String b_houseno, String b_roadno, String b_district, String b_area, String b_code, int b_tfloor, int b_tflat, String build_id, String comm_id, boolean b_status, List<String> b_array, List<String> picurl, double latitude, double longitude, String b_roadname) {
         this.b_name = b_name;
         this.b_flatformat = b_flatformat;
         this.b_houseno = b_houseno;
@@ -41,6 +42,7 @@ public class Activebuilding {
         this.picurl = picurl;
         this.latitude = latitude;
         this.longitude = longitude;
+        this.b_roadname = b_roadname;
     }
 
     public String getB_name() {
@@ -169,5 +171,13 @@ public class Activebuilding {
 
     public void setLongitude(double longitude) {
         this.longitude = longitude;
+    }
+
+    public String getB_roadname() {
+        return b_roadname;
+    }
+
+    public void setB_roadname(String b_roadname) {
+        this.b_roadname = b_roadname;
     }
 }
