@@ -603,9 +603,6 @@ public class AddVisitor extends AppCompatActivity implements IPickResult{
                     }
                 });
 
-
-
-
         
 
         Log.d(TAG, "dialogconfirmation:  approve " + approve);
@@ -1018,9 +1015,14 @@ public class AddVisitor extends AppCompatActivity implements IPickResult{
     private void phoneCall(){
         if (ActivityCompat.checkSelfPermission(context,
                 Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_GRANTED) {
+
+            Toast.makeText(context, ""+phoneno, Toast.LENGTH_SHORT).show();
             Intent callIntent = new Intent(Intent.ACTION_CALL);
             if (!phoneno.isEmpty())callIntent.setData(Uri.parse("tel:"+ phoneno));
+
             startActivity(callIntent);
+
+
         }else{
             Toast.makeText(context, "You don't assign permission.", Toast.LENGTH_SHORT).show();
         }

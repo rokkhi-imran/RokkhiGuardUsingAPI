@@ -2,11 +2,14 @@ package com.rokkhi.rokkhiguard;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.preference.PreferenceManager;
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.RecyclerView;
+
+import android.provider.CalendarContract;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -109,7 +112,7 @@ public class GateAdapter extends RecyclerView.Adapter<GateAdapter.ListViewHolder
         final ActiveFlatAdapter activeFlatAdapter = new ActiveFlatAdapter(allflats, context);
         final AlertDialog alertcompany = new AlertDialog.Builder(context).create();
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View convertView = (View) inflater.inflate(R.layout.custom_list, null);
+        final View convertView = (View) inflater.inflate(R.layout.custom_list, null);
         final EditText editText = convertView.findViewById(R.id.sear);
        //convert listView to gridView
         final GridView lv = (GridView) convertView.findViewById(R.id.listView1);
@@ -171,7 +174,9 @@ public class GateAdapter extends RecyclerView.Adapter<GateAdapter.ListViewHolder
 
                     Log.d(TAG, "onItemClick: rrr1");
 
-                    view.setBackground(ContextCompat.getDrawable(context, R.color.orange_light));
+                    view.findViewById(R.id.name).setBackground(ContextCompat.getDrawable(context, R.drawable.rectangle_textsize_with_bg));
+                    holder.ename.setTextColor(ContextCompat.getColor(context,R.color.white));
+
                     activeFlatAdapter.changedata(ss.getF_no(), true);
                     holder.historyflatid.add(ss.getFlat_id());
                     holder.historyflatno.add(ss.getF_no());
@@ -181,7 +186,9 @@ public class GateAdapter extends RecyclerView.Adapter<GateAdapter.ListViewHolder
 
                 } else {
                     Log.d(TAG, "onItemClick: rrr2");
-                    view.setBackground(ContextCompat.getDrawable(context, R.color.white));
+                    view.findViewById(R.id.name).setBackground(ContextCompat.getDrawable(context, R.drawable.rectangle_textsize));
+                    holder.ename.setTextColor(ContextCompat.getColor(context,R.color.Black));
+
                     activeFlatAdapter.changedata(ss.getF_no(), false);
                     holder.historyflatid.remove(ss.getFlat_id());
                     holder.historyflatno.remove(ss.getF_no());
