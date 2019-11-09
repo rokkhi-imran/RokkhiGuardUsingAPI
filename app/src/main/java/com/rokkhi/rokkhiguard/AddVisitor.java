@@ -392,6 +392,7 @@ public class AddVisitor extends AppCompatActivity implements IPickResult{
                                                 @Override
                                                 public void onClick(View v) {
                                                     username.setText(vsearch.getV_name());
+                                                    phone.setText("");
                                                     phone.setText(normalfunc.makephone11(vsearch.getV_phone()));
                                                     org.setText(vsearch.getV_where());
                                                     if (!vsearch.getV_purpose().isEmpty())

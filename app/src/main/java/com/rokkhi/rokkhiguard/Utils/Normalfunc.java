@@ -130,8 +130,14 @@ public class Normalfunc {
     public boolean isvalidphone14(String phoneno){
         if(phoneno.isEmpty())return false;
 
-        if(phoneno.charAt(0)=='8'){
-            phoneno=phoneno.substring(2);
+        if(phoneno.charAt(0)!='+'){
+            return  false;
+
+        }
+
+        if(phoneno.length()!=14){
+            return  false;
+
         }
         if(phoneno.charAt(0)=='+'){
             phoneno=phoneno.substring(3);

@@ -418,6 +418,13 @@ public class MainPage extends AppCompatActivity {
                     }
 
                 }
+                else{
+                    BuildingChanges buildingChanges= new BuildingChanges(new ArrayList<String>(),new ArrayList<String>()
+                    ,new ArrayList<String>());
+                    getAllActiveFlatsAndSaveToLocalDatabase(buildingChanges);
+                    getAllWhiteListAndSaveToLocalDatabase(buildingChanges);
+                    getVehiclesAndSaveToLocalDatabase(buildingChanges);
+                }
             }
         });
 

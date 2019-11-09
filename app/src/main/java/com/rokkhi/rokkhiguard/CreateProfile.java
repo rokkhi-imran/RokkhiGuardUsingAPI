@@ -149,6 +149,8 @@ public class CreateProfile extends AppCompatActivity implements ActiveFlatAdapte
         flatsRepository = new FlatsRepository(this);
         whiteListRepository = new WhiteListRepository(this);
 
+        Log.d(TAG, "upload: yyyy "+normalfunc.makephone14("01703248520"));
+
 
 
 
@@ -765,7 +767,7 @@ public class CreateProfile extends AppCompatActivity implements ActiveFlatAdapte
     public void upload() {
 
 
-        Log.d(TAG, "upload: yyyy");
+
 
         List<String> ll = normalfunc.splitstring(username.getText().toString());
         ll.add(normalfunc.makephone11(phone.getText().toString()));
