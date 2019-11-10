@@ -52,6 +52,7 @@ public class GatePass extends AppCompatActivity implements View.OnClickListener,
     TextView nine;
     TextView zero;
     TextView cross;
+    TextView clear;
     String passtext="";
     Context context;
     AlertDialog alertDialog;
@@ -99,6 +100,7 @@ public class GatePass extends AppCompatActivity implements View.OnClickListener,
         nine= findViewById(R.id.nine);
         zero= findViewById(R.id.zero);
         cross= findViewById(R.id.cross);
+        clear= findViewById(R.id.clear);
 
 
         one.setOnClickListener( this);
@@ -112,6 +114,7 @@ public class GatePass extends AppCompatActivity implements View.OnClickListener,
         nine.setOnClickListener( this);
         zero.setOnClickListener( this);
         cross.setOnClickListener( this);
+        clear.setOnClickListener( this);
 
         initdialog();
 
@@ -151,6 +154,9 @@ public class GatePass extends AppCompatActivity implements View.OnClickListener,
 
         if(v.getId()==R.id.cross  ){
             if( passtext.length() >0)passtext=passtext.substring(0,passtext.length()-1);
+        }
+        else if(v.getId() == R.id.clear){
+            passtext="";
         }
         else{
             TextView tt= (TextView) v;

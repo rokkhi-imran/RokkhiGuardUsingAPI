@@ -69,6 +69,7 @@ public class DaroanPass extends AppCompatActivity implements View.OnClickListene
     TextView nine;
     TextView zero;
     TextView cross;
+    TextView clear;
     String passtext="";
     private View mRootView;
     Context context;
@@ -131,6 +132,7 @@ public class DaroanPass extends AppCompatActivity implements View.OnClickListene
         nine= findViewById(R.id.nine);
         zero= findViewById(R.id.zero);
         cross= findViewById(R.id.cross);
+        clear= findViewById(R.id.clear);
 
 
         one.setOnClickListener( this);
@@ -144,6 +146,7 @@ public class DaroanPass extends AppCompatActivity implements View.OnClickListene
         nine.setOnClickListener( this);
         zero.setOnClickListener( this);
         cross.setOnClickListener( this);
+        clear.setOnClickListener( this);
 
 
         mAuth = FirebaseAuth.getInstance();
@@ -583,6 +586,9 @@ public class DaroanPass extends AppCompatActivity implements View.OnClickListene
 
         if(view.getId()==R.id.cross  ){
             if( passtext.length() >0)passtext=passtext.substring(0,passtext.length()-1);
+        }
+        else if(view.getId() == R.id.clear){
+            passtext="";
         }
         else{
             TextView tt= (TextView) view;

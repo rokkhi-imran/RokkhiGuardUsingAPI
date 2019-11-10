@@ -356,6 +356,7 @@ public class AddVisitor extends AppCompatActivity implements IPickResult{
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
+                Log.d(TAG, "onTextChanged: nnn2 "+ flag);
                 if (s.length() == 11 && !flag) {
                     flag = true;
 
@@ -363,9 +364,7 @@ public class AddVisitor extends AppCompatActivity implements IPickResult{
 
 
 
-
-
-                    Log.d(TAG, "onTextChanged:  nn1");
+                    Log.d(TAG, "onTextChanged:  nnn1 "+ flag);
                     firebaseFirestore.collection("search")
                             .document(xx).get()
                             .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -381,31 +380,32 @@ public class AddVisitor extends AppCompatActivity implements IPickResult{
                                             LayoutInflater inflater = getLayoutInflater();
                                             View convertView = (View) inflater.inflate(R.layout.item_person, null);
                                             CircleImageView propic = convertView.findViewById(R.id.propic);
-                                            TextView name = convertView.findViewById(R.id.name);
+                                            final TextView name = convertView.findViewById(R.id.name);
                                             Button cancel = convertView.findViewById(R.id.cancel);
                                             TextView pass = convertView.findViewById(R.id.pass);
                                             RelativeLayout relativeLayout = convertView.findViewById(R.id.relativeLayout);
                                             pass.setVisibility(View.GONE);
-
-
+                                            alertDialog.setView(convertView);
+                                            alertDialog.show();
 
                                             relativeLayout.setOnClickListener(new View.OnClickListener() {
                                                 @Override
                                                 public void onClick(View v) {
+                                                    flag=true;
                                                     username.setText(vsearch.getV_name());
-                                                    phone.setText("");
+                                                   // phone.setText("");
                                                     Log.d(TAG, "onClick: oooo "+ vsearch.getV_phone() +" "+normalfunc.makephone11(vsearch.getV_phone()));
                                                     phone.setText(normalfunc.makephone11(vsearch.getV_phone()));
                                                     org.setText(vsearch.getV_where());
                                                     if (!vsearch.getV_purpose().isEmpty())
                                                         purpose.setText(vsearch.getV_purpose());
 
-
                                                     if (!vsearch.getV_thumb().isEmpty()) {
                                                         linkFromSearch = vsearch.getV_thumb();
                                                     }
                                                     username.requestFocus();
                                                     alertDialog.dismiss();
+
                                                     UniversalImageLoader.setImage(vsearch.getV_thumb(), userphoto, null, "");
                                                 }
                                             });
@@ -419,14 +419,16 @@ public class AddVisitor extends AppCompatActivity implements IPickResult{
                                                     alertDialog.dismiss();
                                                 }
                                             });
-                                            alertDialog.setView(convertView);
-                                            alertDialog.show();
+
 
                                         }
                                     }
                                 }
                             });
-                } else if (s.length() < 11) flag = false;
+                } else if (s.length() != 11) {
+                    flag = false;
+                    Log.d(TAG, "onTextChanged: nnn3 "+flag+" "+s.length());
+                }
             }
 
             @Override
