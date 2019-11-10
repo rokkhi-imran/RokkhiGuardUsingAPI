@@ -86,6 +86,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class AddVisitor extends AppCompatActivity implements IPickResult{
 
 
+
     private static final int PERMISSION_REQUEST_READ_PHONE_STATE = 1;
     CircleImageView userphoto;
     EditText username, phone, purpose, idcardno, org, flat, vehicle;
@@ -393,6 +394,7 @@ public class AddVisitor extends AppCompatActivity implements IPickResult{
                                                 public void onClick(View v) {
                                                     username.setText(vsearch.getV_name());
                                                     phone.setText("");
+                                                    Log.d(TAG, "onClick: oooo "+ vsearch.getV_phone() +" "+normalfunc.makephone11(vsearch.getV_phone()));
                                                     phone.setText(normalfunc.makephone11(vsearch.getV_phone()));
                                                     org.setText(vsearch.getV_where());
                                                     if (!vsearch.getV_purpose().isEmpty())

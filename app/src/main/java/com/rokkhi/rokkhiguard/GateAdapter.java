@@ -37,6 +37,7 @@ import com.rokkhi.rokkhiguard.Model.ActiveFlats;
 import com.rokkhi.rokkhiguard.Model.Attendence;
 import com.rokkhi.rokkhiguard.Model.SLastHistory;
 import com.rokkhi.rokkhiguard.Model.Swroker;
+import com.rokkhi.rokkhiguard.Utils.Normalfunc;
 import com.rokkhi.rokkhiguard.Utils.UniversalImageLoader;
 
 import java.util.ArrayList;
@@ -58,6 +59,7 @@ public class GateAdapter extends RecyclerView.Adapter<GateAdapter.ListViewHolder
     }
 
     private MyInterface myInterface;
+    Normalfunc normalfunc;
 
 
     public List<Swroker> list;
@@ -88,6 +90,8 @@ public class GateAdapter extends RecyclerView.Adapter<GateAdapter.ListViewHolder
         sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
         buildid = sharedPref.getString("buildid", "none");
         commid = sharedPref.getString("commid", "none");
+        normalfunc=new Normalfunc();
+
         firebaseFirestore.collection(context.getString(R.string.col_activeflat)).whereEqualTo("build_id",buildid).
                 orderBy("f_no", Query.Direction.ASCENDING)
                 .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -246,91 +250,103 @@ public class GateAdapter extends RecyclerView.Adapter<GateAdapter.ListViewHolder
         holder.in.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(holder.flats.getText().toString().isEmpty()){
-                    Toast.makeText(context,"Please select flats!",Toast.LENGTH_SHORT).show();
-                    return;
+                if(normalfunc.checkcontainsspaceonly(holder.flats.getText().toString())) {
+                    Toast.makeText(context, "Please select flats!", Toast.LENGTH_SHORT).show();
                 }
-                myInterface.showprogressbar();
-                WriteBatch batch = firebaseFirestore.batch();
+                else{
+                    Log.d(TAG, "onClick: uuuu "+ holder.flats.getText().toString());
+                    myInterface.showprogressbar();
+                    WriteBatch batch = firebaseFirestore.batch();
 
 
 
-                for (int i = 0; i < holder.historyflatno.size(); i++) {
+                    for (int i = 0; i < holder.historyflatno.size(); i++) {
 
-                    String auto_id= firebaseFirestore.collection(context.getString(R.string.col_attendance))
-                            .document().getId();
+                        String auto_id= firebaseFirestore.collection(context.getString(R.string.col_attendance))
+                                .document().getId();
 
-                    Attendence attendence= new Attendence(auto_id,swroker.getS_id(),buildid,commid
-                    ,Calendar.getInstance().getTime(),holder.historyflatid.get(i),
-                            holder.historyflatno.get(i),true);
-
-
-
-                    DocumentReference setattendence = firebaseFirestore.collection(context.getString(R.string.col_attendance))
-                            .document(auto_id);
-
-                    batch.set(setattendence, attendence);
-                }
-                SLastHistory sLastHistory = new SLastHistory(swroker.getS_id(), buildid,holder.historyflatid,holder.historyflatno,Calendar.getInstance().getTime());
-                DocumentReference setflat = firebaseFirestore.collection(context.getString(R.string.col_sworker))
-                        .document(swroker.getS_id()).collection("shistory").document(buildid);
-                batch.set(setflat, sLastHistory);
+                        Attendence attendence= new Attendence(auto_id,swroker.getS_id(),buildid,commid
+                                ,Calendar.getInstance().getTime(),holder.historyflatid.get(i),
+                                holder.historyflatno.get(i),true);
 
 
 
+                        DocumentReference setattendence = firebaseFirestore.collection(context.getString(R.string.col_attendance))
+                                .document(auto_id);
 
-
-                batch.commit().addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        myInterface.hideprogressbar();
-                        if(task.isSuccessful()){
-                            Toast.makeText(context,"Done",Toast.LENGTH_SHORT).show();
-                            myInterface.dissmissdialog();
-                        }
+                        batch.set(setattendence, attendence);
                     }
-                });
+                    SLastHistory sLastHistory = new SLastHistory(swroker.getS_id(), buildid,holder.historyflatid,holder.historyflatno,Calendar.getInstance().getTime());
+                    DocumentReference setflat = firebaseFirestore.collection(context.getString(R.string.col_sworker))
+                            .document(swroker.getS_id()).collection("shistory").document(buildid);
+                    batch.set(setflat, sLastHistory);
+
+
+
+
+
+                    batch.commit().addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            myInterface.hideprogressbar();
+                            if(task.isSuccessful()){
+                                Toast.makeText(context,"Done",Toast.LENGTH_SHORT).show();
+                                myInterface.dissmissdialog();
+                            }
+                        }
+                    });
+
+                }
+
+
             }
         });
 
         holder.out.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                myInterface.showprogressbar();
-                WriteBatch batch = firebaseFirestore.batch();
+
+                if(normalfunc.checkcontainsspaceonly(holder.flats.getText().toString())){
+                    Toast.makeText(context,"Please select flats!",Toast.LENGTH_SHORT).show();
+                }
+                else{
+                    myInterface.showprogressbar();
+                    WriteBatch batch = firebaseFirestore.batch();
 
 
 
-                for (int i = 0; i < holder.historyflatno.size(); i++) {
+                    for (int i = 0; i < holder.historyflatno.size(); i++) {
 
-                    String auto_id= firebaseFirestore.collection(context.getString(R.string.col_attendance))
-                            .document().getId();
+                        String auto_id= firebaseFirestore.collection(context.getString(R.string.col_attendance))
+                                .document().getId();
 
-                    Attendence attendence= new Attendence(auto_id,swroker.getS_id(),buildid,commid
-                            ,Calendar.getInstance().getTime(),holder.historyflatid.get(i),
-                            holder.historyflatno.get(i),false);
-
-
+                        Attendence attendence= new Attendence(auto_id,swroker.getS_id(),buildid,commid
+                                ,Calendar.getInstance().getTime(),holder.historyflatid.get(i),
+                                holder.historyflatno.get(i),false);
 
 
-                    DocumentReference setattendence = firebaseFirestore.collection(context.getString(R.string.col_attendance))
-                            .document(auto_id);
 
-                    batch.set(setattendence, attendence);
+
+                        DocumentReference setattendence = firebaseFirestore.collection(context.getString(R.string.col_attendance))
+                                .document(auto_id);
+
+                        batch.set(setattendence, attendence);
+                    }
+
+
+
+                    batch.commit().addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            myInterface.hideprogressbar();
+                            if(task.isSuccessful()){
+                                Toast.makeText(context,"Done",Toast.LENGTH_SHORT).show();
+                                myInterface.dissmissdialog();
+                            }
+                        }
+                    });
                 }
 
-
-
-                batch.commit().addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        myInterface.hideprogressbar();
-                        if(task.isSuccessful()){
-                            Toast.makeText(context,"Done",Toast.LENGTH_SHORT).show();
-                            myInterface.dissmissdialog();
-                        }
-                    }
-                });
             }
         });
 

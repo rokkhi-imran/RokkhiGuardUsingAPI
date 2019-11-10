@@ -8,7 +8,11 @@ import android.os.CountDownTimer;
 import android.preference.PreferenceManager;
 import androidx.annotation.NonNull;
 import com.google.android.material.snackbar.Snackbar;
+
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Observer;
+
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
@@ -25,16 +29,28 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.SetOptions;
 import com.google.firebase.firestore.WriteBatch;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
 import com.google.firebase.messaging.FirebaseMessaging;
+import com.rokkhi.rokkhiguard.Model.ActiveFlats;
+import com.rokkhi.rokkhiguard.Model.BuildingChanges;
 import com.rokkhi.rokkhiguard.Model.GuardPhone;
+import com.rokkhi.rokkhiguard.Model.Vehicle;
+import com.rokkhi.rokkhiguard.Model.Whitelist;
 import com.rokkhi.rokkhiguard.Utils.Normalfunc;
+import com.rokkhi.rokkhiguard.data.FlatsRepository;
+import com.rokkhi.rokkhiguard.data.VehiclesRepository;
+import com.rokkhi.rokkhiguard.data.WhiteListRepository;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import huwi.joldi.abrar.rokkhiguardo.Kotlin.CirclePinField;
 
@@ -73,6 +89,15 @@ public class DaroanPass extends AppCompatActivity implements View.OnClickListene
 
     int flag=0;
     private static final String TAG = "DaroanPass";
+
+
+
+
+    //roomdatabase
+    FlatsRepository flatsRepository;
+    WhiteListRepository whiteListRepository;
+    VehiclesRepository vehiclesRepository;
+    String thismobileuid;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -136,6 +161,13 @@ public class DaroanPass extends AppCompatActivity implements View.OnClickListene
                 else {
                     final String phoneno=firebaseUser.getPhoneNumber();
                     final String userid=firebaseUser.getUid();
+
+                    thismobileuid = FirebaseAuth.getInstance().getUid();
+
+                    flatsRepository = new FlatsRepository(DaroanPass.this);
+                    whiteListRepository = new WhiteListRepository(DaroanPass.this);
+                    vehiclesRepository = new VehiclesRepository(DaroanPass.this);
+
 
 
                     Log.d(TAG, "onAuthStateChanged: ccc10 "+ phoneno);
@@ -339,6 +371,166 @@ public class DaroanPass extends AppCompatActivity implements View.OnClickListene
         }
     }
 
+
+    public void getAllActiveFlatsAndSaveToLocalDatabase(final BuildingChanges buildingChanges) {
+        // final FlatsRepository flatsRepository = new FlatsRepository(this);
+
+        firebaseFirestore.collection(getString(R.string.col_activeflat))
+                .whereEqualTo("build_id", buildid).orderBy("f_no", Query.Direction.ASCENDING).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    Log.d(TAG, "onComplete: pppp");
+                    for (DocumentSnapshot documentSnapshot : task.getResult()) {
+                        ActiveFlats activeFlat = documentSnapshot.toObject(ActiveFlats.class);
+                        flatsRepository.deleteActiveFlat(activeFlat);
+                        flatsRepository.insertActiveFlat(activeFlat);
+                    }
+
+                    Map<String, Object> data = new HashMap<>();
+                    ArrayList<String> flatdata = new ArrayList<>();
+                    flatdata = buildingChanges.getFlats();
+                    flatdata.add(thismobileuid);
+                    data.put("flats", flatdata);
+
+
+                    firebaseFirestore.collection("buildingChanges").document(buildid)
+                            .set(data, SetOptions.merge()).addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            Toast.makeText(context, "Flat data changed!", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+
+                    flatsRepository.deleteTask(buildid);
+
+                } else {
+                    Log.d(TAG, "onComplete: pppp1");
+                }
+            }
+        });
+    }
+
+
+    public void getAllWhiteListAndSaveToLocalDatabase(final BuildingChanges buildingChanges) {
+        //final FlatsRepository flatsRepository = new FlatsRepository(this);
+
+
+        firebaseFirestore.collection(getString(R.string.col_whitelists))
+                .whereEqualTo("build_id", buildid)
+                .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+
+                    for (DocumentSnapshot documentSnapshot : task.getResult()) {
+                        Whitelist whitelist = documentSnapshot.toObject(Whitelist.class);
+                        whiteListRepository.deleteWhiteList(whitelist);
+                        whiteListRepository.insert(whitelist);
+                    }
+
+
+                    Map<String, Object> data = new HashMap<>();
+                    ArrayList<String> wldata = new ArrayList<>();
+                    wldata = buildingChanges.getWhitelists();
+                    wldata.add(thismobileuid);
+                    data.put("whitelists", wldata);
+
+
+                    firebaseFirestore.collection("buildingChanges").document(buildid)
+                            .set(data, SetOptions.merge()).addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            Toast.makeText(context, "Whitelists data changed!", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+
+                    whiteListRepository.deleteTask(buildid);
+
+
+                } else {
+                    Log.d(TAG, "onComplete: xxx5");
+                }
+            }
+        });
+
+    }
+
+    public void matchanddelete(ArrayList<Vehicle>check, Vehicle vehicle){
+        boolean flag=false;
+
+        for(int i=0;i<check.size();i++){
+            if(check.get(i).getVehicle_id().equals(vehicle.getVehicle_id())){
+                //vehiclesRepository.deleteVehicle(vehicle);
+                Log.d(TAG, "matchanddelete: hhhh " );
+                flag=true;
+            }
+        }
+        if(!flag)vehiclesRepository.deleteVehicle(vehicle);
+
+    }
+
+    public void getVehiclesAndSaveToLocalDatabase(final BuildingChanges buildingChanges) {
+        //final FlatsRepository flatsRepository = new FlatsRepository(this);
+
+
+        Log.d("room", "getting new vehicle success " + buildid);
+        firebaseFirestore.collection(getString(R.string.col_vehicle))
+                .whereEqualTo("build_id", buildid)
+                .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+
+                    final ArrayList<Vehicle> check = new ArrayList<>();
+                    Log.d("room", "getting new vehicle success " + "adsf");
+                    for (DocumentSnapshot documentSnapshot : task.getResult()) {
+                        Vehicle vehicle = documentSnapshot.toObject(Vehicle.class);
+
+                        Log.d("room", "getting new vehicle data found " + "adsf");
+                        vehiclesRepository.deleteVehicle(vehicle);
+                        vehiclesRepository.insert(vehicle);
+                        check.add(vehicle);
+                    }
+
+                    Log.d(TAG, "onComplete: kkk "+ check );
+
+                    vehiclesRepository.getAllVehicle().observe(DaroanPass.this, new Observer<List<Vehicle>>() {
+                        @Override
+                        public void onChanged(@Nullable List<Vehicle> allVehicles) {
+                            for (Vehicle vehicle : allVehicles) {
+                                matchanddelete(check,vehicle);
+                                Log.d(TAG, "onChanged: yyyyy "+check.size());
+                                Log.d("room yyyyy", "found a new Vehicle   " + vehicle.getF_no() + "  -- > " + vehicle.getFlat_id());
+                            }
+                        }
+                    });
+
+
+                    Map<String, Object> data = new HashMap<>();
+                    ArrayList<String> vdata = new ArrayList<>();
+                    vdata = buildingChanges.getVehicles();
+                    vdata.add(thismobileuid);
+                    data.put("vehicles", vdata);
+
+
+                    firebaseFirestore.collection("buildingChanges").document(buildid)
+                            .set(data, SetOptions.merge()).addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            Toast.makeText(context, "vehicle data changed!", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                    vehiclesRepository.deleteTask(buildid);
+
+
+                } else {
+                    Log.d(TAG, "onComplete: xxx5");
+                }
+            }
+        });
+    }
+
     private void handleSignInResponse(int resultCode, Intent data) {
         IdpResponse response = IdpResponse.fromResultIntent(data);
 
@@ -346,6 +538,13 @@ public class DaroanPass extends AppCompatActivity implements View.OnClickListene
             //startActivity(openstartingpoint);
             // populateProfile();
            // checkUser();
+
+
+            BuildingChanges buildingChanges= new BuildingChanges(new ArrayList<String>(),new ArrayList<String>()
+                    ,new ArrayList<String>());
+            getAllActiveFlatsAndSaveToLocalDatabase(buildingChanges);
+            getAllWhiteListAndSaveToLocalDatabase(buildingChanges);
+            getVehiclesAndSaveToLocalDatabase(buildingChanges);
         } else {
             if (response == null) {
                 showSnackbar(R.string.sign_in_cancelled);

@@ -52,6 +52,31 @@
                 android:textColor="@color/darkRed"
                 android:visibility="gone"
                 />
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text=" প্রোফাইল  তৈরি  করুন"
+                android:textColor="@color/white"
+                android:background="@drawable/less_round_button"
+                android:backgroundTint="@color/orange"
+                android:layout_below="@+id/text"
+                android:layout_marginTop="70dp"
+                android:id="@+id/profilecreation"
+                android:visibility="gone"
+                />
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="  বাতিল করুন"
+                android:textColor="@color/white"
+                android:backgroundTint="@color/darkRed"
+                android:background="@drawable/less_round_button_red"
+                android:layout_below="@+id/profilecreation"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="50dp"
+                android:id="@+id/cancel"
+                android:visibility="gone"
+                />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:layout_width="match_parent"

@@ -161,7 +161,10 @@ public class Normalfunc {
         else return "error";
     }
     public String makephone11(String phoneno){
-        if(isvalidphone14(phoneno))return phoneno.replace("+88",phoneno);
+        if(isvalidphone14(phoneno)){
+            phoneno=phoneno.replace("+88","");
+            return  phoneno;
+        }
         if(isvalidphone11(phoneno))return phoneno;
         else return "error";
     }
@@ -220,6 +223,16 @@ public class Normalfunc {
             if(xx< '0' || xx>'9')return false;
         }
         return true;
+    }
+
+    public boolean checkcontainsspaceonly(String text){
+        if(text.isEmpty())return true;
+        else{
+            for(int i=0;i<text.length();i++){
+                if(text.charAt(i) !=' ')return false;
+            }
+            return  true;
+        }
     }
 
     public String getvalidphone(String phoneno){

@@ -2,6 +2,7 @@ package com.rokkhi.rokkhiguard;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -174,7 +175,10 @@ public class GatePass extends AppCompatActivity implements View.OnClickListener,
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         progressBar= convertView.findViewById(R.id.progressBar1);
         nomatch= convertView.findViewById(R.id.nomatch);
+        final Button profilecreate= convertView.findViewById(R.id.profilecreation);
+        final Button cancel= convertView.findViewById(R.id.cancel);
         progressBar.setVisibility(View.VISIBLE);
+
 
         firebaseFirestore.collection(getString(R.string.col_sworker))
                 .whereEqualTo("s_phone", newtext).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -190,7 +194,25 @@ public class GatePass extends AppCompatActivity implements View.OnClickListener,
                         Swroker swroker = document.toObject(Swroker.class);
                         list.add(swroker);
                     }
-                    if(list.isEmpty())nomatch.setVisibility(View.VISIBLE);
+                    if(list.isEmpty()){
+                        nomatch.setVisibility(View.VISIBLE);
+                        profilecreate.setVisibility(View.VISIBLE);
+                        cancel.setVisibility(View.VISIBLE);
+                        cancel.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                alertDialog.dismiss();
+                            }
+                        });
+                        profilecreate.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Intent intent= new Intent(context, CreateProfile.class);
+                                startActivity(intent);
+                                finish();
+                            }
+                        });
+                    }
                     gateAdapter = new GateAdapter(list,context);
                     gateAdapter.setHasStableIds(true);
                     recyclerView.setAdapter(gateAdapter);
@@ -215,6 +237,8 @@ public class GatePass extends AppCompatActivity implements View.OnClickListener,
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         progressBar= convertView.findViewById(R.id.progressBar1);
         nomatch= convertView.findViewById(R.id.nomatch);
+        final Button profilecreate= convertView.findViewById(R.id.profilecreation);
+        final Button cancel= convertView.findViewById(R.id.cancel);
         progressBar.setVisibility(View.VISIBLE);
 
         firebaseFirestore.collection(getString(R.string.col_sworker))
@@ -231,7 +255,26 @@ public class GatePass extends AppCompatActivity implements View.OnClickListener,
                         Swroker swroker = document.toObject(Swroker.class);
                         list.add(swroker);
                     }
-                    if(list.isEmpty())nomatch.setVisibility(View.VISIBLE);
+
+                    if(list.isEmpty()){
+                        nomatch.setVisibility(View.VISIBLE);
+                        profilecreate.setVisibility(View.VISIBLE);
+                        cancel.setVisibility(View.VISIBLE);
+                        cancel.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                alertDialog.dismiss();
+                            }
+                        });
+                        profilecreate.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Intent intent= new Intent(context, CreateProfile.class);
+                                startActivity(intent);
+                                finish();
+                            }
+                        });
+                    }
                     gateAdapter = new GateAdapter(list,context);
                     gateAdapter.setHasStableIds(true);
                     recyclerView.setAdapter(gateAdapter);
