@@ -30,10 +30,6 @@
         tools:ignore="GoogleAppIndexingWarning">
         <activity android:name=".CallChildActivity"></activity>
         <activity
-            android:name=".CallActivity"
-            android:label="@string/title_activity_call"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
-        <activity
             android:name=".DaroanPass"
             android:label="Rokkhi"
             android:theme="@style/AppTheme.NoActionBar"
@@ -102,14 +98,6 @@
                 android:resource="@xml/picker_provider_paths" />
         </provider>
 
-        <receiver
-            android:name=".IncomingCallReceiver"
-            android:enabled="true"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.PHONE_STATE" />
-            </intent-filter>
-        </receiver>
     </application>
 
 </manifest>

@@ -135,8 +135,6 @@ public class GatePass extends AppCompatActivity implements View.OnClickListener,
 
     @Override
     public void onClick(View v) {
-
-
         if(buildid.equals("none")){
             final String uid= FirebaseAuth.getInstance().getCurrentUser().getUid();
             firebaseFirestore.collection(getString(R.string.col_phoneguards)).document(uid).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
