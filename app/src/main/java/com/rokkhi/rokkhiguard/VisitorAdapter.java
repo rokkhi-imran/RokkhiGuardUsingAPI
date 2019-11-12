@@ -36,13 +36,11 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class VisitorAdapter extends RecyclerView.Adapter<VisitorAdapter.VisitorViewHolder> implements Filterable {
 
-
     AlertDialog alertDialog, alertDialog2;
 
     public interface MyInterface {
         public void loadagain();
     }
-
     private MyInterface myInterface;
 
 
@@ -83,7 +81,6 @@ public class VisitorAdapter extends RecyclerView.Adapter<VisitorAdapter.VisitorV
 
         return valueFilter;
     }
-
 
     @NonNull
     @Override
@@ -147,7 +144,7 @@ public class VisitorAdapter extends RecyclerView.Adapter<VisitorAdapter.VisitorV
                                 visitor.getV_pic(),visitor.getThumb_v_pic(),visitor.getV_purpose(),visitor.getV_mail()
                         ,visitor.getV_where(),visitor.getFlat_id(),visitor.getF_no(),visitor.getComm_id(),visitor.getBuild_id()
                         ,visitor.getV_vehicleno(),visitor.getV_gpass(),Calendar.getInstance().getTime(),visitor.getV_uid()
-                        ,id,false,true,visitor.getResponse(),"gone",visitor.getV_array(),visitor.getResponder());
+                        ,id,false,true,"done","gone",visitor.getV_array(),visitor.getResponder());
 
 
                         DocumentReference writehasdone = firebaseFirestore
