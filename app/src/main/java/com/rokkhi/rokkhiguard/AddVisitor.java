@@ -446,6 +446,7 @@ public class AddVisitor extends AppCompatActivity implements IPickResult{
         if(wflats.contains(wlcheck)){
             res = "whitelisted";
             vtype="whitelisted";
+
         }
         else{
             res = "pending"; //TODO this should be pending
@@ -453,7 +454,7 @@ public class AddVisitor extends AppCompatActivity implements IPickResult{
 
         }
 
-        Log.d(TAG, "upload: yyyy");
+        Log.d(TAG, "upload: yyyy44 "+ res);
 
         List<String> ll = normalfunc.splitstring(username.getText().toString());
         ll.add(selected.getF_no());

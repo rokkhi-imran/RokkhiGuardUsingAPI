@@ -118,26 +118,27 @@ public class FullscreenVisitorNormal extends AppCompatActivity {
 
 
     @Override
-    public void onNewIntent(Intent intent){
+    public void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
         Bundle extras = intent.getExtras();
-        if(extras != null){
-            whoadd=intent.getStringExtra("who_add");
-            subject=intent.getStringExtra("subject");
+        if (extras != null) {
+            whoadd = intent.getStringExtra("who_add");
+            subject = intent.getStringExtra("subject");
             //org=intent.getStringExtra("org");
-            body= intent.getStringExtra("body");
+            body = intent.getStringExtra("body");
             //omail= intent.getStringExtra("omail");
-            time= intent.getStringExtra("time");
-            nid= intent.getIntExtra("nid",0);
+            time = intent.getStringExtra("time");
+            nid = intent.getIntExtra("nid", 0);
 
 
-            firebaseFirestore.collection(getString(R.string.col_users)).document(whoadd)
+            if(whoadd!=null && !whoadd.isEmpty())firebaseFirestore.collection(getString(R.string.col_users)).document(whoadd)
                     .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                 @Override
                 public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                    if(task.isSuccessful()){
-                        DocumentSnapshot documentSnapshot= task.getResult();
-                        if(documentSnapshot.exists()){
-                            Users users= documentSnapshot.toObject(Users.class);
+                    if (task.isSuccessful()) {
+                        DocumentSnapshot documentSnapshot = task.getResult();
+                        if (documentSnapshot.exists()) {
+                            Users users = documentSnapshot.toObject(Users.class);
                             nameview.setText(users.getName());
                             UniversalImageLoader.setImage(users.getThumb(), propic, null, "");
                         }
