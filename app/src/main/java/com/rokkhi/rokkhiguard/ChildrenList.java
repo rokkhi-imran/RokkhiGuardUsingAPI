@@ -263,8 +263,12 @@ public class ChildrenList extends AppCompatActivity implements ChildAdapter.MyIn
         if (ActivityCompat.checkSelfPermission(context,
                 Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_GRANTED) {
             Intent callIntent = new Intent(Intent.ACTION_CALL);
-            if (phoneno.isEmpty())callIntent.setData(Uri.parse("tel:01521110045"));
-            else callIntent.setData(Uri.parse("tel:"+ phoneno));
+            if (phoneno.isEmpty()){
+                callIntent.setData(Uri.parse("tel:01521110045"));
+            }
+            else{
+                callIntent.setData(Uri.parse("tel:"+ phoneno));
+            }
             startActivity(callIntent);
         }else{
             Toast.makeText(context, "You don't assign permission.", Toast.LENGTH_SHORT).show();
@@ -273,7 +277,9 @@ public class ChildrenList extends AppCompatActivity implements ChildAdapter.MyIn
 
     @Override
     public void callparents(String number) {
+
         phoneno=number;
+
         onCallBtnClick();
     }
 

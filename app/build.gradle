@@ -55,4 +55,15 @@ dependencies {
     implementation 'androidx.recyclerview:recyclerview:1.0.0'
     implementation 'de.hdodenhof:circleimageview:2.2.0'
     implementation 'com.nostra13.universalimageloader:universal-image-loader:1.9.5'
+
+
+    //call
+
+    implementation 'com.jakewharton.timber:timber:4.7.0'
+
+    testImplementation 'junit:junit:4.12'
+
+    implementation "io.reactivex.rxjava2:rxjava:2.2.3"
+    implementation 'io.reactivex.rxjava2:rxkotlin:2.3.0'
+    implementation 'com.android.support:multidex:1.0.0'
 }

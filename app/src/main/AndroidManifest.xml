@@ -28,7 +28,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".CallChildActivity"></activity>
+        <activity android:name=".CallChildActivity" />
         <activity
             android:name=".DaroanPass"
             android:label="Rokkhi"
@@ -97,6 +97,7 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/picker_provider_paths" />
         </provider>
+
 
     </application>
 
