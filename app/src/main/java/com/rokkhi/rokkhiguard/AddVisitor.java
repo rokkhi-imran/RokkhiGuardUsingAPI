@@ -442,7 +442,7 @@ public class AddVisitor extends AppCompatActivity implements IPickResult{
 
     public void upload() {
 
-        String wlcheck= phone.getText().toString()+selected.getFlat_id();
+        String wlcheck=normalfunc.makephone14(phone.getText().toString())+selected.getFlat_id();
         if(wflats.contains(wlcheck)){
             res = "whitelisted";
             vtype="whitelisted";
@@ -454,7 +454,7 @@ public class AddVisitor extends AppCompatActivity implements IPickResult{
 
         }
 
-        Log.d(TAG, "upload: yyyy44 "+ res);
+        Log.d(TAG, "upload: yyyyx44 "+ res);
 
         List<String> ll = normalfunc.splitstring(username.getText().toString());
         ll.add(selected.getF_no());
@@ -616,6 +616,7 @@ public class AddVisitor extends AppCompatActivity implements IPickResult{
         LayoutInflater inflater = getLayoutInflater();
         View convertView = (View) inflater.inflate(R.layout.dialog_confrimation, null);
         final TextView status = convertView.findViewById(R.id.status);
+        final TextView whitelisted = convertView.findViewById(R.id.whitelisted);
         final Button submit = convertView.findViewById(R.id.submit);
         final Button call = convertView.findViewById(R.id.call);
         final CircleImageView enter = convertView.findViewById(R.id.enter);
@@ -694,6 +695,7 @@ public class AddVisitor extends AppCompatActivity implements IPickResult{
                 submit.setVisibility(View.VISIBLE);
                 progressBar.setVisibility(View.GONE);
                 status.setText("Accepted  ( গৃহীত )");
+                whitelisted.setVisibility(View.VISIBLE);
                 status.setTextColor(Color.GREEN);
             }
 
