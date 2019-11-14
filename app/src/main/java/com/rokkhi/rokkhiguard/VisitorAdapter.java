@@ -42,14 +42,9 @@ public class VisitorAdapter extends RecyclerView.Adapter<VisitorAdapter.VisitorV
         public void loadagain();
     }
     private MyInterface myInterface;
-
-
     private ArrayList<Visitors> mvisitorFilterList;
-
     private LayoutInflater mInflater;
-
     private ValueFilter valueFilter;
-
 
     public ArrayList<Visitors> list;
     private static final String TAG = "VisitorAdapter";
@@ -70,7 +65,6 @@ public class VisitorAdapter extends RecyclerView.Adapter<VisitorAdapter.VisitorV
             throw new ClassCastException("Activity must implement AdapterCallback.");
         }
     }
-
     @Override
     public Filter getFilter() {
 
