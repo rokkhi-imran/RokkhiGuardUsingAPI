@@ -52,6 +52,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class GateAdapter extends RecyclerView.Adapter<GateAdapter.ListViewHolder> {
 
+
     public interface MyInterface{
          void dissmissdialog();
          void showprogressbar();
@@ -92,6 +93,8 @@ public class GateAdapter extends RecyclerView.Adapter<GateAdapter.ListViewHolder
         commid = sharedPref.getString("commid", "none");
         normalfunc=new Normalfunc();
 
+
+
         firebaseFirestore.collection(context.getString(R.string.col_activeflat)).whereEqualTo("build_id",buildid).
                 orderBy("f_no", Query.Direction.ASCENDING)
                 .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -121,6 +124,8 @@ public class GateAdapter extends RecyclerView.Adapter<GateAdapter.ListViewHolder
        //convert listView to gridView
         final GridView lv = (GridView) convertView.findViewById(R.id.listView1);
         final Button done = convertView.findViewById(R.id.done);
+        final Button selectAllBtn = convertView.findViewById(R.id.selectAllBtn);
+        final Button unSelectAllBtn = convertView.findViewById(R.id.unSelectAllBtn);
         final TextView tt = convertView.findViewById(R.id.selected);
         tt.setVisibility(View.VISIBLE);
         tt.setText(holder.total);
@@ -133,11 +138,80 @@ public class GateAdapter extends RecyclerView.Adapter<GateAdapter.ListViewHolder
         lv.setAdapter(activeFlatAdapter);
         alertcompany.show();
 
+        if (!holder.total.isEmpty()){
+
+            unSelectAllBtn.setVisibility(View.VISIBLE);
+            selectAllBtn.setVisibility(View.GONE);
+        }
+
         done.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 holder.flats.setText(holder.total);
                 alertcompany.dismiss();
+            }
+        });
+
+        selectAllBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                holder.total="";
+                for(int i=0;i<allflats.size();i++){
+
+
+                    activeFlatAdapter.changedata(allflats.get(i).getF_no(), true);
+                    activeFlatAdapter.notifyDataSetChanged();
+                    holder.historyflatid.add(allflats.get(i).getFlat_id());
+                    holder.historyflatno.add(allflats.get(i).getF_no());
+
+                    holder.total=  holder.total+" "+allflats.get(i).getF_no();
+                    Log.e(TAG, "onClick: "+holder.total.length() );
+                    tt.setText(holder.total);
+
+
+                    unSelectAllBtn.setVisibility(View.VISIBLE);
+                    selectAllBtn.setVisibility(View.GONE);
+                }
+
+            }
+        });
+
+        unSelectAllBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+
+                holder.total="";
+
+                for(int i=0;i<allflats.size();i++){
+
+
+                    activeFlatAdapter.changedata(allflats.get(i).getF_no(), false);
+                    holder.historyflatid.remove(allflats.get(i).getFlat_id());
+                    holder.historyflatno.remove(allflats.get(i).getF_no());
+
+                    holder.total=  holder.total .replace(" " + allflats, "");
+                    tt.setText( holder.total);
+
+
+                    activeFlatAdapter.notifyDataSetChanged();
+
+                    unSelectAllBtn.setVisibility(View.GONE);
+                    selectAllBtn.setVisibility(View.VISIBLE);
+                }
+
+                /*for(int i=0;i<allflats.size();i++){
+//                    view.setBackground(ContextCompat.getDrawable(context, R.color.orange_light));
+                    activeFlatAdapter.changedata(allflats.get(i).getF_no(), false);
+                    activeFlatAdapter.notifyDataSetChanged();
+//                    holder.historyflatno.remove(allflats.get(i));
+
+                    holder.total=  holder.total .replace(" " + allflats.get(i).getF_no(), "");
+                    tt.setText( holder.total);
+                    unSelectAllBtn.setVisibility(View.GONE);
+                    selectAllBtn.setVisibility(View.VISIBLE);
+                }*/
+
             }
         });
 
@@ -184,7 +258,7 @@ public class GateAdapter extends RecyclerView.Adapter<GateAdapter.ListViewHolder
                     activeFlatAdapter.changedata(ss.getF_no(), true);
                     holder.historyflatid.add(ss.getFlat_id());
                     holder.historyflatno.add(ss.getF_no());
-                    holder.total = holder.total + "  " + ss.getF_no();
+                    holder.total = holder.total + " " + ss.getF_no();
                     tt.setText(holder.total);
                     //activeFlatAdapter.notifyDataSetChanged();
 
@@ -196,7 +270,7 @@ public class GateAdapter extends RecyclerView.Adapter<GateAdapter.ListViewHolder
                     activeFlatAdapter.changedata(ss.getF_no(), false);
                     holder.historyflatid.remove(ss.getFlat_id());
                     holder.historyflatno.remove(ss.getF_no());
-                    holder.total = holder.total.replace("  " + ss.getF_no(), "");
+                    holder.total = holder.total.replace(" " + ss.getF_no(), "");
                     tt.setText(holder.total);
                     // activeFlatAdapter.notifyDataSetChanged();
                 }
@@ -378,6 +452,8 @@ public class GateAdapter extends RecyclerView.Adapter<GateAdapter.ListViewHolder
         ArrayList<String>historyflatid;
         ArrayList<String>historyflatno;
 
+
+
         ListViewHolder(View itemView) {
             super(itemView);
             view = itemView;
@@ -388,7 +464,7 @@ public class GateAdapter extends RecyclerView.Adapter<GateAdapter.ListViewHolder
             flats= view.findViewById(R.id.flats);
             historyflatid= new ArrayList<>();
             historyflatno= new ArrayList<>();
-            total="  ";
+            total=" ";
 
         }
     }
