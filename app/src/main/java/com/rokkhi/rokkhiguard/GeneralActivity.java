@@ -48,16 +48,17 @@ public class GeneralActivity extends AppCompatPreferenceActivity {
 
 
             Preference logout= findPreference("logout");
-            logout.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-                @Override
-                public boolean onPreferenceClick(Preference preference) {
-                    FirebaseAuth.getInstance().signOut();
-                    Intent intent= new Intent(getContext(),DaroanPass.class);
-                    startActivity(intent);
-                    getActivity().finish();
-                    return true;
-                }
-            });
+
+//            logout.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+//                @Override
+//                public boolean onPreferenceClick(Preference preference) {
+//                    FirebaseAuth.getInstance().signOut();
+//                    Intent intent= new Intent(getContext(),DaroanPass.class);
+//                    startActivity(intent);
+//                    getActivity().finish();
+//                    return true;
+//                }
+//            });
         }
     }
 

@@ -540,14 +540,13 @@ public class DaroanPass extends AppCompatActivity implements View.OnClickListene
         if (resultCode == RESULT_OK) {
             //startActivity(openstartingpoint);
             // populateProfile();
-           // checkUser();
+           // checkUser()
 
-
-            BuildingChanges buildingChanges= new BuildingChanges(new ArrayList<String>(),new ArrayList<String>()
-                    ,new ArrayList<String>());
-            getAllActiveFlatsAndSaveToLocalDatabase(buildingChanges);
-            getAllWhiteListAndSaveToLocalDatabase(buildingChanges);
-            getVehiclesAndSaveToLocalDatabase(buildingChanges);
+//            BuildingChanges buildingChanges= new BuildingChanges(new ArrayList<String>(),new ArrayList<String>()
+//                    ,new ArrayList<String>());
+//            getAllActiveFlatsAndSaveToLocalDatabase(buildingChanges);
+//            getAllWhiteListAndSaveToLocalDatabase(buildingChanges);
+//            getVehiclesAndSaveToLocalDatabase(buildingChanges);
         } else {
             if (response == null) {
                 showSnackbar(R.string.sign_in_cancelled);
