@@ -52,7 +52,7 @@ public class GuardAdapter extends BaseAdapter implements Filterable {
         return position;
     }
 
-    //Get a View that displays the data at the specified position in the data set.
+
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 

@@ -394,6 +394,7 @@ public class ParcelActivity extends AppCompatActivity implements IPickResult{
                 final String flatname = flat.getText().toString();
                 final String phoneno = gphone.getText().toString();
                 final String type = ptype.getText().toString();
+                final String companyname = cname.getText().toString();
 
 
                 boolean cancel = false;
@@ -403,6 +404,11 @@ public class ParcelActivity extends AppCompatActivity implements IPickResult{
                 if (TextUtils.isEmpty(flatname)) {
                     flat.setError(getString(R.string.error_field_required));
                     focusView = flat;
+                    cancel = true;
+                }
+                if (TextUtils.isEmpty(companyname)) {
+                    cname.setError(getString(R.string.error_field_required));
+                    focusView = cname;
                     cancel = true;
                 }
 
@@ -520,6 +526,7 @@ public class ParcelActivity extends AppCompatActivity implements IPickResult{
                                 @Override
                                 public void onSuccess(Uri uri) {
                                     parcels.setP_pic(uri.toString());
+                                    parcels.setThumb_p_pic(uri.toString());
                                    // doc.put("p_thumb", uri.toString());
                                     // Log.d(TAG, "onSuccess: yyyy");
                                     WriteBatch batch = firebaseFirestore.batch();
