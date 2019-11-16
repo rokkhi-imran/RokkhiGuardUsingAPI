@@ -131,6 +131,7 @@
     <string name="title_activity_signin">SigninActivity</string>
     <string name="col_employees">employees</string>
     <string name="col_admins">admins</string>
+    <string name="col_udetails">userdetails</string>
 
 
     <string name="col_guards">guards</string>

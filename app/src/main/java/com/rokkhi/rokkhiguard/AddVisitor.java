@@ -58,6 +58,7 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.rokkhi.rokkhiguard.Model.ActiveFlats;
 import com.rokkhi.rokkhiguard.Model.BuildingChanges;
+import com.rokkhi.rokkhiguard.Model.UDetails;
 import com.rokkhi.rokkhiguard.Model.Visitors;
 import com.rokkhi.rokkhiguard.Model.Vsearch;
 import com.rokkhi.rokkhiguard.Model.Whitelist;
@@ -110,6 +111,7 @@ public class AddVisitor extends AppCompatActivity implements IPickResult{
     String visitorid;
     String flatid = "", buildid = "", commid = "", famid = "", userid = "";
     ActiveFlats selected;
+    ArrayList<UDetails> flatusers;
 
     Calendar myCalendar;
     Normalfunc normalfunc;
@@ -362,8 +364,6 @@ public class AddVisitor extends AppCompatActivity implements IPickResult{
 
                     String xx=normalfunc.makephone14(phone.getText().toString());
 
-
-
                     Log.d(TAG, "onTextChanged:  nnn1 "+ flag);
                     firebaseFirestore.collection("search")
                             .document(xx).get()
@@ -446,13 +446,26 @@ public class AddVisitor extends AppCompatActivity implements IPickResult{
         if(wflats.contains(wlcheck)){
             res = "whitelisted";
             vtype="whitelisted";
-
         }
         else{
             res = "pending"; //TODO this should be pending
             vtype="visitor";
 
         }
+
+        flatusers= new ArrayList<>();
+        firebaseFirestore.collection(getString(R.string.col_udetails)).whereEqualTo("flat_id",selected.getFlat_id())
+                .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if(task.isSuccessful()){
+                    for(DocumentSnapshot documentSnapshot: task.getResult()){
+                        UDetails uDetails= documentSnapshot.toObject(UDetails.class);
+                        flatusers.add(uDetails);
+                    }
+                }
+            }
+        });
 
         Log.d(TAG, "upload: yyyyx44 "+ res);
 
@@ -588,9 +601,11 @@ public class AddVisitor extends AppCompatActivity implements IPickResult{
 
     public void dialogconfirmation(final String uid) {
 
-
-        if (selected.isVacant() || !selected.isUsing()) approve = false;
+        if (selected.isVacant() || !selected.isUsing()) {
+            approve = false;
+        }
         else approve = true;
+
 
         firebaseFirestore.collection(getString(R.string.col_eintercom)).document(selected.getFlat_id())
                 .addSnapshotListener(new EventListener<DocumentSnapshot>() {
@@ -605,6 +620,7 @@ public class AddVisitor extends AppCompatActivity implements IPickResult{
                             phoneno= documentSnapshot.getString("number");
                             Log.d(TAG, "onEvent: oooo "+ phoneno);
                         }
+                        else phoneno="none";
                     }
                 });
 
@@ -621,6 +637,7 @@ public class AddVisitor extends AppCompatActivity implements IPickResult{
         final Button call = convertView.findViewById(R.id.call);
         final CircleImageView enter = convertView.findViewById(R.id.enter);
         final CircleImageView cancel = convertView.findViewById(R.id.cancel);
+
 
         final ProgressBar progressBar = convertView.findViewById(R.id.dialogprogress);
         alertconfirm.setView(convertView);
@@ -677,16 +694,20 @@ public class AddVisitor extends AppCompatActivity implements IPickResult{
             }
         });
 
-        call.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
 
-                onCallBtnClick();
-            }
-        });
 
 
         if (approve) {
+            call.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    if(!phoneno.equals("none")&& phoneno.isEmpty()) onCallBtnClick();
+                    else{
+                        showUsers();
+                    }
+                }
+            });
 
             if (res.equals("whitelisted")) {
                 Log.d(TAG, "dialogconfirmation: xxx");
@@ -755,14 +776,44 @@ public class AddVisitor extends AppCompatActivity implements IPickResult{
 
 
             progressBar.setVisibility(View.GONE);
+            call.setVisibility(View.GONE);
+            whitelisted.setVisibility(View.VISIBLE);
+            whitelisted.setText(" কোন এপ ইউজার পাওয়া যায়নি। অন্য উপায়ে যোগাযোগ করুন।");
             status.setText("No response ( সাড়া পাওয়া যায়নি )");
             status.setTextColor(Color.BLUE);
-            call.setVisibility(View.VISIBLE);
 
         }
 
 
         alertconfirm.show();
+    }
+
+    public void showUsers() {
+
+        final UsersAdapter usersAdapter = new UsersAdapter(flatusers, context);
+        final AlertDialog alertcompany = new AlertDialog.Builder(context).create();
+        LayoutInflater inflater = getLayoutInflater();
+        View convertView = (View) inflater.inflate(R.layout.custom_list_forusers, null);
+        final ListView lv = (ListView) convertView.findViewById(R.id.listView1);
+        alertcompany.setView(convertView);
+        alertcompany.setCancelable(false);
+        //valueAdapter.notifyDataSetChanged();
+
+        lv.setAdapter(usersAdapter);
+        alertcompany.show();
+
+
+
+        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                UDetails typeselected = (UDetails) lv.getItemAtPosition(position);
+                //cname.setText(myoffice.getName());
+                phoneno= typeselected.getPhone();
+                onCallBtnClick();
+                alertcompany.dismiss();
+            }
+        });
     }
 
 
