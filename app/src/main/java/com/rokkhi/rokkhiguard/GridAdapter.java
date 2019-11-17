@@ -129,6 +129,7 @@ public class GridAdapter extends RecyclerView.Adapter<GridAdapter.GridViewHolder
         View convertView = (View) inflater.inflate(R.layout.custom_list_for_vehicle, null);
         final Button skip = convertView.findViewById(R.id.skip);
         final ListView listView= convertView.findViewById(R.id.listView1);
+        final TextView tt= convertView.findViewById(R.id.tt);
 
 
        // recyclerView.setLayoutManager(new LinearLayoutManager(context));
@@ -138,6 +139,11 @@ public class GridAdapter extends RecyclerView.Adapter<GridAdapter.GridViewHolder
         alertDialog.setCancelable(false);
         listView.setAdapter(vehicleListAdapter);
         alertDialog.show();
+
+        if(flatVehicle.size()==0){
+            tt.setVisibility(View.VISIBLE);
+            skip.setText("okay");
+        }
 
 
 
@@ -149,7 +155,6 @@ public class GridAdapter extends RecyclerView.Adapter<GridAdapter.GridViewHolder
                 confirmdialog(parkings,position);
             }
         });
-
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override

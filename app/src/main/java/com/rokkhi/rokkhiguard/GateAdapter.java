@@ -119,13 +119,13 @@ public class GateAdapter extends RecyclerView.Adapter<GateAdapter.ListViewHolder
         final ActiveFlatAdapter activeFlatAdapter = new ActiveFlatAdapter(allflats, context);
         final AlertDialog alertcompany = new AlertDialog.Builder(context).create();
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        final View convertView = (View) inflater.inflate(R.layout.custom_list, null);
+        final View convertView = (View) inflater.inflate(R.layout.custom_list_multiple, null);
         final EditText editText = convertView.findViewById(R.id.sear);
        //convert listView to gridView
         final GridView lv = (GridView) convertView.findViewById(R.id.listView1);
         final Button done = convertView.findViewById(R.id.done);
-        final Button selectAllBtn = convertView.findViewById(R.id.selectAllBtn);
-        final Button unSelectAllBtn = convertView.findViewById(R.id.unSelectAllBtn);
+        final Button selectbutton = convertView.findViewById(R.id.select);
+        final Button unselectbutton = convertView.findViewById(R.id.deselect);
         final TextView tt = convertView.findViewById(R.id.selected);
         tt.setVisibility(View.VISIBLE);
         tt.setText(holder.total);
@@ -138,11 +138,11 @@ public class GateAdapter extends RecyclerView.Adapter<GateAdapter.ListViewHolder
         lv.setAdapter(activeFlatAdapter);
         alertcompany.show();
 
-        if (!holder.total.isEmpty()){
-
-            unSelectAllBtn.setVisibility(View.VISIBLE);
-            selectAllBtn.setVisibility(View.GONE);
-        }
+//        if (!holder.total.isEmpty()){
+//
+//            unSelectAllBtn.setVisibility(View.VISIBLE);
+//            selectAllBtn.setVisibility(View.GONE);
+//        }
 
         done.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -152,15 +152,15 @@ public class GateAdapter extends RecyclerView.Adapter<GateAdapter.ListViewHolder
             }
         });
 
-        selectAllBtn.setOnClickListener(new View.OnClickListener() {
+        selectbutton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 holder.total="";
+                holder.historyflatid.clear();
+                holder.historyflatno.clear();
                 for(int i=0;i<allflats.size();i++){
-
-
                     activeFlatAdapter.changedata(allflats.get(i).getF_no(), true);
-                    activeFlatAdapter.notifyDataSetChanged();
+
                     holder.historyflatid.add(allflats.get(i).getFlat_id());
                     holder.historyflatno.add(allflats.get(i).getF_no());
 
@@ -168,36 +168,29 @@ public class GateAdapter extends RecyclerView.Adapter<GateAdapter.ListViewHolder
                     Log.e(TAG, "onClick: "+holder.total.length() );
                     tt.setText(holder.total);
 
+                    activeFlatAdapter.notifyDataSetChanged();
 
-                    unSelectAllBtn.setVisibility(View.VISIBLE);
-                    selectAllBtn.setVisibility(View.GONE);
+                    unselectbutton.setVisibility(View.VISIBLE);
+                    selectbutton.setVisibility(View.GONE);
                 }
 
             }
         });
 
-        unSelectAllBtn.setOnClickListener(new View.OnClickListener() {
+        unselectbutton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
 
                 holder.total="";
-
+                tt.setText("");
+                holder.historyflatid.clear();
+                holder.historyflatno.clear();
                 for(int i=0;i<allflats.size();i++){
-
-
                     activeFlatAdapter.changedata(allflats.get(i).getF_no(), false);
-                    holder.historyflatid.remove(allflats.get(i).getFlat_id());
-                    holder.historyflatno.remove(allflats.get(i).getF_no());
-
-                    holder.total=  holder.total .replace(" " + allflats, "");
-                    tt.setText( holder.total);
-
-
                     activeFlatAdapter.notifyDataSetChanged();
-
-                    unSelectAllBtn.setVisibility(View.GONE);
-                    selectAllBtn.setVisibility(View.VISIBLE);
+                    unselectbutton.setVisibility(View.GONE);
+                    selectbutton.setVisibility(View.VISIBLE);
                 }
 
                 /*for(int i=0;i<allflats.size();i++){
@@ -232,17 +225,13 @@ public class GateAdapter extends RecyclerView.Adapter<GateAdapter.ListViewHolder
 
         for(int i=0;i<holder.historyflatno.size();i++){
             activeFlatAdapter.changedata(holder.historyflatno.get(i), true);
-            activeFlatAdapter.notifyDataSetChanged();
         }
+        activeFlatAdapter.notifyDataSetChanged();
 
 
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                typeselected = (String) lv.getItemAtPosition(position);
-//                //cname.setText(myoffice.getName());
-//                type.setText(typeselected);
-//                alertcompany.dismiss();
 
                 ActiveFlats ss = (ActiveFlats) lv.getItemAtPosition(position);
 
@@ -254,13 +243,13 @@ public class GateAdapter extends RecyclerView.Adapter<GateAdapter.ListViewHolder
 
                     view.findViewById(R.id.name).setBackground(ContextCompat.getDrawable(context, R.drawable.rectangle_textsize_with_bg));
                     holder.ename.setTextColor(ContextCompat.getColor(context,R.color.white));
-
                     activeFlatAdapter.changedata(ss.getF_no(), true);
+                    activeFlatAdapter.notifyDataSetChanged();
                     holder.historyflatid.add(ss.getFlat_id());
                     holder.historyflatno.add(ss.getF_no());
                     holder.total = holder.total + " " + ss.getF_no();
                     tt.setText(holder.total);
-                    //activeFlatAdapter.notifyDataSetChanged();
+                    //
 
                 } else {
                     Log.d(TAG, "onItemClick: rrr2");
@@ -268,14 +257,13 @@ public class GateAdapter extends RecyclerView.Adapter<GateAdapter.ListViewHolder
                     holder.ename.setTextColor(ContextCompat.getColor(context,R.color.Black));
 
                     activeFlatAdapter.changedata(ss.getF_no(), false);
+                    activeFlatAdapter.notifyDataSetChanged();
                     holder.historyflatid.remove(ss.getFlat_id());
                     holder.historyflatno.remove(ss.getF_no());
                     holder.total = holder.total.replace(" " + ss.getF_no(), "");
                     tt.setText(holder.total);
                     // activeFlatAdapter.notifyDataSetChanged();
                 }
-
-
             }
         });
 
@@ -283,7 +271,6 @@ public class GateAdapter extends RecyclerView.Adapter<GateAdapter.ListViewHolder
 
     @Override
     public void onBindViewHolder(@NonNull final ListViewHolder holder, int position) {
-
         final Swroker swroker = list.get(position);
         holder.ename.setText(swroker.getS_name());
         UniversalImageLoader.setImage(swroker.getThumb_s_pic(), holder.propic, null, "");
@@ -299,9 +286,7 @@ public class GateAdapter extends RecyclerView.Adapter<GateAdapter.ListViewHolder
                     holder.flats.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-
                             addallflats(holder);
-
                         }
                     });
                     if(documentSnapshot.exists()){
@@ -309,7 +294,8 @@ public class GateAdapter extends RecyclerView.Adapter<GateAdapter.ListViewHolder
                         holder.historyflatid=sLastHistory.getFlatsId();
                         holder.historyflatno=sLastHistory.getFlatsNo();
                         for(int i=0;i<holder.historyflatno.size();i++){
-                            holder.total=holder.total + holder.historyflatno.get(i)+"  ";
+                            if(i!=holder.historyflatno.size()-1)holder.total=holder.total + holder.historyflatno.get(i)+" ";
+                            else holder.total=holder.total + holder.historyflatno.get(i);
                             holder.flats.setText(holder.total);
 
                         }

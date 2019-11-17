@@ -3,14 +3,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_height="match_parent"
     android:layout_width="match_parent"
+    android:layout_margin="10dp"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <RelativeLayout
-        android:layout_centerInParent="true"
-        android:layout_height="match_parent"
-        android:layout_marginTop="80dp"
-        android:layout_width="match_parent"
-        android:padding="20dp">
+
 
         <Button
             android:background="@drawable/orange_rounded_button"
@@ -18,7 +14,7 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="20dp"
             android:layout_marginStart="20dp"
-            android:layout_marginBottom="20dp"
+            android:layout_marginBottom="80dp"
             android:layout_alignParentBottom="true"
             android:layout_width="match_parent"
             android:text="Submit"
@@ -53,51 +49,46 @@
             android:layout_centerHorizontal="true"
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
+            android:layout_marginTop="20dp"
             android:text="Wait for confirmation :\n       অপেক্ষা করুন "
             android:textColor="@color/grey_1000"
             android:textSize="25sp" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/cl2"
-            android:layout_below="@+id/c1"
             android:layout_height="wrap_content"
-            android:layout_marginTop="120dp"
+            android:layout_alignParentBottom="true"
             android:visibility="visible"
+            android:layout_marginBottom="50dp"
             android:layout_width="match_parent">
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/enter"
-                android:layout_height="80dp"
-                android:layout_marginBottom="8dp"
-                android:layout_marginEnd="32dp"
-                android:layout_marginTop="32dp"
                 android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_marginEnd="32dp"
+                android:layout_marginBottom="24dp"
                 android:src="@drawable/yes"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="1.0" />
+                app:layout_constraintEnd_toEndOf="parent" />
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/cancel"
-                android:layout_height="80dp"
-                android:layout_marginBottom="8dp"
-                android:layout_marginStart="32dp"
-                android:layout_marginTop="32dp"
                 android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_marginStart="32dp"
+                android:layout_marginBottom="24dp"
                 android:src="@drawable/no"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintStart_toStartOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:gravity="center_horizontal"
             android:id="@+id/c1"
-            android:layout_below="@+id/tik"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="100dp"
-            android:layout_width="match_parent">
+            android:layout_centerInParent="true"
+            >
 
             <TextView
                 android:id="@+id/text"
@@ -123,6 +114,7 @@
                 android:text=" এখনও পাওয়া যায় নি"
                 android:textSize="18sp"
                 android:textStyle="bold"
+                android:maxLines="3"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/text" />
@@ -131,22 +123,20 @@
                 android:id="@+id/whitelisted"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="40dp"
-                android:textColor="@color/orange"
-                android:visibility="gone"
+                android:layout_marginTop="8dp"
                 android:text=" নিয়মিত গেস্ট"
+                android:textColor="@color/orange"
                 android:textSize="18sp"
                 android:textStyle="bold"
+                android:maxLines="3"
+                android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/text" />
-
+                app:layout_constraintTop_toBottomOf="@+id/status" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-
-    </RelativeLayout>
 
 </RelativeLayout>

@@ -41,7 +41,6 @@
         android:text="select all"
         android:layout_below="@+id/sear"
         android:id="@+id/select"
-
         android:paddingStart="10dp"
         android:paddingEnd="10dp"
         android:layout_alignParentEnd="true"
@@ -74,7 +73,7 @@
         android:layout_marginTop="50dp"
         android:layout_marginStart="10dp"
         android:layout_marginEnd="10dp"
-        android:layout_marginBottom="100dp"
+        android:layout_marginBottom="80dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
@@ -87,7 +86,7 @@
         android:backgroundTint="@color/orange"
         android:textColor="@color/white"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="30dp"
+        android:layout_marginBottom="5dp"
         />
 
 

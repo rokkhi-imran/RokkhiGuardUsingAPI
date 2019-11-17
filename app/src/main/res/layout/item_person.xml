@@ -11,27 +11,27 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:layout_marginBottom="16dp"
         android:text=" প্রোফাইল টি তৈরি করা আছে !"
         android:textColor="@color/green"
-        android:visibility="gone"
-        app:layout_constraintBottom_toTopOf="@+id/relativeLayout"
-        app:layout_constraintEnd_toStartOf="@+id/relativeLayout"
+        android:visibility="visible"
+        android:textStyle="bold"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
 
     <RelativeLayout
         android:id="@+id/relativeLayout"
+
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="16dp"
         android:layout_marginEnd="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
+        app:layout_constraintTop_toBottomOf="@+id/cc">
 
 
         <de.hdodenhof.circleimageview.CircleImageView
@@ -55,19 +55,17 @@
             android:textSize="20sp" />
 
         <TextView
+            android:id="@+id/pass"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text=" গেটপাস : 12345"
+            android:layout_below="@+id/name"
             android:layout_marginStart="28dp"
-            android:id="@+id/pass"
             android:layout_marginTop="4dp"
             android:layout_toEndOf="@+id/propic"
-            android:layout_below="@+id/name"
+            android:text=" গেটপাস : 12345"
             android:textColor="@color/orange"
-            android:textStyle="bold"
-            />
+            android:textStyle="bold" />
     </RelativeLayout>
-
 
 
     <Button
@@ -80,7 +78,9 @@
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="24dp"
         android:background="@drawable/less_round_button_red"
-        android:textColor="@color/darkRed"
+        android:backgroundTint="@color/darkRed"
+        android:textColor="@color/white"
+        android:textStyle="bold"
         android:text=" বাতিল করুন ( cancel )"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

@@ -33,9 +33,7 @@ public class ActiveFlatAdapter extends BaseAdapter implements Filterable {
 
     private ArrayList<ActiveFlats> activeFlats;
     private Map<String,Boolean> bb= new HashMap<>();
-
     private ArrayList<ActiveFlats> mFlatFilterList;
-
     private LayoutInflater mInflater;
     private ValueFilter valueFilter;
     Context context;
@@ -119,19 +117,18 @@ public class ActiveFlatAdapter extends BaseAdapter implements Filterable {
             Boolean flag=bb.get(activeFlats.get(position).getF_no());
             if(flag!=null && flag){
 
-                viewHolder.name.setTextColor(context.getResources().getColor(R.color.white));
+                viewHolder.name.setTextColor(ContextCompat.getColor(context,R.color.white));
 //                viewHolder.name.setBackgroundColor(context.getResources().getColor(R.color.orange));
                 viewHolder.name.setBackground(ContextCompat.getDrawable(context,R.drawable.rectangletextviewwithbg));
 
-//                convertView.setBackground(ContextCompat.getDrawable(context,R.color.orange));
             }
             else{
 //                convertView.setBackground(ContextCompat.getDrawable(context,R.color.white));
 
-                viewHolder.name.setTextColor(context.getResources().getColor(R.color.black));
+                viewHolder.name.setTextColor(ContextCompat.getColor(context,R.color.black));
+//                viewHolder.name.setTextColor(context.getResources().getColor(R.color.black));
                 viewHolder.name.setBackground(ContextCompat.getDrawable(context,R.drawable.rectangletextview));
 
-//                viewHolder.name.setBackgroundColor(context.getResources().getColor(R.color.white));
             }
 
         }
