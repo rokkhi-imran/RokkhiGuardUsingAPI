@@ -44,7 +44,7 @@ public class Normalfunc {
     }
 
 
-    public Bitmap getResizedBitmap(Bitmap image, int maxSize) {
+   /* public Bitmap getResizedBitmap(Bitmap image, int maxSize) {
         int width = image.getWidth();
         int height = image.getHeight();
 
@@ -57,7 +57,7 @@ public class Normalfunc {
             width = (int) (height * bitmapRatio);
         }
         return Bitmap.createScaledBitmap(image, width, height, true);
-    }
+    }*/
 
 
     public void addUser(String utoken, String ulogin,String userid,String gender,String mailid,String name) {
@@ -184,12 +184,13 @@ public class Normalfunc {
     }
 
 
-    public  boolean isValidEmail(String target) {
+   /* public  boolean isValidEmail(String target) {
         if (target == null)
             return false;
 
         return android.util.Patterns.EMAIL_ADDRESS.matcher(target).matches();
-    }
+    }*/
+/*
 
     public  String getRandomNumberString4() {
         // It will generate 6 digit random Number.
@@ -198,6 +199,7 @@ public class Normalfunc {
         int number = rnd.nextInt(9999);
         return String.format("%04d", number);
     }
+*/
 
     public  String getRandomNumberString5() {
         // It will generate 6 digit random Number.
@@ -207,11 +209,11 @@ public class Normalfunc {
         return String.format("%05d", number);
     }
 
-    public  String getPassForGuards5(String phoneno) {
+  /*  public  String getPassForGuards5(String phoneno) {
         String number = phoneno.substring(6);
         return number;
     }
-
+*/
     public boolean isvalidphone(String phoneno){
 
 
@@ -234,7 +236,7 @@ public class Normalfunc {
             return  true;
         }
     }
-
+/*
     public String getvalidphone(String phoneno){
 
         if(phoneno.charAt(0)=='8'){
@@ -244,6 +246,6 @@ public class Normalfunc {
         phoneno=phoneno.replace("+88","");
         phoneno = phoneno.replace(" ","");
         return phoneno;
-    }
+    }*/
 
 }

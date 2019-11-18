@@ -1,8 +1,11 @@
 package com.rokkhi.rokkhiguard;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.content.pm.SharedLibraryInfo;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
@@ -15,70 +18,25 @@ import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.preference.RingtonePreference;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.MenuItem;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.FieldValue;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.HashMap;
+import java.util.Map;
 
 
 public class GeneralActivity extends AppCompatPreferenceActivity {
 
-    private Context context;
     private static final String TAG = SettingsActivity.class.getSimpleName();
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        context= GeneralActivity.this;
-        //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-        // load settings fragment
-        getFragmentManager().beginTransaction().replace(android.R.id.content, new MainPreferenceFragment()).commit();
-    }
-
-    public static class MainPreferenceFragment extends PreferenceFragment {
-        @Override
-        public void onCreate(final Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
-            addPreferencesFromResource(R.xml.pref_main);
-
-
-            // notification preference change listener
-            bindPreferenceSummaryToValue(findPreference(getString(R.string.key_notifications_new_message_ringtone)));
-
-
-
-            Preference logout= findPreference("logout");
-
-//            logout.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-//                @Override
-//                public boolean onPreferenceClick(Preference preference) {
-//                    FirebaseAuth.getInstance().signOut();
-//                    Intent intent= new Intent(getContext(),DaroanPass.class);
-//                    startActivity(intent);
-//                    getActivity().finish();
-//                    return true;
-//                }
-//            });
-        }
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == android.R.id.home) {
-            onBackPressed();
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
-    private static void bindPreferenceSummaryToValue(Preference preference) {
-        preference.setOnPreferenceChangeListener(sBindPreferenceSummaryToValueListener);
-
-        sBindPreferenceSummaryToValueListener.onPreferenceChange(preference,
-                PreferenceManager
-                        .getDefaultSharedPreferences(preference.getContext())
-                        .getString(preference.getKey(), ""));
-    }
-
     /**
      * A preference value change listener that updates the preference's summary
      * to reflect its new value.
@@ -133,12 +91,109 @@ public class GeneralActivity extends AppCompatPreferenceActivity {
             return true;
         }
     };
+    private Context context;
+
+    private static void bindPreferenceSummaryToValue(Preference preference) {
+        preference.setOnPreferenceChangeListener(sBindPreferenceSummaryToValueListener);
+
+        sBindPreferenceSummaryToValueListener.onPreferenceChange(preference,
+                PreferenceManager
+                        .getDefaultSharedPreferences(preference.getContext())
+                        .getString(preference.getKey(), ""));
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        context = GeneralActivity.this;
+        //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        // load settings fragment
+        getFragmentManager().beginTransaction().replace(android.R.id.content, new MainPreferenceFragment()).commit();
+
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            onBackPressed();
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    public static class MainPreferenceFragment extends PreferenceFragment {
+        @Override
+        public void onCreate(final Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+            addPreferencesFromResource(R.xml.pref_main);
+
+
+            // notification preference change listener
+            bindPreferenceSummaryToValue(findPreference(getString(R.string.key_notifications_new_message_ringtone)));
+
+
+            Preference logout = findPreference("logout");
+
+            logout.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+
+                    final ProgressDialog progressDialog = new ProgressDialog(getContext());
+                    progressDialog.setMessage("Action Executing.....");
+                    progressDialog.show();
+
+                    FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
+
+
+                    SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getContext());
+                    SharedPreferences.Editor editor = sharedPref.edit();
+                    String buildid = sharedPref.getString("buildid", "none");
+                    String thismobileuid = FirebaseAuth.getInstance().getUid();
+
+//                    FirebaseFirestore firebaseFirestore=new FirebaseFirestore();
+
+                    //remove value form buldings changes
+
+                    Map<String, Object> mm = new HashMap<>();
+                    mm.put("flats", FieldValue.arrayRemove(thismobileuid)); //for insert array union
+                    mm.put("vehicles", FieldValue.arrayRemove(thismobileuid));
+                    mm.put("whitelists", FieldValue.arrayRemove(thismobileuid));
+
+
+                    Log.e(TAG, "onPreferenceClick: " + buildid);
+                    Log.e(TAG, "onPreferenceClick: " + thismobileuid);
+
+                    Log.e(TAG, "onClick: buildid = " + buildid);
+                    firebaseFirestore.collection("buildingChanges").document(buildid)
+                            .update(mm).addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+
+                            FirebaseAuth.getInstance().signOut();
+                            progressDialog.dismiss();
+                            Intent intent = new Intent(getContext(), DaroanPass.class);
+                            startActivity(intent);
+                            getActivity().finish();
+
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            progressDialog.dismiss();
+                        }
+                    });
+                    return true;
+                }
+            });
+        }
+    }
 
     /**
      * Email client intent to send support mail
      * Appends the necessary device information to email body
      * useful when providing support
      */
+    /*
     public static void sendFeedback(Context context) {
         String body = null;
         try {
@@ -157,5 +212,5 @@ public class GeneralActivity extends AppCompatPreferenceActivity {
     }
 
 
-
+*/
 }

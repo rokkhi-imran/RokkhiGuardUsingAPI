@@ -1,4 +1,5 @@
 package com.rokkhi.rokkhiguard.Model;
+/*
 
 public class Settings {
 
@@ -80,3 +81,4 @@ public class Settings {
         this.isgedit = isgedit;
     }
 }
+*/

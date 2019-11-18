@@ -29,9 +29,11 @@ public interface ActiveFlatsDao {
     @Query("DELETE  FROM ActiveFlats WHERE build_id !=:buildId")
     void getActiveFlatsforDeletion(String buildId);
 
+/*
 
     @Update
     void updateActiveFlat(ActiveFlats note);
+*/
 
 
     @Delete

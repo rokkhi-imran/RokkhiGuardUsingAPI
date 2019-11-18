@@ -28,6 +28,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -53,6 +54,7 @@ import java.util.List;
 import java.util.Map;
 
 import huwi.joldi.abrar.rokkhiguardo.Kotlin.CirclePinField;
+import io.grpc.internal.LogExceptionRunnable;
 
 
 public class DaroanPass extends AppCompatActivity implements View.OnClickListener {
@@ -162,6 +164,7 @@ public class DaroanPass extends AppCompatActivity implements View.OnClickListene
 
 
                 else {
+
                     final String phoneno=firebaseUser.getPhoneNumber();
                     final String userid=firebaseUser.getUid();
 
@@ -371,8 +374,10 @@ public class DaroanPass extends AppCompatActivity implements View.OnClickListene
 
         if (requestCode == RC_SIGN_IN) {
             handleSignInResponse(resultCode, data);
+
         }
     }
+/*
 
 
     public void getAllActiveFlatsAndSaveToLocalDatabase(final BuildingChanges buildingChanges) {
@@ -414,7 +419,8 @@ public class DaroanPass extends AppCompatActivity implements View.OnClickListene
         });
     }
 
-
+*/
+/*
     public void getAllWhiteListAndSaveToLocalDatabase(final BuildingChanges buildingChanges) {
         //final FlatsRepository flatsRepository = new FlatsRepository(this);
 
@@ -459,7 +465,9 @@ public class DaroanPass extends AppCompatActivity implements View.OnClickListene
 
     }
 
-    public void matchanddelete(ArrayList<Vehicle>check, Vehicle vehicle){
+  */
+  /*
+public void matchanddelete(ArrayList<Vehicle>check, Vehicle vehicle){
         boolean flag=false;
 
         for(int i=0;i<check.size();i++){
@@ -472,6 +480,8 @@ public class DaroanPass extends AppCompatActivity implements View.OnClickListene
         if(!flag)vehiclesRepository.deleteVehicle(vehicle);
 
     }
+    */
+/*
 
     public void getVehiclesAndSaveToLocalDatabase(final BuildingChanges buildingChanges) {
         //final FlatsRepository flatsRepository = new FlatsRepository(this);
@@ -534,19 +544,32 @@ public class DaroanPass extends AppCompatActivity implements View.OnClickListene
         });
     }
 
+*/
+
     private void handleSignInResponse(int resultCode, Intent data) {
         IdpResponse response = IdpResponse.fromResultIntent(data);
 
         if (resultCode == RESULT_OK) {
-            //startActivity(openstartingpoint);
-            // populateProfile();
-           // checkUser()
 
-//            BuildingChanges buildingChanges= new BuildingChanges(new ArrayList<String>(),new ArrayList<String>()
-//                    ,new ArrayList<String>());
-//            getAllActiveFlatsAndSaveToLocalDatabase(buildingChanges);
-//            getAllWhiteListAndSaveToLocalDatabase(buildingChanges);
-//            getVehiclesAndSaveToLocalDatabase(buildingChanges);
+            ///eikhane Submit data to buldings change
+/*
+            Log.e(TAG, "handleSignInResponse: "+buildid);
+            Log.e(TAG, "handleSignInResponse: "+thismobileuid);
+
+            Map<String,Object> mm=new HashMap<>();
+            mm.put("flats", FieldValue.arrayUnion(thismobileuid)); //for insert array union
+            mm.put("vehicles", FieldValue.arrayUnion(thismobileuid));
+            mm.put("whitelists", FieldValue.arrayUnion(thismobileuid));
+
+            firebaseFirestore.collection("buildingChanges").document(buildid)
+                    .update(mm).addOnSuccessListener(new OnSuccessListener<Void>() {
+                @Override
+                public void onSuccess(Void aVoid) {
+                    Toast.makeText(context, "updated", Toast.LENGTH_SHORT).show();
+                }
+            });*/
+
+
         } else {
             if (response == null) {
                 showSnackbar(R.string.sign_in_cancelled);

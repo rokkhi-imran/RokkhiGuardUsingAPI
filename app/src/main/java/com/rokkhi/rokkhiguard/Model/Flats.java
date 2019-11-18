@@ -2,6 +2,7 @@ package com.rokkhi.rokkhiguard.Model;
 
 import java.util.ArrayList;
 import java.util.List;
+/*
 
 public class Flats {
 
@@ -172,3 +173,4 @@ public class Flats {
         this.using = using;
     }
 }
+*/

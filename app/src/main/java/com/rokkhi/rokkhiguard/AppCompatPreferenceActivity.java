@@ -3,11 +3,13 @@ package com.rokkhi.rokkhiguard;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
+
 import androidx.annotation.LayoutRes;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.Toolbar;
+
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,14 +36,20 @@ public abstract class AppCompatPreferenceActivity extends PreferenceActivity {
         super.onPostCreate(savedInstanceState);
         getDelegate().onPostCreate(savedInstanceState);
     }
+    /*
+
 
     public ActionBar getSupportActionBar() {
         return getDelegate().getSupportActionBar();
     }
 
+*/
+
+   /*
     public void setSupportActionBar(@Nullable Toolbar toolbar) {
         getDelegate().setSupportActionBar(toolbar);
     }
+*/
 
     @Override
     public MenuInflater getMenuInflater() {

@@ -1,6 +1,7 @@
 package com.rokkhi.rokkhiguard.Model;
 
 import java.util.Date;
+/*
 
 public class ServiceTime {
 
@@ -72,3 +73,4 @@ public class ServiceTime {
         this.lastday = lastday;
     }
 }
+*/

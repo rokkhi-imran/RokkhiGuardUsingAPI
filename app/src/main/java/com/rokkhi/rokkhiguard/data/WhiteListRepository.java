@@ -46,10 +46,12 @@ public class WhiteListRepository {
 
 
 
+/*
 
     public LiveData<List<Whitelist>> getWhiteListFromPhoneAndFlatId(int flat_id , String w_phone) {
         return whitelistDatabase.whiteListDao().fetchWhiteListWithPhoneAndFlatId(flat_id , w_phone);
     }
+*/
 
 
     public LiveData<List<Whitelist>> getAllWhiteList() {

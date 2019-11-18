@@ -29,6 +29,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -42,6 +43,7 @@ import com.rokkhi.rokkhiguard.data.FlatsRepository;
 import com.rokkhi.rokkhiguard.data.VehiclesRepository;
 import com.rokkhi.rokkhiguard.data.WhiteListRepository;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -127,6 +129,7 @@ public class MainPage extends AppCompatActivity {
         logout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 Intent intent = new Intent(context, DaroanPass.class);
                 startActivity(intent);
                 finish();

@@ -2,6 +2,7 @@ package com.rokkhi.rokkhiguard.Model;
 
 import java.util.ArrayList;
 import java.util.List;
+/*
 
 public class Active_Community {
 
@@ -74,3 +75,4 @@ public class Active_Community {
         this.address = address;
     }
 }
+*/

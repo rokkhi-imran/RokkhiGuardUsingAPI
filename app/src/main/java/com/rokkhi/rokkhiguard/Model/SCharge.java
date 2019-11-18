@@ -1,6 +1,7 @@
 package com.rokkhi.rokkhiguard.Model;
 
 import java.util.Date;
+/*
 
 public class SCharge {
 
@@ -113,3 +114,4 @@ public class SCharge {
         this.which_month = which_month;
     }
 }
+*/

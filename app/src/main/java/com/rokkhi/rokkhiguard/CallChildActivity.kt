@@ -3,6 +3,7 @@ package com.rokkhi.rokkhiguard
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 
+/*
 class CallChildActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -10,3 +11,4 @@ class CallChildActivity : AppCompatActivity() {
         setContentView(R.layout.activity_call_child)
     }
 }
+*/

@@ -2,6 +2,7 @@ package com.rokkhi.rokkhiguard;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -9,6 +10,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.preference.PreferenceManager;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -80,19 +82,17 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class CreateProfile extends AppCompatActivity implements ActiveFlatAdapter.MyInterface, IPickResult {
 
+    private static final String TAG = "CreateProfile";
     CircleImageView userphoto;
     ArrayList<Types> types;
     ArrayList<ActiveFlats> activeFlats;
-    EditText username, phone, type, flats,pins;
-    Button done,generate;
+    EditText username, phone, type, flats, pins;
+    Button done, generate;
     Map<String, Object> doc, shistory;
     String mFileUri = "";
     Context context;
     FirebaseFirestore firebaseFirestore;
-    private Bitmap bitmap = null;
     FirebaseUser firebaseUser;
-    private static final String TAG = "CreateProfile";
-    private long mLastClickTime = 0;
     SharedPreferences.Editor editor;
     SharedPreferences sharedPref;
     ProgressBar progressBar;
@@ -107,20 +107,20 @@ public class CreateProfile extends AppCompatActivity implements ActiveFlatAdapte
     boolean flag;
     List<Swroker> list;
     String buildid, commid = "";
-     Swroker swroker=null;
-
+    Swroker swroker = null;
     String thismobileuid;
     FlatsRepository flatsRepository;
     WhiteListRepository whiteListRepository;
-
     ArrayList<String> wflats;
     ArrayList<Whitelist> whitelists;
-//    ArrayList<ActiveFlats> allflats;
-
-
-
-
     int mPosition = -1;
+    Dialog mdialog;
+    //    ArrayList<ActiveFlats> allflats;
+    private Bitmap bitmap = null;
+    private long mLastClickTime = 0;
+
+
+    //add onstart method and check  data
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -135,24 +135,22 @@ public class CreateProfile extends AppCompatActivity implements ActiveFlatAdapte
 
         done = findViewById(R.id.done);
         username = findViewById(R.id.user_name);
-        phone = findViewById(R.id.user_mail);
+        phone = findViewById(R.id.user_Phone_ET);
         //changepic = findViewById(R.id.changeProfilePhoto);
         userphoto = findViewById(R.id.user_photo);
         progressBar = findViewById(R.id.progressBar1);
         myCalendar = Calendar.getInstance();
         type = findViewById(R.id.user_wtype);
         flats = findViewById(R.id.user_flat);
-        pins= findViewById(R.id.user_pin);
-        generate= findViewById(R.id.generatepin);
+        pins = findViewById(R.id.user_pin);
+        generate = findViewById(R.id.generatepin);
 
         //get user mobile id
         thismobileuid = FirebaseAuth.getInstance().getUid();
         flatsRepository = new FlatsRepository(this);
         whiteListRepository = new WhiteListRepository(this);
 
-        Log.d(TAG, "upload: yyyy "+normalfunc.makephone14("01703248520"));
-
-
+        Log.d(TAG, "upload: yyyy " + normalfunc.makephone14("01703248520"));
 
 
         historyFlats = new ArrayList<>();
@@ -171,7 +169,7 @@ public class CreateProfile extends AppCompatActivity implements ActiveFlatAdapte
                 types = new ArrayList<>();
                 if (task.isSuccessful() && task.getResult() != null) {
                     for (DocumentSnapshot documentSnapshot : task.getResult()) {
-                        Types types1= documentSnapshot.toObject(Types.class);
+                        Types types1 = documentSnapshot.toObject(Types.class);
 
                         types.add(types1);
                     }
@@ -182,7 +180,7 @@ public class CreateProfile extends AppCompatActivity implements ActiveFlatAdapte
         generate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String ss= normalfunc.getRandomNumberString5();
+                String ss = normalfunc.getRandomNumberString5();
                 pins.setText(ss);
             }
         });
@@ -195,8 +193,8 @@ public class CreateProfile extends AppCompatActivity implements ActiveFlatAdapte
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if(s.length()>6){
-                    String ss=s.toString().substring(6);
+                if (s.length() > 6) {
+                    String ss = s.toString().substring(6);
                     pins.setText(ss);
                 }
             }
@@ -208,9 +206,6 @@ public class CreateProfile extends AppCompatActivity implements ActiveFlatAdapte
         });
 
     }
-
-
-    //add onstart method and check  data
 
     @Override
     protected void onStart() {
@@ -254,9 +249,9 @@ public class CreateProfile extends AppCompatActivity implements ActiveFlatAdapte
             @Override
             public void onChanged(@Nullable List<Whitelist> allWhiteLists) {
                 wflats = new ArrayList<>();
-                whitelists= new ArrayList<>();
+                whitelists = new ArrayList<>();
                 for (Whitelist whiteList : allWhiteLists) {
-                    wflats.add(whiteList.getW_phone()+whiteList.getFlat_id());
+                    wflats.add(whiteList.getW_phone() + whiteList.getFlat_id());
                     whitelists.add(whiteList);
                     Log.d("room", "found a new WhiteList   " + whiteList.getF_no() + "  -- > " + whiteList.getFlat_id());
                 }
@@ -268,7 +263,6 @@ public class CreateProfile extends AppCompatActivity implements ActiveFlatAdapte
     }
 
     public void addallflats() {
-
 
 
         //getting the data from repository example
@@ -287,9 +281,7 @@ public class CreateProfile extends AppCompatActivity implements ActiveFlatAdapte
 
     }
 
-
     public void getAllActiveFlatsAndSaveToLocalDatabase(final BuildingChanges buildingChanges) {
-
 
 
         // allActiveFlats = new ArrayList<>();
@@ -330,7 +322,6 @@ public class CreateProfile extends AppCompatActivity implements ActiveFlatAdapte
             }
         });
     }
-
 
     public void getAllWhiteListAndSaveToLocalDatabase(final BuildingChanges buildingChanges) {
         //allWhiteLists = new ArrayList<>();
@@ -375,11 +366,6 @@ public class CreateProfile extends AppCompatActivity implements ActiveFlatAdapte
         });
 
     }
-
-
-
-
-    Dialog mdialog;
 
     public void initdialog() {
         mdialog = new Dialog(this);
@@ -435,7 +421,7 @@ public class CreateProfile extends AppCompatActivity implements ActiveFlatAdapte
         selectbutton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                for(int i=0;i<activeFlats.size();i++){
+                for (int i = 0; i < activeFlats.size(); i++) {
 //                    view.setBackground(ContextCompat.getDrawable(context, R.color.orange_light));
                     activeFlatAdapter.changedata(activeFlats.get(i).getF_no(), true);
                     activeFlatAdapter.notifyDataSetChanged();
@@ -451,7 +437,7 @@ public class CreateProfile extends AppCompatActivity implements ActiveFlatAdapte
         unselectbutton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                for(int i=0;i<activeFlats.size();i++){
+                for (int i = 0; i < activeFlats.size(); i++) {
 //                    view.setBackground(ContextCompat.getDrawable(context, R.color.orange_light));
                     activeFlatAdapter.changedata(activeFlats.get(i).getF_no(), false);
                     activeFlatAdapter.notifyDataSetChanged();
@@ -583,9 +569,9 @@ public class CreateProfile extends AppCompatActivity implements ActiveFlatAdapte
                 if (s.length() == 11 && !flag) {
                     String pp = s.toString();
                     flag = true;
-                    pp=normalfunc.makephone14(pp);
+                    pp = normalfunc.makephone14(pp);
 
-                    firebaseFirestore.collection(getString(R.string.col_sworker)).whereEqualTo("s_phone",pp).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    firebaseFirestore.collection(getString(R.string.col_sworker)).whereEqualTo("s_phone", pp).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                         @Override
                         public void onComplete(@NonNull Task<QuerySnapshot> task) {
                             list = new ArrayList<>();
@@ -594,17 +580,17 @@ public class CreateProfile extends AppCompatActivity implements ActiveFlatAdapte
                                 list.add(swroker);
                             }
 
-                            if(list.size()>0){
+                            if (list.size() > 0) {
                                 alertDialog = new AlertDialog.Builder(context).create();
                                 alertDialog.setCancelable(false);
                                 LayoutInflater inflater = getLayoutInflater();
                                 View convertView = (View) inflater.inflate(R.layout.item_person_profile, null);
-                                TextView name= convertView.findViewById(R.id.name);
-                                TextView gatepass = convertView.findViewById(R.id.pass);
-                                CircleImageView pic= convertView.findViewById(R.id.propic);
-                                Button cancel= convertView.findViewById(R.id.cancel);
-                                Button edit= convertView.findViewById(R.id.edit);
-                                TextView cc= convertView.findViewById(R.id.cc);
+                                final TextView name = convertView.findViewById(R.id.name);
+                                final TextView gatepass = convertView.findViewById(R.id.pass);
+                                CircleImageView pic = convertView.findViewById(R.id.propic);
+                                Button cancel = convertView.findViewById(R.id.cancel);
+                                Button edit = convertView.findViewById(R.id.edit);
+                                TextView cc = convertView.findViewById(R.id.cc);
 //                                cc.setVisibility(View.GONE);
                                 cancel.setOnClickListener(new View.OnClickListener() {
                                     @Override
@@ -615,12 +601,51 @@ public class CreateProfile extends AppCompatActivity implements ActiveFlatAdapte
                                 edit.setOnClickListener(new View.OnClickListener() {
                                     @Override
                                     public void onClick(View v) {
+                                        Toast.makeText(context, "edit Profile", Toast.LENGTH_SHORT).show();
+
+                                        Log.e(TAG, "onClick: " + list.get(0).getS_id());
+                                        Log.e(TAG, "onClick: " + list.get(0).getWho_add());
+
+                                        startActivity(new Intent(CreateProfile.this, EditVisitorProfileActivity.class)
+                                                .putExtra("s_id", list.get(0).getS_id())
+                                                .putExtra("who_add", list.get(0).getWho_add())
+                                                .putExtra("name", list.get(0).getS_name())
+                                                .putExtra("", list.get(0).getS_phone())
+                                        );
+
+
+                                        alertDialog.dismiss();
+/*
+                                        swroker=new Swroker();
+
+                                        Log.e(TAG, "onClick: "+list.get(0).getS_pic());
+                                        Log.e(TAG, "onClick: "+list.get(0).getS_name());
+                                        Log.e(TAG, "onClick: "+list.get(0).getS_mail());
+                                        Log.e(TAG, "onClick: "+list.get(0).getS_id());
+                                        Log.e(TAG, "onClick: "+list.get(0).getNid());
+                                        Log.e(TAG, "onClick: "+list.get(0).getS_pass());
+                                        Log.e(TAG, "onClick: "+list.get(0).getS_phone());
+                                        Log.e(TAG, "onClick: "+list.get(0).getThumb_s_pic());
+                                        Log.e(TAG, "onClick: "+list.get(0).getType());
+                                        Log.e(TAG, "onClick: "+list.get(0).getWho_add());
+                                        Log.e(TAG, "onClick: "+list.get(0).getWho_add());
+
+//                                        EditText username, phone, type, flats, pins;
+                                        UniversalImageLoader.setImage(list.get(0).getS_pic(), userphoto, null, "");
+                                        phone.setText(list.get(0).getS_phone());
+                                        pins.setText(list.get(0).getS_pass());
+                                        username.setText(list.get(0).getS_name());
+                                        type.setText(list.get(0).getType());
+
+//                                        flats.setText(list.get(0));
+
+                                        alertDialog.dismiss();*/
 
                                     }
                                 });
 
                                 name.setText(list.get(0).getS_name());
-                                gatepass.setText("Gatepass: "+ list.get(0).getS_pass());
+                                gatepass.setText("Gatepass: " + list.get(0).getS_pass());
                                 UniversalImageLoader.setImage(list.get(0).getThumb_s_pic(), pic, null, "");
 
                                 alertDialog.setView(convertView);
@@ -733,11 +758,9 @@ public class CreateProfile extends AppCompatActivity implements ActiveFlatAdapte
                     if (firebaseUser == null) return;
                     initdialog();
                     showdialog();
-                    // progressBar.setVisibility(View.VISIBLE);
-                    if(swroker==null )upload();
-                    else{
 
-                    }
+                    upload();
+
                 }
 
 
@@ -761,13 +784,11 @@ public class CreateProfile extends AppCompatActivity implements ActiveFlatAdapte
     public void upload() {
 
 
-
-
         List<String> ll = normalfunc.splitstring(username.getText().toString());
         ll.add(normalfunc.makephone11(phone.getText().toString()));
         ll.add(normalfunc.makephone14(phone.getText().toString()));
         ll.addAll(normalfunc.splitchar(typeselected.getEnglish().toLowerCase()));
-        final List<String> ll1= ll;
+        final List<String> ll1 = ll;
 //        ll.add(mail.getText().toString().toLowerCase());
 
 
@@ -791,7 +812,6 @@ public class CreateProfile extends AppCompatActivity implements ActiveFlatAdapte
         doc.put("s_pass", pins.getText().toString());
         doc.put("address", new ArrayList<>());
         doc.put("s_array", ll);
-
 
 
         photoRef = FirebaseStorage.getInstance().getReference()
@@ -818,7 +838,7 @@ public class CreateProfile extends AppCompatActivity implements ActiveFlatAdapte
                             photoRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                                 @Override
                                 public void onSuccess(Uri uri) {
-                                    String picurl=uri.toString();
+                                    String picurl = uri.toString();
                                     doc.put("s_pic", picurl);
                                     doc.put("thumb_s_pic", picurl);
 
@@ -832,11 +852,11 @@ public class CreateProfile extends AppCompatActivity implements ActiveFlatAdapte
 
                                     batch.set(setsworker, doc);
 
-                                    if(typeselected.getEnglish().equals("guard")){
+                                    if (typeselected.getEnglish().equals("guard")) {
 
-                                        final Guards guards= new Guards(buildid,commid,username.getText().toString()
-                                                ,normalfunc.getRandomNumberString5(),"",Calendar.getInstance().getTime(),normalfunc.futuredate(),"",picurl,"",picurl,
-                                              normalfunc.makephone14(phone.getText().toString())   ,s_id,ll1);
+                                        final Guards guards = new Guards(buildid, commid, username.getText().toString()
+                                                , normalfunc.getRandomNumberString5(), "", Calendar.getInstance().getTime(), normalfunc.futuredate(), "", picurl, "", picurl,
+                                                normalfunc.makephone14(phone.getText().toString()), s_id, ll1);
                                         DocumentReference setguard = firebaseFirestore.collection(getString(R.string.col_guards))
                                                 .document(s_id);
 
@@ -844,15 +864,15 @@ public class CreateProfile extends AppCompatActivity implements ActiveFlatAdapte
 
                                     }
 
-                                    ArrayList<String>stringid= new ArrayList<>();
-                                    ArrayList<String>stringno= new ArrayList<>();
+                                    ArrayList<String> stringid = new ArrayList<>();
+                                    ArrayList<String> stringno = new ArrayList<>();
 
                                     for (int i = 0; i < historyFlats.size(); i++) {
                                         stringid.add(historyFlats.get(i).getFlat_id());
                                         stringno.add(historyFlats.get(i).getF_no());
                                     }
 
-                                    SLastHistory sLastHistory = new SLastHistory(s_id,buildid ,stringid,stringno,Calendar.getInstance().getTime());
+                                    SLastHistory sLastHistory = new SLastHistory(s_id, buildid, stringid, stringno, Calendar.getInstance().getTime());
                                     DocumentReference setflat = firebaseFirestore.collection(getString(R.string.col_sworker))
                                             .document(s_id).collection("shistory").document(buildid);
 
@@ -900,11 +920,11 @@ public class CreateProfile extends AppCompatActivity implements ActiveFlatAdapte
 
             batch.set(setsworker, doc);
 
-            if(typeselected.getEnglish().equals("guard")){
+            if (typeselected.getEnglish().equals("guard")) {
 
-                final Guards guards= new Guards(buildid,commid,username.getText().toString()
-                        ,normalfunc.getRandomNumberString5(),"",Calendar.getInstance().getTime(),normalfunc.futuredate(),"","","","",
-                        normalfunc.makephone14(phone.getText().toString())  ,s_id,ll1);
+                final Guards guards = new Guards(buildid, commid, username.getText().toString()
+                        , normalfunc.getRandomNumberString5(), "", Calendar.getInstance().getTime(), normalfunc.futuredate(), "", "", "", "",
+                        normalfunc.makephone14(phone.getText().toString()), s_id, ll1);
                 DocumentReference setguard = firebaseFirestore.collection(getString(R.string.col_guards))
                         .document(s_id);
 
@@ -912,15 +932,15 @@ public class CreateProfile extends AppCompatActivity implements ActiveFlatAdapte
 
             }
 
-            ArrayList<String>stringid= new ArrayList<>();
-            ArrayList<String>stringno= new ArrayList<>();
+            ArrayList<String> stringid = new ArrayList<>();
+            ArrayList<String> stringno = new ArrayList<>();
 
             for (int i = 0; i < historyFlats.size(); i++) {
                 stringid.add(historyFlats.get(i).getFlat_id());
                 stringno.add(historyFlats.get(i).getF_no());
             }
 
-            SLastHistory sLastHistory = new SLastHistory(s_id,buildid ,stringid,stringno,Calendar.getInstance().getTime());
+            SLastHistory sLastHistory = new SLastHistory(s_id, buildid, stringid, stringno, Calendar.getInstance().getTime());
             DocumentReference setflat = firebaseFirestore.collection(getString(R.string.col_sworker))
                     .document(s_id).collection("shistory").document(buildid);
 

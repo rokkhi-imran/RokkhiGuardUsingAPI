@@ -83,7 +83,7 @@
 
 
         <LinearLayout
-            android:id="@+id/relmail"
+            android:id="@+id/relPhone"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/prorel"
@@ -101,7 +101,7 @@
                 android:textSize="22sp" />
 
             <EditText
-                android:id="@+id/user_mail"
+                android:id="@+id/user_Phone_ET"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:paddingStart="10dp"
@@ -116,7 +116,7 @@
             android:id="@+id/relpin"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/relmail"
+            android:layout_below="@+id/relPhone"
             android:layout_marginTop="30dp"
 
             android:orientation="vertical">
