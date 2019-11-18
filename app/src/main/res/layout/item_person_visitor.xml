@@ -6,20 +6,6 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content" >
 
-    <TextView
-        android:id="@+id/cc"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:text=" প্রোফাইল টি তৈরি করা আছে !"
-        android:textColor="@color/green"
-        android:visibility="visible"
-        android:textStyle="bold"
-        android:textSize="20sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
 
     <RelativeLayout
         android:id="@+id/relativeLayout"
@@ -27,11 +13,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="16dp"
         android:layout_marginEnd="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cc">
+        app:layout_constraintTop_toTopOf="parent">
 
 
         <de.hdodenhof.circleimageview.CircleImageView
@@ -51,20 +36,10 @@
             android:layout_marginTop="15dp"
             android:layout_toEndOf="@+id/propic"
             android:text="name"
+            android:layout_centerVertical="true"
             android:textColor="@color/black"
             android:textSize="20sp" />
 
-        <TextView
-            android:id="@+id/pass"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/name"
-            android:layout_marginStart="28dp"
-            android:layout_marginTop="4dp"
-            android:layout_toEndOf="@+id/propic"
-            android:text=" গেটপাস : 12345"
-            android:textColor="@color/orange"
-            android:textStyle="bold" />
     </RelativeLayout>
 
 
@@ -74,7 +49,7 @@
         android:layout_height="50dp"
         android:layout_margin="10dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="40dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="24dp"
         android:background="@drawable/less_round_button_red"

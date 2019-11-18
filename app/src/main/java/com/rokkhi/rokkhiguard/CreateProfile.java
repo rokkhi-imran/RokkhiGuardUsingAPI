@@ -107,6 +107,7 @@ public class CreateProfile extends AppCompatActivity implements ActiveFlatAdapte
     boolean flag;
     List<Swroker> list;
     String buildid, commid = "";
+     Swroker swroker=null;
 
     String thismobileuid;
     FlatsRepository flatsRepository;
@@ -597,17 +598,24 @@ public class CreateProfile extends AppCompatActivity implements ActiveFlatAdapte
                                 alertDialog = new AlertDialog.Builder(context).create();
                                 alertDialog.setCancelable(false);
                                 LayoutInflater inflater = getLayoutInflater();
-                                View convertView = (View) inflater.inflate(R.layout.item_person, null);
+                                View convertView = (View) inflater.inflate(R.layout.item_person_profile, null);
                                 TextView name= convertView.findViewById(R.id.name);
                                 TextView gatepass = convertView.findViewById(R.id.pass);
                                 CircleImageView pic= convertView.findViewById(R.id.propic);
                                 Button cancel= convertView.findViewById(R.id.cancel);
+                                Button edit= convertView.findViewById(R.id.edit);
                                 TextView cc= convertView.findViewById(R.id.cc);
-                                cc.setVisibility(View.GONE);
+//                                cc.setVisibility(View.GONE);
                                 cancel.setOnClickListener(new View.OnClickListener() {
                                     @Override
                                     public void onClick(View v) {
                                         finish();
+                                    }
+                                });
+                                edit.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+
                                     }
                                 });
 
@@ -726,7 +734,10 @@ public class CreateProfile extends AppCompatActivity implements ActiveFlatAdapte
                     initdialog();
                     showdialog();
                     // progressBar.setVisibility(View.VISIBLE);
-                    upload();
+                    if(swroker==null )upload();
+                    else{
+
+                    }
                 }
 
 
