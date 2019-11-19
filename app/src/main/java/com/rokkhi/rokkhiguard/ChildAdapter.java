@@ -1,12 +1,15 @@
 package com.rokkhi.rokkhiguard;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.RecyclerView;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,8 +17,11 @@ import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.rokkhi.callerapp.CallActivity;
+import com.rokkhi.rokkhiguard.CallerApp.MainActivity;
 import com.rokkhi.rokkhiguard.Model.Child;
 import com.rokkhi.rokkhiguard.Utils.UniversalImageLoader;
 
@@ -27,28 +33,16 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class ChildAdapter extends RecyclerView.Adapter<ChildAdapter.ChildViewHolder> implements Filterable {
 
 
+    private static final String TAG = "ChildAdapter";
+    public ArrayList<Child> list;
     AlertDialog alertDialog, alertDialog2;
-
-    public interface MyInterface {
-        public void callparents(String number);
-    }
-
+    SharedPreferences sharedPref;
     private MyInterface myInterface;
     private ArrayList<Child> mchildFilterList;
-
     private LayoutInflater mInflater;
-
     private ValueFilter valueFilter;
-
-
-
-    public ArrayList<Child> list;
-    private static final String TAG = "ChildAdapter";
-    SharedPreferences sharedPref;
-
     private Context context;
     private FirebaseFirestore firebaseFirestore;
-
     ChildAdapter(ArrayList<Child> list, Context context) {
         this.list = list;
         mchildFilterList = list;
@@ -74,7 +68,6 @@ public class ChildAdapter extends RecyclerView.Adapter<ChildAdapter.ChildViewHol
         return valueFilter;
     }
 
-
     @NonNull
     @Override
     public ChildViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -92,13 +85,12 @@ public class ChildAdapter extends RecyclerView.Adapter<ChildAdapter.ChildViewHol
 
         final Child child = list.get(position);
         holder.name.setText(child.getM_name());
-        holder.flat.setText("Flat:  "+  child.getF_no());
+        holder.flat.setText("Flat:  " + child.getF_no());
         UniversalImageLoader.setImage(child.getThumb_m_pic(), holder.propic, null, "");
-        if(child.isActivated()){
+        if (child.isActivated()) {
             holder.active.setText("ACTIVE");
             holder.active.setTextColor(ContextCompat.getColor(context, R.color.green));
-        }
-        else{
+        } else {
             holder.active.setText("NOT ACTIVE");
             holder.active.setTextColor(ContextCompat.getColor(context, R.color.darkRed));
         }
@@ -106,22 +98,21 @@ public class ChildAdapter extends RecyclerView.Adapter<ChildAdapter.ChildViewHol
             @Override
             public void onClick(View view) {
 
-                myInterface.callparents(child.getPhoneno());
+//make phone call
+                view.getContext().startActivity(new Intent(view.getContext(), MainActivity.class)
+                .putExtra("phoneNumber",child.getPhoneno()));
+//                myInterface.callparents(child.getPhoneno());
 
             }
         });
 
 
-
     }
-
-
 
     @Override
     public int getItemCount() {
         return list.size();
     }
-
 
     @Override
     public long getItemId(int position) {
@@ -133,13 +124,17 @@ public class ChildAdapter extends RecyclerView.Adapter<ChildAdapter.ChildViewHol
         return position;
     }
 
+    public interface MyInterface {
+        public void callparents(String number);
+    }
+
     public class ChildViewHolder extends RecyclerView.ViewHolder {
         public View view;
         TextView name;
         TextView active, flat;
         CircleImageView propic;
         ImageView call;
-        String phoneno="";
+        String phoneno = "";
 
         ChildViewHolder(View itemView) {
             super(itemView);

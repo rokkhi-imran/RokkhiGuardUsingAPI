@@ -40,6 +40,8 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
+
         </activity>
         <activity android:name=".MainPage" />
         <activity
@@ -98,6 +100,50 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/picker_provider_paths" />
         </provider>
+<!--phone call-->
+
+        <activity android:name="com.rokkhi.callerapp.CallActivity"/>
+        <activity android:name=".CallerApp.MainActivity">
+            <!--call app-->
+            <intent-filter>
+
+                <!-- Handle links from other applications -->
+
+                <action android:name="android.intent.action.VIEW" />
+                <action android:name="android.intent.action.DIAL" />
+                <!-- Populate the system chooser -->
+                <category android:name="android.intent.category.DEFAULT" />
+                <!-- Handle links in browsers -->
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="tel" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.DIAL" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+
+            <!--call app End-->
+        </activity>
+
+
+        <service
+            android:name="com.rokkhi.callerapp.CallService"
+            android:permission="android.permission.BIND_INCALL_SERVICE"
+            >
+            <meta-data
+                android:name="android.telecom.IN_CALL_SERVICE_UI"
+                android:value="true"
+                />
+            <intent-filter>
+                <action android:name="android.telecom.InCallService" />
+            </intent-filter>
+        </service>
+        <!--phone call End-->
+
+
+
     </application>
 
 </manifest>
