@@ -806,7 +806,7 @@ public class CreateProfile extends AppCompatActivity implements ActiveFlatAdapte
         doc.put("starttime", 0);
         doc.put("endtime", 0);
         doc.put("nid", "");
-        doc.put("type", typeselected.getEnglish());//
+        doc.put("type", typeselected.getType_id());//
         doc.put("who_add", firebaseUser.getUid());
         doc.put("when_add", FieldValue.serverTimestamp());
         //when_updated and who_updated

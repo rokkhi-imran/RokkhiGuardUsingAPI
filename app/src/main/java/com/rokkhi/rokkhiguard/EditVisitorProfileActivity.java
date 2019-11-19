@@ -4,10 +4,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Bitmap;
-import android.net.Uri;
 import android.os.Bundle;
-import android.os.SystemClock;
 import android.preference.PreferenceManager;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -26,36 +23,26 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
 
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.SetOptions;
 import com.google.firebase.firestore.WriteBatch;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.UploadTask;
 import com.rokkhi.rokkhiguard.Model.ActiveFlats;
 import com.rokkhi.rokkhiguard.Model.Guards;
 import com.rokkhi.rokkhiguard.Model.SLastHistory;
 import com.rokkhi.rokkhiguard.Model.Swroker;
 import com.rokkhi.rokkhiguard.Model.Types;
 import com.rokkhi.rokkhiguard.Utils.Normalfunc;
-import com.rokkhi.rokkhiguard.Utils.UniversalImageLoader;
 
-import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -96,14 +83,14 @@ public class EditVisitorProfileActivity extends AppCompatActivity implements Vie
         intent = getIntent();
         sID = intent.getStringExtra("s_id");
         normalfunc = new Normalfunc();
-        Log.e("TAG", "onCreate: "+sID );
+        Log.e("TAG", "onCreate: " + sID);
 
 
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
         buildid = sharedPref.getString("buildid", "none");
         commid = sharedPref.getString("commid", "none");
 
-        getUserData(sID);
+        loadUserData(sID);
         getFlatList(sID);
 
         //load Flat
@@ -125,11 +112,11 @@ public class EditVisitorProfileActivity extends AppCompatActivity implements Vie
 
                         types.add(types1);
                     }
-                    
+
                     userWtype.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                        addalltypes();
+                            showAlltypes();
                         }
                     });
                 }
@@ -352,7 +339,7 @@ public class EditVisitorProfileActivity extends AppCompatActivity implements Vie
         });
     }
 
-    private void getUserData(final String sID) {
+    private void loadUserData(final String sID) {
 
         final ProgressDialog progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("Executing Action.....");
@@ -369,8 +356,24 @@ public class EditVisitorProfileActivity extends AppCompatActivity implements Vie
                 userPhoneTV.setText(normalfunc.getNumberWithoutCountryCode(swroker.getS_phone()));
                 userPin.setText(swroker.getS_pass());
                 userName.setText(swroker.getS_name());
-                userWtype.setText(swroker.getType());
+                final String typeID = swroker.getType();
 
+
+                firebaseFirestore.collection("stype")
+                        .whereEqualTo("type_id", typeID).get()
+                        .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+
+                                for (DocumentSnapshot documentSnapshot : task.getResult()) {
+                                    Types types = documentSnapshot.toObject(Types.class);
+                                    userWtype.setText(types.getBangla());
+                                }
+                            }
+                        });
+
+
+//                userWtype.setText(swroker.getType());
 
 
                 progressDialog.dismiss();
@@ -392,13 +395,13 @@ public class EditVisitorProfileActivity extends AppCompatActivity implements Vie
         }
         /*if (view.getId() == R.id.user_wtype) {
             Toast.makeText(context, "user Type", Toast.LENGTH_SHORT).show();
-            addalltypes();
+            showAlltypes();
         }*/
     }
 
     //show dialog for select user type
 
-    public void addalltypes() {
+    public void showAlltypes() {
 
         final TypesAdapter valueAdapter = new TypesAdapter(types, context);
         final AlertDialog alertcompany = new AlertDialog.Builder(context).create();
@@ -447,6 +450,7 @@ public class EditVisitorProfileActivity extends AppCompatActivity implements Vie
                 alertcompany.dismiss();
             }
         });
+
     }    //show dialog for user type END
 
 
@@ -483,11 +487,6 @@ public class EditVisitorProfileActivity extends AppCompatActivity implements Vie
             return;
 
         }
-        if (typetext.isEmpty()){
-            userWtype.setError(getString(R.string.error_field_required));
-            userWtype.requestFocus();
-            return;
-        }
 
 
         List<String> ll = normalfunc.splitstring(userName.getText().toString());
@@ -500,8 +499,14 @@ public class EditVisitorProfileActivity extends AppCompatActivity implements Vie
         Map<String, Object> doc = new HashMap<>();
 
         doc.put("s_name", userName.getText().toString());
-        doc.put("type", typeselected.getEnglish());
-        doc.put("s_pass", userPin.getText().toString());
+        if (typeselected.getType_id()=="none"){
+            doc.put("type", swroker.getType());
+
+        }else {
+            doc.put("type", typeselected.getType_id());
+
+        }
+         doc.put("s_pass", userPin.getText().toString());
         doc.put("s_array", ll);
 
         WriteBatch batch = firebaseFirestore.batch();
@@ -519,10 +524,10 @@ public class EditVisitorProfileActivity extends AppCompatActivity implements Vie
                     , normalfunc.getRandomNumberString5(), "", Calendar.getInstance().getTime(), normalfunc.futuredate(), "", "", "", "",
                     normalfunc.makephone14(userPhoneTV.getText().toString()), sID, ll1);
             Log.e("TAG", "upload: " + guards);
-             DocumentReference setguard = firebaseFirestore.collection(getString(R.string.col_guards))
+            DocumentReference setguard = firebaseFirestore.collection(getString(R.string.col_guards))
                     .document(sID);
 
-            batch.set(setguard, guards,SetOptions.merge());
+            batch.set(setguard, guards, SetOptions.merge());
         }
 
         ArrayList<String> stringid = new ArrayList<>();
@@ -537,7 +542,7 @@ public class EditVisitorProfileActivity extends AppCompatActivity implements Vie
         DocumentReference setflat = firebaseFirestore.collection(getString(R.string.col_sworker))
                 .document(sID).collection("shistory").document(buildid);
 
-        batch.set(setflat, sLastHistory,SetOptions.merge());
+        batch.set(setflat, sLastHistory, SetOptions.merge());
         Log.e("TAG", "upload: " + sLastHistory);
 
 
@@ -553,8 +558,8 @@ public class EditVisitorProfileActivity extends AppCompatActivity implements Vie
                     userPhoneTV.setText("");
                     userFlat.setText("");
                     userWtype.setText("");
-                    startActivity(new Intent(EditVisitorProfileActivity.this,MainPage.class)
-                    .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                    startActivity(new Intent(EditVisitorProfileActivity.this, MainPage.class)
+                            .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
 //                    UniversalImageLoader.setImage("", , null, "");
                 }
             }
