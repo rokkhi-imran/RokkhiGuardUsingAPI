@@ -248,4 +248,23 @@ public class Normalfunc {
         return phoneno;
     }*/
 
+
+
+    //get Number Without Country Code
+    public String getNumberWithoutCountryCode(String st) {
+        String number = "";
+        if (st.charAt(0) == '+' && st.charAt(1) == '8' && st.charAt(2) == '8') {
+
+            for (int i = 3; i < st.length(); i++) {
+                number += st.charAt(i);
+            }
+        } else {
+            number = st;
+        }
+
+
+        return number;
+    }
+
+
 }

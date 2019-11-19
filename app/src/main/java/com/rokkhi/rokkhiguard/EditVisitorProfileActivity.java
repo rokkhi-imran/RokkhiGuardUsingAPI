@@ -19,6 +19,7 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.GridView;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -39,6 +40,7 @@ import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.SetOptions;
 import com.google.firebase.firestore.WriteBatch;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.UploadTask;
@@ -74,21 +76,27 @@ public class EditVisitorProfileActivity extends AppCompatActivity implements Vie
     Swroker swroker;
     String buildid = "";
     String commid = "";
-    String total="";
+    String total = "";
+    Normalfunc normalfunc;
 
     ArrayList<ActiveFlats> allflats;
     ArrayList<String> historyflatno;
     ArrayList<String> historyflatId;
+    ArrayList<Types> types;
+
+    Types typeselected;
+    String flatName = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         super.setContentView(R.layout.activity_edit_visitor_profile);
         initView();
-        context= EditVisitorProfileActivity.this;
+        context = EditVisitorProfileActivity.this;
         intent = getIntent();
         sID = intent.getStringExtra("s_id");
-
+        normalfunc = new Normalfunc();
+        Log.e("TAG", "onCreate: "+sID );
 
 
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
@@ -100,20 +108,47 @@ public class EditVisitorProfileActivity extends AppCompatActivity implements Vie
 
         //load Flat
         loadFlat();
+
+        //get all user Type
+        getAlluserType();
+    }
+
+    private void getAlluserType() {
+
+        firebaseFirestore.collection("stype").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                types = new ArrayList<>();
+                if (task.isSuccessful() && task.getResult() != null) {
+                    for (DocumentSnapshot documentSnapshot : task.getResult()) {
+                        Types types1 = documentSnapshot.toObject(Types.class);
+
+                        types.add(types1);
+                    }
+                    
+                    userWtype.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                        addalltypes();
+                        }
+                    });
+                }
+            }
+        });
     }
 
     private void loadFlat() {
 
-        firebaseFirestore.collection(getString(R.string.col_activeflat)).whereEqualTo("build_id",buildid).
+        firebaseFirestore.collection(getString(R.string.col_activeflat)).whereEqualTo("build_id", buildid).
                 orderBy("f_no", Query.Direction.ASCENDING)
                 .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if(task.isSuccessful()){
+                if (task.isSuccessful()) {
                     allflats.clear();
-                    for(DocumentSnapshot documentSnapshot: task.getResult()){
+                    for (DocumentSnapshot documentSnapshot : task.getResult()) {
 
-                        ActiveFlats activeFlat= documentSnapshot.toObject(ActiveFlats.class);
+                        ActiveFlats activeFlat = documentSnapshot.toObject(ActiveFlats.class);
                         allflats.add(activeFlat);
                     }
                 }
@@ -121,8 +156,6 @@ public class EditVisitorProfileActivity extends AppCompatActivity implements Vie
         });
 
     }
-
- 
 
     public void addallflats() {
 
@@ -165,16 +198,16 @@ public class EditVisitorProfileActivity extends AppCompatActivity implements Vie
         selectbutton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                flatName="";
+                flatName = "";
                 historyflatId.clear();
                 historyflatno.clear();
-                for(int i=0;i<allflats.size();i++){
+                for (int i = 0; i < allflats.size(); i++) {
                     activeFlatAdapter.changedata(allflats.get(i).getF_no(), true);
 
                     historyflatId.add(allflats.get(i).getFlat_id());
                     historyflatno.add(allflats.get(i).getF_no());
 
-                    flatName=  flatName+" "+allflats.get(i).getF_no();
+                    flatName = flatName + " " + allflats.get(i).getF_no();
 //                    Log.e(TAG, "onClick: "+flatName.length() );
                     tt.setText(flatName);
 
@@ -192,11 +225,11 @@ public class EditVisitorProfileActivity extends AppCompatActivity implements Vie
             public void onClick(View v) {
 
 
-                flatName="";
+                flatName = "";
                 tt.setText("");
                 historyflatId.clear();
                 historyflatno.clear();
-                for(int i=0;i<allflats.size();i++){
+                for (int i = 0; i < allflats.size(); i++) {
                     activeFlatAdapter.changedata(allflats.get(i).getF_no(), false);
                     activeFlatAdapter.notifyDataSetChanged();
                     unselectbutton.setVisibility(View.GONE);
@@ -233,7 +266,7 @@ public class EditVisitorProfileActivity extends AppCompatActivity implements Vie
             }
         });
 
-        for(int i=0;i<historyflatno.size();i++){
+        for (int i = 0; i < historyflatno.size(); i++) {
             activeFlatAdapter.changedata(historyflatno.get(i), true);
         }
         activeFlatAdapter.notifyDataSetChanged();
@@ -257,6 +290,7 @@ public class EditVisitorProfileActivity extends AppCompatActivity implements Vie
                     activeFlatAdapter.notifyDataSetChanged();
                     historyflatId.add(ss.getFlat_id());
                     historyflatno.add(ss.getF_no());
+//                    historyFlats.add(ss);
                     flatName = flatName + " " + ss.getF_no();
                     tt.setText(flatName);
                     //
@@ -270,6 +304,8 @@ public class EditVisitorProfileActivity extends AppCompatActivity implements Vie
                     activeFlatAdapter.notifyDataSetChanged();
                     historyflatId.remove(ss.getFlat_id());
                     historyflatno.remove(ss.getF_no());
+
+//                    historyFlats.remove(ss);
                     flatName = flatName.replace(" " + ss.getF_no(), "");
                     tt.setText(flatName);
                     // activeFlatAdapter.notifyDataSetChanged();
@@ -277,7 +313,6 @@ public class EditVisitorProfileActivity extends AppCompatActivity implements Vie
             }
         });
     }
-    String flatName="";
 
     private void getFlatList(String sID) {
 
@@ -302,11 +337,11 @@ public class EditVisitorProfileActivity extends AppCompatActivity implements Vie
                         SLastHistory sLastHistory = documentSnapshot.toObject(SLastHistory.class);
 
                         historyflatno = sLastHistory.getFlatsNo();
-                        flatName="";
+                        flatName = "";
                         for (int i = 0; i < historyflatno.size(); i++) {
-                            Log.e("TAG", "onComplete: "+historyflatno.get(i));
+                            Log.e("TAG", "onComplete: " + historyflatno.get(i));
 
-                            flatName=flatName+" "+historyflatno.get(i);
+                            flatName = flatName + " " + historyflatno.get(i);
                         }
                         userFlat.setText(flatName);
 
@@ -331,10 +366,11 @@ public class EditVisitorProfileActivity extends AppCompatActivity implements Vie
 
                 swroker = documentSnapshot.toObject(Swroker.class);
 
-                userPhoneTV.setText(swroker.getS_phone());
+                userPhoneTV.setText(normalfunc.getNumberWithoutCountryCode(swroker.getS_phone()));
                 userPin.setText(swroker.getS_pass());
                 userName.setText(swroker.getS_name());
                 userWtype.setText(swroker.getType());
+
 
 
                 progressDialog.dismiss();
@@ -350,18 +386,77 @@ public class EditVisitorProfileActivity extends AppCompatActivity implements Vie
         if (view.getId() == R.id.done) {
 
 
-//            upload();
+            upload();
 
 
         }
+        /*if (view.getId() == R.id.user_wtype) {
+            Toast.makeText(context, "user Type", Toast.LENGTH_SHORT).show();
+            addalltypes();
+        }*/
     }
 
-/*
+    //show dialog for select user type
 
+    public void addalltypes() {
+
+        final TypesAdapter valueAdapter = new TypesAdapter(types, context);
+        final AlertDialog alertcompany = new AlertDialog.Builder(context).create();
+        LayoutInflater inflater = getLayoutInflater();
+        View convertView = (View) inflater.inflate(R.layout.custom_designation_list, null);
+        final EditText editText = convertView.findViewById(R.id.sear);
+
+        final ListView lv = (ListView) convertView.findViewById(R.id.listView1);
+        final Button done = convertView.findViewById(R.id.done);
+        alertcompany.setView(convertView);
+        alertcompany.setCancelable(false);
+        editText.setVisibility(View.GONE);
+        //valueAdapter.notifyDataSetChanged();
+
+        lv.setAdapter(valueAdapter);
+        alertcompany.show();
+
+        done.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //type.setText(editText.getText().toString());
+                alertcompany.dismiss();
+            }
+        });
+        editText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                valueAdapter.getFilter().filter(s);
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        });
+
+        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                typeselected = (Types) lv.getItemAtPosition(position);
+                //cname.setText(myoffice.getName());
+                userWtype.setText(typeselected.getBangla());
+                alertcompany.dismiss();
+            }
+        });
+    }    //show dialog for user type END
+
+
+    //start Upload
     public void upload() {
 
-        Types typeselected = new Types();
-        Normalfunc normalfunc = new Normalfunc();.
+        final ProgressDialog progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage("Executing Action...");
+        progressDialog.show();
+
 
         // Store values at the time of the login attempt.
         final String iname = userName.getText().toString();
@@ -369,9 +464,11 @@ public class EditVisitorProfileActivity extends AppCompatActivity implements Vie
         final String typetext = userWtype.getText().toString();
         final String pintext = userPin.getText().toString();
 
+/*
 
         boolean cancel = false;
         View focusView = null;
+*/
 
 
         if (TextUtils.isEmpty(iname)) {
@@ -383,7 +480,13 @@ public class EditVisitorProfileActivity extends AppCompatActivity implements Vie
         if (TextUtils.isEmpty(typetext)) {
             userWtype.setError(getString(R.string.error_field_required));
             userWtype.requestFocus();
+            return;
 
+        }
+        if (typetext.isEmpty()){
+            userWtype.setError(getString(R.string.error_field_required));
+            userWtype.requestFocus();
+            return;
         }
 
 
@@ -391,7 +494,8 @@ public class EditVisitorProfileActivity extends AppCompatActivity implements Vie
         ll.addAll(normalfunc.splitchar(typeselected.getEnglish().toLowerCase()));
         final List<String> ll1 = ll;
 
-        final String s_id = firebaseFirestore.collection(getString(R.string.col_sworker)).document().getId();
+//        final String s_id = firebaseFirestore.collection(getString(R.string.col_sworker)).document().getId();
+//        Log.e("TAG", "upload:S ID = "+s_id );
 
         Map<String, Object> doc = new HashMap<>();
 
@@ -402,37 +506,39 @@ public class EditVisitorProfileActivity extends AppCompatActivity implements Vie
 
         WriteBatch batch = firebaseFirestore.batch();
 
+        Log.e("TAG", "upload: " + doc);
 
         DocumentReference setsworker = firebaseFirestore.collection(getString(R.string.col_sworker))
-                .document(s_id);
+                .document(sID);
 
-        batch.set(setsworker, doc);
+        batch.set(setsworker, doc, SetOptions.merge());
 
         if (typeselected.getEnglish().equals("guard")) {
 
             final Guards guards = new Guards(buildid, commid, userName.getText().toString()
                     , normalfunc.getRandomNumberString5(), "", Calendar.getInstance().getTime(), normalfunc.futuredate(), "", "", "", "",
-                    normalfunc.makephone14(userPhoneTV.getText().toString()), s_id, ll1);
-            DocumentReference setguard = firebaseFirestore.collection(getString(R.string.col_guards))
-                    .document(s_id);
+                    normalfunc.makephone14(userPhoneTV.getText().toString()), sID, ll1);
+            Log.e("TAG", "upload: " + guards);
+             DocumentReference setguard = firebaseFirestore.collection(getString(R.string.col_guards))
+                    .document(sID);
 
-            batch.set(setguard, guards);
-
+            batch.set(setguard, guards,SetOptions.merge());
         }
 
         ArrayList<String> stringid = new ArrayList<>();
         ArrayList<String> stringno = new ArrayList<>();
 
-        for (int i = 0; i < historyFlats.size(); i++) {
-            stringid.add(historyFlats.get(i).getFlat_id());
-            stringno.add(historyFlats.get(i).getF_no());
+        for (int i = 0; i < historyflatno.size(); i++) {
+            stringid.add(allflats.get(i).getFlat_id());
+            stringno.add(allflats.get(i).getF_no());
         }
 
-        SLastHistory sLastHistory = new SLastHistory(s_id, buildid, stringid, stringno, Calendar.getInstance().getTime());
+        SLastHistory sLastHistory = new SLastHistory(sID, buildid, stringid, stringno, Calendar.getInstance().getTime());
         DocumentReference setflat = firebaseFirestore.collection(getString(R.string.col_sworker))
-                .document(s_id).collection("shistory").document(buildid);
+                .document(sID).collection("shistory").document(buildid);
 
-        batch.set(setflat, sLastHistory);
+        batch.set(setflat, sLastHistory,SetOptions.merge());
+        Log.e("TAG", "upload: " + sLastHistory);
 
 
         batch.commit().addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -440,20 +546,22 @@ public class EditVisitorProfileActivity extends AppCompatActivity implements Vie
             public void onComplete(@NonNull Task<Void> task) {
                 if (task.isSuccessful()) {
 
-                    //progressBar.setVisibility(View.GONE);
-                    dismissdialog();
+
+                    progressDialog.dismiss();
                     Toast.makeText(context, "Done!", Toast.LENGTH_SHORT).show();
-                    username.setText("");
-                    phone.setText("");
-                    flats.setText("");
-                    type.setText("");
-                    UniversalImageLoader.setImage("", userphoto, null, "");
+                    userName.setText("");
+                    userPhoneTV.setText("");
+                    userFlat.setText("");
+                    userWtype.setText("");
+                    startActivity(new Intent(EditVisitorProfileActivity.this,MainPage.class)
+                    .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
+//                    UniversalImageLoader.setImage("", , null, "");
                 }
             }
         });
 
     }
-*/
+    //upload End
 
     private void initView() {
         userPhoneTV = (TextView) findViewById(R.id.user_Phone_TV);
@@ -466,8 +574,10 @@ public class EditVisitorProfileActivity extends AppCompatActivity implements Vie
         done.setOnClickListener(EditVisitorProfileActivity.this);
         firebaseFirestore = FirebaseFirestore.getInstance();
 
-        allflats= new ArrayList<>();
-        historyflatno=new ArrayList<>();
-        historyflatId=new ArrayList<>();
+        allflats = new ArrayList<>();
+        historyflatno = new ArrayList<>();
+        historyflatId = new ArrayList<>();
+        types = new ArrayList<>();
+        typeselected = new Types();
     }
 }
