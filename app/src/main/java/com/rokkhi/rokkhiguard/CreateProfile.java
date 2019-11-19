@@ -82,6 +82,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class CreateProfile extends AppCompatActivity implements ActiveFlatAdapter.MyInterface, IPickResult {
 
+
     private static final String TAG = "CreateProfile";
     CircleImageView userphoto;
     ArrayList<Types> types;
@@ -657,7 +658,6 @@ public class CreateProfile extends AppCompatActivity implements ActiveFlatAdapte
                 } else if (s.length() != 11) flag = false;
             }
 
-
             @Override
             public void afterTextChanged(Editable s) {
 
@@ -795,23 +795,24 @@ public class CreateProfile extends AppCompatActivity implements ActiveFlatAdapte
         final String s_id = firebaseFirestore.collection(getString(R.string.col_sworker)).document().getId();
 
         doc = new HashMap<>();
-        doc.put("s_name", username.getText().toString());
+        doc.put("s_name", username.getText().toString()); //
         doc.put("s_id", s_id);
         doc.put("s_phone", normalfunc.makephone14(phone.getText().toString()));
         doc.put("s_mail", "");
-        doc.put("s_pic", "");
+        doc.put("s_pic", "");//
         doc.put("thumb_s_pic", "");
         doc.put("s_bday", futuredate());
         doc.put("experience", futuredate());
         doc.put("starttime", 0);
         doc.put("endtime", 0);
         doc.put("nid", "");
-        doc.put("type", typeselected.getEnglish());
+        doc.put("type", typeselected.getEnglish());//
         doc.put("who_add", firebaseUser.getUid());
         doc.put("when_add", FieldValue.serverTimestamp());
-        doc.put("s_pass", pins.getText().toString());
+        //when_updated and who_updated
+        doc.put("s_pass", pins.getText().toString()); //
         doc.put("address", new ArrayList<>());
-        doc.put("s_array", ll);
+        doc.put("s_array", ll); //
 
 
         photoRef = FirebaseStorage.getInstance().getReference()
