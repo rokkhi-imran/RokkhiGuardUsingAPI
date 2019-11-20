@@ -29,6 +29,8 @@ import java.util.ArrayList;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
+import static android.content.Context.MODE_PRIVATE;
+
 
 public class ChildAdapter extends RecyclerView.Adapter<ChildAdapter.ChildViewHolder> implements Filterable {
 
@@ -97,6 +99,10 @@ public class ChildAdapter extends RecyclerView.Adapter<ChildAdapter.ChildViewHol
         holder.call.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+                SharedPreferences.Editor editor = context.getSharedPreferences("FlatNumber", MODE_PRIVATE).edit();
+                editor.putString("flat", child.getF_no());
+                editor.apply();
 
 //make phone call
                 view.getContext().startActivity(new Intent(view.getContext(), MainActivity.class)

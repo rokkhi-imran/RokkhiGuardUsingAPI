@@ -40,9 +40,10 @@ class CallActivity : AppCompatActivity() {
     private lateinit var startTime: Date;
     private lateinit var endTime: Date;
     private lateinit var myPhoneNumber: String;
-    private  var isReceived: Boolean = false;
-//    var isReceived = false;
+    private var isReceived: Boolean = false;
+    private var isDial: Boolean = false;
 
+//    var isReceived = false;
 
 
     lateinit var firebaseFirestore: FirebaseFirestore
@@ -59,6 +60,7 @@ class CallActivity : AppCompatActivity() {
         val sharedPref = PreferenceManager.getDefaultSharedPreferences(this)
         buildid = sharedPref.getString("buildid", "none")
         thismobileuid = FirebaseAuth.getInstance().uid.toString()
+
         startTime = Calendar.getInstance().getTime()
 
         myPhoneNumber = FirebaseAuth.getInstance().currentUser?.phoneNumber.toString()
@@ -67,7 +69,6 @@ class CallActivity : AppCompatActivity() {
 //        commid = sharedPref.getString("commid", "none")
 
     }
-
 
 
     override fun onStart() {
@@ -103,8 +104,14 @@ class CallActivity : AppCompatActivity() {
     @SuppressLint("SetTextI18n")
     private fun updateUi(state: Int) {
 
-        if (state.asString().endsWith("ACTIVE",true)) {
+        if (state.asString().endsWith("DIALING", true)) {
+            isDial = true
+        }
+        if (state.asString().endsWith("ACTIVE", true)) {
             isReceived = true
+
+            startTime = Calendar.getInstance().getTime()
+
         }
 //        callInfo.text = "${state.asString().toLowerCase().capitalize()}\n$number"
         callInfo.text = "${state.asString().toLowerCase().capitalize()}"
@@ -119,23 +126,32 @@ class CallActivity : AppCompatActivity() {
 
     override fun onStop() {
 
+        if (isDial) {
+            var prefs = getSharedPreferences("FlatNumber", MODE_PRIVATE);
+            var flatName = prefs.getString("flat", "No name defined");
 
-        endTime = Calendar.getInstance().getTime()
 
-        var id = firebaseFirestore.collection(getString(R.string.col_callLog)).document()
+            endTime = Calendar.getInstance().getTime()
 
-        var callLogClass = CallLogClass(id.id, buildid, thismobileuid, myPhoneNumber,
-                number, startTime, endTime, isReceived);
-        firebaseFirestore.collection(getString(R.string.col_callLog)).document(id.id)
-                .set(callLogClass)
-                .addOnSuccessListener(OnSuccessListener<Void?> {
+            var id = firebaseFirestore.collection(getString(R.string.col_callLog)).document()
 
-                    Toast.makeText(this, "Save", Toast.LENGTH_LONG).show()
-                })
-                .addOnFailureListener(OnFailureListener {
-                    Toast.makeText(this, "Failed", Toast.LENGTH_LONG).show()
+            var callLogClass = CallLogClass(id.id, buildid, thismobileuid, myPhoneNumber,
+                    number, startTime, endTime, flatName, isReceived);
 
-                })
+            firebaseFirestore.collection(getString(R.string.col_callLog)).document(id.id)
+                    .set(callLogClass)
+                    .addOnSuccessListener(OnSuccessListener<Void?> {
+
+                        Toast.makeText(this, "Data Save", Toast.LENGTH_LONG).show()
+                    })
+                    .addOnFailureListener(OnFailureListener {
+                        Toast.makeText(this, "Failed", Toast.LENGTH_LONG).show()
+
+                    })
+
+        }
+
+
 
         super.onStop()
         disposables.clear()

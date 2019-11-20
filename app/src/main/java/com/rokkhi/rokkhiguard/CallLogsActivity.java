@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.telecom.Call;
 import android.util.Log;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -57,8 +58,10 @@ public class CallLogsActivity extends AppCompatActivity {
         progressDialog.setCancelable(false);
         progressDialog.show();
 
+        Log.e("TAG", "loadDataToRecyclerView: thismobile "+thismobile );
 
 
+//.orderBy("callStart", Query.Direction.DESCENDING)
         firebaseFirestore.collection(getString(R.string.col_callLog))
                 .whereEqualTo("mobileUID",thismobile)
                 .orderBy("callStart", Query.Direction.DESCENDING)
@@ -68,6 +71,7 @@ public class CallLogsActivity extends AppCompatActivity {
                 if (task.isSuccessful()){
                     callLogClassList.clear();
                     for (DocumentSnapshot documentSnapshot : task.getResult()) {
+
                         CallLogClass callLogClass= documentSnapshot.toObject(CallLogClass.class);
                         callLogClassList.add(callLogClass);
                         Log.e("TAG", "onComplete: "+callLogClass.getDocID());
@@ -79,6 +83,7 @@ public class CallLogsActivity extends AppCompatActivity {
 
                 }else {
                     progressDialog.dismiss();
+                    Toast.makeText(CallLogsActivity.this, "DataBase Error", Toast.LENGTH_SHORT).show();
                 }
 
             }

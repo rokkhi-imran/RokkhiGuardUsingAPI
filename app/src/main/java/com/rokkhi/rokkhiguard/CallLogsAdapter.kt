@@ -1,11 +1,13 @@
 package com.rokkhi.rokkhiguard
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.rokkhi.rokkhiguard.Model.CallLogClass
 import kotlinx.android.synthetic.main.item_view_call_logs.view.*
+import java.text.SimpleDateFormat
 
 
 class CallLogsAdapter(var callLogClassList: MutableList<CallLogClass>) : RecyclerView.Adapter<CallLogsAdapter.ViewHolderClass>() {
@@ -29,13 +31,34 @@ class CallLogsAdapter(var callLogClassList: MutableList<CallLogClass>) : Recycle
     class ViewHolderClass(itemView: View) : RecyclerView.ViewHolder(itemView) {
         fun setData(callLogClass: CallLogClass) {
 
-            itemView.callNumber.text=callLogClass.mobileNumberReceiver
-            itemView.callTime.text="Time : "+callLogClass.callStart.toString()
-            if (callLogClass.isReceived){
+            itemView.flatNumber.text = callLogClass.flatName
 
-                itemView.callStatus.text="Status : Received"
-            }else{
-                itemView.callStatus.text="Status : Cancel"
+            val formatter = SimpleDateFormat("hh:mm:ss a")
+
+            val strTime: String = formatter.format(callLogClass.callStart)
+            val endTime: String = formatter.format(callLogClass.callStart)
+
+//get diffrence between two date
+            val diff: Long = callLogClass.callEnd.getTime() - callLogClass.callStart.getTime()
+            val diffSeconds = diff / 1000 % 60
+            Log.e("difference = second  = ", "" + diffSeconds)
+            var minute = diffSeconds / 60
+            var seconds = diffSeconds % 60
+
+            itemView.callTime.text = strTime
+
+
+//            itemView.callTime.text="Time : "+callLogClass.callStart.toString()
+
+
+            if (callLogClass.isReceived) {
+                itemView.callStatus.text = "Received"
+                itemView.duration.text = minute.toString() + ":" + seconds.toString()
+
+            } else {
+                itemView.callStatus.text = "Cancel"
+                itemView.duration.text = "0:00"
+
 
             }
 

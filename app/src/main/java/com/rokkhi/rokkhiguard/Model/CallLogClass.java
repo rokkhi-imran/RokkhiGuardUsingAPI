@@ -10,12 +10,13 @@ public class CallLogClass {
    String mobileNumberReceiver;
    Date callStart;
    Date callEnd;
+   String flatName;
    boolean received;
 
     public CallLogClass() {
     }
 
-    public CallLogClass(String docID, String buildID, String mobileUID, String mobielNumberCaller, String mobileNumberReceiver, Date callStart, Date callEnd, boolean received) {
+    public CallLogClass(String docID, String buildID, String mobileUID, String mobielNumberCaller, String mobileNumberReceiver, Date callStart, Date callEnd, String flatName, boolean received) {
         this.docID = docID;
         this.buildID = buildID;
         this.mobileUID = mobileUID;
@@ -23,6 +24,7 @@ public class CallLogClass {
         this.mobileNumberReceiver = mobileNumberReceiver;
         this.callStart = callStart;
         this.callEnd = callEnd;
+        this.flatName = flatName;
         this.received = received;
     }
 
@@ -80,6 +82,14 @@ public class CallLogClass {
 
     public void setCallEnd(Date callEnd) {
         this.callEnd = callEnd;
+    }
+
+    public String getFlatName() {
+        return flatName;
+    }
+
+    public void setFlatName(String flatName) {
+        this.flatName = flatName;
     }
 
     public boolean isReceived() {
