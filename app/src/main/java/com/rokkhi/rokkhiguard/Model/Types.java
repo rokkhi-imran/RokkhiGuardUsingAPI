@@ -10,7 +10,6 @@ public class Types {
     public Types(){
     }
 
-
     public Types(String english, String bangla, String type_id) {
         this.english = english;
         this.bangla = bangla;

@@ -217,6 +217,7 @@ public class Normalfunc {
     public boolean isvalidphone(String phoneno){
 
 
+        if(phoneno.isEmpty())return  false;
         if(phoneno.charAt(0)!='0')return false;
 
         if(phoneno.length()!=11)return false;
