@@ -53,7 +53,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class MainPage extends AppCompatActivity {
 
-    CircleImageView gatepass, logout, addvis, vislist, notice, parcel, create, vehicle, child;
+    CircleImageView gatepass, logout, addvis, vislist, notice, parcel, create, vehicle, child,callLogs;
     private static final String TAG = "MainPage";
     Context context;
     ImageButton settings;
@@ -94,6 +94,7 @@ public class MainPage extends AppCompatActivity {
         settings = findViewById(R.id.settings);
         vehicle = findViewById(R.id.vehicle);
         child = findViewById(R.id.child);
+        callLogs=findViewById(R.id.callLogs);
 
         firebaseFirestore = FirebaseFirestore.getInstance();
         sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
@@ -212,6 +213,13 @@ public class MainPage extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(MainPage.this, SettingsActivity.class);
+                startActivity(intent);
+            }
+        });
+        callLogs.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MainPage.this, CallLogsActivity.class);
                 startActivity(intent);
             }
         });

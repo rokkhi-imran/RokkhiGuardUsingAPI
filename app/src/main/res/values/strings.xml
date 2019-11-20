@@ -124,6 +124,7 @@
     <string name="col_allmail">allmails</string>
     <string name="col_setting">settings</string>
     <string name="col_sworker">sworkers</string>
+    <string name="col_callLog">callLog</string>
     <string name="progress_downloading">Downloading…</string>
     <string name="progress_uploading">Uploading…</string>
     <string name="upload_success">Upload finished</string>

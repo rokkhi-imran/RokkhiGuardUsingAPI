@@ -28,8 +28,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".EditVisitorProfileActivity"></activity>
-        <!-- <activity android:name=".CallChildActivity" /> -->
+        <activity android:name=".CallLogsActivity"></activity>
+        <activity android:name=".EditVisitorProfileActivity" /> <!-- <activity android:name=".CallChildActivity" /> -->
         <activity
             android:name=".DaroanPass"
             android:label="Rokkhi"
@@ -40,8 +40,6 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
-
         </activity>
         <activity android:name=".MainPage" />
         <activity
@@ -99,12 +97,11 @@
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/picker_provider_paths" />
-        </provider>
-<!--phone call-->
-
-        <activity android:name="com.rokkhi.callerapp.CallActivity"/>
+        </provider> <!-- phone call -->
+        <activity android:name="com.rokkhi.callerapp.CallActivity" />
         <activity android:name=".CallerApp.MainActivity">
-            <!--call app-->
+
+            <!-- call app -->
             <intent-filter>
 
                 <!-- Handle links from other applications -->
@@ -124,26 +121,20 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
 
-            <!--call app End-->
+            <!-- call app End -->
         </activity>
-
 
         <service
             android:name="com.rokkhi.callerapp.CallService"
-            android:permission="android.permission.BIND_INCALL_SERVICE"
-            >
+            android:permission="android.permission.BIND_INCALL_SERVICE">
             <meta-data
                 android:name="android.telecom.IN_CALL_SERVICE_UI"
-                android:value="true"
-                />
+                android:value="true" />
+
             <intent-filter>
                 <action android:name="android.telecom.InCallService" />
             </intent-filter>
         </service>
-        <!--phone call End-->
-
-
-
     </application>
 
 </manifest>
