@@ -30,7 +30,7 @@
                 android:id="@+id/flatNumber"
                 android:textColor="@color/lightorange"
                 android:textSize="20sp"
-                android:text="+8801521431798"
+                android:text="A1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
         </LinearLayout>

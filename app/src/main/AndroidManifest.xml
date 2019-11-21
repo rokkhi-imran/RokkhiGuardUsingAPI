@@ -28,7 +28,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".CallLogsActivity"></activity>
+        <activity android:name=".SWorkersActivity"></activity>
+        <activity android:name=".CallLogsActivity" />
         <activity android:name=".EditVisitorProfileActivity" /> <!-- <activity android:name=".CallChildActivity" /> -->
         <activity
             android:name=".DaroanPass"

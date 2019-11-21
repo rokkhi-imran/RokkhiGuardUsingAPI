@@ -1,26 +1,27 @@
 package com.rokkhi.rokkhiguard.Model;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 public class Swroker {
-    private String s_id;//
-    private  String s_name;//
-    private  String s_phone;//
-    private  String s_pic;//
-    private  String thumb_s_pic;//
-    private String s_mail;//
-    private Date s_bday;//
-    private Date experience;//
-    private int starttime;//
-    private int endtime;//
-    private String nid;//
-    private String type;//
-    private String s_pass;//
-    private String who_add;
-    private Date when_add;
-    private List<String> address;//
-    private List<String> s_array;//
+    private String s_id="none";//
+    private  String s_name="none";//
+    private  String s_phone="none";//
+    private  String s_pic="none";//
+    private  String thumb_s_pic="none";//
+    private String s_mail="none";//
+    private Date s_bday=new Date();//
+    private Date experience=new Date();//
+    private int starttime=0;//
+    private int endtime=0;//
+    private String nid="none";//
+    private String type="none";//
+    private String s_pass="none";//
+    private String who_add="none";
+    private Date when_add=new Date();
+    private List<String> address=new ArrayList<>();//
+    private List<String> s_array=new ArrayList<>();//
 
     public Swroker(){
     }
