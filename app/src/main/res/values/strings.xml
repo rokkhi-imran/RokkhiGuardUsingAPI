@@ -110,6 +110,7 @@
     <string name="col_activeflat">activeflats</string>
     <string name="col_vehicle">vehicles</string>
     <string name="col_users">users</string>
+    <string name="col_userdetails">userdetails</string>
     <string name="col_flats">flats</string>
 
 

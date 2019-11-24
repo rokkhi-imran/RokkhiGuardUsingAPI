@@ -42,6 +42,7 @@ class CallActivity : AppCompatActivity() {
     private lateinit var myPhoneNumber: String;
     private var isReceived: Boolean = false;
     private var isDial: Boolean = false;
+    private  var  flatName="";
 
 //    var isReceived = false;
 
@@ -59,6 +60,9 @@ class CallActivity : AppCompatActivity() {
 
         val sharedPref = PreferenceManager.getDefaultSharedPreferences(this)
         buildid = sharedPref.getString("buildid", "none")
+
+        var prefs = getSharedPreferences("FlatNumber", MODE_PRIVATE);
+        flatName = prefs.getString("flat", "No name defined");
         thismobileuid = FirebaseAuth.getInstance().uid.toString()
 
         startTime = Calendar.getInstance().getTime()
@@ -114,7 +118,8 @@ class CallActivity : AppCompatActivity() {
 
         }
 //        callInfo.text = "${state.asString().toLowerCase().capitalize()}\n$number"
-        callInfo.text = "${state.asString().toLowerCase().capitalize()}"
+//        callInfo.text = "${state.asString().toLowerCase().capitalize()}"
+        callInfo.text = "${state.asString().toLowerCase().capitalize()} \n $flatName"
 
         answer.isVisible = state == Call.STATE_RINGING
         hangup.isVisible = state in listOf(

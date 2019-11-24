@@ -1,5 +1,6 @@
 package com.rokkhi.rokkhiguard;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -10,19 +11,27 @@ import androidx.core.content.ContextCompat;
 import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.rokkhi.callerapp.CallActivity;
 import com.rokkhi.rokkhiguard.CallerApp.MainActivity;
 import com.rokkhi.rokkhiguard.Model.Child;
+import com.rokkhi.rokkhiguard.Model.UDetails;
 import com.rokkhi.rokkhiguard.Utils.UniversalImageLoader;
 
 import java.util.ArrayList;
@@ -41,10 +50,12 @@ public class ChildAdapter extends RecyclerView.Adapter<ChildAdapter.ChildViewHol
     SharedPreferences sharedPref;
     private MyInterface myInterface;
     private ArrayList<Child> mchildFilterList;
+    private ArrayList<UDetails> flatusers;
     private LayoutInflater mInflater;
     private ValueFilter valueFilter;
     private Context context;
     private FirebaseFirestore firebaseFirestore;
+
     ChildAdapter(ArrayList<Child> list, Context context) {
         this.list = list;
         mchildFilterList = list;
@@ -103,16 +114,77 @@ public class ChildAdapter extends RecyclerView.Adapter<ChildAdapter.ChildViewHol
                 SharedPreferences.Editor editor = context.getSharedPreferences("FlatNumber", MODE_PRIVATE).edit();
                 editor.putString("flat", child.getF_no());
                 editor.apply();
-
+/*
 //make phone call
                 view.getContext().startActivity(new Intent(view.getContext(), MainActivity.class)
                 .putExtra("phoneNumber",child.getPhoneno()));
 //                myInterface.callparents(child.getPhoneno());
 
+                */
+                getFlatUser(child.getFlat_id());
+
+
             }
         });
 
 
+    }
+
+    private void getFlatUser(String flat_id) {
+        flatusers = new ArrayList<>();
+        final ProgressDialog progressDialog = new ProgressDialog(context);
+        progressDialog.setMessage("Getting Number List");
+        progressDialog.show();
+
+        FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
+        firebaseFirestore.collection(context.getString(R.string.col_userdetails)).whereEqualTo("flat_id", flat_id)
+                .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    for (DocumentSnapshot documentSnapshot : task.getResult()) {
+                        UDetails uDetails = documentSnapshot.toObject(UDetails.class);
+                        flatusers.add(uDetails);
+                        Log.e(TAG, "onComplete: " + uDetails.getPhone());
+                    }
+
+//                    progressDialog.dismiss();
+                    showUsers(context, flatusers,progressDialog);
+                }
+            }
+        });
+    }
+
+
+    public void showUsers(Context context, ArrayList<UDetails> flatusers, ProgressDialog progressDialog) {
+
+        final UsersAdapter usersAdapter = new UsersAdapter(this.flatusers, this.context);
+        final AlertDialog alertcompany = new AlertDialog.Builder(this.context).create();
+//        LayoutInflater inflater = context.getLayoutInflater();
+        View convertView = (View) LayoutInflater.from(context).inflate(R.layout.custom_list_forusers, null);
+        final ListView lv = (ListView) convertView.findViewById(R.id.listView1);
+        alertcompany.setView(convertView);
+        alertcompany.setCancelable(true);
+        //valueAdapter.notifyDataSetChanged();
+        progressDialog.dismiss();
+        lv.setAdapter(usersAdapter);
+        alertcompany.show();
+
+
+        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                UDetails typeselected = (UDetails) lv.getItemAtPosition(position);
+                //cname.setText(myoffice.getName());
+                String phoneno = typeselected.getPhone();
+//                onCallBtnClick();
+
+                view.getContext().startActivity(new Intent(view.getContext(), MainActivity.class)
+                        .putExtra("phoneNumber", phoneno));
+
+                alertcompany.dismiss();
+            }
+        });
     }
 
     @Override
