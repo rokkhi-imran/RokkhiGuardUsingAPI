@@ -53,7 +53,12 @@ class CallLogsAdapter(var callLogClassList: MutableList<CallLogClass>) : Recycle
 
             if (callLogClass.isReceived) {
                 itemView.callStatus.text = "Received"
-                itemView.duration.text = minute.toString() + ":" + seconds.toString()
+                if (seconds < 9) {
+                    itemView.duration.text = minute.toString() + ":0" + seconds.toString()
+                } else {
+
+                    itemView.duration.text = minute.toString() + ":" + seconds.toString()
+                }
 
             } else {
                 itemView.callStatus.text = "Cancel"

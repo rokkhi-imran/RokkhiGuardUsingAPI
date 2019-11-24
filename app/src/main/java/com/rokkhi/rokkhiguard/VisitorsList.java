@@ -139,6 +139,8 @@ public class VisitorsList extends AppCompatActivity implements VisitorAdapter.My
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {
+
+                    progressBar.setVisibility(View.VISIBLE);
                     Log.d(TAG, "onComplete: kotoboro "+task.getResult().size());
                     list = new ArrayList<>();
                     for (DocumentSnapshot document : task.getResult()) {

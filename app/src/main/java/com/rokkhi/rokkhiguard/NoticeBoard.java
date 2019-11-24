@@ -102,6 +102,7 @@ public class NoticeBoard extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {
+                    progressBar.setVisibility(View.VISIBLE);
                     Log.d(TAG, "onComplete: kotoboro "+task.getResult().size());
 
                     for (DocumentSnapshot document : task.getResult()) {
@@ -119,6 +120,8 @@ public class NoticeBoard extends AppCompatActivity {
 
                 }
                 else {
+
+                    progressBar.setVisibility(View.GONE);
                     Log.d(TAG, "onComplete: kotoboro1");
                 }
             }
@@ -129,7 +132,7 @@ public class NoticeBoard extends AppCompatActivity {
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {
                     Log.d(TAG, "onComplete: kotoboro "+task.getResult().size());
-
+                    progressBar.setVisibility(View.VISIBLE);
                     for (DocumentSnapshot document : task.getResult()) {
                         Notifications notifications = document.toObject(Notifications.class);
                         list.add(notifications);
@@ -147,6 +150,7 @@ public class NoticeBoard extends AppCompatActivity {
 
                 }
                 else {
+                    progressBar.setVisibility(View.GONE);
                     Log.d(TAG, "onComplete: kotoboro1");
                 }
             }
