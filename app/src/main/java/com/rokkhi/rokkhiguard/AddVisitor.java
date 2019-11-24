@@ -700,7 +700,7 @@ public class AddVisitor extends AppCompatActivity implements IPickResult{
                 @Override
                 public void onClick(View v) {
 
-                    if(!phoneno.equals("none")&& phoneno.isEmpty()) onCallBtnClick();
+                    if(!phoneno.equals("none") && !phoneno.isEmpty()) onCallBtnClick();
                     else{
                         showUsers();
                     }
