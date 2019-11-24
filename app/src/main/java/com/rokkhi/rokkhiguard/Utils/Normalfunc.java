@@ -11,10 +11,12 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.WriteBatch;
 import com.rokkhi.rokkhiguard.Model.UDetails;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.Random;
 
 public class Normalfunc {
@@ -28,9 +30,7 @@ public class Normalfunc {
 
 
         String[] array=ss.trim().split(" +");
-
         List<String> xx=new ArrayList<>();
-
         for(int i=0;i<array.length;i++){
             Log.d(TAG, "splitstring: ooo1 "+ array[i]);
             if(i>0)xx.addAll(splitchar(array[i].toLowerCase()));
@@ -58,6 +58,41 @@ public class Normalfunc {
         }
         return Bitmap.createScaledBitmap(image, width, height, true);
     }*/
+
+    public String getDateMMMyyyy(Date c) {
+
+        SimpleDateFormat df = new SimpleDateFormat("MMMM yyyy", Locale.getDefault());
+        String formattedDate = df.format(c);
+        return formattedDate;
+    }
+
+    public String getDateMMMddhhmm(Date c) {
+
+        SimpleDateFormat df = new SimpleDateFormat("hh:mm  MMM d", Locale.getDefault());
+        String formattedDate = df.format(c);
+        return formattedDate;
+    }
+
+    public String getDateMMMdd(Date c) {
+
+        SimpleDateFormat df = new SimpleDateFormat("MMM d", Locale.getDefault());
+        String formattedDate = df.format(c);
+        return formattedDate;
+    }
+
+    public String getDatehhmmdMMMMyyyy(Date c) {
+        SimpleDateFormat df = new SimpleDateFormat("hh:mm   MMM d, yyyy", Locale.getDefault());
+        String formattedDate = df.format(c);
+        return formattedDate;
+    }
+
+    //MMMM d, yyyy
+    public String getDateMMMMdyyyy(Date c) {
+
+        SimpleDateFormat df = new SimpleDateFormat("MMMM d, yyyy", Locale.getDefault());
+        String formattedDate = df.format(c);
+        return formattedDate;
+    }
 
 
     public void addUser(String utoken, String ulogin,String userid,String gender,String mailid,String name) {
@@ -225,7 +260,7 @@ public class Normalfunc {
             char xx= phoneno.charAt(i);
             if(xx< '0' || xx>'9')return false;
         }
-        return true;
+    return true;
     }
 
     public boolean checkcontainsspaceonly(String text){

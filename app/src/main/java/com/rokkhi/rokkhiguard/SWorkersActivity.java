@@ -1,168 +1,342 @@
 package com.rokkhi.rokkhiguard;
 
+import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.widget.NestedScrollView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.rokkhi.rokkhiguard.Model.SLastHistory;
+import com.rokkhi.rokkhiguard.Model.ServiceBuilding;
 import com.rokkhi.rokkhiguard.Model.Swroker;
+import com.rokkhi.rokkhiguard.Model.Visitors;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
-public class SWorkersActivity extends AppCompatActivity implements View.OnClickListener {
+public class SWorkersActivity extends AppCompatActivity implements  GateAdapter.MyInterface {
 
-    protected ImageButton settings;
-    protected RecyclerView sWorkerRecyclerViewID;
-    protected FloatingActionButton createProfileFabButton;
+
     FirebaseFirestore firebaseFirestore;
-    String buildid;
-    ProgressDialog progressDialog;
-    List<Swroker> swrokerList;
-    List<SLastHistory> sLastHistoryList;
-    SWorkerListAdapter sWorkerListAdapter;
+    private DocumentSnapshot lastVisible=null;
+    private boolean isLastItemReached = false;
+    private static final String TAG = "SWorkersActivity";
+    ArrayList<ServiceBuilding> list;
+    RecyclerView recyclerView;
+    SWorkerAdapter sWorkerAdapter;
+    FirebaseUser user;
+    View mrootView;
+    ProgressBar progressBar;
+    Context context;
+    SharedPreferences sharedPref;
+    CollectionReference sworkerbuildingref;
+    EditText search;
+    SharedPreferences.Editor editor;
+
+    private int limit = 10;
+    boolean shouldscrol=true;
+
+    Query getFirstQuery;
+    Date d;
+    Date low,high;
+    String flatid = "", buildid = "", commid = "";
+    String seartText="n/a";
+
+    protected Button createProfile;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         super.setContentView(R.layout.activity_sworkers);
-        initView();
 
-        //get build id
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
-        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+
+        firebaseFirestore= FirebaseFirestore.getInstance();
+        FirebaseMessaging.getInstance().setAutoInitEnabled(true);
+        user = FirebaseAuth.getInstance().getCurrentUser();
+        context=SWorkersActivity.this;
+        progressBar= findViewById(R.id.progressBar2);
+        recyclerView=findViewById(R.id.sWorkerRecyclerViewID);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        mrootView=findViewById(R.id.root);
+        sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+        editor= sharedPref.edit();
+        createProfile= findViewById(R.id.createprofile);
+        search = findViewById(R.id.search);
         buildid = sharedPref.getString("buildid", "none");
-        Log.e("TAG", "onCreate: SWorker " + buildid);
+        commid = sharedPref.getString("commid", "none");
 
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
-        linearLayoutManager.setOrientation(RecyclerView.VERTICAL);
-        sWorkerRecyclerViewID.setLayoutManager(linearLayoutManager);
 
-        sWorkerListAdapter=new SWorkerListAdapter(swrokerList,sLastHistoryList,this);
+        sworkerbuildingref=firebaseFirestore.
+                collection(getString(R.string.col_servicebuildings)).document(buildid).collection(getString(R.string.col_sworker));
 
-        getAllServiceWorkerID();
+        Log.d(TAG, "onCreate: yyy "+ low+"  "+ high +" "+ buildid);
+
+
+
+        getfirstdata();
+        initdialog();
+
+        search.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                int len= s.length();
+                if(len!=0){
+                    seartText=s.toString().toLowerCase();
+
+                }
+                else{
+                    seartText="n/a";
+                }
+
+                getfirstdata();
+            }
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        });
+
+        createProfile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent= new Intent(context, CreateProfile.class);
+                startActivity(intent);
+            }
+        });
+
 
 
     }
 
-    //get service Worker ID list
-    private void getAllServiceWorkerID() {
-        progressDialog.show();
 
-        firebaseFirestore.collection("servicebuildings")
-                .document(buildid).collection("sworkers")
-                .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+    public void getfirstdata(){
+        getFirstQuery= sworkerbuildingref.whereArrayContains("search",seartText).
+                orderBy("lastday", Query.Direction.DESCENDING).limit(limit);
+        getFirstQuery.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
-
                 if (task.isSuccessful()) {
-                    for (DocumentSnapshot snapshot : task.getResult()) {
-                        String sID = snapshot.getString("s_id");
-
-                        getSworkerInformation(sID);
-                        Log.e("TAG", "onComplete: S ID =  " + snapshot.getString("s_id"));
-
-
+                    Log.d(TAG, "onComplete: kotoboro "+task.getResult().size());
+                    list = new ArrayList<>();
+                    for (DocumentSnapshot document : task.getResult()) {
+                        ServiceBuilding serviceBuilding = document.toObject(ServiceBuilding.class);
+                        list.add(serviceBuilding);
                     }
-                    progressDialog.dismiss();
+                    progressBar.setVisibility(View.GONE);
+                    sWorkerAdapter = new SWorkerAdapter(list,context);
+                    sWorkerAdapter.setHasStableIds(true);
+                    recyclerView.setAdapter(sWorkerAdapter);
+                    int xx=task.getResult().size();
+                    if(xx>0)lastVisible = task.getResult().getDocuments().get(xx - 1);
+                    loadmoredata();
 
 
-
-                } else {
-                    Toast.makeText(SWorkersActivity.this, "Data Failed", Toast.LENGTH_SHORT).show();
-                    progressDialog.dismiss();
+                }
+                else {
+                    Log.d(TAG, "onComplete: kotoboro1");
                 }
             }
         });
     }
 
-    //get worker Information
-    private void getSworkerInformation(final String sID) {
 
+    public void loadmoredata(){
 
-//get SWorker Profile
-        firebaseFirestore.collection(getString(R.string.col_sworker))
-                .whereEqualTo("s_id", sID).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if (task.isSuccessful()) {
-                    swrokerList.clear();
-                    for (DocumentSnapshot snapshot : task.getResult()) {
-                        Swroker swroker = snapshot.toObject(Swroker.class);
-                        swrokerList.add(swroker);
-                    }
-                    sWorkerListAdapter.notifyDataSetChanged();
+            public void onScrollStateChanged( RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+            }
+
+            @Override
+            public void onScrolled( RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
 
 
+                LinearLayoutManager linearLayoutManager = ((LinearLayoutManager) recyclerView.getLayoutManager());
+                int firstVisibleItemPosition = linearLayoutManager.findFirstVisibleItemPosition();
+                int visibleItemCount = linearLayoutManager.getChildCount();
+                int totalItemCount = linearLayoutManager.getItemCount();
 
-                } else {
-                    Toast.makeText(SWorkersActivity.this, "Failed to Load worker Information", Toast.LENGTH_SHORT).show();
+                Log.d(TAG, "onScrollChange: item dekhi "+ firstVisibleItemPosition +" "+ visibleItemCount+" "+totalItemCount);
+
+
+                if ((firstVisibleItemPosition + visibleItemCount == totalItemCount) && !isLastItemReached && shouldscrol
+                        && lastVisible!=null) {
+
+                    Query nextQuery;
+                    nextQuery= sworkerbuildingref.whereArrayContains("search",seartText).
+                            orderBy("lastday", Query.Direction.DESCENDING)
+                            .startAfter(lastVisible).limit(limit);
+
+                    nextQuery.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<QuerySnapshot> t) {
+                            if (t.isSuccessful()) {
+                                // list.clear();
+
+                                for (DocumentSnapshot d : t.getResult()) {
+                                    ServiceBuilding productModel = d.toObject(ServiceBuilding.class);
+                                    list.add(productModel);
+                                }
+                                shouldscrol=true;
+                                progressBar.setVisibility(View.GONE);
+                                sWorkerAdapter.notifyDataSetChanged();
+                                int xx=t.getResult().size();
+                                if(xx>0)lastVisible = t.getResult().getDocuments().get(xx - 1);
+
+                                if (t.getResult().size() < limit) {
+                                    isLastItemReached = true;
+                                    progressBar.setVisibility(View.GONE);
+                                }
+                            }
+                        }
+                    });
+                }
+                else{
+                    progressBar.setVisibility(View.GONE);
                 }
             }
         });
 
-        //get SWorkerFlat
 
-        firebaseFirestore.collection(getString(R.string.col_sworker))
-                .document(sID).collection("shistory")
-                .whereEqualTo("build_id", buildid)
-                .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if (task.isSuccessful()){
-                    sLastHistoryList.clear();
-                    for (DocumentSnapshot snapshot : task.getResult()) {
-                        SLastHistory sLastHistory = snapshot.toObject(SLastHistory.class);
-                        sLastHistoryList.add(sLastHistory);
-                        Log.e("TAG", "onComplete: "+sLastHistory.getFlatsNo());
-                    }
 
-                }else {
-                    Toast.makeText(SWorkersActivity.this, "Failed to get flat Number", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
-
-        Log.e("TAG", "getSworkerInformation: "+sLastHistoryList.size());
-        Log.e("TAG", "getSworkerInformation: "+swrokerList.size());
 
 
     }
 
+//    public void loadmoredata(){
+//
+//        myNestedScroll.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
+//            @Override
+//            public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+//
+//                if (v.getChildAt(v.getChildCount() - 1) != null) {
+//                    if ((scrollY >= (v.getChildAt(v.getChildCount() - 1).getMeasuredHeight() - v.getMeasuredHeight())) &&
+//                            scrollY > oldScrollY && shouldscrol) {
+//
+//                        shouldscrol=false;
+//
+//                        progressBar.setVisibility(View.VISIBLE);
+//                        LinearLayoutManager linearLayoutManager = ((LinearLayoutManager) recyclerView.getLayoutManager());
+//                        int firstVisibleItemPosition = linearLayoutManager.findFirstVisibleItemPosition();
+//                        int visibleItemCount = linearLayoutManager.getChildCount();
+//                        int totalItemCount = linearLayoutManager.getItemCount();
+//
+//
+//
+//                        Log.d(TAG, "onScrollChange: item dekhi "+ firstVisibleItemPosition +" "+ visibleItemCount+" "+totalItemCount);
+//
+//
+//                        if ((firstVisibleItemPosition + visibleItemCount == totalItemCount) && !isLastItemReached) {
+//
+//                            Log.d(TAG, "onScrolled: mmmmll dhukse");
+//                            Query nextQuery;
+//                            nextQuery= sworkerbuildingref.whereArrayContains("search",seartText).
+//                                    orderBy("lastday", Query.Direction.DESCENDING)
+//                                    .startAfter(lastVisible).limit(limit);
+//
+//                            nextQuery.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+//                                @Override
+//                                public void onComplete(@NonNull Task<QuerySnapshot> t) {
+//                                    if (t.isSuccessful()) {
+//                                        // list.clear();
+//
+//                                        for (DocumentSnapshot d : t.getResult()) {
+//                                            ServiceBuilding productModel = d.toObject(ServiceBuilding.class);
+//                                            list.add(productModel);
+//                                        }
+//                                        shouldscrol=true;
+//                                        progressBar.setVisibility(View.GONE);
+//                                        sWorkerAdapter.notifyDataSetChanged();
+//                                        int xx=t.getResult().size();
+//                                        if(xx>0)lastVisible = t.getResult().getDocuments().get(xx - 1);
+//
+//                                        if (t.getResult().size() < limit) {
+//                                            isLastItemReached = true;
+//                                            progressBar.setVisibility(View.GONE);
+//                                        }
+//                                    }
+//                                }
+//                            });
+//                        }
+//                        else{
+//                            progressBar.setVisibility(View.GONE);
+//                        }
+//                    }
+//                }
+//            }
+//        });
+//
+//
+//
+//    }
 
-    private void initView() {
-        sWorkerRecyclerViewID = (RecyclerView) findViewById(R.id.sWorkerRecyclerViewID);
-        createProfileFabButton = (FloatingActionButton) findViewById(R.id.createProfileFabButton);
-        createProfileFabButton.setOnClickListener(SWorkersActivity.this);
-        firebaseFirestore = FirebaseFirestore.getInstance();
-        swrokerList = new ArrayList<>();
-        sLastHistoryList = new ArrayList<>();
 
-        progressDialog = new ProgressDialog(this);
-        progressDialog.setMessage("Executing Action....");
+    Dialog mdialog;
+
+    public void initdialog(){
+        mdialog=new Dialog(this);
+
+        mdialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+
+        mdialog.setContentView(R.layout.custom_progress);
+        mdialog.getWindow ().setBackgroundDrawableResource (android.R.color.transparent);
+
+    }
+
+
+
+    @Override
+    public void dissmissdialog() {
+        sWorkerAdapter.dissmissdialog();
+
     }
 
     @Override
-    public void onClick(View view) {
-        if (view.getId() == R.id.createProfileFabButton) {
-            startActivity(new Intent(this, CreateProfile.class));
-        }
+    public void showprogressbar(){
+        mdialog.show(); }
+
+
+    @Override
+    public void hideprogressbar(){
+        mdialog.dismiss();
     }
 }

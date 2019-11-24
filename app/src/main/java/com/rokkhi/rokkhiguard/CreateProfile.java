@@ -743,7 +743,7 @@ public class CreateProfile extends AppCompatActivity implements ActiveFlatAdapte
                     cancel = true;
                 }
 
-                if (!normalfunc.isvalidphone(phoneno)) {
+                if (!TextUtils.isEmpty(phoneno) && !normalfunc.isvalidphone(phoneno)) {
                     phone.setError("Invalid Phone no");
                     focusView = phone;
                     cancel = true;

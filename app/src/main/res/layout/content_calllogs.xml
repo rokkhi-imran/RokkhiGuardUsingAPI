@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/nested"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:showIn="@layout/activity_call_logs"
+    >
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/callLogsRecyclerViewID"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="200dp"
+            android:layout_marginStart="10dp"
+            >
+        </androidx.recyclerview.widget.RecyclerView>
+
+        <!--    <androidx.recyclerview.widget.RecyclerView-->
+        <!--        android:id="@+id/callLogsRecyclerViewID"-->
+        <!--        android:layout_width="match_parent"-->
+        <!--        android:layout_height="match_parent"/>-->
+
+        <ProgressBar
+            android:id="@+id/progressBar2"
+            style="?android:attr/progressBarStyleLarge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:layout_marginBottom="200dp"
+            android:layout_centerInParent="true"
+            android:layout_below="@+id/callLogsRecyclerViewID"
+            />
+    </RelativeLayout>
+
+
+</androidx.core.widget.NestedScrollView>

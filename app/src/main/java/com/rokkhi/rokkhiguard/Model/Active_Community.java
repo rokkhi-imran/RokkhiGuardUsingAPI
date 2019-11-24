@@ -11,7 +11,7 @@ public class Active_Community {
     private String c_mail="none";
     private String c_name="none";
     private boolean c_status=false;
-    private List<String> c_array=new ArrayList<>(); //search
+    private List<String> c_array=new A0000rrayList<>(); //search
     private List<String> address= new ArrayList<>(); //0 house no, 1 road no, 2 area ,3 district
 
     public Active_Community(){

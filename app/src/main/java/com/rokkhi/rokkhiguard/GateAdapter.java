@@ -93,8 +93,6 @@ public class GateAdapter extends RecyclerView.Adapter<GateAdapter.ListViewHolder
         commid = sharedPref.getString("commid", "none");
         normalfunc=new Normalfunc();
 
-
-
         firebaseFirestore.collection(context.getString(R.string.col_activeflat)).whereEqualTo("build_id",buildid).
                 orderBy("f_no", Query.Direction.ASCENDING)
                 .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -450,7 +448,7 @@ public class GateAdapter extends RecyclerView.Adapter<GateAdapter.ListViewHolder
             flats= view.findViewById(R.id.flats);
             historyflatid= new ArrayList<>();
             historyflatno= new ArrayList<>();
-            total=" ";
+            total="";
 
         }
     }

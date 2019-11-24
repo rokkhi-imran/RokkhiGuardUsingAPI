@@ -141,6 +141,7 @@
     <string name="col_phoneguards">guardPhone</string>
     <string name="col_attendance">attendance</string>
     <string name="col_visitors">visitors</string>
+    <string name="col_servicebuildings">servicebuildings</string>
 
     <string name="col_parcels">parcels</string>
     <string name="col_invitees">invitees</string>

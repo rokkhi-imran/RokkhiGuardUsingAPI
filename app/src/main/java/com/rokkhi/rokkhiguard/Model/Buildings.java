@@ -31,6 +31,7 @@ public class Buildings implements Parcelable {
     public Buildings(){
     }
 
+
     public Buildings(String b_name, String b_flatformat, String b_houseno, String b_roadno, String b_district, String b_area, String b_code, int b_tfloor, int b_tflat, int b_tparking, int b_tgate, String build_id, String comm_id, List<String> picurl, double latitude, double longitude, int b_servicecharge, List<String> b_array, boolean b_status, String b_roadname) {
         this.b_name = b_name;
         this.b_flatformat = b_flatformat;
