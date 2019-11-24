@@ -64,6 +64,7 @@ public class SWorkersActivity extends AppCompatActivity implements  GateAdapter.
     CollectionReference sworkerbuildingref;
     EditText search;
     SharedPreferences.Editor editor;
+    NestedScrollView myNestedScroll;
 
     private int limit = 10;
     boolean shouldscrol=true;
@@ -89,9 +90,12 @@ public class SWorkersActivity extends AppCompatActivity implements  GateAdapter.
         FirebaseMessaging.getInstance().setAutoInitEnabled(true);
         user = FirebaseAuth.getInstance().getCurrentUser();
         context=SWorkersActivity.this;
+        myNestedScroll= (NestedScrollView) findViewById(R.id.nested);
         progressBar= findViewById(R.id.progressBar2);
         recyclerView=findViewById(R.id.sWorkerRecyclerViewID);
+        recyclerView.setNestedScrollingEnabled(false);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
         mrootView=findViewById(R.id.root);
         sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
         editor= sharedPref.edit();
@@ -110,6 +114,7 @@ public class SWorkersActivity extends AppCompatActivity implements  GateAdapter.
 
         getfirstdata();
         initdialog();
+        list = new ArrayList<>();
 
         search.addTextChangedListener(new TextWatcher() {
             @Override
@@ -147,14 +152,20 @@ public class SWorkersActivity extends AppCompatActivity implements  GateAdapter.
 
 
     public void getfirstdata(){
+        progressBar.setVisibility(View.VISIBLE);
+        isLastItemReached=false;
         getFirstQuery= sworkerbuildingref.whereArrayContains("search",seartText).
                 orderBy("lastday", Query.Direction.DESCENDING).limit(limit);
+        shouldscrol=true;
+
         getFirstQuery.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {
+                    list=new ArrayList<>();
                     Log.d(TAG, "onComplete: kotoboro "+task.getResult().size());
-                    list = new ArrayList<>();
+
+
                     for (DocumentSnapshot document : task.getResult()) {
                         ServiceBuilding serviceBuilding = document.toObject(ServiceBuilding.class);
                         list.add(serviceBuilding);
@@ -177,137 +188,136 @@ public class SWorkersActivity extends AppCompatActivity implements  GateAdapter.
     }
 
 
-    public void loadmoredata(){
-
-        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrollStateChanged( RecyclerView recyclerView, int newState) {
-                super.onScrollStateChanged(recyclerView, newState);
-            }
-
-            @Override
-            public void onScrolled( RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
-
-
-                LinearLayoutManager linearLayoutManager = ((LinearLayoutManager) recyclerView.getLayoutManager());
-                int firstVisibleItemPosition = linearLayoutManager.findFirstVisibleItemPosition();
-                int visibleItemCount = linearLayoutManager.getChildCount();
-                int totalItemCount = linearLayoutManager.getItemCount();
-
-                Log.d(TAG, "onScrollChange: item dekhi "+ firstVisibleItemPosition +" "+ visibleItemCount+" "+totalItemCount);
-
-
-                if ((firstVisibleItemPosition + visibleItemCount == totalItemCount) && !isLastItemReached && shouldscrol
-                        && lastVisible!=null) {
-
-                    Query nextQuery;
-                    nextQuery= sworkerbuildingref.whereArrayContains("search",seartText).
-                            orderBy("lastday", Query.Direction.DESCENDING)
-                            .startAfter(lastVisible).limit(limit);
-
-                    nextQuery.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                        @Override
-                        public void onComplete(@NonNull Task<QuerySnapshot> t) {
-                            if (t.isSuccessful()) {
-                                // list.clear();
-
-                                for (DocumentSnapshot d : t.getResult()) {
-                                    ServiceBuilding productModel = d.toObject(ServiceBuilding.class);
-                                    list.add(productModel);
-                                }
-                                shouldscrol=true;
-                                progressBar.setVisibility(View.GONE);
-                                sWorkerAdapter.notifyDataSetChanged();
-                                int xx=t.getResult().size();
-                                if(xx>0)lastVisible = t.getResult().getDocuments().get(xx - 1);
-
-                                if (t.getResult().size() < limit) {
-                                    isLastItemReached = true;
-                                    progressBar.setVisibility(View.GONE);
-                                }
-                            }
-                        }
-                    });
-                }
-                else{
-                    progressBar.setVisibility(View.GONE);
-                }
-            }
-        });
-
-
-
-
-
-    }
-
 //    public void loadmoredata(){
 //
-//        myNestedScroll.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
+//        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
 //            @Override
-//            public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+//            public void onScrollStateChanged( RecyclerView recyclerView, int newState) {
+//                super.onScrollStateChanged(recyclerView, newState);
+//            }
 //
-//                if (v.getChildAt(v.getChildCount() - 1) != null) {
-//                    if ((scrollY >= (v.getChildAt(v.getChildCount() - 1).getMeasuredHeight() - v.getMeasuredHeight())) &&
-//                            scrollY > oldScrollY && shouldscrol) {
-//
-//                        shouldscrol=false;
-//
-//                        progressBar.setVisibility(View.VISIBLE);
-//                        LinearLayoutManager linearLayoutManager = ((LinearLayoutManager) recyclerView.getLayoutManager());
-//                        int firstVisibleItemPosition = linearLayoutManager.findFirstVisibleItemPosition();
-//                        int visibleItemCount = linearLayoutManager.getChildCount();
-//                        int totalItemCount = linearLayoutManager.getItemCount();
+//            @Override
+//            public void onScrolled( RecyclerView recyclerView, int dx, int dy) {
+//                super.onScrolled(recyclerView, dx, dy);
 //
 //
+//                LinearLayoutManager linearLayoutManager = ((LinearLayoutManager) recyclerView.getLayoutManager());
+//                int firstVisibleItemPosition = linearLayoutManager.findFirstVisibleItemPosition();
+//                int visibleItemCount = linearLayoutManager.getChildCount();
+//                int totalItemCount = linearLayoutManager.getItemCount();
 //
-//                        Log.d(TAG, "onScrollChange: item dekhi "+ firstVisibleItemPosition +" "+ visibleItemCount+" "+totalItemCount);
+//                Log.d(TAG, "onScrollChange: item dekhi "+ firstVisibleItemPosition +" "+ visibleItemCount+" "+totalItemCount);
 //
 //
-//                        if ((firstVisibleItemPosition + visibleItemCount == totalItemCount) && !isLastItemReached) {
+//                if ((firstVisibleItemPosition + visibleItemCount == totalItemCount) && !isLastItemReached
+//                        && lastVisible!=null) {
 //
-//                            Log.d(TAG, "onScrolled: mmmmll dhukse");
-//                            Query nextQuery;
-//                            nextQuery= sworkerbuildingref.whereArrayContains("search",seartText).
-//                                    orderBy("lastday", Query.Direction.DESCENDING)
-//                                    .startAfter(lastVisible).limit(limit);
+//                    Query nextQuery;
+//                    nextQuery= sworkerbuildingref.whereArrayContains("search",seartText).
+//                            orderBy("lastday", Query.Direction.DESCENDING)
+//                            .startAfter(lastVisible).limit(limit);
 //
-//                            nextQuery.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-//                                @Override
-//                                public void onComplete(@NonNull Task<QuerySnapshot> t) {
-//                                    if (t.isSuccessful()) {
-//                                        // list.clear();
+//                    nextQuery.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+//                        @Override
+//                        public void onComplete(@NonNull Task<QuerySnapshot> t) {
+//                            if (t.isSuccessful()) {
+//                                // list.clear();
+//                                Log.d(TAG, "onComplete: kotoboro2 "+list.size() +" "+t.getResult().size());
 //
-//                                        for (DocumentSnapshot d : t.getResult()) {
-//                                            ServiceBuilding productModel = d.toObject(ServiceBuilding.class);
-//                                            list.add(productModel);
-//                                        }
-//                                        shouldscrol=true;
-//                                        progressBar.setVisibility(View.GONE);
-//                                        sWorkerAdapter.notifyDataSetChanged();
-//                                        int xx=t.getResult().size();
-//                                        if(xx>0)lastVisible = t.getResult().getDocuments().get(xx - 1);
-//
-//                                        if (t.getResult().size() < limit) {
-//                                            isLastItemReached = true;
-//                                            progressBar.setVisibility(View.GONE);
-//                                        }
-//                                    }
+//                                for (DocumentSnapshot d : t.getResult()) {
+//                                    ServiceBuilding productModel = d.toObject(ServiceBuilding.class);
+//                                    list.add(productModel);
 //                                }
-//                            });
+//                                progressBar.setVisibility(View.GONE);
+//                                sWorkerAdapter.notifyDataSetChanged();
+//                                int xx=t.getResult().size();
+//                                if(xx>0)lastVisible = t.getResult().getDocuments().get(xx - 1);
+//
+//                                if (t.getResult().size() < limit) {
+//                                    isLastItemReached = true;
+//                                    progressBar.setVisibility(View.GONE);
+//                                }
+//                            }
 //                        }
-//                        else{
-//                            progressBar.setVisibility(View.GONE);
-//                        }
-//                    }
+//                    });
+//                }
+//                else{
+//                    progressBar.setVisibility(View.GONE);
 //                }
 //            }
 //        });
 //
-//
-//
 //    }
+
+    public void loadmoredata(){
+
+
+        myNestedScroll.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
+            @Override
+            public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+
+                if (v.getChildAt(v.getChildCount() - 1) != null) {
+                    if ((scrollY >= (v.getChildAt(v.getChildCount() - 1).getMeasuredHeight() - v.getMeasuredHeight())) &&
+                            scrollY > oldScrollY && shouldscrol) {
+                        shouldscrol=false;
+                        progressBar.setVisibility(View.VISIBLE);
+                        LinearLayoutManager linearLayoutManager = ((LinearLayoutManager) recyclerView.getLayoutManager());
+                        int firstVisibleItemPosition = linearLayoutManager.findFirstVisibleItemPosition();
+                        int visibleItemCount = linearLayoutManager.getChildCount();
+                        int totalItemCount = linearLayoutManager.getItemCount();
+
+                        Log.d(TAG, "onScrollChange: item dekhi "+ firstVisibleItemPosition +" "+ visibleItemCount+" "+totalItemCount);
+
+
+                        if ((firstVisibleItemPosition + visibleItemCount == totalItemCount) && !isLastItemReached) {
+
+                            Log.d(TAG, "onScrolled: mmmmll dhukse");
+                            Query nextQuery;
+                            nextQuery= sworkerbuildingref.whereArrayContains("search",seartText).
+                                    orderBy("lastday", Query.Direction.DESCENDING)
+                                    .startAfter(lastVisible).limit(limit);
+
+                            nextQuery.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                @Override
+                                public void onComplete(@NonNull Task<QuerySnapshot> t) {
+                                    if (t.isSuccessful()) {
+                                        // list.clear();
+                                        Log.d(TAG, "onComplete: kotoboro2 "+list.size() +" "+t.getResult().size());
+
+                                        for (DocumentSnapshot d : t.getResult()) {
+                                            ServiceBuilding productModel = d.toObject(ServiceBuilding.class);
+                                            list.add(productModel);
+                                        }
+                                        progressBar.setVisibility(View.GONE);
+                                        sWorkerAdapter.notifyDataSetChanged();
+                                        int xx=t.getResult().size();
+                                        if(xx>0)lastVisible = t.getResult().getDocuments().get(xx - 1);
+
+                                        if (t.getResult().size() < limit) {
+                                            isLastItemReached = true;
+                                            progressBar.setVisibility(View.GONE);
+                                        }
+                                    }
+                                }
+                            });
+                        }
+                        else{
+                            progressBar.setVisibility(View.GONE);
+                        }
+
+
+                    }
+
+
+                }
+
+
+
+            }
+        });
+
+
+    }
 
 
     Dialog mdialog;
