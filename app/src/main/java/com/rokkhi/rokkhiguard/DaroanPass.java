@@ -3,6 +3,8 @@ package com.rokkhi.rokkhiguard;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.preference.PreferenceManager;
@@ -90,6 +92,8 @@ public class DaroanPass extends AppCompatActivity implements View.OnClickListene
     TextView homename;
 
 
+
+
     int flag=0;
     private static final String TAG = "DaroanPass";
 
@@ -149,7 +153,6 @@ public class DaroanPass extends AppCompatActivity implements View.OnClickListene
         zero.setOnClickListener( this);
         cross.setOnClickListener( this);
         clear.setOnClickListener( this);
-
 
         mAuth = FirebaseAuth.getInstance();
         //mAuth.signOut();
@@ -353,7 +356,6 @@ public class DaroanPass extends AppCompatActivity implements View.OnClickListene
 
 
 
-
     }
 
     private void gosignpage() {
@@ -550,24 +552,6 @@ public void matchanddelete(ArrayList<Vehicle>check, Vehicle vehicle){
         IdpResponse response = IdpResponse.fromResultIntent(data);
 
         if (resultCode == RESULT_OK) {
-
-            ///eikhane Submit data to buldings change
-/*
-            Log.e(TAG, "handleSignInResponse: "+buildid);
-            Log.e(TAG, "handleSignInResponse: "+thismobileuid);
-
-            Map<String,Object> mm=new HashMap<>();
-            mm.put("flats", FieldValue.arrayUnion(thismobileuid)); //for insert array union
-            mm.put("vehicles", FieldValue.arrayUnion(thismobileuid));
-            mm.put("whitelists", FieldValue.arrayUnion(thismobileuid));
-
-            firebaseFirestore.collection("buildingChanges").document(buildid)
-                    .update(mm).addOnSuccessListener(new OnSuccessListener<Void>() {
-                @Override
-                public void onSuccess(Void aVoid) {
-                    Toast.makeText(context, "updated", Toast.LENGTH_SHORT).show();
-                }
-            });*/
 
 
         } else {

@@ -2,9 +2,12 @@ package com.rokkhi.rokkhiguard;
 
 import androidx.lifecycle.Observer;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 
@@ -53,8 +56,8 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class MainPage extends AppCompatActivity {
 
-    CircleImageView gatepass, logout, addvis, vislist, notice, parcel, create, vehicle, child,callLogs;
     private static final String TAG = "MainPage";
+    CircleImageView gatepass, logout, addvis, vislist, notice, parcel, create, vehicle, child, callLogs,guardList;
     Context context;
     ImageButton settings;
     FirebaseFirestore firebaseFirestore;
@@ -70,6 +73,7 @@ public class MainPage extends AppCompatActivity {
     WhiteListRepository whiteListRepository;
     VehiclesRepository vehiclesRepository;
     String thismobileuid;
+    String appVersion;
 
 
     @Override
@@ -94,13 +98,58 @@ public class MainPage extends AppCompatActivity {
         settings = findViewById(R.id.settings);
         vehicle = findViewById(R.id.vehicle);
         child = findViewById(R.id.child);
-        callLogs=findViewById(R.id.callLogs);
+        callLogs = findViewById(R.id.callLogs);
+        guardList=findViewById(R.id.guardList);
 
         firebaseFirestore = FirebaseFirestore.getInstance();
         sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
         editor = sharedPref.edit();
         buildid = sharedPref.getString("buildid", "none");
         commid = sharedPref.getString("commid", "none");
+
+
+
+//check new app start
+
+/*
+        try {
+            PackageInfo pInfo = context.getPackageManager().getPackageInfo(getPackageName(), 0);
+            appVersion = pInfo.versionName;
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        firebaseFirestore.collection(getString(R.string.col_guardApk)).document(getString(R.string.newApkString))
+                .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                DocumentSnapshot documentSnapshot = task.getResult();
+                if (documentSnapshot.exists()) {
+                    String appVersionCodeNew = documentSnapshot.getString("versionCode");
+
+                    if (!appVersion.equalsIgnoreCase(appVersionCodeNew)){
+
+                        String downloadLink = documentSnapshot.getString("downloadLink");
+                        if (!downloadLink.isEmpty()){
+                            ProgressDialog progressDialog=new ProgressDialog(MainPage.this);
+                            progressDialog.setMessage("Downloading new Apk...");
+                            progressDialog.setCancelable(false);
+                            progressDialog.show();
+
+                            DownloadFile downloadFile=new DownloadFile(downloadLink,progressDialog,context);
+                            downloadFile.execute();
+
+                        }
+
+                    }
+                }
+            }
+        });*/
+
+
+
+//check new app End
+
 
 
         firebaseFirestore.collection(getString(R.string.col_activebuild)).document(buildid)
@@ -224,6 +273,14 @@ public class MainPage extends AppCompatActivity {
             }
         });
 
+        guardList.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainPage.this, GuardListActivity.class);
+                startActivity(intent);
+            }
+        });
+
     }
 
 
@@ -321,17 +378,17 @@ public class MainPage extends AppCompatActivity {
 
     }
 
-    public void matchanddelete(ArrayList<Vehicle>check, Vehicle vehicle){
-        boolean flag=false;
+    public void matchanddelete(ArrayList<Vehicle> check, Vehicle vehicle) {
+        boolean flag = false;
 
-        for(int i=0;i<check.size();i++){
-            if(check.get(i).getVehicle_id().equals(vehicle.getVehicle_id())){
+        for (int i = 0; i < check.size(); i++) {
+            if (check.get(i).getVehicle_id().equals(vehicle.getVehicle_id())) {
                 //vehiclesRepository.deleteVehicle(vehicle);
-                Log.d(TAG, "matchanddelete: hhhh " );
-                flag=true;
+                Log.d(TAG, "matchanddelete: hhhh ");
+                flag = true;
             }
         }
-        if(!flag)vehiclesRepository.deleteVehicle(vehicle);
+        if (!flag) vehiclesRepository.deleteVehicle(vehicle);
 
     }
 
@@ -358,14 +415,14 @@ public class MainPage extends AppCompatActivity {
                         check.add(vehicle);
                     }
 
-                    Log.d(TAG, "onComplete: kkk "+ check );
+                    Log.d(TAG, "onComplete: kkk " + check);
 
                     vehiclesRepository.getAllVehicle().observe(MainPage.this, new Observer<List<Vehicle>>() {
                         @Override
                         public void onChanged(@Nullable List<Vehicle> allVehicles) {
                             for (Vehicle vehicle : allVehicles) {
-                                matchanddelete(check,vehicle);
-                                Log.d(TAG, "onChanged: yyyyy "+check.size());
+                                matchanddelete(check, vehicle);
+                                Log.d(TAG, "onChanged: yyyyy " + check.size());
                                 Log.d("room yyyyy", "found a new Vehicle   " + vehicle.getF_no() + "  -- > " + vehicle.getFlat_id());
                             }
                         }
@@ -432,10 +489,9 @@ public class MainPage extends AppCompatActivity {
                         getVehiclesAndSaveToLocalDatabase(buildingChanges);
                     }
 
-                }
-                else{
-                    BuildingChanges buildingChanges= new BuildingChanges(new ArrayList<String>(),new ArrayList<String>()
-                    ,new ArrayList<String>());
+                } else {
+                    BuildingChanges buildingChanges = new BuildingChanges(new ArrayList<String>(), new ArrayList<String>()
+                            , new ArrayList<String>());
                     getAllActiveFlatsAndSaveToLocalDatabase(buildingChanges);
                     getAllWhiteListAndSaveToLocalDatabase(buildingChanges);
                     getVehiclesAndSaveToLocalDatabase(buildingChanges);

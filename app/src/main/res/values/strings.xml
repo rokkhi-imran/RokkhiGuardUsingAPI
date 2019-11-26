@@ -112,6 +112,7 @@
     <string name="col_users">users</string>
     <string name="col_userdetails">userdetails</string>
     <string name="col_flats">flats</string>
+    <string name="col_guardApk">guardApk</string>
 
 
     <string name="col_members">members</string>
@@ -170,6 +171,7 @@
     <string name="delete">Delete</string>
     <string name="delete_account_failed">Delete account failed</string>
     <string name="unknown_sign_in_response">Login successful!</string>
+    <string name="newApkString">cdGFbBM0khAeYQowlI24</string>
 
 
     <string name="title_activity_visitors">VisitorsActivity</string>

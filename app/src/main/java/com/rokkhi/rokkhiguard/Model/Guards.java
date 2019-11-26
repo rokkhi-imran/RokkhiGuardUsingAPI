@@ -1,12 +1,15 @@
 package com.rokkhi.rokkhiguard.Model;
 
 
+import android.os.Parcelable;
+
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 
-public class Guards {
+public class Guards implements Serializable {
 
     private String build_id="none";
     private String comm_id="none";

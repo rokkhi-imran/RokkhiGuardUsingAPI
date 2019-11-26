@@ -20,6 +20,7 @@
     <color name="black">#000000</color>
     <color name="link_blue">#4d94ff</color>
     <color name="darkRed">#cc0000</color>
+    <color name="guardlistColor">#cb58d9</color>
     <color name="callLogsColor">#2e8e8b</color>
     <color name="orange">#ff3300</color>
     <color name="orange2">#F94E03</color>
