@@ -23,7 +23,7 @@
 
 
         <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/propic"
+            android:id="@+id/one"
             android:layout_width="70dp"
             android:layout_height="70dp"
             android:layout_marginStart="16dp"
@@ -37,7 +37,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="28dp"
             android:layout_marginTop="15dp"
-            android:layout_toEndOf="@+id/propic"
+            android:layout_toEndOf="@+id/one"
             android:text="Name"
             android:textColor="@color/black"
             android:textSize="20sp" />
@@ -49,7 +49,7 @@
             android:layout_below="@+id/name"
             android:layout_marginStart="28dp"
             android:layout_marginTop="4dp"
-            android:layout_toEndOf="@+id/propic"
+            android:layout_toEndOf="@+id/one"
             android:text="last came"
             android:textColor="@color/link_blue"
             android:textStyle="italic" />

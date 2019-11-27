@@ -20,7 +20,7 @@
 
 
         <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/propic"
+            android:id="@+id/one"
             android:layout_width="70dp"
             android:layout_height="70dp"
             android:layout_marginStart="16dp"
@@ -34,7 +34,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="28dp"
             android:layout_marginTop="15dp"
-            android:layout_toEndOf="@+id/propic"
+            android:layout_toEndOf="@+id/one"
             android:text="name"
             android:layout_centerVertical="true"
             android:textColor="@color/black"

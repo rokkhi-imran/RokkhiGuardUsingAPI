@@ -118,7 +118,7 @@ public class ActiveFlatAdapter extends BaseAdapter implements Filterable {
             if(flag!=null && flag){
 
                 viewHolder.name.setTextColor(ContextCompat.getColor(context,R.color.white));
-//                viewHolder.name.setBackgroundColor(context.getResources().getColor(R.color.orange));
+//                viewHolder.buildingNameTV.setBackgroundColor(context.getResources().getColor(R.color.orange));
                 viewHolder.name.setBackground(ContextCompat.getDrawable(context,R.drawable.rectangletextviewwithbg));
 
             }
@@ -126,7 +126,7 @@ public class ActiveFlatAdapter extends BaseAdapter implements Filterable {
 //                convertView.setBackground(ContextCompat.getDrawable(context,R.color.white));
 
                 viewHolder.name.setTextColor(ContextCompat.getColor(context,R.color.black));
-//                viewHolder.name.setTextColor(context.getResources().getColor(R.color.black));
+//                viewHolder.buildingNameTV.setTextColor(context.getResources().getColor(R.color.black));
                 viewHolder.name.setBackground(ContextCompat.getDrawable(context,R.drawable.rectangletextview));
 
             }

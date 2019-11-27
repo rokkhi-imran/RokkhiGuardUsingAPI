@@ -198,7 +198,7 @@ public class VisitorAdapter extends RecyclerView.Adapter<VisitorAdapter.VisitorV
             super(itemView);
             view = itemView;
             name = view.findViewById(R.id.name);
-            propic = view.findViewById(R.id.propic);
+            propic = view.findViewById(R.id.one);
             intime = view.findViewById(R.id.starttime);
             outtime = view.findViewById(R.id.endtime);
             out = view.findViewById(R.id.out);

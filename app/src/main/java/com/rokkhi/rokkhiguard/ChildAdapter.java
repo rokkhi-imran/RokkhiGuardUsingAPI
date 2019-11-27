@@ -21,14 +21,12 @@ import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.rokkhi.callerapp.CallActivity;
 import com.rokkhi.rokkhiguard.CallerApp.MainActivity;
 import com.rokkhi.rokkhiguard.Model.Child;
 import com.rokkhi.rokkhiguard.Model.UDetails;
@@ -218,7 +216,7 @@ public class ChildAdapter extends RecyclerView.Adapter<ChildAdapter.ChildViewHol
             super(itemView);
             view = itemView;
             name = view.findViewById(R.id.name);
-            propic = view.findViewById(R.id.propic);
+            propic = view.findViewById(R.id.one);
             active = view.findViewById(R.id.activated);
             call = view.findViewById(R.id.call);
             flat = view.findViewById(R.id.flat);

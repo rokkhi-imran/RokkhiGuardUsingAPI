@@ -34,8 +34,6 @@ import com.rokkhi.rokkhiguard.Utils.Normalfunc;
 import java.util.ArrayList;
 import java.util.List;
 
-import huwi.joldi.abrar.rokkhiguardo.Kotlin.LinePinField;
-
 
 public class GatePass extends AppCompatActivity implements View.OnClickListener, GateAdapter.MyInterface {
 
@@ -89,7 +87,7 @@ public class GatePass extends AppCompatActivity implements View.OnClickListener,
         commid = sharedPref.getString("commid", "none");
         editor=sharedPref.edit();
 
-        one= findViewById(R.id.propic);
+        one= findViewById(R.id.one);
         two= findViewById(R.id.two);
         three= findViewById(R.id.three);
         four= findViewById(R.id.four);

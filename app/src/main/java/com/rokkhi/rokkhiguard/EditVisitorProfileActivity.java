@@ -270,7 +270,7 @@ public class EditVisitorProfileActivity extends AppCompatActivity implements Vie
 
 //                    Log.d(TAG, "onItemClick: rrr1");
 //
-//                    view.findViewById(R.id.name).setBackground(ContextCompat.getDrawable(context, R.drawable.rectangle_textsize_with_bg));
+//                    view.findViewById(R.id.buildingNameTV).setBackground(ContextCompat.getDrawable(context, R.drawable.rectangle_textsize_with_bg));
 //                    holder.ename.setTextColor(ContextCompat.getColor(context,R.color.white));
                     activeFlatAdapter.changedata(ss.getF_no(), true);
                     activeFlatAdapter.notifyDataSetChanged();
@@ -283,7 +283,7 @@ public class EditVisitorProfileActivity extends AppCompatActivity implements Vie
 
                 } else {
 ////                    Log.d(TAG, "onItemClick: rrr2");
-//                    view.findViewById(R.id.name).setBackground(ContextCompat.getDrawable(context, R.drawable.rectangle_textsize));
+//                    view.findViewById(R.id.buildingNameTV).setBackground(ContextCompat.getDrawable(context, R.drawable.rectangle_textsize));
 //                    holder.ename.setTextColor(ContextCompat.getColor(context,R.color.Black));
 
                     activeFlatAdapter.changedata(ss.getF_no(), false);

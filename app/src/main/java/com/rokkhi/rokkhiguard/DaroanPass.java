@@ -3,20 +3,31 @@ package com.rokkhi.rokkhiguard;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.preference.PreferenceManager;
+
 import androidx.annotation.NonNull;
+
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.material.snackbar.Snackbar;
 
-import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.Observer;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -28,22 +39,15 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.google.firebase.firestore.SetOptions;
-import com.google.firebase.firestore.WriteBatch;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
 import com.google.firebase.messaging.FirebaseMessaging;
-import com.rokkhi.rokkhiguard.Model.ActiveFlats;
-import com.rokkhi.rokkhiguard.Model.BuildingChanges;
+import com.rokkhi.rokkhiguard.CallerApp.MainActivity;
+import com.rokkhi.rokkhiguard.Model.Buildings;
 import com.rokkhi.rokkhiguard.Model.GuardPhone;
-import com.rokkhi.rokkhiguard.Model.Vehicle;
-import com.rokkhi.rokkhiguard.Model.Whitelist;
 import com.rokkhi.rokkhiguard.Utils.Normalfunc;
 import com.rokkhi.rokkhiguard.data.FlatsRepository;
 import com.rokkhi.rokkhiguard.data.VehiclesRepository;
@@ -51,16 +55,15 @@ import com.rokkhi.rokkhiguard.data.WhiteListRepository;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import huwi.joldi.abrar.rokkhiguardo.Kotlin.CirclePinField;
-import io.grpc.internal.LogExceptionRunnable;
 
 
 public class DaroanPass extends AppCompatActivity implements View.OnClickListener {
 
+    private static final int RC_SIGN_IN = 12773;
+    private static final String TAG = "DaroanPass";
     CirclePinField circlePinField;
     TextView one;
     TextView two;
@@ -74,85 +77,77 @@ public class DaroanPass extends AppCompatActivity implements View.OnClickListene
     TextView zero;
     TextView cross;
     TextView clear;
-    String passtext="";
-    private View mRootView;
+    String passtext = "";
     Context context;
     AuthUI.IdpConfig phoneConfigWithDefaultNumber;
-    private static final int RC_SIGN_IN = 12773;
-
-    private FirebaseAuth mAuth;
     FirebaseUser firebaseUser;
-    private FirebaseAuth.AuthStateListener mAuthListener;
     FirebaseFirestore firebaseFirestore;
     SharedPreferences sharedPref;
     SharedPreferences.Editor editor;
-    String token="";
-    String tabpass="";
-    String flatid = "", buildid = "", commid = "",userid="";
-    TextView homename;
-
-
-
-
-    int flag=0;
-    private static final String TAG = "DaroanPass";
-
-
-
-
+    String token = "";
+    String tabpass = "";
+    String flatid = "", buildid = "", commid = "", userid = "";
+   static TextView homename;
+    ArrayAdapter<String> adapter;
+    int flag = 0;
     //roomdatabase
     FlatsRepository flatsRepository;
     WhiteListRepository whiteListRepository;
     VehiclesRepository vehiclesRepository;
     String thismobileuid;
+    List<String> buildingsName;
+    private View mRootView;
+    private FirebaseAuth mAuth;
+    private FirebaseAuth.AuthStateListener mAuthListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_daroan_pass);
-        context= DaroanPass.this;
+        context = DaroanPass.this;
         Log.d(TAG, "onCreate: xxx ");
+        buildingsName = new ArrayList<>();
 
 
-        circlePinField= findViewById( R.id.circleField);
+        circlePinField = findViewById(R.id.circleField);
         sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
         mRootView = findViewById(R.id.root);
-        homename= findViewById(R.id.companyname);
+        homename = findViewById(R.id.buildingname);
         flatid = sharedPref.getString("flatid", "none");
         buildid = sharedPref.getString("buildid", "none");
         commid = sharedPref.getString("commid", "none");
 
-        firebaseFirestore= FirebaseFirestore.getInstance();
-        editor=sharedPref.edit();
+        firebaseFirestore = FirebaseFirestore.getInstance();
+        editor = sharedPref.edit();
 
 
+        one = findViewById(R.id.one);
+        two = findViewById(R.id.two);
+        three = findViewById(R.id.three);
+        four = findViewById(R.id.four);
+        five = findViewById(R.id.five);
+        six = findViewById(R.id.six);
+        seven = findViewById(R.id.seven);
+        eight = findViewById(R.id.eight);
+        nine = findViewById(R.id.nine);
+        zero = findViewById(R.id.zero);
+        cross = findViewById(R.id.cross);
+        clear = findViewById(R.id.clear);
 
-        one= findViewById(R.id.propic);
-        two= findViewById(R.id.two);
-        three= findViewById(R.id.three);
-        four= findViewById(R.id.four);
-        five= findViewById(R.id.five);
-        six= findViewById(R.id.six);
-        seven= findViewById(R.id.seven);
-        eight= findViewById(R.id.eight);
-        nine= findViewById(R.id.nine);
-        zero= findViewById(R.id.zero);
-        cross= findViewById(R.id.cross);
-        clear= findViewById(R.id.clear);
 
+        one.setOnClickListener(this);
+        two.setOnClickListener(this);
+        three.setOnClickListener(this);
+        four.setOnClickListener(this);
+        five.setOnClickListener(this);
+        six.setOnClickListener(this);
+        seven.setOnClickListener(this);
+        eight.setOnClickListener(this);
+        nine.setOnClickListener(this);
+        zero.setOnClickListener(this);
+        cross.setOnClickListener(this);
+        clear.setOnClickListener(this);
 
-        one.setOnClickListener( this);
-        two.setOnClickListener( this);
-        three.setOnClickListener( this);
-        four.setOnClickListener( this);
-        five.setOnClickListener( this);
-        six.setOnClickListener( this);
-        seven.setOnClickListener( this);
-        eight.setOnClickListener( this);
-        nine.setOnClickListener( this);
-        zero.setOnClickListener( this);
-        cross.setOnClickListener( this);
-        clear.setOnClickListener( this);
 
         mAuth = FirebaseAuth.getInstance();
         //mAuth.signOut();
@@ -160,16 +155,11 @@ public class DaroanPass extends AppCompatActivity implements View.OnClickListene
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 firebaseUser = firebaseAuth.getCurrentUser();
-                if(firebaseUser==null){
+                if (firebaseUser == null) {
                     gosignpage();
-                }
+                } else {
 
-
-
-                else {
-
-                    final String phoneno=firebaseUser.getPhoneNumber();
-                    final String userid=firebaseUser.getUid();
+                    final String phoneno = firebaseUser.getPhoneNumber();
 
                     thismobileuid = FirebaseAuth.getInstance().getUid();
 
@@ -178,44 +168,42 @@ public class DaroanPass extends AppCompatActivity implements View.OnClickListene
                     vehiclesRepository = new VehiclesRepository(DaroanPass.this);
 
 
-
-                    Log.d(TAG, "onAuthStateChanged: ccc10 "+ phoneno);
+                    Log.d(TAG, "onAuthStateChanged: ccc10 " + phoneno);
                     firebaseFirestore.collection(getString(R.string.col_phoneguards)).document(phoneno).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                         @Override
                         public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                            if(task.isSuccessful()){
-                                final DocumentSnapshot documentSnapshot= task.getResult();
+                            if (task.isSuccessful()) {
+                                final DocumentSnapshot documentSnapshot = task.getResult();
 
                                 Log.d(TAG, "onComplete: ck1 ");
-                                if(documentSnapshot!=null && documentSnapshot.exists()){
+                                if (documentSnapshot != null && documentSnapshot.exists()) {
                                     Log.d(TAG, "onComplete: ck2");
 
-                                    GuardPhone guardPhone= documentSnapshot.toObject(GuardPhone.class);
-                                    ArrayList<String> arr= guardPhone.getBuild_array();
-                                    buildid=arr.get(0);
-                                    commid= documentSnapshot.getString("comm_id");
-                                    editor.putString("buildid",buildid);
-                                    editor.putString("commid",commid);
+                                    GuardPhone guardPhone = documentSnapshot.toObject(GuardPhone.class);
+                                    ArrayList<String> arr = guardPhone.getBuild_array();
+
+
+                                    buildid = arr.get(0);
+                                    commid = documentSnapshot.getString("comm_id");
+                                    editor.putString("buildid", buildid);
+                                    editor.putString("commid", commid);
                                     editor.apply();
-                                    token=documentSnapshot.getString("g_token");
-                                    tabpass= documentSnapshot.getString("mobilepass");
+                                    token = documentSnapshot.getString("g_token");
+                                    tabpass = documentSnapshot.getString("mobilepass");
 
-                                    editor.putString("pass",tabpass);
+                                    editor.putString("pass", tabpass);
                                     editor.apply();
-
-
 
 
                                     firebaseFirestore.collection(getString(R.string.col_build)).document(buildid).get()
                                             .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                                                 @Override
                                                 public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                                                    if(task.isSuccessful()){
-                                                        DocumentSnapshot documentSnapshot1= task.getResult();
-                                                        if(documentSnapshot1.exists()){
-                                                            String hname= documentSnapshot1.getString("b_name");
+                                                    if (task.isSuccessful()) {
+                                                        DocumentSnapshot documentSnapshot1 = task.getResult();
+                                                        if (documentSnapshot1.exists()) {
+                                                            String hname = documentSnapshot1.getString("b_name");
                                                             homename.setText(hname);
-
 
 
                                                         }
@@ -228,16 +216,15 @@ public class DaroanPass extends AppCompatActivity implements View.OnClickListene
                                             .document(commid).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                                         @Override
                                         public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                                            if(task.isSuccessful()){
-                                                DocumentSnapshot documentSnapshot1= task.getResult();
-                                                if(documentSnapshot1.exists()){
+                                            if (task.isSuccessful()) {
+                                                DocumentSnapshot documentSnapshot1 = task.getResult();
+                                                if (documentSnapshot1.exists()) {
 
-                                                    Boolean status= documentSnapshot1.getBoolean("c_status");
-                                                    if(status==null || !status){
+                                                    Boolean status = documentSnapshot1.getBoolean("c_status");
+                                                    if (status == null || !status) {
                                                         Log.d(TAG, "onComplete: ck4");
                                                         mAuth.signOut();
-                                                    }
-                                                    else{
+                                                    } else {
                                                         //homename.setText(hname);
 
                                                     }
@@ -247,28 +234,24 @@ public class DaroanPass extends AppCompatActivity implements View.OnClickListene
                                     });
 
 
-
-
-
-
-                                    FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener( DaroanPass.this,  new OnSuccessListener<InstanceIdResult>() {
+                                    FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener(DaroanPass.this, new OnSuccessListener<InstanceIdResult>() {
                                         @Override
                                         public void onSuccess(InstanceIdResult instanceIdResult) {
 
-                                            String tempToken=instanceIdResult.getToken();
+                                            String tempToken = instanceIdResult.getToken();
 
-                                            if(!tempToken.equals(token)){
+                                            if (!tempToken.equals(token)) {
 
-                                                if(token.isEmpty() || token.equals("none")){
-                                                    String phone= firebaseUser.getPhoneNumber();
-                                                    String uid= firebaseUser.getUid();
+                                                if (token.isEmpty() || token.equals("none")) {
+                                                    String phone = firebaseUser.getPhoneNumber();
+                                                    String uid = firebaseUser.getUid();
 
-                                                    Normalfunc normalfunc= new Normalfunc();
-                                                    normalfunc.addUser(tempToken,phone,uid,"guard","","Guard");
+                                                    Normalfunc normalfunc = new Normalfunc();
+                                                    normalfunc.addUser(tempToken, phone, uid, "guard", "", "Guard");
 
 
-                                                    String topic= buildid;
-                                                    topic=topic+"guard"+"android";
+                                                    String topic = buildid;
+                                                    topic = topic + "guard" + "android";
                                                     FirebaseMessaging.getInstance().subscribeToTopic(topic).addOnSuccessListener(new OnSuccessListener<Void>() {
                                                         @Override
                                                         public void onSuccess(Void aVoid) {
@@ -276,8 +259,8 @@ public class DaroanPass extends AppCompatActivity implements View.OnClickListene
                                                         }
                                                     });
 
-                                                    String topic1= buildid;
-                                                    topic1=topic1+"all"+"android";
+                                                    String topic1 = buildid;
+                                                    topic1 = topic1 + "all" + "android";
 
                                                     FirebaseMessaging.getInstance().subscribeToTopic(topic1).addOnSuccessListener(new OnSuccessListener<Void>() {
                                                         @Override
@@ -287,8 +270,8 @@ public class DaroanPass extends AppCompatActivity implements View.OnClickListene
                                                     });
 
 
-                                                    String topic2= commid.replace("@","_");
-                                                    topic2=topic2+"guard"+"android";
+                                                    String topic2 = commid.replace("@", "_");
+                                                    topic2 = topic2 + "guard" + "android";
                                                     FirebaseMessaging.getInstance().subscribeToTopic(topic2).addOnSuccessListener(new OnSuccessListener<Void>() {
                                                         @Override
                                                         public void onSuccess(Void aVoid) {
@@ -296,8 +279,8 @@ public class DaroanPass extends AppCompatActivity implements View.OnClickListene
                                                         }
                                                     });
 
-                                                    String topic3= commid.replace("@","_");
-                                                    topic3=topic3+"all"+"android";
+                                                    String topic3 = commid.replace("@", "_");
+                                                    topic3 = topic3 + "all" + "android";
 
                                                     FirebaseMessaging.getInstance().subscribeToTopic(topic3).addOnSuccessListener(new OnSuccessListener<Void>() {
                                                         @Override
@@ -308,43 +291,34 @@ public class DaroanPass extends AppCompatActivity implements View.OnClickListene
                                                 }
 
 
-                                                firebaseFirestore.collection(getString(R.string.col_phoneguards)).document(phoneno).update("g_token",instanceIdResult.getToken()
-                                                        ,"activated",true)
+                                                firebaseFirestore.collection(getString(R.string.col_phoneguards)).document(phoneno).update("g_token", instanceIdResult.getToken()
+                                                        , "activated", true)
                                                         .addOnCompleteListener(new OnCompleteListener<Void>() {
                                                             @Override
                                                             public void onComplete(@NonNull Task<Void> task) {
-                                                                if(task.isSuccessful()){
-                                                                    Toast.makeText(context,"Welcome!",Toast.LENGTH_SHORT).show();
+                                                                if (task.isSuccessful()) {
+                                                                    Toast.makeText(context, "Welcome!", Toast.LENGTH_SHORT).show();
                                                                 }
                                                             }
                                                         });
                                             }
 
 
-
                                         }
                                     });
 
 
-
-
-
-
-                                }
-                                else{
+                                } else {
                                     Log.d(TAG, "onComplete: ck5");
                                     mAuth.signOut();
                                 }
-                            }
-                            else {
+                            } else {
                                 Log.d(TAG, "onComplete: ck6");
                                 Log.d(TAG, "onComplete:  task not success");
-                               // mAuth.signOut();
+                                // mAuth.signOut();
                             }
                         }
                     });
-
-
 
 
                     Log.d(TAG, "onAuthStateChanged:signed_out");
@@ -353,10 +327,103 @@ public class DaroanPass extends AppCompatActivity implements View.OnClickListene
         };
 
 
-
+//set on clik
+        homename.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                callBuildingsNameList(context);
+            }
+        });
 
 
     }
+
+    private void callBuildingsNameList(final Context context) {
+        String phoneNumebr;
+        if (firebaseUser != null) {
+            phoneNumebr = firebaseUser.getPhoneNumber();
+
+
+            firebaseFirestore.collection(getString(R.string.col_phoneguards)).document(phoneNumebr).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+
+
+                    if (task.isSuccessful()) {
+                        final DocumentSnapshot documentSnapshot = task.getResult();
+
+                        Log.d(TAG, "onComplete: ck1 ");
+                        if (documentSnapshot != null && documentSnapshot.exists()) {
+                            Log.d(TAG, "onComplete: ck2");
+
+                            GuardPhone guardPhone = documentSnapshot.toObject(GuardPhone.class);
+                            ArrayList<String> arr = guardPhone.getBuild_array();
+
+                            showAddressAlert(arr, context);
+
+
+                        }
+                    }
+
+
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Toast.makeText(context, "failed to laod data", Toast.LENGTH_SHORT).show();
+                }
+            });
+
+
+        }
+
+    }
+
+    private void showAddressAlert(List<String> list, final Context context) {
+
+        final AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
+
+        View rowList = getLayoutInflater().inflate(R.layout.alert_dialog_adress, null);
+
+
+        RecyclerView recyclerList = rowList.findViewById(R.id.buildingnaemList);
+
+        recyclerList.setLayoutManager(new LinearLayoutManager(context));
+
+
+
+        alertDialog.setView(rowList);
+        final AlertDialog dialog = alertDialog.create();
+        dialog.show();
+
+
+        BuildingNameAdapter adapter = new BuildingNameAdapter(context, list,dialog);
+
+        recyclerList.setAdapter(adapter);
+
+
+
+
+
+       /* houseNoEdit.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {            }            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                EditBuildActivity.this.adapter.getFilter().filter(s);
+            }            @Override
+            public void afterTextChanged(Editable s) {            }
+        });   */
+
+        /*houseNoList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                String houseno=String.valueOf(parent.getItemAtPosition(position));
+                editText.setText(houseno);
+                dialog.dismiss();
+            }
+        });*/
+    }
+
 
     private void gosignpage() {
         List<String> whitelistedCountries = new ArrayList<String>();
@@ -379,174 +446,7 @@ public class DaroanPass extends AppCompatActivity implements View.OnClickListene
 
         }
     }
-/*
 
-
-    public void getAllActiveFlatsAndSaveToLocalDatabase(final BuildingChanges buildingChanges) {
-        // final FlatsRepository flatsRepository = new FlatsRepository(this);
-
-        firebaseFirestore.collection(getString(R.string.col_activeflat))
-                .whereEqualTo("build_id", buildid).orderBy("f_no", Query.Direction.ASCENDING).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if (task.isSuccessful()) {
-                    Log.d(TAG, "onComplete: pppp");
-                    for (DocumentSnapshot documentSnapshot : task.getResult()) {
-                        ActiveFlats activeFlat = documentSnapshot.toObject(ActiveFlats.class);
-                        flatsRepository.deleteActiveFlat(activeFlat);
-                        flatsRepository.insertActiveFlat(activeFlat);
-                    }
-
-                    Map<String, Object> data = new HashMap<>();
-                    ArrayList<String> flatdata = new ArrayList<>();
-                    flatdata = buildingChanges.getFlats();
-                    flatdata.add(thismobileuid);
-                    data.put("flats", flatdata);
-
-
-                    firebaseFirestore.collection("buildingChanges").document(buildid)
-                            .set(data, SetOptions.merge()).addOnCompleteListener(new OnCompleteListener<Void>() {
-                        @Override
-                        public void onComplete(@NonNull Task<Void> task) {
-                            Toast.makeText(context, "Flat data changed!", Toast.LENGTH_SHORT).show();
-                        }
-                    });
-
-                    flatsRepository.deleteTask(buildid);
-
-                } else {
-                    Log.d(TAG, "onComplete: pppp1");
-                }
-            }
-        });
-    }
-
-*/
-/*
-    public void getAllWhiteListAndSaveToLocalDatabase(final BuildingChanges buildingChanges) {
-        //final FlatsRepository flatsRepository = new FlatsRepository(this);
-
-
-        firebaseFirestore.collection(getString(R.string.col_whitelists))
-                .whereEqualTo("build_id", buildid)
-                .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if (task.isSuccessful()) {
-
-                    for (DocumentSnapshot documentSnapshot : task.getResult()) {
-                        Whitelist whitelist = documentSnapshot.toObject(Whitelist.class);
-                        whiteListRepository.deleteWhiteList(whitelist);
-                        whiteListRepository.insert(whitelist);
-                    }
-
-
-                    Map<String, Object> data = new HashMap<>();
-                    ArrayList<String> wldata = new ArrayList<>();
-                    wldata = buildingChanges.getWhitelists();
-                    wldata.add(thismobileuid);
-                    data.put("whitelists", wldata);
-
-
-                    firebaseFirestore.collection("buildingChanges").document(buildid)
-                            .set(data, SetOptions.merge()).addOnCompleteListener(new OnCompleteListener<Void>() {
-                        @Override
-                        public void onComplete(@NonNull Task<Void> task) {
-                            Toast.makeText(context, "Whitelists data changed!", Toast.LENGTH_SHORT).show();
-                        }
-                    });
-
-                    whiteListRepository.deleteTask(buildid);
-
-
-                } else {
-                    Log.d(TAG, "onComplete: xxx5");
-                }
-            }
-        });
-
-    }
-
-  */
-  /*
-public void matchanddelete(ArrayList<Vehicle>check, Vehicle vehicle){
-        boolean flag=false;
-
-        for(int i=0;i<check.size();i++){
-            if(check.get(i).getVehicle_id().equals(vehicle.getVehicle_id())){
-                //vehiclesRepository.deleteVehicle(vehicle);
-                Log.d(TAG, "matchanddelete: hhhh " );
-                flag=true;
-            }
-        }
-        if(!flag)vehiclesRepository.deleteVehicle(vehicle);
-
-    }
-    */
-/*
-
-    public void getVehiclesAndSaveToLocalDatabase(final BuildingChanges buildingChanges) {
-        //final FlatsRepository flatsRepository = new FlatsRepository(this);
-
-
-        Log.d("room", "getting new vehicle success " + buildid);
-        firebaseFirestore.collection(getString(R.string.col_vehicle))
-                .whereEqualTo("build_id", buildid)
-                .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if (task.isSuccessful()) {
-
-                    final ArrayList<Vehicle> check = new ArrayList<>();
-                    Log.d("room", "getting new vehicle success " + "adsf");
-                    for (DocumentSnapshot documentSnapshot : task.getResult()) {
-                        Vehicle vehicle = documentSnapshot.toObject(Vehicle.class);
-
-                        Log.d("room", "getting new vehicle data found " + "adsf");
-                        vehiclesRepository.deleteVehicle(vehicle);
-                        vehiclesRepository.insert(vehicle);
-                        check.add(vehicle);
-                    }
-
-                    Log.d(TAG, "onComplete: kkk "+ check );
-
-                    vehiclesRepository.getAllVehicle().observe(DaroanPass.this, new Observer<List<Vehicle>>() {
-                        @Override
-                        public void onChanged(@Nullable List<Vehicle> allVehicles) {
-                            for (Vehicle vehicle : allVehicles) {
-                                matchanddelete(check,vehicle);
-                                Log.d(TAG, "onChanged: yyyyy "+check.size());
-                                Log.d("room yyyyy", "found a new Vehicle   " + vehicle.getF_no() + "  -- > " + vehicle.getFlat_id());
-                            }
-                        }
-                    });
-
-
-                    Map<String, Object> data = new HashMap<>();
-                    ArrayList<String> vdata = new ArrayList<>();
-                    vdata = buildingChanges.getVehicles();
-                    vdata.add(thismobileuid);
-                    data.put("vehicles", vdata);
-
-
-                    firebaseFirestore.collection("buildingChanges").document(buildid)
-                            .set(data, SetOptions.merge()).addOnCompleteListener(new OnCompleteListener<Void>() {
-                        @Override
-                        public void onComplete(@NonNull Task<Void> task) {
-                            Toast.makeText(context, "vehicle data changed!", Toast.LENGTH_SHORT).show();
-                        }
-                    });
-                    vehiclesRepository.deleteTask(buildid);
-
-
-                } else {
-                    Log.d(TAG, "onComplete: xxx5");
-                }
-            }
-        });
-    }
-
-*/
 
     private void handleSignInResponse(int resultCode, Intent data) {
         IdpResponse response = IdpResponse.fromResultIntent(data);
@@ -572,7 +472,6 @@ public void matchanddelete(ArrayList<Vehicle>check, Vehicle vehicle){
     }
 
 
-
     public void signInPhone(View view) {
         startActivityForResult(
                 AuthUI.getInstance()
@@ -585,45 +484,38 @@ public void matchanddelete(ArrayList<Vehicle>check, Vehicle vehicle){
     }
 
 
-
-
     @Override
     public void onClick(View view) {
 
-        if(view.getId()==R.id.cross  ){
-            if( passtext.length() >0)passtext=passtext.substring(0,passtext.length()-1);
-        }
-        else if(view.getId() == R.id.clear){
-            passtext="";
-        }
-        else{
-            TextView tt= (TextView) view;
-            passtext=passtext+ tt.getText().toString();
+        if (view.getId() == R.id.cross) {
+            if (passtext.length() > 0) passtext = passtext.substring(0, passtext.length() - 1);
+        } else if (view.getId() == R.id.clear) {
+            passtext = "";
+        } else {
+            TextView tt = (TextView) view;
+            passtext = passtext + tt.getText().toString();
         }
         circlePinField.setText(passtext);
 
-        if(passtext.length()==5){
+        if (passtext.length() == 5) {
             //circlePinField.setText(passtext);
-            if(tabpass!=null && tabpass.equals(passtext)){
-               // passtext="";
-                Intent intent=new Intent(DaroanPass.this,MainPage.class);
+            if (tabpass != null && tabpass.equals(passtext)) {
+                // passtext="";
+                Intent intent = new Intent(DaroanPass.this, MainPage.class);
                 startActivity(intent);
                 finish();
-            }
-            else{
-                tabpass=sharedPref.getString("pass","none");
-                if(tabpass!=null && tabpass.equals(passtext)){
+            } else {
+                tabpass = sharedPref.getString("pass", "none");
+                if (tabpass != null && tabpass.equals(passtext)) {
                     //passtext="";
 
-                    Intent intent=new Intent(DaroanPass.this,MainPage.class);
+                    Intent intent = new Intent(DaroanPass.this, MainPage.class);
                     startActivity(intent);
                     finish();
-                }
+                } else {
 
-                else {
-
-                    passtext="";
-                    Toast.makeText(context,"Wrong passcode!!",Toast.LENGTH_SHORT).show();
+                    passtext = "";
+                    Toast.makeText(context, "Wrong passcode!!", Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -634,12 +526,10 @@ public void matchanddelete(ArrayList<Vehicle>check, Vehicle vehicle){
 
                 public void onFinish() {
                     circlePinField.setText("");
-                    passtext="";
+                    passtext = "";
                 }
 
             }.start();
-
-
 
 
             return;
@@ -647,14 +537,11 @@ public void matchanddelete(ArrayList<Vehicle>check, Vehicle vehicle){
     }
 
 
-
-
     @Override
     public void onStart() {
         super.onStart();
         Log.d(TAG, "onStart: xxx");
         mAuth.addAuthStateListener(mAuthListener);
-
 
 
     }
@@ -673,8 +560,118 @@ public void matchanddelete(ArrayList<Vehicle>check, Vehicle vehicle){
     }
 
 
+    private static class BuildingNameAdapter extends RecyclerView.Adapter<BuildingNameAdapter.ListViewHolder>{
+
+            Context context;
+            List<String> list;
+            FirebaseFirestore firebaseFirestore;
+            AlertDialog alertDialog;
+
+
+            //for onClick from java class (Second ....)
+            private ClickListener clickListener;
+
+
+            public BuildingNameAdapter(Context context, List<String> list, AlertDialog dialog) {
+                firebaseFirestore=FirebaseFirestore.getInstance();
+                this.context = context;
+                this.list = list;
+                this.alertDialog=dialog;
+            }
+
+            @NonNull
+            @Override
+            public ListViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+
+                View view= LayoutInflater.from(parent.getContext()).inflate(R.layout.item_building_name, parent, false);
+
+                ListViewHolder listViewHolder=new ListViewHolder(view);
+
+                return listViewHolder;
+            }
+
+            @Override
+            public void onBindViewHolder(@NonNull final ListViewHolder holder, int position) {
+
+                Log.e("TAG", "onBindViewHolder: ID =  "+list.get(position) );
+
+                firebaseFirestore.collection(context.getString(R.string.col_build))
+                        .whereEqualTo("build_id",list.get(position))
+                        .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+
+                        if (task.isSuccessful()){
+                            for (DocumentSnapshot snapshot:task.getResult()){
+
+                                Buildings buildings = (Buildings) snapshot.toObject(Buildings.class);
+                                holder.buildingName.setText(buildings.getB_name());
+                                holder.buildingIDTV.setText(buildings.getBuild_id());
+                            }
+                        }
+                    }
+                });
+
+
+
+            }
+
+            @Override
+            public int getItemCount() {
+                return list.size();
+            }
+
+            public class ListViewHolder extends RecyclerView.ViewHolder implements View.OnLongClickListener, View.OnClickListener {
+
+                TextView buildingName ;
+                TextView buildingIDTV ;
+                public View view;
+
+                ListViewHolder(View itemView) {
+                    super(itemView);
+                    view = itemView;
+                    buildingName = view.findViewById(R.id.buildingNameTV);
+                    buildingIDTV =view.findViewById(R.id.buildingIDTV);
+
+                    itemView.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+
+                            alertDialog.dismiss();
+                            DaroanPass.homename.setText(buildingIDTV.getText().toString());
+
+                        }
+                    });
+
+
+                }
+
+                @Override
+                public void onClick(View v) {
+
+                    clickListener.onItemClick(getAdapterPosition(), v, buildingName.getText().toString(),buildingIDTV.getText().toString());
+
+                }
+
+                @Override
+                public boolean onLongClick(View v) {
+
+                    clickListener.onItemLongClick(getAdapterPosition(), v);
+
+                    return false;
+                }
+            }
+
+
+            public interface ClickListener {
+                void onItemClick(int position, View v, String s, String text);
+                void onItemLongClick(int position, View v);
+            }
 
 
 
 
+
+
+    }
 }

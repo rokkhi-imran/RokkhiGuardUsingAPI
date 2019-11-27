@@ -74,7 +74,7 @@ public class GeneralActivity extends AppCompatPreferenceActivity {
                         preference.setSummary(R.string.summary_choose_ringtone);
                     } else {
                         // Set the summary to reflect the new ringtone display
-                        // name.
+                        // buildingNameTV.
                         String name = ringtone.getTitle(preference.getContext());
                         preference.setSummary(name);
                     }
@@ -82,7 +82,7 @@ public class GeneralActivity extends AppCompatPreferenceActivity {
 
             } else if (preference instanceof EditTextPreference) {
                 if (preference.getKey().equals("key_gallery_name")) {
-                    // update the changed gallery name to summary filed
+                    // update the changed gallery buildingNameTV to summary filed
                     preference.setSummary(stringValue);
                 }
             } else {

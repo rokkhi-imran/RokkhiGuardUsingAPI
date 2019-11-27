@@ -379,7 +379,7 @@ public class AddVisitor extends AppCompatActivity implements IPickResult{
                                             alertDialog.setCancelable(false);
                                             LayoutInflater inflater = getLayoutInflater();
                                             View convertView = (View) inflater.inflate(R.layout.item_person_visitor, null);
-                                            CircleImageView propic = convertView.findViewById(R.id.propic);
+                                            CircleImageView propic = convertView.findViewById(R.id.one);
                                             final TextView name = convertView.findViewById(R.id.name);
                                             Button cancel = convertView.findViewById(R.id.cancel);
                                             RelativeLayout relativeLayout = convertView.findViewById(R.id.relativeLayout);

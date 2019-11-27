@@ -2,10 +2,9 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
     android:id="@+id/root"
-    >
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
     <ImageView
         android:id="@+id/imageView"
@@ -20,22 +19,17 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/companyname"
+    <Button
+
+        android:id="@+id/buildingname"
         android:layout_width="match_parent"
-        android:layout_height="33dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginEnd="8dp"
-        android:gravity="center"
-        android:text="Community name"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:background="@drawable/less_round_button"
+        android:text="building name,address"
         android:textColor="@color/Black"
-        android:textSize="20sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView"
-        />
+
+        app:layout_constraintTop_toBottomOf="@+id/imageView" />
 
 
     <huwi.joldi.abrar.rokkhiguardo.Kotlin.CirclePinField
@@ -53,7 +47,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/companyname"
+        app:layout_constraintTop_toBottomOf="@+id/buildingname"
         app:noOfFields="5" />
 
 
@@ -189,7 +183,7 @@
         app:layout_constraintTop_toBottomOf="@+id/three" />
 
     <TextView
-        android:id="@+id/propic"
+        android:id="@+id/one"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="60dp"
@@ -215,7 +209,7 @@
         android:textColor="@color/Black"
         android:textSize="40sp"
         app:layout_constraintEnd_toStartOf="@+id/three"
-        app:layout_constraintStart_toEndOf="@+id/propic"
+        app:layout_constraintStart_toEndOf="@+id/one"
         app:layout_constraintTop_toBottomOf="@+id/circleField" />
 
     <TextView
@@ -246,11 +240,7 @@
         android:textColor="@color/Black"
         android:textSize="40sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/propic" />
-
-
-
-
+        app:layout_constraintTop_toBottomOf="@+id/one" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -163,7 +163,7 @@
             app:layout_constraintTop_toBottomOf="@+id/three" />
 
         <TextView
-            android:id="@+id/propic"
+            android:id="@+id/one"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="60dp"
@@ -189,7 +189,7 @@
             android:textColor="@color/Black"
             android:textSize="40sp"
             app:layout_constraintEnd_toStartOf="@+id/three"
-            app:layout_constraintStart_toEndOf="@+id/propic"
+            app:layout_constraintStart_toEndOf="@+id/one"
             app:layout_constraintTop_toBottomOf="@+id/search" />
 
         <TextView
@@ -220,7 +220,7 @@
             android:textColor="@color/Black"
             android:textSize="40sp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/propic" />
+            app:layout_constraintTop_toBottomOf="@+id/one" />
 
         <TextView
             android:id="@+id/clear"

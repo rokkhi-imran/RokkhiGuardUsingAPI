@@ -588,7 +588,7 @@ public class CreateProfile extends AppCompatActivity implements ActiveFlatAdapte
                                 View convertView = (View) inflater.inflate(R.layout.item_person_profile, null);
                                 final TextView name = convertView.findViewById(R.id.name);
                                 final TextView gatepass = convertView.findViewById(R.id.pass);
-                                CircleImageView pic = convertView.findViewById(R.id.propic);
+                                CircleImageView pic = convertView.findViewById(R.id.one);
                                 Button cancel = convertView.findViewById(R.id.cancel);
                                 Button edit = convertView.findViewById(R.id.edit);
                                 TextView cc = convertView.findViewById(R.id.cc);
@@ -610,7 +610,7 @@ public class CreateProfile extends AppCompatActivity implements ActiveFlatAdapte
                                         startActivity(new Intent(CreateProfile.this, EditVisitorProfileActivity.class)
                                                 .putExtra("s_id", list.get(0).getS_id())
                                                 .putExtra("who_add", list.get(0).getWho_add())
-                                                .putExtra("name", list.get(0).getS_name())
+                                                .putExtra("buildingNameTV", list.get(0).getS_name())
                                                 .putExtra("", list.get(0).getS_phone())
                                         );
 

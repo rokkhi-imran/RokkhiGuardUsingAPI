@@ -64,7 +64,7 @@ public class UsersAdapter extends BaseAdapter implements Filterable {
             convertView = mInflater.inflate(R.layout.item_person_flat, null);
             viewHolder.name = (TextView) convertView.findViewById(R.id.name);
             viewHolder.flatnumber = (TextView) convertView.findViewById(R.id.flat);
-            viewHolder.propic =  convertView.findViewById(R.id.propic);
+            viewHolder.propic =  convertView.findViewById(R.id.one);
 
 
 
