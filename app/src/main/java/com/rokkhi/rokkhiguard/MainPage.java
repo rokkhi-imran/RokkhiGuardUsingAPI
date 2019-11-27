@@ -9,6 +9,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.os.Environment;
 import android.preference.PreferenceManager;
 
 import androidx.annotation.NonNull;
@@ -46,6 +47,7 @@ import com.rokkhi.rokkhiguard.data.FlatsRepository;
 import com.rokkhi.rokkhiguard.data.VehiclesRepository;
 import com.rokkhi.rokkhiguard.data.WhiteListRepository;
 
+import java.io.File;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -54,10 +56,12 @@ import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
+import static com.google.firebase.firestore.FieldValue.delete;
+
 public class MainPage extends AppCompatActivity {
 
     private static final String TAG = "MainPage";
-    CircleImageView gatepass, logout, addvis, vislist, notice, parcel, create, vehicle, child, callLogs,guardList;
+    CircleImageView gatepass, logout, addvis, vislist, notice, parcel, create, vehicle, child, callLogs, guardList;
     Context context;
     ImageButton settings;
     FirebaseFirestore firebaseFirestore;
@@ -83,6 +87,7 @@ public class MainPage extends AppCompatActivity {
 
 
         Log.d(TAG, "onCreate: " + "xxx");
+//        Toast.makeText(this, "Update From Database", Toast.LENGTH_SHORT).show();
 
         Intent intent = getIntent();
         context = MainPage.this;
@@ -99,7 +104,7 @@ public class MainPage extends AppCompatActivity {
         vehicle = findViewById(R.id.vehicle);
         child = findViewById(R.id.child);
         callLogs = findViewById(R.id.callLogs);
-        guardList=findViewById(R.id.guardList);
+        guardList = findViewById(R.id.guardList);
 
         firebaseFirestore = FirebaseFirestore.getInstance();
         sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
@@ -108,10 +113,8 @@ public class MainPage extends AppCompatActivity {
         commid = sharedPref.getString("commid", "none");
 
 
-
 //check new app start
 
-/*
         try {
             PackageInfo pInfo = context.getPackageManager().getPackageInfo(getPackageName(), 0);
             appVersion = pInfo.versionName;
@@ -126,17 +129,18 @@ public class MainPage extends AppCompatActivity {
                 DocumentSnapshot documentSnapshot = task.getResult();
                 if (documentSnapshot.exists()) {
                     String appVersionCodeNew = documentSnapshot.getString("versionCode");
-
-                    if (!appVersion.equalsIgnoreCase(appVersionCodeNew)){
+                    Log.e(TAG, "onComplete: appVersionCodeNew = database " + appVersionCodeNew);
+                    Log.e(TAG, "onComplete: appVersionCodeNew = phone version " + appVersion);
+                    if (!appVersion.equalsIgnoreCase(appVersionCodeNew)) {
 
                         String downloadLink = documentSnapshot.getString("downloadLink");
-                        if (!downloadLink.isEmpty()){
-                            ProgressDialog progressDialog=new ProgressDialog(MainPage.this);
+                        if (!downloadLink.isEmpty()) {
+                            ProgressDialog progressDialog = new ProgressDialog(MainPage.this);
                             progressDialog.setMessage("Downloading new Apk...");
                             progressDialog.setCancelable(false);
                             progressDialog.show();
 
-                            DownloadFile downloadFile=new DownloadFile(downloadLink,progressDialog,context);
+                            DownloadFile downloadFile = new DownloadFile(downloadLink, progressDialog, context);
                             downloadFile.execute();
 
                         }
@@ -144,12 +148,10 @@ public class MainPage extends AppCompatActivity {
                     }
                 }
             }
-        });*/
-
+        });
 
 
 //check new app End
-
 
 
         firebaseFirestore.collection(getString(R.string.col_activebuild)).document(buildid)

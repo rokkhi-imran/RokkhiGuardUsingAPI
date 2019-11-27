@@ -48,7 +48,7 @@ public class GuardQRCodeActivity extends AppCompatActivity {
 
                 Bitmap bitmap = null;
                 try {
-                    bitmap = TextToImageEncode(guards.getBuild_id() + guards.getG_uid());
+                    bitmap = TextToImageEncode(guards.getBuild_id()+"-"+ guards.getG_uid());
                 } catch (WriterException e) {
                     e.printStackTrace();
                 }

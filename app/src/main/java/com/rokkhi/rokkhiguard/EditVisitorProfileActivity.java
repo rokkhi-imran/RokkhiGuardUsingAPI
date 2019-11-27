@@ -228,7 +228,6 @@ public class EditVisitorProfileActivity extends AppCompatActivity implements Vie
                     activeFlatAdapter.changedata(allflats.get(i).getF_no(), false);
                     activeFlatAdapter.notifyDataSetChanged();
 //                    holder.historyflatno.remove(allflats.get(i));
-
                     flatName=  flatName .replace(" " + allflats.get(i).getF_no(), "");
                     tt.setText( flatName);
                     unSelectAllBtn.setVisibility(View.GONE);
@@ -469,7 +468,6 @@ public class EditVisitorProfileActivity extends AppCompatActivity implements Vie
         final String pintext = userPin.getText().toString();
 
 /*
-
         boolean cancel = false;
         View focusView = null;
 */
@@ -506,7 +504,7 @@ public class EditVisitorProfileActivity extends AppCompatActivity implements Vie
             doc.put("type", typeselected.getType_id());
 
         }
-         doc.put("s_pass", userPin.getText().toString());
+        doc.put("s_pass", userPin.getText().toString());
         doc.put("s_array", ll);
 
         WriteBatch batch = firebaseFirestore.batch();

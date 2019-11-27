@@ -37,7 +37,7 @@ public class DownloadFile extends AsyncTask<String, Integer, String> {
     protected String doInBackground(String... strings) {
         int count;
         try {
-            Log.e("TAG", "doInBackground: " + downloadLink);
+            Log.e("TAG", "download Link: " + downloadLink);
             URL url = new URL(downloadLink);
             URLConnection conexion = url.openConnection();
             conexion.connect();
@@ -86,9 +86,10 @@ public class DownloadFile extends AsyncTask<String, Integer, String> {
 
     @Override
     protected void onPostExecute(String s) {
-        super.onPostExecute(s);
+        Log.e("TAG", "onPostExecute: s = "+s );
         progressDialog.dismiss();
         install();
+        super.onPostExecute(s);
 
 
 
@@ -110,7 +111,7 @@ public class DownloadFile extends AsyncTask<String, Integer, String> {
             String type = "application/vnd.android.package-archive";
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                Uri downloadedApk = FileProvider.getUriForFile(context,  "", file);
+                Uri downloadedApk = FileProvider.getUriForFile(context,  BuildConfig.APPLICATION_ID+".com.vansuita.pickimage.provider", file);
                 intent.setDataAndType(downloadedApk, type);
 
                 intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
