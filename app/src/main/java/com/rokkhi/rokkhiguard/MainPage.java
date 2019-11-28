@@ -77,7 +77,6 @@ public class MainPage extends AppCompatActivity {
 
     Button buildingName;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

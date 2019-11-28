@@ -84,7 +84,6 @@ public class EditWrokerProfileActivity extends AppCompatActivity implements View
     String commid = "";
     String total = "";
     Normalfunc normalfunc;
-
     String picurl;
     String mFileUri = "";
     private Bitmap bitmap = null;
@@ -517,6 +516,12 @@ public class EditWrokerProfileActivity extends AppCompatActivity implements View
             userWtype.requestFocus();
             return;
 
+        }
+
+        if(bitmap==null){
+
+            Toast.makeText(context,"Please select your picture", Toast.LENGTH_SHORT).show();
+            return;
         }
 
 

@@ -82,7 +82,6 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class CreateProfile extends AppCompatActivity implements ActiveFlatAdapter.MyInterface, IPickResult {
 
-
     private static final String TAG = "CreateProfile";
     CircleImageView userphoto;
     ArrayList<Types> types;
@@ -748,6 +747,11 @@ public class CreateProfile extends AppCompatActivity implements ActiveFlatAdapte
                     phone.setError("Invalid Phone no");
                     focusView = phone;
                     cancel = true;
+                }
+
+                if(bitmap==null){
+                    cancel=true;
+                    Toast.makeText(context,"Please select your picture", Toast.LENGTH_SHORT).show();
                 }
 
 

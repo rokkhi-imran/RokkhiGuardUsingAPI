@@ -42,6 +42,24 @@
 
     </RelativeLayout>
 
+    <Button
+        android:id="@+id/select"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:layout_margin="10dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="8dp"
+        android:background="@drawable/less_round_button"
+        android:backgroundTint="@color/orange"
+        android:text="সিলেক্ট করুন ( select )"
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/relativeLayout" />
+
 
     <Button
         android:id="@+id/cancel"
@@ -61,7 +79,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/relativeLayout" />
+        app:layout_constraintTop_toBottomOf="@+id/select" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

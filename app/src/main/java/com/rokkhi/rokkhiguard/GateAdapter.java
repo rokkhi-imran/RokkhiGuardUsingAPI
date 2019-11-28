@@ -171,9 +171,9 @@ public class GateAdapter extends RecyclerView.Adapter<GateAdapter.ListViewHolder
                     unselectbutton.setVisibility(View.VISIBLE);
                     selectbutton.setVisibility(View.GONE);
                 }
-
             }
         });
+
 
         unselectbutton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -448,7 +448,7 @@ public class GateAdapter extends RecyclerView.Adapter<GateAdapter.ListViewHolder
             flats= view.findViewById(R.id.flats);
             historyflatid= new ArrayList<>();
             historyflatno= new ArrayList<>();
-            total="";
+            total=" ";
 
         }
     }

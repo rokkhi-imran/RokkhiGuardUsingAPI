@@ -382,6 +382,7 @@ public class AddVisitor extends AppCompatActivity implements IPickResult{
                                             CircleImageView propic = convertView.findViewById(R.id.one);
                                             final TextView name = convertView.findViewById(R.id.name);
                                             Button cancel = convertView.findViewById(R.id.cancel);
+                                            Button select = convertView.findViewById(R.id.select);
                                             RelativeLayout relativeLayout = convertView.findViewById(R.id.relativeLayout);
                                             alertDialog.setView(convertView);
                                             alertDialog.show();
@@ -415,6 +416,27 @@ public class AddVisitor extends AppCompatActivity implements IPickResult{
                                                 @Override
                                                 public void onClick(View v) {
                                                     alertDialog.dismiss();
+                                                }
+                                            });
+                                            select.setOnClickListener(new View.OnClickListener() {
+                                                @Override
+                                                public void onClick(View v) {
+                                                    flag=true;
+                                                    username.setText(vsearch.getV_name());
+                                                    // phone.setText("");
+                                                    Log.d(TAG, "onClick: oooo "+ vsearch.getV_phone() +" "+normalfunc.makephone11(vsearch.getV_phone()));
+                                                    phone.setText(normalfunc.makephone11(vsearch.getV_phone()));
+                                                    org.setText(vsearch.getV_where());
+                                                    if (!vsearch.getV_purpose().isEmpty())
+                                                        purpose.setText(vsearch.getV_purpose());
+
+                                                    if (!vsearch.getV_thumb().isEmpty()) {
+                                                        linkFromSearch = vsearch.getV_thumb();
+                                                    }
+                                                    username.requestFocus();
+                                                    alertDialog.dismiss();
+                                                    Log.e(TAG, "onClick: image url = "+vsearch.getV_thumb());
+                                                    UniversalImageLoader.setImage(vsearch.getV_thumb(), userphoto, null, "");
                                                 }
                                             });
 
