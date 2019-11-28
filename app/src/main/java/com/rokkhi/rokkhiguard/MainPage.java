@@ -23,6 +23,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -110,10 +111,8 @@ public class MainPage extends AppCompatActivity {
         commid = sharedPref.getString("commid", "none");
 
 
-
 //check new app start
 
-/*
         try {
             PackageInfo pInfo = context.getPackageManager().getPackageInfo(getPackageName(), 0);
             appVersion = pInfo.versionName;
@@ -125,29 +124,65 @@ public class MainPage extends AppCompatActivity {
                 .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                DocumentSnapshot documentSnapshot = task.getResult();
+                final DocumentSnapshot documentSnapshot = task.getResult();
                 if (documentSnapshot.exists()) {
                     String appVersionCodeNew = documentSnapshot.getString("versionCode");
+                    boolean mustInstall= documentSnapshot.getBoolean("mustInstall");
 
-                    if (!appVersion.equalsIgnoreCase(appVersionCodeNew)){
+                    Log.e(TAG, "onComplete: appVersionCodeNew = database " + appVersionCodeNew);
+                    Log.e(TAG, "onComplete: appVersionCodeNew = phone version " + appVersion);
 
-                        String downloadLink = documentSnapshot.getString("downloadLink");
-                        if (!downloadLink.isEmpty()){
-                            ProgressDialog progressDialog=new ProgressDialog(MainPage.this);
-                            progressDialog.setMessage("Downloading new Apk...");
-                            progressDialog.setCancelable(false);
-                            progressDialog.show();
+                    if (!appVersion.equalsIgnoreCase(appVersionCodeNew)) {
 
-                            DownloadFile downloadFile=new DownloadFile(downloadLink,progressDialog,context);
-                            downloadFile.execute();
+                        final String downloadLink = documentSnapshot.getString("downloadLink");
 
+                        final AlertDialog  alertDialog = new AlertDialog.Builder(context).create();
+                        alertDialog.setCancelable(false);
+                        LayoutInflater inflater = getLayoutInflater();
+                        View convertView = (View) inflater.inflate(R.layout.show_update_alert, null);
+
+                        Button cancelBtn = convertView.findViewById(R.id.cancelBtn);
+                        Button installBtn = convertView.findViewById(R.id.installBtn);
+
+                        if (mustInstall){
+                            cancelBtn.setVisibility(View.GONE);
+                            alertDialog.setCancelable(false);
                         }
+                        cancelBtn.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                alertDialog.dismiss();
+                            }
+                        });
+                        installBtn.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+
+                                if (!downloadLink.isEmpty()) {
+                                    ProgressDialog progressDialog = new ProgressDialog(MainPage.this);
+                                    progressDialog.setMessage("Downloading new Apk...");
+                                    progressDialog.setCancelable(false);
+                                    progressDialog.show();
+
+                                    DownloadFile downloadFile = new DownloadFile(downloadLink, progressDialog, context);
+                                    downloadFile.execute();
+
+                                }
+                            }
+                        });
+
+                        alertDialog.setView(convertView);
+                        alertDialog.show();
+
+
+
+
+
 
                     }
                 }
             }
-        });*/
-
+        });
 
 
 //check new app End
