@@ -403,7 +403,7 @@ public class AddVisitor extends AppCompatActivity implements IPickResult{
                                                     }
                                                     username.requestFocus();
                                                     alertDialog.dismiss();
-
+                                                    Log.e(TAG, "onClick: image url = "+vsearch.getV_thumb());
                                                     UniversalImageLoader.setImage(vsearch.getV_thumb(), userphoto, null, "");
                                                 }
                                             });

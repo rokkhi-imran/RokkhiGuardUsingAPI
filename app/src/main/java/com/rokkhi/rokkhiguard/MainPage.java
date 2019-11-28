@@ -74,6 +74,8 @@ public class MainPage extends AppCompatActivity {
     String thismobileuid;
     String appVersion;
 
+    Button buildingName;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,6 +101,7 @@ public class MainPage extends AppCompatActivity {
         child = findViewById(R.id.child);
         callLogs = findViewById(R.id.callLogs);
         guardList=findViewById(R.id.guardList);
+        buildingName=findViewById(R.id.buildingNameTV);
 
         firebaseFirestore = FirebaseFirestore.getInstance();
         sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
@@ -159,6 +162,10 @@ public class MainPage extends AppCompatActivity {
                     DocumentSnapshot documentSnapshot = task.getResult();
                     if (documentSnapshot.exists()) {
                         Activebuilding activebuilding = documentSnapshot.toObject(Activebuilding.class);
+
+                        buildingName.setText(activebuilding.getB_name());
+
+
                         int floorno = activebuilding.getB_tfloor();
                         int flatno = activebuilding.getB_tflat();
                         editor.putInt("floorno", floorno);
