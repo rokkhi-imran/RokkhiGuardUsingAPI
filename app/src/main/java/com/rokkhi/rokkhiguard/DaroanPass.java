@@ -28,6 +28,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -99,6 +100,9 @@ public class DaroanPass extends AppCompatActivity implements View.OnClickListene
     private View mRootView;
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
+
+    public  static boolean checked=false;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -182,6 +186,9 @@ public class DaroanPass extends AppCompatActivity implements View.OnClickListene
                                     GuardPhone guardPhone = documentSnapshot.toObject(GuardPhone.class);
                                     ArrayList<String> arr = guardPhone.getBuild_array();
 
+                                    if (arr.size()==1){
+                                        checked=true;
+                                    }
 
                                     buildid = arr.get(0);
                                     commid = documentSnapshot.getString("comm_id");
@@ -194,22 +201,26 @@ public class DaroanPass extends AppCompatActivity implements View.OnClickListene
                                     editor.putString("pass", tabpass);
                                     editor.apply();
 
+                                    if (arr.size()==1){
 
-                                    firebaseFirestore.collection(getString(R.string.col_build)).document(buildid).get()
-                                            .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                                                @Override
-                                                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                                                    if (task.isSuccessful()) {
-                                                        DocumentSnapshot documentSnapshot1 = task.getResult();
-                                                        if (documentSnapshot1.exists()) {
-                                                            String hname = documentSnapshot1.getString("b_name");
-                                                            homename.setText(hname);
+                                        firebaseFirestore.collection(getString(R.string.col_build)).document(buildid).get()
+                                                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                                    @Override
+                                                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                                        if (task.isSuccessful()) {
+                                                            DocumentSnapshot documentSnapshot1 = task.getResult();
+                                                            if (documentSnapshot1.exists()) {
+                                                                String hname = documentSnapshot1.getString("b_name");
+                                                                homename.setText(hname+" (Selected)");
 
 
+                                                            }
                                                         }
                                                     }
-                                                }
-                                            });
+                                                });
+
+                                    }
+
 
 
                                     firebaseFirestore.collection(getString(R.string.col_community))
@@ -327,7 +338,8 @@ public class DaroanPass extends AppCompatActivity implements View.OnClickListene
         };
 
 
-//set on clik
+//set on click
+
         homename.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -359,7 +371,12 @@ public class DaroanPass extends AppCompatActivity implements View.OnClickListene
                             GuardPhone guardPhone = documentSnapshot.toObject(GuardPhone.class);
                             ArrayList<String> arr = guardPhone.getBuild_array();
 
-                            showAddressAlert(arr, context);
+
+                            if (arr.size()>1){
+
+                                showAddressAlert(arr, context);
+
+                            }
 
 
                         }
@@ -388,6 +405,8 @@ public class DaroanPass extends AppCompatActivity implements View.OnClickListene
 
         RecyclerView recyclerList = rowList.findViewById(R.id.buildingnaemList);
 
+        ProgressBar progressBar=rowList.findViewById(R.id.progressBar);
+
         recyclerList.setLayoutManager(new LinearLayoutManager(context));
 
 
@@ -400,28 +419,8 @@ public class DaroanPass extends AppCompatActivity implements View.OnClickListene
         BuildingNameAdapter adapter = new BuildingNameAdapter(context, list,dialog);
 
         recyclerList.setAdapter(adapter);
+        progressBar.setVisibility(View.GONE);
 
-
-
-
-
-       /* houseNoEdit.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {            }            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                EditBuildActivity.this.adapter.getFilter().filter(s);
-            }            @Override
-            public void afterTextChanged(Editable s) {            }
-        });   */
-
-        /*houseNoList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                String houseno=String.valueOf(parent.getItemAtPosition(position));
-                editText.setText(houseno);
-                dialog.dismiss();
-            }
-        });*/
     }
 
 
@@ -483,6 +482,17 @@ public class DaroanPass extends AppCompatActivity implements View.OnClickListene
 
     }
 
+    @Override
+    protected void onRestart() {
+        checked=false;
+        super.onRestart();
+    }
+
+    @Override
+    protected void onPause() {
+        checked=false;
+        super.onPause();
+    }
 
     @Override
     public void onClick(View view) {
@@ -501,9 +511,17 @@ public class DaroanPass extends AppCompatActivity implements View.OnClickListene
             //circlePinField.setText(passtext);
             if (tabpass != null && tabpass.equals(passtext)) {
                 // passtext="";
-                Intent intent = new Intent(DaroanPass.this, MainPage.class);
-                startActivity(intent);
-                finish();
+
+
+                if (DaroanPass.checked){
+
+                    Intent intent = new Intent(DaroanPass.this, MainPage.class);
+                    startActivity(intent);
+                    finish();
+                    Toast.makeText(context, "ok", Toast.LENGTH_SHORT).show();
+                }else {
+                    Toast.makeText(context, "Select building", Toast.LENGTH_SHORT).show();
+                }
             } else {
                 tabpass = sharedPref.getString("pass", "none");
                 if (tabpass != null && tabpass.equals(passtext)) {
@@ -570,6 +588,8 @@ public class DaroanPass extends AppCompatActivity implements View.OnClickListene
 
             //for onClick from java class (Second ....)
             private ClickListener clickListener;
+            SharedPreferences sharedPreferences;
+            SharedPreferences.Editor editor;
 
 
             public BuildingNameAdapter(Context context, List<String> list, AlertDialog dialog) {
@@ -577,6 +597,9 @@ public class DaroanPass extends AppCompatActivity implements View.OnClickListene
                 this.context = context;
                 this.list = list;
                 this.alertDialog=dialog;
+
+                sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+                editor = sharedPreferences.edit();
             }
 
             @NonNull
@@ -595,6 +618,8 @@ public class DaroanPass extends AppCompatActivity implements View.OnClickListene
 
                 Log.e("TAG", "onBindViewHolder: ID =  "+list.get(position) );
 
+                Log.e(TAG, "onBindViewHolder: build id  =  "+list.get(position) );
+
                 firebaseFirestore.collection(context.getString(R.string.col_build))
                         .whereEqualTo("build_id",list.get(position))
                         .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -607,7 +632,11 @@ public class DaroanPass extends AppCompatActivity implements View.OnClickListene
                                 Buildings buildings = (Buildings) snapshot.toObject(Buildings.class);
                                 holder.buildingName.setText(buildings.getB_name());
                                 holder.buildingIDTV.setText(buildings.getBuild_id());
+//                                holder.progressBar.setVisibility(View.GONE);
                             }
+                        }else {
+//                            holder.progressBar.setVisibility(View.GONE);
+                            Toast.makeText(context, "Data not loaded", Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
@@ -625,6 +654,7 @@ public class DaroanPass extends AppCompatActivity implements View.OnClickListene
 
                 TextView buildingName ;
                 TextView buildingIDTV ;
+//                ProgressBar progressBar;
                 public View view;
 
                 ListViewHolder(View itemView) {
@@ -632,17 +662,26 @@ public class DaroanPass extends AppCompatActivity implements View.OnClickListene
                     view = itemView;
                     buildingName = view.findViewById(R.id.buildingNameTV);
                     buildingIDTV =view.findViewById(R.id.buildingIDTV);
+//                    progressBar =view.findViewById(R.id.progressBar);
 
                     itemView.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
 
                             alertDialog.dismiss();
-                            DaroanPass.homename.setText(buildingIDTV.getText().toString());
+                            DaroanPass.homename.setText(buildingName.getText().toString());
+
+                            String buildID=buildingIDTV.getText().toString();
+                            Log.e(TAG, "onClick: buildID = "+buildID);
+
+                            //save buil ID in sharedpreferance
+
+                            editor.putString("buildid", buildID);
+                            editor.apply();
+                            checked=true;
 
                         }
                     });
-
 
                 }
 
@@ -662,16 +701,10 @@ public class DaroanPass extends AppCompatActivity implements View.OnClickListene
                 }
             }
 
-
             public interface ClickListener {
                 void onItemClick(int position, View v, String s, String text);
                 void onItemLongClick(int position, View v);
             }
-
-
-
-
-
 
     }
 }

@@ -26,11 +26,35 @@
 
 
             <LinearLayout
+                android:id="@+id/lin0"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="10dp"
+                android:weightSum="3">
+
+                <Button
+                    android:id="@+id/buildingNameTV"
+                    android:text="Building Name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:background="@drawable/less_round_button"
+                    android:textColor="@color/Black"/>
+
+
+            </LinearLayout>
+
+
+            <LinearLayout
                 android:id="@+id/lin1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:layout_marginTop="10dp"
+                android:layout_below="@id/lin0"
                 android:weightSum="3">
 
 

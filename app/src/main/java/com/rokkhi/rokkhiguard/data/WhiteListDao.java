@@ -19,8 +19,8 @@ public interface WhiteListDao {
     void insertWhiteList(Whitelist whitelist);
 
 
-    @Query("SELECT * FROM Whitelist ORDER BY f_no desc")
-    LiveData<List<Whitelist>> fetchAllWhiteLists();
+    @Query("SELECT * FROM Whitelist WHERE build_id=:buildID  ORDER BY f_no desc")
+    LiveData<List<Whitelist>> fetchAllWhiteLists(String buildID);
 
 
     @Query("SELECT * FROM Whitelist WHERE flat_id =:flatId AND w_phone=:w_phone")
@@ -31,9 +31,11 @@ public interface WhiteListDao {
 
     @Delete
     void deleteWhiteList(Whitelist note);
+/*
 
     @Query("DELETE  FROM Whitelist WHERE build_id !=:buildId")
     void getWhitelistsforDeletion(String buildId);
 
+*/
 
 }

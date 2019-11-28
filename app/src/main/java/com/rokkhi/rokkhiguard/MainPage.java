@@ -78,6 +78,7 @@ public class MainPage extends AppCompatActivity {
     VehiclesRepository vehiclesRepository;
     String thismobileuid;
     String appVersion;
+    Button buildingName;
 
 
     @Override
@@ -105,6 +106,7 @@ public class MainPage extends AppCompatActivity {
         child = findViewById(R.id.child);
         callLogs = findViewById(R.id.callLogs);
         guardList = findViewById(R.id.guardList);
+        buildingName=findViewById(R.id.buildingNameTV);
 
         firebaseFirestore = FirebaseFirestore.getInstance();
         sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
@@ -112,6 +114,7 @@ public class MainPage extends AppCompatActivity {
         buildid = sharedPref.getString("buildid", "none");
         commid = sharedPref.getString("commid", "none");
 
+        Log.e(TAG, "onCreate: BuildID =  "+buildid );
 
 //check new app start
 
@@ -162,6 +165,9 @@ public class MainPage extends AppCompatActivity {
                     DocumentSnapshot documentSnapshot = task.getResult();
                     if (documentSnapshot.exists()) {
                         Activebuilding activebuilding = documentSnapshot.toObject(Activebuilding.class);
+
+                        buildingName.setText(activebuilding.getB_name());
+
                         int floorno = activebuilding.getB_tfloor();
                         int flatno = activebuilding.getB_tflat();
                         editor.putInt("floorno", floorno);
@@ -326,7 +332,7 @@ public class MainPage extends AppCompatActivity {
                         }
                     });
 
-                    flatsRepository.deleteTask(buildid);
+//                    flatsRepository.deleteTask(buildid);
 
                 } else {
                     Log.d(TAG, "onComplete: pppp1");
@@ -369,7 +375,7 @@ public class MainPage extends AppCompatActivity {
                         }
                     });
 
-                    whiteListRepository.deleteTask(buildid);
+//                    whiteListRepository.deleteTask(buildid);
 
 
                 } else {
@@ -445,7 +451,7 @@ public class MainPage extends AppCompatActivity {
                             Toast.makeText(context, "vehicle data changed!", Toast.LENGTH_SHORT).show();
                         }
                     });
-                    vehiclesRepository.deleteTask(buildid);
+//                    vehiclesRepository.deleteTask(buildid);
 
 
                 } else {

@@ -246,7 +246,7 @@ public class CreateProfile extends AppCompatActivity implements ActiveFlatAdapte
         });
 
 
-        whiteListRepository.getAllWhiteList().observe(this, new Observer<List<Whitelist>>() {
+        whiteListRepository.getAllWhiteList(buildid).observe(this, new Observer<List<Whitelist>>() {
             @Override
             public void onChanged(@Nullable List<Whitelist> allWhiteLists) {
                 wflats = new ArrayList<>();
@@ -265,10 +265,11 @@ public class CreateProfile extends AppCompatActivity implements ActiveFlatAdapte
 
     public void addallflats() {
 
+        Log.e(TAG, "addallflats: "+buildid );
 
         //getting the data from repository example
         //final FlatsRepository flatsRepository = new FlatsRepository(this);
-        flatsRepository.getAllActiveFlats().observe(this, new Observer<List<ActiveFlats>>() {
+        flatsRepository.getAllActiveFlats(buildid).observe(this, new Observer<List<ActiveFlats>>() {
             @Override
             public void onChanged(@androidx.annotation.Nullable List<ActiveFlats> allFlatss) {
                 activeFlats = new ArrayList<>();
@@ -358,7 +359,7 @@ public class CreateProfile extends AppCompatActivity implements ActiveFlatAdapte
                         }
                     });
 
-                    whiteListRepository.deleteTask(buildid);
+//                    whiteListRepository.deleteTask(buildid);
 
                 } else {
                     Log.d(TAG, "onComplete: xxx5");

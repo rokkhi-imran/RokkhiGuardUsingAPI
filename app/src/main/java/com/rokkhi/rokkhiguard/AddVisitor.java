@@ -209,7 +209,7 @@ public class AddVisitor extends AppCompatActivity implements IPickResult{
                         }
                     });
 
-                    whiteListRepository.deleteTask(buildid);
+//                    whiteListRepository.deleteTask(buildid);
 
                 } else {
                     Log.d(TAG, "onComplete: xxx5");
@@ -301,7 +301,7 @@ public class AddVisitor extends AppCompatActivity implements IPickResult{
         });
 
 
-        whiteListRepository.getAllWhiteList().observe(this, new Observer<List<Whitelist>>() {
+        whiteListRepository.getAllWhiteList(buildid).observe(this, new Observer<List<Whitelist>>() {
             @Override
             public void onChanged(@Nullable List<Whitelist> allWhiteLists) {
                 wflats = new ArrayList<>();
@@ -818,10 +818,10 @@ public class AddVisitor extends AppCompatActivity implements IPickResult{
     public void addallflats() {
 
 
-
+        Log.e(TAG, "addallflats: "+buildid );
         //getting the data from repository example
         //final FlatsRepository flatsRepository = new FlatsRepository(this);
-        flatsRepository.getAllActiveFlats().observe(this, new Observer<List<ActiveFlats>>() {
+        flatsRepository.getAllActiveFlats(buildid).observe(this, new Observer<List<ActiveFlats>>() {
             @Override
             public void onChanged(@androidx.annotation.Nullable List<ActiveFlats> allFlatss) {
                 allflats = new ArrayList<>();

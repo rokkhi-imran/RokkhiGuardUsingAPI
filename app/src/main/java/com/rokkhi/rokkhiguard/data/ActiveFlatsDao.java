@@ -19,21 +19,18 @@ public interface ActiveFlatsDao {
     void insertActiveFlat(ActiveFlats activeFlat);
 
 
-    @Query("SELECT * FROM ActiveFlats ORDER BY f_no desc")
-    LiveData<List<ActiveFlats>> fetchAllActiveFlats();
+    @Query("SELECT * FROM ActiveFlats WHERE build_id=:buildID ORDER BY f_no desc")
+    LiveData<List<ActiveFlats>> fetchAllActiveFlats(String buildID);
 
 
-//    @Query("SELECT * FROM ActiveFlats WHERE flat_id =:flatId")
-//    LiveData<ActiveFlats> getActiveFlat(int flatId);
+
+/*
 
     @Query("DELETE  FROM ActiveFlats WHERE build_id !=:buildId")
     void getActiveFlatsforDeletion(String buildId);
 
-/*
-
-    @Update
-    void updateActiveFlat(ActiveFlats note);
 */
+
 
 
     @Delete

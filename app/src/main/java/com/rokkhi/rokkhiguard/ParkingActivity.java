@@ -198,7 +198,7 @@ public class ParkingActivity extends AppCompatActivity implements GridAdapter.My
                     });
 
 
-                    vehiclesRepository.deleteTask(buildid);
+//                    vehiclesRepository.deleteTask(buildid);
 
 
                 }

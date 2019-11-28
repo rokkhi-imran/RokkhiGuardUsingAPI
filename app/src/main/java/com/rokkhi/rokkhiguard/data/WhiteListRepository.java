@@ -33,7 +33,7 @@ public class WhiteListRepository {
         }.execute();
     }
 
-    public static void deleteTask(final String build_id) {
+ /*   public static void deleteTask(final String build_id) {
         //final LiveData<ActiveFlats> task = getTask(id);
         new AsyncTask<Void, Void, Void>() {
             @Override
@@ -43,7 +43,7 @@ public class WhiteListRepository {
             }
         }.execute();
     }
-
+*/
 
 
 /*
@@ -54,8 +54,8 @@ public class WhiteListRepository {
 */
 
 
-    public LiveData<List<Whitelist>> getAllWhiteList() {
-        return whitelistDatabase.whiteListDao().fetchAllWhiteLists();
+    public LiveData<List<Whitelist>> getAllWhiteList(String buildID) {
+        return whitelistDatabase.whiteListDao().fetchAllWhiteLists(buildID);
     }
 
     public static void deleteWhiteList(final Whitelist whiteList) {

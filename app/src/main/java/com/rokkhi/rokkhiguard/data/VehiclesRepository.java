@@ -34,7 +34,7 @@ public class VehiclesRepository {
         }.execute();
     }
 
-    public static void deleteTask(final String build_id) {
+ /*   public static void deleteTask(final String build_id) {
         //final LiveData<ActiveFlats> task = getTask(id);
         new AsyncTask<Void, Void, Void>() {
             @Override
@@ -43,7 +43,7 @@ public class VehiclesRepository {
                 return null;
             }
         }.execute();
-    }
+    }*/
 
 
 
