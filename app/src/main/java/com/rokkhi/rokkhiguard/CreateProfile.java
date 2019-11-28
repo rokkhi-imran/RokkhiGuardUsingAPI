@@ -608,7 +608,7 @@ public class CreateProfile extends AppCompatActivity implements ActiveFlatAdapte
                                         Log.e(TAG, "onClick: " + list.get(0).getS_id());
                                         Log.e(TAG, "onClick: " + list.get(0).getWho_add());
 
-                                        startActivity(new Intent(CreateProfile.this, EditVisitorProfileActivity.class)
+                                        startActivity(new Intent(CreateProfile.this, EditWrokerProfileActivity.class)
                                                 .putExtra("s_id", list.get(0).getS_id())
                                                 .putExtra("who_add", list.get(0).getWho_add())
                                                 .putExtra("buildingNameTV", list.get(0).getS_name())

@@ -168,7 +168,6 @@ public class GeneralActivity extends AppCompatPreferenceActivity {
                             .update(mm).addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void aVoid) {
-
                             FirebaseAuth.getInstance().signOut();
                             progressDialog.dismiss();
                             Intent intent = new Intent(getContext(), DaroanPass.class);

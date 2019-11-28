@@ -35,7 +35,7 @@
         <activity android:name=".GuardListActivity" />
         <activity android:name=".SWorkersActivity" />
         <activity android:name=".CallLogsActivity" />
-        <activity android:name=".EditVisitorProfileActivity" /> <!-- <activity android:name=".CallChildActivity" /> -->
+        <activity android:name=".EditWrokerProfileActivity" /> <!-- <activity android:name=".CallChildActivity" /> -->
         <activity
             android:name=".DaroanPass"
             android:label="Rokkhi"

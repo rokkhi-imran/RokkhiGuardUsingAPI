@@ -4,6 +4,9 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.text.Editable;
@@ -16,6 +19,7 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.GridView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -25,6 +29,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
@@ -34,20 +39,32 @@ import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.SetOptions;
 import com.google.firebase.firestore.WriteBatch;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.rokkhi.rokkhiguard.Model.ActiveFlats;
 import com.rokkhi.rokkhiguard.Model.Guards;
 import com.rokkhi.rokkhiguard.Model.SLastHistory;
 import com.rokkhi.rokkhiguard.Model.Swroker;
 import com.rokkhi.rokkhiguard.Model.Types;
 import com.rokkhi.rokkhiguard.Utils.Normalfunc;
+import com.rokkhi.rokkhiguard.Utils.UniversalImageLoader;
+import com.vansuita.pickimage.bean.PickResult;
+import com.vansuita.pickimage.bundle.PickSetup;
+import com.vansuita.pickimage.dialog.PickImageDialog;
+import com.vansuita.pickimage.listeners.IPickResult;
 
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class EditVisitorProfileActivity extends AppCompatActivity implements View.OnClickListener {
+import de.hdodenhof.circleimageview.CircleImageView;
+
+public class EditWrokerProfileActivity extends AppCompatActivity implements View.OnClickListener, IPickResult {
+
 
     protected TextView userPhoneTV;
     protected Button generatepin;
@@ -56,15 +73,21 @@ public class EditVisitorProfileActivity extends AppCompatActivity implements Vie
     protected EditText userWtype;
     protected EditText userFlat;
     protected Button done;
+    CircleImageView userPhoto;
     Intent intent;
     Context context;
     String sID;
     FirebaseFirestore firebaseFirestore;
+    StorageReference photoRef;
     Swroker swroker;
     String buildid = "";
     String commid = "";
     String total = "";
     Normalfunc normalfunc;
+
+    String picurl;
+    String mFileUri = "";
+    private Bitmap bitmap = null;
 
     ArrayList<ActiveFlats> allflats;
     ArrayList<String> historyflatno;
@@ -77,9 +100,9 @@ public class EditVisitorProfileActivity extends AppCompatActivity implements Vie
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        super.setContentView(R.layout.activity_edit_visitor_profile);
+        super.setContentView(R.layout.activity_edit_worker_profile);
         initView();
-        context = EditVisitorProfileActivity.this;
+        context = EditWrokerProfileActivity.this;
         intent = getIntent();
         sID = intent.getStringExtra("s_id");
         normalfunc = new Normalfunc();
@@ -357,6 +380,12 @@ public class EditVisitorProfileActivity extends AppCompatActivity implements Vie
                 userName.setText(swroker.getS_name());
                 final String typeID = swroker.getType();
 
+                picurl=  swroker.getS_pic();
+                if( !swroker.getS_pic().isEmpty() && !swroker.getS_pic().equals("none"))
+                    UniversalImageLoader.setImage(swroker.getS_pic(), userPhoto, null, "");
+
+
+
 
                 firebaseFirestore.collection("stype")
                         .whereEqualTo("type_id", typeID).get()
@@ -453,6 +482,8 @@ public class EditVisitorProfileActivity extends AppCompatActivity implements Vie
     }    //show dialog for user type END
 
 
+    private static final String TAG = "EditWrokerProfileActivi";
+    Map<String, Object> doc;
     //start Upload
     public void upload() {
 
@@ -461,6 +492,8 @@ public class EditVisitorProfileActivity extends AppCompatActivity implements Vie
         progressDialog.show();
 
 
+        photoRef = FirebaseStorage.getInstance().getReference()
+                .child("sworkers/" + sID + "/s_pic");
         // Store values at the time of the login attempt.
         final String iname = userName.getText().toString();
         final String phoneno = userPhoneTV.getText().toString();
@@ -494,10 +527,10 @@ public class EditVisitorProfileActivity extends AppCompatActivity implements Vie
 //        final String s_id = firebaseFirestore.collection(getString(R.string.col_sworker)).document().getId();
 //        Log.e("TAG", "upload:S ID = "+s_id );
 
-        Map<String, Object> doc = new HashMap<>();
+        doc = new HashMap<>();
 
         doc.put("s_name", userName.getText().toString());
-        if (typeselected.getType_id()=="none"){
+        if (typeselected.getType_id().equals("none")){
             doc.put("type", swroker.getType());
 
         }else {
@@ -507,61 +540,170 @@ public class EditVisitorProfileActivity extends AppCompatActivity implements Vie
         doc.put("s_pass", userPin.getText().toString());
         doc.put("s_array", ll);
 
-        WriteBatch batch = firebaseFirestore.batch();
 
-        Log.e("TAG", "upload: " + doc);
 
-        DocumentReference setsworker = firebaseFirestore.collection(getString(R.string.col_sworker))
-                .document(sID);
+        if (bitmap != null) {
+            final ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
 
-        batch.set(setsworker, doc, SetOptions.merge());
+            byte[] data = baos.toByteArray();
 
-        if (typeselected.getEnglish().equals("guard")) {
+            UploadTask uploadTask = photoRef.putBytes(data);
+            uploadTask
+                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            // Upload succeeded
+                            Log.d(TAG, "uploadFromUri:onSuccess yyyy");
 
-            final Guards guards = new Guards(buildid, commid, userName.getText().toString()
-                    , normalfunc.getRandomNumberString5(), "", Calendar.getInstance().getTime(), normalfunc.futuredate(), "", "", "", "",
-                    normalfunc.makephone14(userPhoneTV.getText().toString()), sID, ll1);
-            Log.e("TAG", "upload: " + guards);
-            DocumentReference setguard = firebaseFirestore.collection(getString(R.string.col_guards))
+                            // Get the public download URL
+                            photoRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                @Override
+                                public void onSuccess(Uri uri) {
+                                    String picurl = uri.toString();
+                                    doc.put("s_pic", picurl);
+                                    doc.put("thumb_s_pic", picurl);
+
+
+
+
+
+                                    WriteBatch batch = firebaseFirestore.batch();
+
+                                    Log.e("TAG", "upload: " + doc);
+
+                                    DocumentReference setsworker = firebaseFirestore.collection(getString(R.string.col_sworker))
+                                            .document(sID);
+
+                                    batch.set(setsworker, doc, SetOptions.merge());
+
+                                    if (typeselected.getEnglish().equals("guard")) {
+
+                                        final Guards guards = new Guards(buildid, commid, userName.getText().toString()
+                                                , normalfunc.getRandomNumberString5(), "", Calendar.getInstance().getTime(), normalfunc.futuredate(), "", picurl, "", picurl,
+                                                normalfunc.makephone14(userPhoneTV.getText().toString()), sID, ll1);
+                                        Log.e("TAG", "upload: " + guards);
+                                        DocumentReference setguard = firebaseFirestore.collection(getString(R.string.col_guards))
+                                                .document(sID);
+
+                                        batch.set(setguard, guards, SetOptions.merge());
+                                    }
+
+                                    ArrayList<String> stringid = new ArrayList<>();
+                                    ArrayList<String> stringno = new ArrayList<>();
+
+                                    for (int i = 0; i < historyflatno.size(); i++) {
+                                        stringid.add(allflats.get(i).getFlat_id());
+                                        stringno.add(allflats.get(i).getF_no());
+                                    }
+
+                                    SLastHistory sLastHistory = new SLastHistory(sID, buildid, stringid, stringno, Calendar.getInstance().getTime());
+                                    DocumentReference setflat = firebaseFirestore.collection(getString(R.string.col_sworker))
+                                            .document(sID).collection("shistory").document(buildid);
+
+                                    batch.set(setflat, sLastHistory, SetOptions.merge());
+                                    Log.e("TAG", "upload: " + sLastHistory);
+
+
+                                    batch.commit().addOnCompleteListener(new OnCompleteListener<Void>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<Void> task) {
+                                            if (task.isSuccessful()) {
+
+
+                                                progressDialog.dismiss();
+                                                Toast.makeText(context, "Done!", Toast.LENGTH_SHORT).show();
+                                                userName.setText("");
+                                                userPhoneTV.setText("");
+                                                userFlat.setText("");
+                                                userWtype.setText("");
+                                                startActivity(new Intent(EditWrokerProfileActivity.this, MainPage.class)
+                                                        .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
+//                    UniversalImageLoader.setImage("", , null, "");
+                                            }
+                                        }
+                                    });
+
+                                }
+                            });
+
+
+                            // [END_EXCLUDE]
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception exception) {
+                            // Upload failed
+                            Log.w(TAG, "uploadFromUri:onFailure", exception);
+
+                        }
+                    });
+        }
+
+        else{
+            WriteBatch batch = firebaseFirestore.batch();
+
+            Log.e("TAG", "upload: " + doc);
+
+            DocumentReference setsworker = firebaseFirestore.collection(getString(R.string.col_sworker))
                     .document(sID);
 
-            batch.set(setguard, guards, SetOptions.merge());
-        }
+            batch.set(setsworker, doc, SetOptions.merge());
 
-        ArrayList<String> stringid = new ArrayList<>();
-        ArrayList<String> stringno = new ArrayList<>();
+            if (typeselected.getEnglish().equals("guard")) {
 
-        for (int i = 0; i < historyflatno.size(); i++) {
-            stringid.add(allflats.get(i).getFlat_id());
-            stringno.add(allflats.get(i).getF_no());
-        }
+                final Guards guards = new Guards(buildid, commid, userName.getText().toString()
+                        , normalfunc.getRandomNumberString5(), "", Calendar.getInstance().getTime(), normalfunc.futuredate(), "", picurl, "", picurl,
+                        normalfunc.makephone14(userPhoneTV.getText().toString()), sID, ll1);
+                Log.e("TAG", "upload: " + guards);
+                DocumentReference setguard = firebaseFirestore.collection(getString(R.string.col_guards))
+                        .document(sID);
 
-        SLastHistory sLastHistory = new SLastHistory(sID, buildid, stringid, stringno, Calendar.getInstance().getTime());
-        DocumentReference setflat = firebaseFirestore.collection(getString(R.string.col_sworker))
-                .document(sID).collection("shistory").document(buildid);
-
-        batch.set(setflat, sLastHistory, SetOptions.merge());
-        Log.e("TAG", "upload: " + sLastHistory);
-
-
-        batch.commit().addOnCompleteListener(new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                if (task.isSuccessful()) {
-
-
-                    progressDialog.dismiss();
-                    Toast.makeText(context, "Done!", Toast.LENGTH_SHORT).show();
-                    userName.setText("");
-                    userPhoneTV.setText("");
-                    userFlat.setText("");
-                    userWtype.setText("");
-                    startActivity(new Intent(EditVisitorProfileActivity.this, MainPage.class)
-                            .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
-//                    UniversalImageLoader.setImage("", , null, "");
-                }
+                batch.set(setguard, guards, SetOptions.merge());
             }
-        });
+
+            ArrayList<String> stringid = new ArrayList<>();
+            ArrayList<String> stringno = new ArrayList<>();
+
+            for (int i = 0; i < historyflatno.size(); i++) {
+                stringid.add(allflats.get(i).getFlat_id());
+                stringno.add(allflats.get(i).getF_no());
+            }
+
+            SLastHistory sLastHistory = new SLastHistory(sID, buildid, stringid, stringno, Calendar.getInstance().getTime());
+            DocumentReference setflat = firebaseFirestore.collection(getString(R.string.col_sworker))
+                    .document(sID).collection("shistory").document(buildid);
+
+            batch.set(setflat, sLastHistory, SetOptions.merge());
+            Log.e("TAG", "upload: " + sLastHistory);
+
+
+            batch.commit().addOnCompleteListener(new OnCompleteListener<Void>() {
+                @Override
+                public void onComplete(@NonNull Task<Void> task) {
+                    if (task.isSuccessful()) {
+
+
+                        progressDialog.dismiss();
+                        Toast.makeText(context, "Done!", Toast.LENGTH_SHORT).show();
+                        userName.setText("");
+                        userPhoneTV.setText("");
+                        userFlat.setText("");
+                        userWtype.setText("");
+                        startActivity(new Intent(EditWrokerProfileActivity.this, MainPage.class)
+                                .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
+//                    UniversalImageLoader.setImage("", , null, "");
+                    }
+                }
+            });
+        }
+
+
+
+
+
+
 
     }
     //upload End
@@ -573,8 +715,9 @@ public class EditVisitorProfileActivity extends AppCompatActivity implements Vie
         userName = (EditText) findViewById(R.id.user_name);
         userWtype = (EditText) findViewById(R.id.user_wtype);
         userFlat = (EditText) findViewById(R.id.user_flat);
+        userPhoto= findViewById(R.id.user_photo_IV);
         done = (Button) findViewById(R.id.done);
-        done.setOnClickListener(EditVisitorProfileActivity.this);
+        done.setOnClickListener(EditWrokerProfileActivity.this);
         firebaseFirestore = FirebaseFirestore.getInstance();
 
         allflats = new ArrayList<>();
@@ -582,5 +725,42 @@ public class EditVisitorProfileActivity extends AppCompatActivity implements Vie
         historyflatId = new ArrayList<>();
         types = new ArrayList<>();
         typeselected = new Types();
+
+
+        userPhoto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                PickSetup setup = new PickSetup()
+                        .setTitle("Choose Photo")
+                        .setBackgroundColor(Color.WHITE)
+                        .setButtonOrientation(LinearLayout.HORIZONTAL)
+                        .setGalleryButtonText("Gallery")
+                        .setCameraIcon(R.mipmap.camera_colored)
+                        .setGalleryIcon(R.mipmap.gallery_colored)
+                        .setCameraToPictures(false)
+                        .setMaxSize(300);
+
+                PickImageDialog.build(setup)
+                        //.setOnClick(this)
+                        .show(EditWrokerProfileActivity.this);
+            }
+        });
+    }
+
+    @Override
+    public void onPickResult(PickResult r) {
+        if (r.getError() == null) {
+            //progressBar.setVisibility(View.VISIBLE);
+
+            userPhoto.setImageBitmap(null);
+
+            mFileUri = r.getUri().toString();
+            bitmap = r.getBitmap();
+            userPhoto.setImageBitmap(r.getBitmap());
+
+        } else {
+            Toast.makeText(context, r.getError().getMessage(), Toast.LENGTH_LONG).show();
+
+        }
     }
 }
