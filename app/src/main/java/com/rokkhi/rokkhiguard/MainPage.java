@@ -163,6 +163,8 @@ public class MainPage extends AppCompatActivity {
                                     progressDialog.setCancelable(false);
                                     progressDialog.show();
 
+
+
                                     DownloadFile downloadFile = new DownloadFile(downloadLink, progressDialog, context);
                                     downloadFile.execute();
 

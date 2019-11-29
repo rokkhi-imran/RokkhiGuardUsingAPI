@@ -1,6 +1,8 @@
 package com.rokkhi.rokkhiguard;
 
 
+
+import android.app.DownloadManager;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -14,6 +16,8 @@ import android.widget.Toast;
 
 import androidx.core.content.FileProvider;
 
+import com.squareup.okhttp.Request;
+
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -21,6 +25,9 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URL;
 import java.net.URLConnection;
+import java.security.PrivateKey;
+
+import static android.content.Context.DOWNLOAD_SERVICE;
 
 public class DownloadFile extends AsyncTask<String, Integer, String> {
     String downloadLink;
@@ -35,9 +42,11 @@ public class DownloadFile extends AsyncTask<String, Integer, String> {
 
     @Override
     protected String doInBackground(String... strings) {
+
+
         int count;
         try {
-            Log.e("TAG", "download Link: " + downloadLink);
+            Log.e("TAG", "doInBackground: " + downloadLink);
             URL url = new URL(downloadLink);
             URLConnection conexion = url.openConnection();
             conexion.connect();
@@ -75,6 +84,53 @@ public class DownloadFile extends AsyncTask<String, Integer, String> {
         }
 //        }
         return null;
+
+
+
+
+
+        /*
+
+        int count;
+        try {
+            Log.e("TAG", "download Link: " + downloadLink);
+
+            URL url = new URL(downloadLink);
+            URLConnection conexion = url.openConnection();
+            conexion.setRequestProperty("connection", "close");
+            conexion.connect();
+
+            // this will be useful so that you can show a tipical 0-100% progress bar
+            int lenghtOfFile = conexion.getContentLength();
+
+            Log.e("TAG", "doInBackground: "+lenghtOfFile);
+            // downlod the file
+            InputStream input = new BufferedInputStream(url.openStream());
+            OutputStream output = new FileOutputStream(
+                    Environment.getExternalStorageDirectory().getAbsolutePath() +"/guardAPK.apk"
+            );
+            byte data[] = new byte[1024];
+
+            long total = 0;
+
+            while ((count = input.read(data)) != -1) {
+                total += count;
+                // publishing the progress....
+                publishProgress((int) (total * 100 / lenghtOfFile));
+                Log.e("TAG", "doInBackground: Count =  " + count);
+                Log.e("TAG", "doInBackground: total =  " + total);
+                Log.e("TAG", "doInBackground: total % =  " + (total * 100 / lenghtOfFile));
+
+                output.write(data, 0, count);
+
+            }
+
+            output.flush();
+            output.close();
+            input.close();
+        } catch (Exception e) {
+        }
+        return null;*/
     }
 
 
