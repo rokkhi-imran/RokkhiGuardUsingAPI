@@ -133,9 +133,6 @@ public class DaroanPass extends AppCompatActivity implements View.OnClickListene
         if (result == 0) {
             success = Settings.Secure.putString(getContentResolver(), Settings.Secure.INSTALL_NON_MARKET_APPS, "1");
             Toast.makeText(this, "status = "+success, Toast.LENGTH_SHORT).show();
-        }else {
-            Toast.makeText(this, "status = "+success, Toast.LENGTH_SHORT).show();
-
         }
 
         //check  unknown Source INstall End
@@ -387,7 +384,7 @@ public class DaroanPass extends AppCompatActivity implements View.OnClickListene
     public boolean checkPermissionForReadExtertalStorage(Context context) {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            int result = context.checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE);
+            int result = context.checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE);
             return result == PackageManager.PERMISSION_GRANTED;
         }
         return false;
@@ -395,7 +392,7 @@ public class DaroanPass extends AppCompatActivity implements View.OnClickListene
 
     public void requestPermissionForReadExtertalStorage(Context context) throws Exception {
         try {
-            ActivityCompat.requestPermissions((Activity) context, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
+            ActivityCompat.requestPermissions((Activity) context, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
                     1);
         } catch (Exception e) {
             e.printStackTrace();

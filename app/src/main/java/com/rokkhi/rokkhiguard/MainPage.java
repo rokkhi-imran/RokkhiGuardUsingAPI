@@ -2,13 +2,17 @@ package com.rokkhi.rokkhiguard;
 
 import androidx.lifecycle.Observer;
 
+import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.preference.PreferenceManager;
 
 import androidx.annotation.NonNull;
@@ -47,7 +51,7 @@ import com.rokkhi.rokkhiguard.data.FlatsRepository;
 import com.rokkhi.rokkhiguard.data.VehiclesRepository;
 import com.rokkhi.rokkhiguard.data.WhiteListRepository;
 
-import java.lang.reflect.Field;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -55,7 +59,7 @@ import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class MainPage extends AppCompatActivity {
+public class MainPage extends AppCompatActivity{
 
     private static final String TAG = "MainPage";
     CircleImageView gatepass, logout, addvis, vislist, notice, parcel, create, vehicle, child, callLogs,guardList;
@@ -158,15 +162,32 @@ public class MainPage extends AppCompatActivity {
                             public void onClick(View v) {
 
                                 if (!downloadLink.isEmpty()) {
-                                    ProgressDialog progressDialog = new ProgressDialog(MainPage.this);
-                                    progressDialog.setMessage("Downloading new Apk...");
-                                    progressDialog.setCancelable(false);
-                                    progressDialog.show();
+
+                                    if (CheckForSDCard.isSDCardPresent()) {
+
+                                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                                            // only for gingerbread and newer versions
 
 
+                                        }
 
-                                    DownloadFile downloadFile = new DownloadFile(downloadLink, progressDialog, context);
-                                    downloadFile.execute();
+
+                                            Log.e(TAG, "onClick: "+downloadLink );
+
+
+                                            ProgressDialog progressDialog = new ProgressDialog(MainPage.this);
+                                            progressDialog.setMessage("Downloading new Apk...");
+                                            progressDialog.setCancelable(false);
+                                            progressDialog.show();
+
+                                            DownloadFile downloadFile = new DownloadFile(downloadLink, progressDialog, context);
+                                            downloadFile.execute();
+
+
+                                    }else {
+                                        Toast.makeText(context, "No SD CARD", Toast.LENGTH_SHORT).show();
+                                    }
+
 
                                 }
                             }
@@ -485,7 +506,6 @@ public class MainPage extends AppCompatActivity {
                             Toast.makeText(context, "vehicle data changed!", Toast.LENGTH_SHORT).show();
                         }
                     });
-//                    vehiclesRepository.deleteTask(buildid);
 
 
                 } else {
@@ -587,5 +607,18 @@ public class MainPage extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+    }
+
+    private static class CheckForSDCard {
+
+        //Method to Check If SD Card is mounted or not
+        public static boolean isSDCardPresent() {
+            if (Environment.getExternalStorageState().equals(
+
+                    Environment.MEDIA_MOUNTED)) {
+                return true;
+            }
+            return false;
+        }
     }
 }

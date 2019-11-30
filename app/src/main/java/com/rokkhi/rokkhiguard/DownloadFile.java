@@ -43,54 +43,6 @@ public class DownloadFile extends AsyncTask<String, Integer, String> {
     @Override
     protected String doInBackground(String... strings) {
 
-
-        int count;
-        try {
-            Log.e("TAG", "doInBackground: " + downloadLink);
-            URL url = new URL(downloadLink);
-            URLConnection conexion = url.openConnection();
-            conexion.connect();
-
-            // this will be useful so that you can show a tipical 0-100% progress bar
-            int lenghtOfFile = conexion.getContentLength();
-
-            Log.e("TAG", "doInBackground: "+lenghtOfFile);
-            // downlod the file
-            InputStream input = new BufferedInputStream(url.openStream());
-            OutputStream output = new FileOutputStream(
-                    Environment.getExternalStorageDirectory().getAbsolutePath() +"/guardAPK.apk"
-            );
-
-            byte data[] = new byte[1024];
-
-            long total = 0;
-
-            while ((count = input.read(data)) != -1) {
-                total += count;
-                // publishing the progress....
-                publishProgress((int) (total * 100 / lenghtOfFile));
-                Log.e("TAG", "doInBackground: Count =  " + count);
-                Log.e("TAG", "doInBackground: total =  " + total);
-                Log.e("TAG", "doInBackground: total % =  " + (total * 100 / lenghtOfFile));
-
-                output.write(data, 0, count);
-
-            }
-
-            output.flush();
-            output.close();
-            input.close();
-        } catch (Exception e) {
-        }
-//        }
-        return null;
-
-
-
-
-
-        /*
-
         int count;
         try {
             Log.e("TAG", "download Link: " + downloadLink);
@@ -103,7 +55,7 @@ public class DownloadFile extends AsyncTask<String, Integer, String> {
             // this will be useful so that you can show a tipical 0-100% progress bar
             int lenghtOfFile = conexion.getContentLength();
 
-            Log.e("TAG", "doInBackground: "+lenghtOfFile);
+            Log.e("TAG", "doInBackground: lenghtOfFile "+lenghtOfFile);
             // downlod the file
             InputStream input = new BufferedInputStream(url.openStream());
             OutputStream output = new FileOutputStream(
@@ -130,7 +82,7 @@ public class DownloadFile extends AsyncTask<String, Integer, String> {
             input.close();
         } catch (Exception e) {
         }
-        return null;*/
+        return null;
     }
 
 

@@ -8,7 +8,7 @@ android {
     compileSdkVersion 28
     defaultConfig {
         applicationId "com.rokkhi.rokkhiguard"
-        minSdkVersion 27
+        minSdkVersion 25
         targetSdkVersion 28
         versionCode 1
         versionName "1.0"
@@ -65,6 +65,8 @@ dependencies {
     implementation 'androidx.core:core-ktx:1.0.2'
 //QR Code
     implementation 'me.dm7.barcodescanner:zxing:1.9.8'
+
+
 
 
 }
