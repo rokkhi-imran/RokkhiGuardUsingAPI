@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -24,16 +23,11 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.provider.Settings;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.EditText;
-import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -52,7 +46,6 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
 import com.google.firebase.messaging.FirebaseMessaging;
-import com.rokkhi.rokkhiguard.CallerApp.MainActivity;
 import com.rokkhi.rokkhiguard.Model.Buildings;
 import com.rokkhi.rokkhiguard.Model.GuardPhone;
 import com.rokkhi.rokkhiguard.Utils.Normalfunc;
@@ -112,12 +105,22 @@ public class DaroanPass extends AppCompatActivity implements View.OnClickListene
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_daroan_pass);
+        context = DaroanPass.this;
+//        Toast.makeText(context, "Updated Apk", Toast.LENGTH_SHORT).show();
 
         //check Stroage permission Start
 
+        if (!checkPermissionForWriteExtertalStorage(this)) {
+            try {
+                requestPermissionForWriteExtertalStorage(this);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
         if (!checkPermissionForReadExtertalStorage(this)) {
             try {
-                requestPermissionForReadExtertalStorage(this);
+                requestPermissionForReadeExtertalStorage(this);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -138,7 +141,6 @@ public class DaroanPass extends AppCompatActivity implements View.OnClickListene
         //check  unknown Source INstall End
 
 
-        context = DaroanPass.this;
         Log.d(TAG, "onCreate: xxx ");
         buildingsName = new ArrayList<>();
 
@@ -384,15 +386,33 @@ public class DaroanPass extends AppCompatActivity implements View.OnClickListene
     public boolean checkPermissionForReadExtertalStorage(Context context) {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            int result = context.checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE);
+            return result == PackageManager.PERMISSION_GRANTED;
+        }
+        return false;
+    }
+
+    public boolean checkPermissionForWriteExtertalStorage(Context context) {
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             int result = context.checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE);
             return result == PackageManager.PERMISSION_GRANTED;
         }
         return false;
     }
 
-    public void requestPermissionForReadExtertalStorage(Context context) throws Exception {
+    public void requestPermissionForWriteExtertalStorage(Context context) throws Exception {
         try {
             ActivityCompat.requestPermissions((Activity) context, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                    1);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw e;
+        }
+    }
+    public void requestPermissionForReadeExtertalStorage(Context context) throws Exception {
+        try {
+            ActivityCompat.requestPermissions((Activity) context, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
                     1);
         } catch (Exception e) {
             e.printStackTrace();
