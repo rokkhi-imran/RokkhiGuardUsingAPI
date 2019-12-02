@@ -722,7 +722,7 @@ public class CreateProfile extends AppCompatActivity implements ActiveFlatAdapte
 
 
                 boolean cancel = false;
-                View focusView = null;
+                View focusView = v.getRootView();
 
 
                 if (TextUtils.isEmpty(iname)) {

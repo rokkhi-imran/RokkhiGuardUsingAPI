@@ -519,6 +519,7 @@ public class EditWrokerProfileActivity extends AppCompatActivity implements View
         }
 
         if(bitmap==null){
+            progressDialog.dismiss();
 
             Toast.makeText(context,"Please select your picture", Toast.LENGTH_SHORT).show();
             return;
