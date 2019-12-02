@@ -3,16 +3,12 @@ package com.rokkhi.callerapp
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
-import android.content.pm.PackageManager
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.preference.PreferenceManager
 import android.telecom.Call
-import android.telephony.TelephonyManager
-import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import com.github.arekolek.phone.OngoingCall
 import com.github.arekolek.phone.asString
@@ -20,7 +16,6 @@ import com.google.android.gms.tasks.OnFailureListener
 import com.google.android.gms.tasks.OnSuccessListener
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-import com.rokkhi.rokkhiguard.ChildrenList
 import com.rokkhi.rokkhiguard.Model.CallLogClass
 import com.rokkhi.rokkhiguard.R
 import io.reactivex.disposables.CompositeDisposable
@@ -42,7 +37,7 @@ class CallActivity : AppCompatActivity() {
     private lateinit var myPhoneNumber: String;
     private var isReceived: Boolean = false;
     private var isDial: Boolean = false;
-    private  var  flatName="";
+    private var flatName = "";
 
 //    var isReceived = false;
 
@@ -85,12 +80,32 @@ class CallActivity : AppCompatActivity() {
         hangup.setOnClickListener {
             OngoingCall.hangup()
 
-            startActivity(Intent(this, ChildrenList::class.java)
-                    .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP))
+            //cname.setText(myoffice.getName());
+            val editor: SharedPreferences.Editor = this.getSharedPreferences("finish", Context.MODE_PRIVATE).edit()
+            editor.putString("from", "0")
+            editor.apply()
 
-//            finishAffinity()
+            finish()
 
-//            System.exit(0)
+           /* var prefs = getSharedPreferences("FlatNumber", MODE_PRIVATE);
+            var from = prefs.getString("from", "No");
+
+            if (from.equals("1")) {
+
+                startActivity(Intent(this, ChildrenList::class.java)
+                        .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP))
+            }
+            if (from.equals("2")) {
+
+                startActivity(Intent(this, AddVisitor::class.java)
+                        .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP))
+            }
+            if (from.equals("No")){
+                startActivity(Intent(this, MainPage::class.java)
+                        .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP))
+            }
+
+*/
         }
 
         OngoingCall.state

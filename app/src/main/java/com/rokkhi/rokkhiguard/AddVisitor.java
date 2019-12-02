@@ -56,6 +56,7 @@ import com.google.firebase.firestore.SetOptions;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.rokkhi.rokkhiguard.CallerApp.MainActivity;
 import com.rokkhi.rokkhiguard.Model.ActiveFlats;
 import com.rokkhi.rokkhiguard.Model.BuildingChanges;
 import com.rokkhi.rokkhiguard.Model.UDetails;
@@ -829,9 +830,20 @@ public class AddVisitor extends AppCompatActivity implements IPickResult{
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 UDetails typeselected = (UDetails) lv.getItemAtPosition(position);
                 //cname.setText(myoffice.getName());
+
+                SharedPreferences.Editor editor = context.getSharedPreferences("FlatNumber", MODE_PRIVATE).edit();
+                editor.putString("flat", flatusers.get(position).getF_no());
+                editor.putString("from", "2");
+                editor.apply();
+
                 phoneno= typeselected.getPhone();
-                onCallBtnClick();
+
+//                onCallBtnClick();
                 alertcompany.dismiss();
+
+
+                view.getContext().startActivity(new Intent(view.getContext(), MainActivity.class)
+                        .putExtra("phoneNumber", phoneno));
             }
         });
     }

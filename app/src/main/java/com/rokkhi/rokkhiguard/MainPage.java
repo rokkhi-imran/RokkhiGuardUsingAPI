@@ -21,6 +21,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.telecom.TelecomManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -92,7 +93,6 @@ public class MainPage extends AppCompatActivity{
         Intent intent = getIntent();
         context = MainPage.this;
 
-
         gatepass = findViewById(R.id.gatepass);
         logout = findViewById(R.id.logout);
         addvis = findViewById(R.id.addvis);
@@ -112,6 +112,11 @@ public class MainPage extends AppCompatActivity{
         editor = sharedPref.edit();
         buildid = sharedPref.getString("buildid", "none");
         commid = sharedPref.getString("commid", "none");
+
+        //set default caller
+
+        offerReplacingDefaultDialer(context);
+
 
 
 //check new app start
@@ -344,6 +349,15 @@ public class MainPage extends AppCompatActivity{
             }
         });
 
+    }
+
+
+    private void offerReplacingDefaultDialer(Context context) {
+
+        if (context.getSystemService(TelecomManager.class).getDefaultDialerPackage()!= getPackageName()) {
+            new Intent(TelecomManager.ACTION_CHANGE_DEFAULT_DIALER)
+                    .putExtra(TelecomManager.EXTRA_CHANGE_DEFAULT_DIALER_PACKAGE_NAME, getPackageName());
+        }
     }
 
 

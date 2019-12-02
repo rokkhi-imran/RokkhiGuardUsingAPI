@@ -24,6 +24,18 @@ class MainActivity : AppCompatActivity() {
         number = intent.getStringExtra("phoneNumber")
 
         makeCall()
+
+        var prefs = getSharedPreferences("finish", MODE_PRIVATE);
+        var from = prefs.getString("from", "No");
+        if (from.equals("0")){
+            finish()
+        }
+    }
+
+    override fun onRestart() {
+
+
+        super.onRestart()
     }
 
     private fun makeCall() {

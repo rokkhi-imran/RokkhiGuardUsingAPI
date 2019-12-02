@@ -109,9 +109,6 @@ public class ChildAdapter extends RecyclerView.Adapter<ChildAdapter.ChildViewHol
             @Override
             public void onClick(View view) {
 
-                SharedPreferences.Editor editor = context.getSharedPreferences("FlatNumber", MODE_PRIVATE).edit();
-                editor.putString("flat", child.getF_no());
-                editor.apply();
 /*
 //make phone call
                 view.getContext().startActivity(new Intent(view.getContext(), MainActivity.class)
@@ -129,6 +126,7 @@ public class ChildAdapter extends RecyclerView.Adapter<ChildAdapter.ChildViewHol
     }
 
     private void getFlatUser(String flat_id) {
+
         flatusers = new ArrayList<>();
         final ProgressDialog progressDialog = new ProgressDialog(context);
         progressDialog.setMessage("Getting Number List");
@@ -154,7 +152,7 @@ public class ChildAdapter extends RecyclerView.Adapter<ChildAdapter.ChildViewHol
     }
 
 
-    public void showUsers(Context context, ArrayList<UDetails> flatusers, ProgressDialog progressDialog) {
+    public void showUsers(final Context context, final ArrayList<UDetails> flatusers, ProgressDialog progressDialog) {
 
         final UsersAdapter usersAdapter = new UsersAdapter(this.flatusers, this.context);
         final AlertDialog alertcompany = new AlertDialog.Builder(this.context).create();
@@ -174,6 +172,13 @@ public class ChildAdapter extends RecyclerView.Adapter<ChildAdapter.ChildViewHol
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 UDetails typeselected = (UDetails) lv.getItemAtPosition(position);
                 //cname.setText(myoffice.getName());
+
+//saved Data to Shared
+                SharedPreferences.Editor editor = context.getSharedPreferences("FlatNumber", MODE_PRIVATE).edit();
+                editor.putString("flat", flatusers.get(position).getF_no());
+                editor.putString("from", "1");
+                editor.apply();
+
                 String phoneno = typeselected.getPhone();
 //                onCallBtnClick();
 
