@@ -265,7 +265,7 @@ public class CreateProfile extends AppCompatActivity implements ActiveFlatAdapte
 
     public void addallflats() {
 
-        Log.e(TAG, "addallflats: "+buildid );
+        Log.e(TAG, "addallflats: " + buildid);
 
         //getting the data from repository example
         //final FlatsRepository flatsRepository = new FlatsRepository(this);
@@ -482,6 +482,7 @@ public class CreateProfile extends AppCompatActivity implements ActiveFlatAdapte
 
 
                 //selected na hoile selected er moto kaj korbe.. selection er subidhar jnno
+                //!tt.getText().toString().contains(ss.getF_no()
                 if (!historyFlats.contains(ss)) {
 
                     //view.setBackground(ContextCompat.getDrawable(context, R.color.orange_light));
@@ -492,14 +493,26 @@ public class CreateProfile extends AppCompatActivity implements ActiveFlatAdapte
                     tt.setText(totaltext);
                     //activeFlatAdapter.notifyDataSetChanged();
 
-                } else{
+                } else {
+
                     //view.setBackground(ContextCompat.getDrawable(context, R.color.white));
                     activeFlatAdapter.changedata(ss.getF_no(), false);
-                    historyFlats.remove(ss);
+                    String totalTV = tt.getText().toString();
+
+                    if (totalTV.contains(" "+ss.getF_no()+" ")){
+                        Toast.makeText(CreateProfile.this, "removed", Toast.LENGTH_SHORT).show();
+                        historyFlats.remove(ss);
+                    }
+/*
+                    for (int i=0;i<totalTV.length();i++){
+                        if (totalTV.charAt(i)=='A')
+                    }*/
                     totaltext = totaltext.replace("  " + ss.getF_no(), "");
                     activeFlatAdapter.notifyDataSetChanged();
                     tt.setText(totaltext);
                     // activeFlatAdapter.notifyDataSetChanged();
+
+
                 }
 
 
@@ -752,9 +765,9 @@ public class CreateProfile extends AppCompatActivity implements ActiveFlatAdapte
                     cancel = true;
                 }
 
-                if(bitmap==null){
-                    cancel=true;
-                    Toast.makeText(context,"Please select your picture", Toast.LENGTH_SHORT).show();
+                if (bitmap == null) {
+                    cancel = true;
+                    Toast.makeText(context, "Please select your picture", Toast.LENGTH_SHORT).show();
                 }
 
 
