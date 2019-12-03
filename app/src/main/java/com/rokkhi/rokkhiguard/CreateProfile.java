@@ -424,6 +424,7 @@ public class CreateProfile extends AppCompatActivity implements ActiveFlatAdapte
         selectbutton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                historyFlats.clear();
 
                 for (int i = 0; i < activeFlats.size(); i++) {
 
@@ -451,6 +452,7 @@ public class CreateProfile extends AppCompatActivity implements ActiveFlatAdapte
                     unselectbutton.setVisibility(View.GONE);
                     selectbutton.setVisibility(View.VISIBLE);
                 }
+                historyFlats.clear();
             }
         });
 
