@@ -20,6 +20,7 @@ import androidx.lifecycle.Observer;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -400,6 +401,7 @@ public class CreateProfile extends AppCompatActivity implements ActiveFlatAdapte
         final Button selectbutton = convertView.findViewById(R.id.select);
         final Button unselectbutton = convertView.findViewById(R.id.deselect);
         final TextView tt = convertView.findViewById(R.id.selected);
+        tt.setMovementMethod(new ScrollingMovementMethod());
         tt.setVisibility(View.VISIBLE);
         totaltext = "";
 
@@ -422,8 +424,9 @@ public class CreateProfile extends AppCompatActivity implements ActiveFlatAdapte
         selectbutton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 for (int i = 0; i < activeFlats.size(); i++) {
-//                    view.setBackground(ContextCompat.getDrawable(context, R.color.orange_light));
+
                     activeFlatAdapter.changedata(activeFlats.get(i).getF_no(), true);
                     activeFlatAdapter.notifyDataSetChanged();
                     historyFlats.add(activeFlats.get(i));
@@ -439,7 +442,7 @@ public class CreateProfile extends AppCompatActivity implements ActiveFlatAdapte
             @Override
             public void onClick(View v) {
                 for (int i = 0; i < activeFlats.size(); i++) {
-//                    view.setBackground(ContextCompat.getDrawable(context, R.color.orange_light));
+
                     activeFlatAdapter.changedata(activeFlats.get(i).getF_no(), false);
                     activeFlatAdapter.notifyDataSetChanged();
                     historyFlats.remove(activeFlats.get(i));
@@ -489,7 +492,7 @@ public class CreateProfile extends AppCompatActivity implements ActiveFlatAdapte
                     tt.setText(totaltext);
                     //activeFlatAdapter.notifyDataSetChanged();
 
-                } else {
+                } else{
                     //view.setBackground(ContextCompat.getDrawable(context, R.color.white));
                     activeFlatAdapter.changedata(ss.getF_no(), false);
                     historyFlats.remove(ss);
