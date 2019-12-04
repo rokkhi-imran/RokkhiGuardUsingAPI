@@ -425,13 +425,16 @@ public class CreateProfile extends AppCompatActivity implements ActiveFlatAdapte
             @Override
             public void onClick(View v) {
                 historyFlats.clear();
+                totaltext = "";
+                tt.setText(totaltext);
 
+                //add again
                 for (int i = 0; i < activeFlats.size(); i++) {
 
                     activeFlatAdapter.changedata(activeFlats.get(i).getF_no(), true);
                     activeFlatAdapter.notifyDataSetChanged();
                     historyFlats.add(activeFlats.get(i));
-                    totaltext = totaltext + "  " + activeFlats.get(i).getF_no();
+                    totaltext = totaltext + " " + activeFlats.get(i).getF_no() + " ";
                     tt.setText(totaltext);
                     unselectbutton.setVisibility(View.VISIBLE);
                     selectbutton.setVisibility(View.GONE);
@@ -447,7 +450,7 @@ public class CreateProfile extends AppCompatActivity implements ActiveFlatAdapte
                     activeFlatAdapter.changedata(activeFlats.get(i).getF_no(), false);
                     activeFlatAdapter.notifyDataSetChanged();
                     historyFlats.remove(activeFlats.get(i));
-                    totaltext = totaltext.replace("  " + activeFlats.get(i).getF_no(), "");
+                    totaltext = totaltext.replace(" " + activeFlats.get(i).getF_no(), " ");
                     tt.setText(totaltext);
                     unselectbutton.setVisibility(View.GONE);
                     selectbutton.setVisibility(View.VISIBLE);
@@ -475,45 +478,27 @@ public class CreateProfile extends AppCompatActivity implements ActiveFlatAdapte
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                typeselected = (String) lv.getItemAtPosition(position);
-//                //cname.setText(myoffice.getName());
-//                type.setText(typeselected);
-//                alertcompany.dismiss();
+
 
                 ActiveFlats ss = (ActiveFlats) lv.getItemAtPosition(position);
 
-
                 //selected na hoile selected er moto kaj korbe.. selection er subidhar jnno
-                //!tt.getText().toString().contains(ss.getF_no()
+
                 if (!historyFlats.contains(ss)) {
 
-                    //view.setBackground(ContextCompat.getDrawable(context, R.color.orange_light));
                     activeFlatAdapter.changedata(ss.getF_no(), true);
                     historyFlats.add(ss);
                     activeFlatAdapter.notifyDataSetChanged();
                     totaltext = totaltext + "  " + ss.getF_no();
                     tt.setText(totaltext);
-                    //activeFlatAdapter.notifyDataSetChanged();
 
                 } else {
-
-                    //view.setBackground(ContextCompat.getDrawable(context, R.color.white));
                     activeFlatAdapter.changedata(ss.getF_no(), false);
-                    String totalTV = tt.getText().toString();
+                    historyFlats.remove(ss);
 
-                    if (totalTV.contains(" "+ss.getF_no()+" ")){
-                        Toast.makeText(CreateProfile.this, "removed", Toast.LENGTH_SHORT).show();
-                        historyFlats.remove(ss);
-                    }
-/*
-                    for (int i=0;i<totalTV.length();i++){
-                        if (totalTV.charAt(i)=='A')
-                    }*/
-                    totaltext = totaltext.replace("  " + ss.getF_no(), "");
+                    totaltext = totaltext.replace(ss.getF_no(), "");
                     activeFlatAdapter.notifyDataSetChanged();
                     tt.setText(totaltext);
-                    // activeFlatAdapter.notifyDataSetChanged();
-
 
                 }
 

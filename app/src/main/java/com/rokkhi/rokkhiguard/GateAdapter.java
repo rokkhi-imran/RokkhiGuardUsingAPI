@@ -1,6 +1,7 @@
 package com.rokkhi.rokkhiguard;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.preference.PreferenceManager;
@@ -304,6 +305,15 @@ public class GateAdapter extends RecyclerView.Adapter<GateAdapter.ListViewHolder
         });
 
 
+        holder.editButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                context.startActivity(new Intent(context,EditWrokerProfileActivity.class)
+                .putExtra("s_id",swroker.getS_id()));
+            }
+        });
+
+
 
         holder.in.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -430,7 +440,7 @@ public class GateAdapter extends RecyclerView.Adapter<GateAdapter.ListViewHolder
         public View view;
         TextView ename ;
         CircleImageView propic;
-        Button in,out;
+        Button in,out,editButton;
         String total;
         EditText flats;
         ArrayList<String>historyflatid;
@@ -444,6 +454,7 @@ public class GateAdapter extends RecyclerView.Adapter<GateAdapter.ListViewHolder
             ename = view.findViewById(R.id.name);
             propic=view.findViewById(R.id.pic);
             in= view.findViewById(R.id.in);
+            editButton= view.findViewById(R.id.editButton);
             out= view.findViewById(R.id.out);
             flats= view.findViewById(R.id.flats);
             historyflatid= new ArrayList<>();
