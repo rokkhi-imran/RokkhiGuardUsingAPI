@@ -515,6 +515,7 @@ public class AddVisitor extends AppCompatActivity implements IPickResult{
         doc.put("v_vehicleno", vehicle.getText().toString());
         doc.put("v_pic", "");
         doc.put("thumb_v_pic", "");
+        doc.put("statusOfEntry", "pending");
         doc.put("in", true);
         doc.put("completed", false);
         doc.put("response", res);
@@ -668,9 +669,16 @@ public class AddVisitor extends AppCompatActivity implements IPickResult{
         enter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+
+                Map<String, Object> mm= new HashMap<>();
+                mm.put("response","accepted");
+                mm.put("in",true);
+                mm.put("responder",FirebaseAuth.getInstance().getCurrentUser().getUid());
+                mm.put("statusOfEntry","in");
+
                 firebaseFirestore.collection(getString(R.string.col_visitors)).document(uid)
-                        .update("response", "accepted"
-                        ,"responder",FirebaseAuth.getInstance().getCurrentUser().getUid()).addOnCompleteListener(new OnCompleteListener<Void>() {
+                        .set(mm,SetOptions.merge()).addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful()) {
@@ -681,6 +689,20 @@ public class AddVisitor extends AppCompatActivity implements IPickResult{
                         }
                     }
                 });
+
+//                firebaseFirestore.collection(getString(R.string.col_visitors)).document(uid)
+//                        .update("response", "accepted"
+//                        ,"responder",FirebaseAuth.getInstance().getCurrentUser().getUid()).addOnCompleteListener(new OnCompleteListener<Void>() {
+//                    @Override
+//                    public void onComplete(@NonNull Task<Void> task) {
+//                        if (task.isSuccessful()) {
+//                            Toast.makeText(context, "Done!", Toast.LENGTH_SHORT).show();
+//                            progressBar.setVisibility(View.GONE);
+//                            alertconfirm.dismiss();
+//                            cleardata();
+//                        }
+//                    }
+//                });
             }
         });
 
@@ -688,10 +710,15 @@ public class AddVisitor extends AppCompatActivity implements IPickResult{
             @Override
             public void onClick(View view) {
                 progressBar.setVisibility(View.VISIBLE);
+
+                Map<String, Object> mm= new HashMap<>();
+                mm.put("response","rejected");
+                mm.put("in",false);
+                mm.put("responder",FirebaseAuth.getInstance().getCurrentUser().getUid());
+                mm.put("statusOfEntry","out");
+
                 firebaseFirestore.collection(getString(R.string.col_visitors)).document(uid)
-                        .update("response", "rejected",
-                                "in",false,"responder",
-                                FirebaseAuth.getInstance().getCurrentUser().getUid()).addOnCompleteListener(new OnCompleteListener<Void>() {
+                        .set(mm,SetOptions.merge()).addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful()) {
@@ -702,6 +729,20 @@ public class AddVisitor extends AppCompatActivity implements IPickResult{
                         }
                     }
                 });
+//                firebaseFirestore.collection(getString(R.string.col_visitors)).document(uid)
+//                        .update("response", "rejected",
+//                                "in",false,"responder",
+//                                FirebaseAuth.getInstance().getCurrentUser().getUid()).addOnCompleteListener(new OnCompleteListener<Void>() {
+//                    @Override
+//                    public void onComplete(@NonNull Task<Void> task) {
+//                        if (task.isSuccessful()) {
+//                            Toast.makeText(context, "Done!", Toast.LENGTH_SHORT).show();
+//                            progressBar.setVisibility(View.GONE);
+//                            alertconfirm.dismiss();
+//                            cleardata();
+//                        }
+//                    }
+//                });
             }
         });
 
@@ -786,6 +827,29 @@ public class AddVisitor extends AppCompatActivity implements IPickResult{
                                     progressBar.setVisibility(View.GONE);
                                     status.setText("Accepted  ( গৃহীত )");
                                     status.setTextColor(Color.GREEN);
+                                }
+                                else if(res.equals("intercom")){
+                                    enter.setVisibility(View.GONE);
+                                    cancel.setVisibility(View.GONE);
+                                    submit.setVisibility(View.VISIBLE);
+                                    progressBar.setVisibility(View.GONE);
+                                    status.setText("Call By intercom  ( গৃহীত )");
+                                    status.setTextColor(Color.YELLOW);
+                                }
+                                else if(res.equals("mobile")){
+//                                    flatusers.clear();
+                                    String responder= visitors.getResponder();
+                                    for(int i=0;i<flatusers.size();i++){
+                                        if(!flatusers.get(i).getUser_id().equals(responder)){
+                                            flatusers.remove(flatusers.get(i));
+                                        }
+                                    }
+                                    enter.setVisibility(View.GONE);
+                                    cancel.setVisibility(View.GONE);
+                                    submit.setVisibility(View.VISIBLE);
+                                    progressBar.setVisibility(View.GONE);
+                                    status.setText("Call in mobile  ( গৃহীত )");
+                                    status.setTextColor(Color.MAGENTA);
                                 }
 
                             } else {

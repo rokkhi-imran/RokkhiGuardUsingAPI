@@ -22,7 +22,8 @@ public class Visitors {
     private Date time= new Date();
     private String another_uid="none";
     private String v_uid="none";
-    private boolean in=false;
+    private String statusOfEntry="none";
+    private boolean in=false; //aste aste obsolete hye jabe
     private boolean completed=false;
     private String response="none";
     private String v_type="none";
@@ -30,13 +31,11 @@ public class Visitors {
     private String responder="none";
 
 
-
-
     public Visitors() {
     }
 
 
-    public Visitors(String v_phone, String v_name, String v_pic, String thumb_v_pic, String v_purpose, String v_mail, String v_where, String flat_id, String f_no, String comm_id, String build_id, String v_vehicleno, String v_gpass, Date time, String another_uid, String v_uid, boolean in, boolean completed, String response, String v_type, List<String> v_array, String responder) {
+    public Visitors(String v_phone, String v_name, String v_pic, String thumb_v_pic, String v_purpose, String v_mail, String v_where, String flat_id, String f_no, String comm_id, String build_id, String v_vehicleno, String v_gpass, Date time, String another_uid, String v_uid, String statusOfEntry, boolean in, boolean completed, String response, String v_type, List<String> v_array, String responder) {
         this.v_phone = v_phone;
         this.v_name = v_name;
         this.v_pic = v_pic;
@@ -53,6 +52,7 @@ public class Visitors {
         this.time = time;
         this.another_uid = another_uid;
         this.v_uid = v_uid;
+        this.statusOfEntry = statusOfEntry;
         this.in = in;
         this.completed = completed;
         this.response = response;
@@ -188,6 +188,14 @@ public class Visitors {
 
     public void setV_uid(String v_uid) {
         this.v_uid = v_uid;
+    }
+
+    public String getStatusOfEntry() {
+        return statusOfEntry;
+    }
+
+    public void setStatusOfEntry(String statusOfEntry) {
+        this.statusOfEntry = statusOfEntry;
     }
 
     public boolean isIn() {
