@@ -2,6 +2,8 @@ package com.rokkhi.rokkhiguard;
 
 import android.Manifest;
 import android.app.Dialog;
+
+import androidx.core.content.ContextCompat;
 import androidx.lifecycle.Observer;
 import android.content.Context;
 import android.content.Intent;
@@ -515,7 +517,8 @@ public class AddVisitor extends AppCompatActivity implements IPickResult{
         doc.put("v_vehicleno", vehicle.getText().toString());
         doc.put("v_pic", "");
         doc.put("thumb_v_pic", "");
-        doc.put("statusOfEntry", "pending");
+        if(res.equals("whitelisted"))doc.put("statusOfEntry", "in");
+        else doc.put("statusOfEntry", "pending");
         doc.put("in", true);
         doc.put("completed", false);
         doc.put("response", res);
@@ -849,12 +852,12 @@ public class AddVisitor extends AppCompatActivity implements IPickResult{
                                     status.setTextColor(Color.GREEN);
                                 }
                                 else if(res.equals("intercom")){
-                                    enter.setVisibility(View.GONE);
-                                    cancel.setVisibility(View.GONE);
-                                    submit.setVisibility(View.VISIBLE);
+//                                    enter.setVisibility(View.GONE);
+//                                    cancel.setVisibility(View.GONE);
+//                                    submit.setVisibility(View.VISIBLE);
                                     progressBar.setVisibility(View.GONE);
                                     status.setText("Call By intercom  ( গৃহীত )");
-                                    status.setTextColor(Color.YELLOW);
+                                    status.setTextColor(ContextCompat.getColor(context,R.color.yellow));
                                 }
                                 else if(res.equals("mobile")){
 //                                    flatusers.clear();
@@ -864,9 +867,9 @@ public class AddVisitor extends AppCompatActivity implements IPickResult{
                                             flatusers.remove(flatusers.get(i));
                                         }
                                     }
-                                    enter.setVisibility(View.GONE);
-                                    cancel.setVisibility(View.GONE);
-                                    submit.setVisibility(View.VISIBLE);
+//                                    enter.setVisibility(View.GONE);
+//                                    cancel.setVisibility(View.GONE);
+//                                    submit.setVisibility(View.VISIBLE);
                                     progressBar.setVisibility(View.GONE);
                                     status.setText("Call in mobile  ( গৃহীত )");
                                     status.setTextColor(Color.MAGENTA);
@@ -901,7 +904,6 @@ public class AddVisitor extends AppCompatActivity implements IPickResult{
         View convertView = (View) inflater.inflate(R.layout.custom_list_forusers, null);
         final ListView lv = (ListView) convertView.findViewById(R.id.listView1);
         alertcompany.setView(convertView);
-        alertcompany.setCancelable(false);
         //valueAdapter.notifyDataSetChanged();
 
         lv.setAdapter(usersAdapter);
