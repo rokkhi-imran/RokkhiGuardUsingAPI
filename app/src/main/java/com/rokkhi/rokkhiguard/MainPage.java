@@ -2,6 +2,8 @@ package com.rokkhi.rokkhiguard;
 
 import androidx.lifecycle.Observer;
 
+import android.Manifest;
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -17,6 +19,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.telecom.TelecomManager;
 import android.util.Log;
@@ -27,12 +31,16 @@ import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.SetOptions;
@@ -40,6 +48,7 @@ import com.rokkhi.rokkhiguard.Model.ActiveFlats;
 import com.rokkhi.rokkhiguard.Model.Activebuilding;
 import com.rokkhi.rokkhiguard.Model.BuildingChanges;
 import com.rokkhi.rokkhiguard.Model.Vehicle;
+import com.rokkhi.rokkhiguard.Model.Visitors;
 import com.rokkhi.rokkhiguard.Model.Whitelist;
 import com.rokkhi.rokkhiguard.data.FlatsRepository;
 import com.rokkhi.rokkhiguard.data.VehiclesRepository;
@@ -53,10 +62,10 @@ import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class MainPage extends AppCompatActivity{
+public class MainPage extends AppCompatActivity {
 
     private static final String TAG = "MainPage";
-    CircleImageView gatepass, logout, addvis, vislist, notice, parcel, create, vehicle, child, callLogs,guardList;
+    CircleImageView gatepass, logout, addvis, vislist, notice, parcel, create, vehicle, child, callLogs, guardList;
     Context context;
     ImageButton settings;
     FirebaseFirestore firebaseFirestore;
@@ -73,19 +82,23 @@ public class MainPage extends AppCompatActivity{
     String thismobileuid;
     String appVersion;
 
+    RecyclerView recyclerViewVisitorAdapter;
+
+    ArrayList<Visitors> visitorsArrayList;
+
     Button buildingName;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_page);
 
 
         Log.d(TAG, "onCreate: " + "xxx");
 
-        Intent intent = getIntent();
         context = MainPage.this;
 
+        visitorsArrayList = new ArrayList<>();
         gatepass = findViewById(R.id.gatepass);
         logout = findViewById(R.id.logout);
         addvis = findViewById(R.id.addvis);
@@ -97,8 +110,15 @@ public class MainPage extends AppCompatActivity{
         vehicle = findViewById(R.id.vehicle);
         child = findViewById(R.id.child);
         callLogs = findViewById(R.id.callLogs);
-        guardList=findViewById(R.id.guardList);
-        buildingName=findViewById(R.id.buildingNameTV);
+        guardList = findViewById(R.id.guardList);
+        buildingName = findViewById(R.id.buildingNameTV);
+        recyclerViewVisitorAdapter = findViewById(R.id.recyclerviewVisitorWaitingListID);
+
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context);
+
+        linearLayoutManager.setOrientation(RecyclerView.HORIZONTAL);
+
+        recyclerViewVisitorAdapter.setLayoutManager(linearLayoutManager);
 
         firebaseFirestore = FirebaseFirestore.getInstance();
         sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
@@ -110,6 +130,39 @@ public class MainPage extends AppCompatActivity{
 
         offerReplacingDefaultDialer(context);
 
+
+        //Load visitor Waiting List Start
+
+        //check the call permission
+        if (context.checkSelfPermission(Manifest.permission.READ_PHONE_STATE) == PackageManager.PERMISSION_DENIED || context.checkSelfPermission(Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_DENIED) {
+            String[] permissions = {Manifest.permission.READ_PHONE_STATE, Manifest.permission.CALL_PHONE};
+            requestPermissions(permissions, 1);
+        }
+
+        firebaseFirestore.collection(getString(R.string.col_visitors))
+                .whereEqualTo("completed", false)
+                .whereEqualTo("build_id", buildid)
+                .orderBy("time", Query.Direction.DESCENDING)
+                .limit(15)
+                .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                    @Override
+                    public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
+
+                        for (DocumentSnapshot snapshot:queryDocumentSnapshots.getDocuments()){
+                            Visitors visitors =snapshot.toObject(Visitors.class);
+                            visitorsArrayList.add(visitors);
+                        }
+
+                        VisitorWaitingAdapter visitorWaitingAdapter = new VisitorWaitingAdapter(visitorsArrayList,MainPage.this);
+                        recyclerViewVisitorAdapter.setAdapter(visitorWaitingAdapter);
+
+                        Log.e(TAG, "onComplete: visitors size = " + visitorsArrayList.size());
+
+                    }
+                });
+
+
+        //Load Visitor Waiting List End
 
 
 //check new app start
@@ -128,7 +181,7 @@ public class MainPage extends AppCompatActivity{
                 final DocumentSnapshot documentSnapshot = task.getResult();
                 if (documentSnapshot.exists()) {
                     String appVersionCodeNew = documentSnapshot.getString("versionCode");
-                    boolean mustInstall= documentSnapshot.getBoolean("mustInstall");
+                    boolean mustInstall = documentSnapshot.getBoolean("mustInstall");
 
                     Log.e(TAG, "onComplete: appVersionCodeNew = database " + appVersionCodeNew);
                     Log.e(TAG, "onComplete: appVersionCodeNew = phone version " + appVersion);
@@ -137,7 +190,7 @@ public class MainPage extends AppCompatActivity{
 
                         final String downloadLink = documentSnapshot.getString("downloadLink");
 
-                        final AlertDialog  alertDialog = new AlertDialog.Builder(context).create();
+                        final AlertDialog alertDialog = new AlertDialog.Builder(context).create();
                         alertDialog.setCancelable(false);
                         LayoutInflater inflater = getLayoutInflater();
                         View convertView = (View) inflater.inflate(R.layout.show_update_alert, null);
@@ -145,7 +198,7 @@ public class MainPage extends AppCompatActivity{
                         Button cancelBtn = convertView.findViewById(R.id.cancelBtn);
                         Button installBtn = convertView.findViewById(R.id.installBtn);
 
-                        if (mustInstall){
+                        if (mustInstall) {
                             cancelBtn.setVisibility(View.GONE);
                             alertDialog.setCancelable(false);
                         }
@@ -170,19 +223,19 @@ public class MainPage extends AppCompatActivity{
                                         }
 
 
-                                            Log.e(TAG, "onClick: "+downloadLink );
+                                        Log.e(TAG, "onClick: " + downloadLink);
 
 
-                                            ProgressDialog progressDialog = new ProgressDialog(MainPage.this);
-                                            progressDialog.setMessage("Downloading new Apk...");
-                                            progressDialog.setCancelable(false);
-                                            progressDialog.show();
+                                        ProgressDialog progressDialog = new ProgressDialog(MainPage.this);
+                                        progressDialog.setMessage("Downloading new Apk...");
+                                        progressDialog.setCancelable(false);
+                                        progressDialog.show();
 
-                                            DownloadFile downloadFile = new DownloadFile(downloadLink, progressDialog, context);
-                                            downloadFile.execute();
+                                        DownloadFile downloadFile = new DownloadFile(downloadLink, progressDialog, context);
+                                        downloadFile.execute();
 
 
-                                    }else {
+                                    } else {
                                         Toast.makeText(context, "No SD CARD", Toast.LENGTH_SHORT).show();
                                     }
 
@@ -195,10 +248,6 @@ public class MainPage extends AppCompatActivity{
                         alertDialog.show();
 
 
-
-
-
-
                     }
                 }
             }
@@ -206,7 +255,6 @@ public class MainPage extends AppCompatActivity{
 
 
 //check new app End
-
 
 
         firebaseFirestore.collection(getString(R.string.col_activebuild)).document(buildid)
@@ -347,7 +395,7 @@ public class MainPage extends AppCompatActivity{
 
     private void offerReplacingDefaultDialer(Context context) {
 
-        if (context.getSystemService(TelecomManager.class).getDefaultDialerPackage()!= getPackageName()) {
+        if (context.getSystemService(TelecomManager.class).getDefaultDialerPackage() != getPackageName()) {
             new Intent(TelecomManager.ACTION_CHANGE_DEFAULT_DIALER)
                     .putExtra(TelecomManager.EXTRA_CHANGE_DEFAULT_DIALER_PACKAGE_NAME, getPackageName());
         }
@@ -359,8 +407,6 @@ public class MainPage extends AppCompatActivity{
         Intent intent = new Intent(MainPage.this, SWorkersActivity.class);
         startActivity(intent);
 
-       /* Intent intent = new Intent(MainPage.this, CreateProfile.class);
-        startActivity(intent);*/
     }
 
 

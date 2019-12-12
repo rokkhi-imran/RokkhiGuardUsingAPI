@@ -18,12 +18,12 @@
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.ANSWER_PHONE_CALLS" />
     <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
-
-    <uses-permission android:name="android.permission.WRITE_SETTINGS"
+    <uses-permission
+        android:name="android.permission.WRITE_SETTINGS"
         tools:ignore="ProtectedPermissions" />
-    <uses-permission android:name="android.permission.WRITE_SECURE_SETTINGS"
+    <uses-permission
+        android:name="android.permission.WRITE_SECURE_SETTINGS"
         tools:ignore="ProtectedPermissions" />
-
     <uses-permission
         android:name="android.permission.INSTALL_PACKAGES"
         tools:ignore="ProtectedPermissions" />
@@ -37,7 +37,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".GuardQRCodeActivity"></activity>
+        <activity android:name=".GuardQRCodeActivity" />
         <activity android:name=".GuardListActivity" />
         <activity android:name=".SWorkersActivity" />
         <activity android:name=".CallLogsActivity" />
@@ -109,7 +109,7 @@
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/paths"
-                tools:replace="android:resource"/>
+                tools:replace="android:resource" />
         </provider> <!-- phone call -->
         <activity android:name="com.rokkhi.callerapp.CallActivity" />
         <activity android:name=".CallerApp.MainActivity">

@@ -26,7 +26,28 @@
 
 
             <LinearLayout
+                android:id="@+id/visitorListLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="10dp"
+                android:weightSum="3">
+
+
+                <androidx.recyclerview.widget.RecyclerView
+
+                    android:id="@+id/recyclerviewVisitorWaitingListID"
+                    android:layout_width="match_parent"
+                    android:orientation="horizontal"
+                    android:layout_height="wrap_content"/>
+
+
+
+            </LinearLayout>
+
+            <LinearLayout
                 android:id="@+id/lin0"
+                android:layout_below="@id/visitorListLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"

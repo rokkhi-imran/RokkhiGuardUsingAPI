@@ -1,10 +1,11 @@
 package com.rokkhi.rokkhiguard.Model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class Visitors {
+public class Visitors implements Serializable {
 
     private String v_phone="none";
     private String v_name="none";
