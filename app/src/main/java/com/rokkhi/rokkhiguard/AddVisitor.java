@@ -465,11 +465,11 @@ public class AddVisitor extends AppCompatActivity implements IPickResult{
 
         String wlcheck=normalfunc.makephone14(phone.getText().toString())+selected.getFlat_id();
         if(wflats.contains(wlcheck)){
-            res = "whitelisted";
+            res = "whitelisted";  //vvvvvv
             vtype="whitelisted";
         }
         else{
-            res = "pending"; //TODO this should be pending
+            res = "pending"; //TODO this should be pending  //vvvvvv
             vtype="visitor";
 
         }
@@ -674,6 +674,7 @@ public class AddVisitor extends AppCompatActivity implements IPickResult{
                 Map<String, Object> mm= new HashMap<>();
                 mm.put("response","accepted");
                 mm.put("in",true);
+                mm.put("completed",true);
                 mm.put("responder",FirebaseAuth.getInstance().getCurrentUser().getUid());
                 mm.put("statusOfEntry","in");
 
@@ -714,6 +715,7 @@ public class AddVisitor extends AppCompatActivity implements IPickResult{
                 Map<String, Object> mm= new HashMap<>();
                 mm.put("response","rejected");
                 mm.put("in",false);
+                mm.put("completed",true);
                 mm.put("responder",FirebaseAuth.getInstance().getCurrentUser().getUid());
                 mm.put("statusOfEntry","out");
 
@@ -749,10 +751,27 @@ public class AddVisitor extends AppCompatActivity implements IPickResult{
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+                Map<String, Object> mm= new HashMap<>();
+                mm.put("completed",true);
+
                 progressBar.setVisibility(View.VISIBLE);
-                progressBar.setVisibility(View.GONE);
-                alertconfirm.dismiss();
-                cleardata();
+
+                firebaseFirestore.collection(getString(R.string.col_visitors)).document(uid)
+                        .set(mm,SetOptions.merge()).addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            Toast.makeText(context, "Done!", Toast.LENGTH_SHORT).show();
+
+                            progressBar.setVisibility(View.GONE);
+                            alertconfirm.dismiss();
+                            cleardata();
+                        }
+                    }
+                });
+
+
             }
         });
 
@@ -814,6 +833,7 @@ public class AddVisitor extends AppCompatActivity implements IPickResult{
                                 res = visitors.getResponse();
                                 if (res.equals("rejected")) {
 
+                                    //vvvvvv
                                     enter.setVisibility(View.GONE);
                                     cancel.setVisibility(View.GONE);
                                     submit.setVisibility(View.VISIBLE);
