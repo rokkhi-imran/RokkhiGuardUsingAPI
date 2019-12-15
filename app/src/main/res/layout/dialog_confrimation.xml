@@ -34,6 +34,16 @@
             android:textColor="@color/orange"
           />
 
+    <Button
+        android:id="@+id/addAnother"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/less_round_button_grey"
+        android:backgroundTint="@color/yellow_dark"
+        android:text="Add another visitor"
+        android:textColor="@color/white"
+        android:layout_below="@+id/call"
+        />
 
 
         <ProgressBar
@@ -79,6 +89,8 @@
                 android:src="@drawable/no"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent" />
+
+
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout

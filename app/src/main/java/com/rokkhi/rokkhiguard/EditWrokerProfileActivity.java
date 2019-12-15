@@ -84,7 +84,7 @@ public class EditWrokerProfileActivity extends AppCompatActivity implements View
     String commid = "";
     String total = "";
     Normalfunc normalfunc;
-    String picurl;
+    String picurl="";
     String mFileUri = "";
     private Bitmap bitmap = null;
 
@@ -488,7 +488,7 @@ public class EditWrokerProfileActivity extends AppCompatActivity implements View
 
         final ProgressDialog progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("Executing Action...");
-        progressDialog.show();
+
 
 
         photoRef = FirebaseStorage.getInstance().getReference()
@@ -518,12 +518,13 @@ public class EditWrokerProfileActivity extends AppCompatActivity implements View
 
         }
 
-        if(bitmap==null){
+        if(bitmap==null && picurl.isEmpty()){
             progressDialog.dismiss();
 
             Toast.makeText(context,"Please select your picture", Toast.LENGTH_SHORT).show();
             return;
         }
+        progressDialog.show();
 
 
         List<String> ll = normalfunc.splitstring(userName.getText().toString());
@@ -646,63 +647,63 @@ public class EditWrokerProfileActivity extends AppCompatActivity implements View
                     });
         }
 
-//        else{
-//            WriteBatch batch = firebaseFirestore.batch();
-//
-//            Log.e("TAG", "upload: " + doc);
-//
-//            DocumentReference setsworker = firebaseFirestore.collection(getString(R.string.col_sworker))
-//                    .document(sID);
-//
-//            batch.set(setsworker, doc, SetOptions.merge());
-//
-//            if (typeselected.getEnglish().equals("guard")) {
-//
-//                final Guards guards = new Guards(buildid, commid, userName.getText().toString()
-//                        , normalfunc.getRandomNumberString5(), "", Calendar.getInstance().getTime(), normalfunc.futuredate(), "", picurl, "", picurl,
-//                        normalfunc.makephone14(userPhoneTV.getText().toString()), sID, ll1);
-//                Log.e("TAG", "upload: " + guards);
-//                DocumentReference setguard = firebaseFirestore.collection(getString(R.string.col_guards))
-//                        .document(sID);
-//
-//                batch.set(setguard, guards, SetOptions.merge());
-//            }
-//
-//            ArrayList<String> stringid = new ArrayList<>();
-//            ArrayList<String> stringno = new ArrayList<>();
-//
-//            for (int i = 0; i < historyflatno.size(); i++) {
-//                stringid.add(allflats.get(i).getFlat_id());
-//                stringno.add(allflats.get(i).getF_no());
-//            }
-//
-//            SLastHistory sLastHistory = new SLastHistory(sID, buildid, stringid, stringno, Calendar.getInstance().getTime());
-//            DocumentReference setflat = firebaseFirestore.collection(getString(R.string.col_sworker))
-//                    .document(sID).collection("shistory").document(buildid);
-//
-//            batch.set(setflat, sLastHistory, SetOptions.merge());
-//            Log.e("TAG", "upload: " + sLastHistory);
-//
-//
-//            batch.commit().addOnCompleteListener(new OnCompleteListener<Void>() {
-//                @Override
-//                public void onComplete(@NonNull Task<Void> task) {
-//                    if (task.isSuccessful()) {
-//
-//
-//                        progressDialog.dismiss();
-//                        Toast.makeText(context, "Done!", Toast.LENGTH_SHORT).show();
-//                        userName.setText("");
-//                        userPhoneTV.setText("");
-//                        userFlat.setText("");
-//                        userWtype.setText("");
-//                        startActivity(new Intent(EditWrokerProfileActivity.this, MainPage.class)
-//                                .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
-////                    UniversalImageLoader.setImage("", , null, "");
-//                    }
-//                }
-//            });
-//        }
+        else{
+            WriteBatch batch = firebaseFirestore.batch();
+
+            Log.e("TAG", "upload: " + doc);
+
+            DocumentReference setsworker = firebaseFirestore.collection(getString(R.string.col_sworker))
+                    .document(sID);
+
+            batch.set(setsworker, doc, SetOptions.merge());
+
+            if (typeselected.getEnglish().equals("guard")) {
+
+                final Guards guards = new Guards(buildid, commid, userName.getText().toString()
+                        , normalfunc.getRandomNumberString5(), "", Calendar.getInstance().getTime(), normalfunc.futuredate(), "", picurl, "", picurl,
+                        normalfunc.makephone14(userPhoneTV.getText().toString()), sID, ll1);
+                Log.e("TAG", "upload: " + guards);
+                DocumentReference setguard = firebaseFirestore.collection(getString(R.string.col_guards))
+                        .document(sID);
+
+                batch.set(setguard, guards, SetOptions.merge());
+            }
+
+            ArrayList<String> stringid = new ArrayList<>();
+            ArrayList<String> stringno = new ArrayList<>();
+
+            for (int i = 0; i < historyflatno.size(); i++) {
+                stringid.add(allflats.get(i).getFlat_id());
+                stringno.add(allflats.get(i).getF_no());
+            }
+
+            SLastHistory sLastHistory = new SLastHistory(sID, buildid, stringid, stringno, Calendar.getInstance().getTime());
+            DocumentReference setflat = firebaseFirestore.collection(getString(R.string.col_sworker))
+                    .document(sID).collection("shistory").document(buildid);
+
+            batch.set(setflat, sLastHistory, SetOptions.merge());
+            Log.e("TAG", "upload: " + sLastHistory);
+
+
+            batch.commit().addOnCompleteListener(new OnCompleteListener<Void>() {
+                @Override
+                public void onComplete(@NonNull Task<Void> task) {
+                    if (task.isSuccessful()) {
+
+
+                        progressDialog.dismiss();
+                        Toast.makeText(context, "Done!", Toast.LENGTH_SHORT).show();
+                        userName.setText("");
+                        userPhoneTV.setText("");
+                        userFlat.setText("");
+                        userWtype.setText("");
+                        startActivity(new Intent(EditWrokerProfileActivity.this, MainPage.class)
+                                .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
+//                    UniversalImageLoader.setImage("", , null, "");
+                    }
+                }
+            });
+        }
 
 
 

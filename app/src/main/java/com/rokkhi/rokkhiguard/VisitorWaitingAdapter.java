@@ -1,6 +1,7 @@
 package com.rokkhi.rokkhiguard;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -204,6 +205,7 @@ public class VisitorWaitingAdapter extends RecyclerView.Adapter<VisitorWaitingAd
         final TextView whitelisted = convertView.findViewById(R.id.whitelisted);
         final Button submit = convertView.findViewById(R.id.submit);
         final Button call = convertView.findViewById(R.id.call);
+        final Button addAnother = convertView.findViewById(R.id.addAnother);
         final CircleImageView responPic = convertView.findViewById(R.id.responsepic);
         final CircleImageView enter = convertView.findViewById(R.id.enter);
         final CircleImageView cancel = convertView.findViewById(R.id.cancel);
@@ -212,6 +214,17 @@ public class VisitorWaitingAdapter extends RecyclerView.Adapter<VisitorWaitingAd
         final ProgressBar progressBar = convertView.findViewById(R.id.dialogprogress);
         alertconfirm.setView(convertView);
         alertconfirm.setCancelable(true);
+
+        addAnother.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                alertconfirm.dismiss();
+                Intent intent= new Intent(context,AddVisitor.class);
+                context.startActivity(intent);
+//                finish();
+            }
+        });
+
 
 
         enter.setOnClickListener(new View.OnClickListener() {
@@ -407,6 +420,7 @@ public class VisitorWaitingAdapter extends RecyclerView.Adapter<VisitorWaitingAd
 
             progressBar.setVisibility(View.GONE);
             call.setVisibility(View.GONE);
+            responPic.setVisibility(View.GONE);
             whitelisted.setVisibility(View.VISIBLE);
             whitelisted.setText(" কোন এপ ইউজার পাওয়া যায়নি। অন্য উপায়ে যোগাযোগ করুন।");
             status.setText("No response ( সাড়া পাওয়া যায়নি )");

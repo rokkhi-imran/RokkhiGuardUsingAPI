@@ -92,8 +92,8 @@ public class VisitorsList extends AppCompatActivity implements VisitorAdapter.My
         Log.d(TAG, "onCreate: yyy "+ low+"  "+ high +" "+ buildid);
 
 
-        getFirstQuery= visitorref.whereEqualTo("build_id",buildid).whereEqualTo("in",true)
-                .whereEqualTo("completed",false)
+        getFirstQuery= visitorref.whereEqualTo("build_id",buildid).
+                whereEqualTo("statusOfEntry","in")
                 .whereGreaterThan("time",low)
                 .whereLessThan("time",high).
                 orderBy("time", Query.Direction.ASCENDING).limit(limit);
@@ -191,8 +191,7 @@ public class VisitorsList extends AppCompatActivity implements VisitorAdapter.My
 
                             Log.d(TAG, "onScrolled: mmmmll dhukse");
                             Query nextQuery;
-                            nextQuery= visitorref.whereEqualTo("build_id",buildid).whereEqualTo("in",true)
-                                    .whereEqualTo("completed",false)
+                            nextQuery= visitorref.whereEqualTo("build_id",buildid).whereEqualTo("statusOfEntry","in")
                                     .whereGreaterThan("time",low)
                                     .whereLessThan("time",high).
                                             orderBy("time", Query.Direction.ASCENDING)
