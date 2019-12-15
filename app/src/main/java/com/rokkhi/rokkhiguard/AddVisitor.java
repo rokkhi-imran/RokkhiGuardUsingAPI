@@ -662,6 +662,7 @@ public class AddVisitor extends AppCompatActivity implements IPickResult{
         final Button call = convertView.findViewById(R.id.call);
         final CircleImageView enter = convertView.findViewById(R.id.enter);
         final CircleImageView cancel = convertView.findViewById(R.id.cancel);
+        final CircleImageView responPic = convertView.findViewById(R.id.responsepic);
 
 
         final ProgressBar progressBar = convertView.findViewById(R.id.dialogprogress);
@@ -839,6 +840,7 @@ public class AddVisitor extends AppCompatActivity implements IPickResult{
                                     //vvvvvv
                                     enter.setVisibility(View.GONE);
                                     cancel.setVisibility(View.GONE);
+                                    responPic.setImageDrawable(ContextCompat.getDrawable(context,R.drawable.reject));
                                     submit.setVisibility(View.VISIBLE);
                                     progressBar.setVisibility(View.GONE);
                                     status.setText("Rejected  ( বাতিল )");
@@ -848,6 +850,7 @@ public class AddVisitor extends AppCompatActivity implements IPickResult{
                                     cancel.setVisibility(View.GONE);
                                     submit.setVisibility(View.VISIBLE);
                                     progressBar.setVisibility(View.GONE);
+                                    responPic.setImageDrawable(ContextCompat.getDrawable(context,R.drawable.accept));
                                     status.setText("Accepted  ( গৃহীত )");
                                     status.setTextColor(Color.GREEN);
                                 }
@@ -855,6 +858,7 @@ public class AddVisitor extends AppCompatActivity implements IPickResult{
 //                                    enter.setVisibility(View.GONE);
 //                                    cancel.setVisibility(View.GONE);
 //                                    submit.setVisibility(View.VISIBLE);
+                                    responPic.setImageDrawable(ContextCompat.getDrawable(context,R.drawable.telephone));
                                     progressBar.setVisibility(View.GONE);
                                     status.setText("Call By intercom  ( গৃহীত )");
                                     status.setTextColor(ContextCompat.getColor(context,R.color.yellow));
@@ -867,6 +871,7 @@ public class AddVisitor extends AppCompatActivity implements IPickResult{
                                             flatusers.remove(flatusers.get(i));
                                         }
                                     }
+                                    responPic.setImageDrawable(ContextCompat.getDrawable(context,R.drawable.smartphone));
 //                                    enter.setVisibility(View.GONE);
 //                                    cancel.setVisibility(View.GONE);
 //                                    submit.setVisibility(View.VISIBLE);

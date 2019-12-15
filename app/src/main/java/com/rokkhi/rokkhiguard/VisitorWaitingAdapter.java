@@ -23,6 +23,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -122,6 +123,7 @@ public class VisitorWaitingAdapter extends RecyclerView.Adapter<VisitorWaitingAd
                 public void onClick(View v) {
 
 
+
                     getActiveBuildings(visitorsArrayList.get(getAdapterPosition()));
 
                 }
@@ -130,6 +132,20 @@ public class VisitorWaitingAdapter extends RecyclerView.Adapter<VisitorWaitingAd
         }
     }
     private void getActiveBuildings(final Visitors visitors) {
+
+        flatusers= new ArrayList<>();
+        firebaseFirestore.collection(context.getString(R.string.col_udetails)).whereEqualTo("flat_id",visitors.getFlat_id())
+                .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if(task.isSuccessful()){
+                    for(DocumentSnapshot documentSnapshot: task.getResult()){
+                        UDetails uDetails= documentSnapshot.toObject(UDetails.class);
+                        flatusers.add(uDetails);
+                    }
+                }
+            }
+        });
 
         firebaseFirestore.collection(context.getString(R.string.col_activeflat))
                 .document(visitors.getFlat_id())
@@ -188,6 +204,7 @@ public class VisitorWaitingAdapter extends RecyclerView.Adapter<VisitorWaitingAd
         final TextView whitelisted = convertView.findViewById(R.id.whitelisted);
         final Button submit = convertView.findViewById(R.id.submit);
         final Button call = convertView.findViewById(R.id.call);
+        final CircleImageView responPic = convertView.findViewById(R.id.responsepic);
         final CircleImageView enter = convertView.findViewById(R.id.enter);
         final CircleImageView cancel = convertView.findViewById(R.id.cancel);
 
@@ -340,6 +357,7 @@ public class VisitorWaitingAdapter extends RecyclerView.Adapter<VisitorWaitingAd
                                     //vvvvvv
                                     enter.setVisibility(View.GONE);
                                     cancel.setVisibility(View.GONE);
+                                    responPic.setImageDrawable(ContextCompat.getDrawable(context,R.drawable.reject));
                                     submit.setVisibility(View.VISIBLE);
                                     progressBar.setVisibility(View.GONE);
                                     status.setText("Rejected  ( বাতিল )");
@@ -349,6 +367,7 @@ public class VisitorWaitingAdapter extends RecyclerView.Adapter<VisitorWaitingAd
                                     cancel.setVisibility(View.GONE);
                                     submit.setVisibility(View.VISIBLE);
                                     progressBar.setVisibility(View.GONE);
+                                    responPic.setImageDrawable(ContextCompat.getDrawable(context,R.drawable.accept));
                                     status.setText("Accepted  ( গৃহীত )");
                                     status.setTextColor(Color.GREEN);
                                 }
@@ -356,9 +375,10 @@ public class VisitorWaitingAdapter extends RecyclerView.Adapter<VisitorWaitingAd
 //                                    enter.setVisibility(View.GONE);
 //                                    cancel.setVisibility(View.GONE);
 //                                    submit.setVisibility(View.VISIBLE);
+                                    responPic.setImageDrawable(ContextCompat.getDrawable(context,R.drawable.telephone));
                                     progressBar.setVisibility(View.GONE);
                                     status.setText("Call By intercom  ( গৃহীত )");
-                                    status.setTextColor(Color.YELLOW);
+                                    status.setTextColor(ContextCompat.getColor(context,R.color.yellow));
                                 }
                                 else if(res.equals("mobile")){
 //                                    flatusers.clear();
@@ -368,6 +388,7 @@ public class VisitorWaitingAdapter extends RecyclerView.Adapter<VisitorWaitingAd
                                             flatusers.remove(flatusers.get(i));
                                         }
                                     }
+                                    responPic.setImageDrawable(ContextCompat.getDrawable(context,R.drawable.smartphone));
 //                                    enter.setVisibility(View.GONE);
 //                                    cancel.setVisibility(View.GONE);
 //                                    submit.setVisibility(View.VISIBLE);
