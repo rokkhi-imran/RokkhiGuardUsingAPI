@@ -93,10 +93,16 @@ public class VisitorWaitingAdapter extends RecyclerView.Adapter<VisitorWaitingAd
         holder.visitorStatus.setText(visitorsArrayList.get(position).getResponse());
 
         if (visitorsArrayList.get(position).getResponse().equalsIgnoreCase("rejected")) {
-            holder.visitorStatus.setTextColor(Color.parseColor("#fe346e"));
+            holder.visitorStatus.setTextColor(ContextCompat.getColor(context,R.color.darkRed));
         }
-        if (visitorsArrayList.get(position).getResponse().equalsIgnoreCase("accepted")) {
-            holder.visitorStatus.setTextColor(Color.parseColor("#297ca0"));
+        else if (visitorsArrayList.get(position).getResponse().equalsIgnoreCase("accepted")) {
+            holder.visitorStatus.setTextColor(ContextCompat.getColor(context,R.color.green));
+        }
+        else if (visitorsArrayList.get(position).getResponse().equalsIgnoreCase("intercom")) {
+            holder.visitorStatus.setTextColor(ContextCompat.getColor(context,R.color.yellow));
+        }
+        else if (visitorsArrayList.get(position).getResponse().equalsIgnoreCase("mobile")) {
+            holder.visitorStatus.setTextColor(ContextCompat.getColor(context,R.color.guardlistColor));
         }
     }
 

@@ -34,13 +34,14 @@
             android:textColor="@color/orange"
           />
 
+
     <Button
         android:id="@+id/addAnother"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/less_round_button_grey"
         android:backgroundTint="@color/yellow_dark"
-        android:text="Add another visitor"
+        android:text="আরেকজন অতিথিকে এড করুন"
         android:textColor="@color/white"
         android:layout_below="@+id/call"
         />

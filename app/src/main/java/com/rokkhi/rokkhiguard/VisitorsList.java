@@ -54,7 +54,6 @@ public class VisitorsList extends AppCompatActivity implements VisitorAdapter.My
     private int limit = 10;
     NestedScrollView myNestedScroll;
     boolean shouldscrol=true;
-
     Query getFirstQuery;
     Date d;
     Date low,high;

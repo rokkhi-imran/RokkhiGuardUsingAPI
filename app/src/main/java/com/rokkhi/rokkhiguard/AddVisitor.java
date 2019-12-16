@@ -871,7 +871,7 @@ public class AddVisitor extends AppCompatActivity implements IPickResult{
 //                                    submit.setVisibility(View.VISIBLE);
                                     responPic.setImageDrawable(ContextCompat.getDrawable(context,R.drawable.telephone));
                                     progressBar.setVisibility(View.GONE);
-                                    status.setText("Call By intercom  ( গৃহীত )");
+                                    status.setText("ইন্টারকম এ কল করুন");
                                     status.setTextColor(ContextCompat.getColor(context,R.color.yellow));
                                 }
                                 else if(res.equals("mobile")){
@@ -887,7 +887,7 @@ public class AddVisitor extends AppCompatActivity implements IPickResult{
 //                                    cancel.setVisibility(View.GONE);
 //                                    submit.setVisibility(View.VISIBLE);
                                     progressBar.setVisibility(View.GONE);
-                                    status.setText("Call in mobile  ( গৃহীত )");
+                                    status.setText("মোবাইলে কল করুন");
                                     status.setTextColor(Color.MAGENTA);
                                 }
 
