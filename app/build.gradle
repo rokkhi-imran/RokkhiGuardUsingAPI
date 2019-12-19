@@ -28,7 +28,6 @@ dependencies {
     implementation 'com.google.firebase:firebase-core:17.2.1'
     implementation 'com.google.firebase:firebase-storage:19.1.0'
     implementation 'com.google.firebase:firebase-firestore:21.3.1'
-    implementation 'com.nostra13.universalimageloader:universal-image-loader:1.9.5'
     implementation 'com.github.jrvansuita:PickImage:2.2.4'
     implementation 'com.google.firebase:firebase-messaging:20.1.0'
     implementation 'com.google.firebase:firebase-functions:19.0.1'
@@ -50,7 +49,7 @@ dependencies {
 
     implementation 'androidx.recyclerview:recyclerview:1.1.0'
     implementation 'de.hdodenhof:circleimageview:3.0.1'
-    implementation 'com.nostra13.universalimageloader:universal-image-loader:1.9.5'
+//    implementation 'com.nostra13.universalimageloader:universal-image-loader:1.9.5'
 
 
     //call
@@ -65,6 +64,10 @@ dependencies {
     implementation 'androidx.core:core-ktx:1.1.0'
 //QR Code
     implementation 'me.dm7.barcodescanner:zxing:1.9.8'
+
+    //glide Image Loader
+    implementation 'com.github.bumptech.glide:glide:4.10.0'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.10.0'
 
 
 }

@@ -25,6 +25,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
@@ -39,7 +40,6 @@ import com.rokkhi.rokkhiguard.Model.Attendence;
 import com.rokkhi.rokkhiguard.Model.SLastHistory;
 import com.rokkhi.rokkhiguard.Model.Swroker;
 import com.rokkhi.rokkhiguard.Utils.Normalfunc;
-import com.rokkhi.rokkhiguard.Utils.UniversalImageLoader;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -272,7 +272,9 @@ public class GateAdapter extends RecyclerView.Adapter<GateAdapter.ListViewHolder
     public void onBindViewHolder(@NonNull final ListViewHolder holder, int position) {
         final Swroker swroker = list.get(position);
         holder.ename.setText(swroker.getS_name());
-        UniversalImageLoader.setImage(swroker.getThumb_s_pic(), holder.propic, null, "");
+
+        Glide.with(context).load(swroker.getThumb_s_pic()).placeholder(R.drawable.male1).into(holder.propic);
+//        UniversalImageLoader.setImage(swroker.getThumb_s_pic(), holder.propic, null, "");
 
 
         firebaseFirestore.collection(context.getString(R.string.col_sworker))

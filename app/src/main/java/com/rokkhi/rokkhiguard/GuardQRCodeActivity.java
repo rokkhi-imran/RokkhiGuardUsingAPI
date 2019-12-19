@@ -11,12 +11,12 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.bumptech.glide.Glide;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 import com.rokkhi.rokkhiguard.Model.Guards;
-import com.rokkhi.rokkhiguard.Utils.UniversalImageLoader;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -37,7 +37,10 @@ public class GuardQRCodeActivity extends AppCompatActivity {
         //get data from intent
          guards = (Guards) getIntent().getSerializableExtra("GuardInfo");
 
-        UniversalImageLoader.setImage(guards.getG_pic(), propicGuardImage, null, "");
+
+        Glide.with(GuardQRCodeActivity.this).load(guards.getG_pic()).placeholder(R.drawable.male1).into(propicGuardImage);
+
+//        UniversalImageLoader.setImage(guards.getG_pic(), propicGuardImage, null, "");
         guardNameTV.setText(guards.getG_name());
 
 

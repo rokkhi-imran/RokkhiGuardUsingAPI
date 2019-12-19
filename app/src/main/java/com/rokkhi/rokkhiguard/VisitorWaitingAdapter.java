@@ -27,6 +27,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -40,7 +41,6 @@ import com.rokkhi.rokkhiguard.CallerApp.MainActivity;
 import com.rokkhi.rokkhiguard.Model.ActiveFlats;
 import com.rokkhi.rokkhiguard.Model.UDetails;
 import com.rokkhi.rokkhiguard.Model.Visitors;
-import com.rokkhi.rokkhiguard.Utils.UniversalImageLoader;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -88,7 +88,10 @@ public class VisitorWaitingAdapter extends RecyclerView.Adapter<VisitorWaitingAd
     @Override
     public void onBindViewHolder(@NonNull VisitorViewHolderClass holder, int position) {
 
-        UniversalImageLoader.setImage(visitorsArrayList.get(position).getV_pic(), holder.imageView, null, "");
+        Glide.with(context).load(visitorsArrayList.get(position).getV_pic()).placeholder(R.drawable.male1).into(holder.imageView);
+
+//        UniversalImageLoader.setImage(visitorsArrayList.get(position).getV_pic(), holder.imageView, null, "");
+
         holder.nameVisitorWaitingID.setText(visitorsArrayList.get(position).getV_name());
         holder.visitorStatus.setText(visitorsArrayList.get(position).getResponse());
 

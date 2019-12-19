@@ -10,8 +10,8 @@ import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.rokkhi.rokkhiguard.Model.Guards;
-import com.rokkhi.rokkhiguard.Utils.UniversalImageLoader;
 
 import java.util.ArrayList;
 
@@ -73,7 +73,12 @@ public class GuardAdapter extends BaseAdapter implements Filterable {
         viewHolder.green.setVisibility(View.GONE);
         viewHolder.org.setText(guard.getG_org());
         viewHolder.name.setText(guard.getG_name());
-        UniversalImageLoader.setImage(guard.getThumb_g_pic(), viewHolder.pic, null, "");
+
+        Glide.with(convertView.getContext()).load(guard.getThumb_g_pic()).placeholder(R.drawable.male1)
+                .into(viewHolder.pic);
+
+
+//        UniversalImageLoader.setImage(guard.getThumb_g_pic(), viewHolder.pic, null, "");
         return convertView;
     }
 

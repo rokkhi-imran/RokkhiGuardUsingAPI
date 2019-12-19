@@ -19,6 +19,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
+import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -27,7 +28,6 @@ import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.rokkhi.rokkhiguard.Model.Users;
-import com.rokkhi.rokkhiguard.Utils.UniversalImageLoader;
 
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -140,7 +140,10 @@ public class FullscreenVisitorNormal extends AppCompatActivity {
                         if (documentSnapshot.exists()) {
                             Users users = documentSnapshot.toObject(Users.class);
                             nameview.setText(users.getName());
-                            UniversalImageLoader.setImage(users.getThumb(), propic, null, "");
+
+                            Glide.with(context).load(users.getThumb()).placeholder(R.drawable.male1).into(propic);
+
+//                            UniversalImageLoader.setImage(users.getThumb(), propic, null, "");
                         }
                     }
                 }

@@ -35,6 +35,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -60,7 +61,6 @@ import com.rokkhi.rokkhiguard.Model.Swroker;
 import com.rokkhi.rokkhiguard.Model.Types;
 import com.rokkhi.rokkhiguard.Model.Whitelist;
 import com.rokkhi.rokkhiguard.Utils.Normalfunc;
-import com.rokkhi.rokkhiguard.Utils.UniversalImageLoader;
 import com.rokkhi.rokkhiguard.data.FlatsRepository;
 import com.rokkhi.rokkhiguard.data.WhiteListRepository;
 import com.vansuita.pickimage.bean.PickResult;
@@ -650,7 +650,10 @@ public class CreateProfile extends AppCompatActivity implements ActiveFlatAdapte
 
                                 name.setText(list.get(0).getS_name());
                                 gatepass.setText("Gatepass: " + list.get(0).getS_pass());
-                                UniversalImageLoader.setImage(list.get(0).getThumb_s_pic(), pic, null, "");
+                                Glide.with(CreateProfile.this).load(list.get(0).getThumb_s_pic())
+                                        .placeholder(R.drawable.male1).into(pic);
+
+//                                UniversalImageLoader.setImage(list.get(0).getThumb_s_pic(), pic, null, "");
 
                                 alertDialog.setView(convertView);
                                 alertDialog.show();
@@ -900,7 +903,8 @@ public class CreateProfile extends AppCompatActivity implements ActiveFlatAdapte
                                                 phone.setText("");
                                                 flats.setText("");
                                                 type.setText("");
-                                                UniversalImageLoader.setImage("", userphoto, null, "");
+
+//                                                UniversalImageLoader.setImage("", userphoto, null, "");
                                             }
                                         }
                                     });
@@ -968,7 +972,7 @@ public class CreateProfile extends AppCompatActivity implements ActiveFlatAdapte
                         phone.setText("");
                         flats.setText("");
                         type.setText("");
-                        UniversalImageLoader.setImage("", userphoto, null, "");
+//                        UniversalImageLoader.setImage("", userphoto, null, "");
                     }
                 }
             });

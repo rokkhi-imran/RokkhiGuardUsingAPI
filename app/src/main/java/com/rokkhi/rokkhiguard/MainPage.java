@@ -148,6 +148,10 @@ public class MainPage extends AppCompatActivity {
                     @Override
                     public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
 
+                        if (queryDocumentSnapshots==null){
+                            return;
+                        }
+
                         visitorsArrayList.clear();
                         for (DocumentSnapshot snapshot:queryDocumentSnapshots.getDocuments()){
                             Visitors visitors =snapshot.toObject(Visitors.class);

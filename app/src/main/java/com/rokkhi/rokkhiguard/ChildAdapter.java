@@ -22,6 +22,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -30,7 +31,6 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.rokkhi.rokkhiguard.CallerApp.MainActivity;
 import com.rokkhi.rokkhiguard.Model.Child;
 import com.rokkhi.rokkhiguard.Model.UDetails;
-import com.rokkhi.rokkhiguard.Utils.UniversalImageLoader;
 
 import java.util.ArrayList;
 
@@ -97,7 +97,11 @@ public class ChildAdapter extends RecyclerView.Adapter<ChildAdapter.ChildViewHol
         final Child child = list.get(position);
         holder.name.setText(child.getM_name());
         holder.flat.setText("Flat:  " + child.getF_no());
-        UniversalImageLoader.setImage(child.getThumb_m_pic(), holder.propic, null, "");
+
+        Glide.with(context).load(child.getThumb_m_pic()).placeholder(R.drawable.male1).into(holder.propic);
+
+
+//        UniversalImageLoader.setImage(child.getThumb_m_pic(), holder.propic, null, "");
         if (child.isActivated()) {
             holder.active.setText("ACTIVE");
             holder.active.setTextColor(ContextCompat.getColor(context, R.color.green));

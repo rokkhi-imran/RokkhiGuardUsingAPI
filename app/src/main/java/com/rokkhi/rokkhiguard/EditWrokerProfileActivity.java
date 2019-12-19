@@ -28,6 +28,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -48,7 +49,7 @@ import com.rokkhi.rokkhiguard.Model.SLastHistory;
 import com.rokkhi.rokkhiguard.Model.Swroker;
 import com.rokkhi.rokkhiguard.Model.Types;
 import com.rokkhi.rokkhiguard.Utils.Normalfunc;
-import com.rokkhi.rokkhiguard.Utils.UniversalImageLoader;
+
 import com.vansuita.pickimage.bean.PickResult;
 import com.vansuita.pickimage.bundle.PickSetup;
 import com.vansuita.pickimage.dialog.PickImageDialog;
@@ -380,8 +381,12 @@ public class EditWrokerProfileActivity extends AppCompatActivity implements View
                 final String typeID = swroker.getType();
 
                 picurl=  swroker.getS_pic();
-                if( !swroker.getS_pic().isEmpty() && !swroker.getS_pic().equals("none"))
-                    UniversalImageLoader.setImage(swroker.getS_pic(), userPhoto, null, "");
+                if( !swroker.getS_pic().isEmpty() && !swroker.getS_pic().equals("none")){
+
+                    Glide.with(context).load(swroker.getS_pic()).placeholder(R.drawable.male1).into(userPhoto);
+
+//                    UniversalImageLoader.setImage(swroker.getS_pic(), userPhoto, null, "");
+                }
 
 
 

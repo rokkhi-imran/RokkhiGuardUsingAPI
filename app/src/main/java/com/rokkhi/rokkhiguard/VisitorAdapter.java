@@ -16,13 +16,13 @@ import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.WriteBatch;
 import com.rokkhi.rokkhiguard.Model.Visitors;
-import com.rokkhi.rokkhiguard.Utils.UniversalImageLoader;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -94,7 +94,10 @@ public class VisitorAdapter extends RecyclerView.Adapter<VisitorAdapter.VisitorV
 
         final Visitors visitor = list.get(position);
         holder.name.setText(visitor.getV_name());
-        UniversalImageLoader.setImage(visitor.getThumb_v_pic(), holder.propic, null, "");
+
+        Glide.with(context).load(visitor.getThumb_v_pic()).placeholder(R.drawable.male1).into(holder.propic);
+
+//        UniversalImageLoader.setImage(visitor.getThumb_v_pic(), holder.propic, null, "");
         Date date1 = visitor.getTime();
         Calendar cal = Calendar.getInstance();
         cal.setTime(date1);

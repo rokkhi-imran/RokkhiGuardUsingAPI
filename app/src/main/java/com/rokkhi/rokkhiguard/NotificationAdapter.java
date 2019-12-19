@@ -11,13 +11,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.rokkhi.rokkhiguard.Model.Notifications;
-import com.rokkhi.rokkhiguard.Utils.UniversalImageLoader;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -75,14 +75,18 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
                         DocumentSnapshot documentSnapshot= task.getResult();
                         if(documentSnapshot!=null && documentSnapshot.exists()){
                             String propic= documentSnapshot.getString("e_thumb");
-                            UniversalImageLoader.setImage(propic, holder.propic, null, "");
+                            Glide.with(context).load(propic).placeholder(R.drawable.male1).into(holder.propic);
+
+//                            UniversalImageLoader.setImage(propic, holder.propic, null, "");
                         }
                     }
                 }
             });
         }
         else{
-            UniversalImageLoader.setImage("", holder.propic, null, "");
+
+
+//            UniversalImageLoader.setImage("", holder.propic, null, "");
         }
 
         Date date1=notifications.getN_time();

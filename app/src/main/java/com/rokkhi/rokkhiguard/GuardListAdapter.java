@@ -12,8 +12,8 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.rokkhi.rokkhiguard.Model.Guards;
-import com.rokkhi.rokkhiguard.Utils.UniversalImageLoader;
 
 import java.util.ArrayList;
 
@@ -43,7 +43,10 @@ public class GuardListAdapter extends RecyclerView.Adapter<GuardListAdapter.List
 
 
         holder.nameTV.setText(guardsArrayList.get(position).getG_name());
-        UniversalImageLoader.setImage(guardsArrayList.get(position).getG_pic(), holder.circleImageView, null, "");
+
+        Glide.with(context).load(guardsArrayList.get(position).getG_pic()).placeholder(R.drawable.male1).into(holder.circleImageView);
+
+//        UniversalImageLoader.setImage(guardsArrayList.get(position).getG_pic(), holder.circleImageView, null, "");
 
 
     }

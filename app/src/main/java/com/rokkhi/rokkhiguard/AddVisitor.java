@@ -40,6 +40,8 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -66,7 +68,6 @@ import com.rokkhi.rokkhiguard.Model.Visitors;
 import com.rokkhi.rokkhiguard.Model.Vsearch;
 import com.rokkhi.rokkhiguard.Model.Whitelist;
 import com.rokkhi.rokkhiguard.Utils.Normalfunc;
-import com.rokkhi.rokkhiguard.Utils.UniversalImageLoader;
 import com.rokkhi.rokkhiguard.data.FlatsRepository;
 import com.rokkhi.rokkhiguard.data.WhiteListRepository;
 import com.vansuita.pickimage.bean.PickResult;
@@ -408,12 +409,19 @@ public class AddVisitor extends AppCompatActivity implements IPickResult{
                                                     username.requestFocus();
                                                     alertDialog.dismiss();
                                                     Log.e(TAG, "onClick: image url = "+vsearch.getV_thumb());
-                                                    UniversalImageLoader.setImage(vsearch.getV_thumb(), userphoto, null, "");
+
+                                                    Glide.with(context).load(vsearch.getV_thumb()).placeholder(R.drawable.male1).into(userphoto);
+
+//                                                    UniversalImageLoader.setImage(vsearch.getV_thumb(), userphoto, null, "");
                                                 }
                                             });
 
                                             name.setText(vsearch.getV_name());
-                                            UniversalImageLoader.setImage(vsearch.getV_thumb(), propic, null, "");
+
+                                            Glide.with(context).load(vsearch.getV_thumb()).placeholder(R.drawable.male1).into(propic);
+
+
+//                                            UniversalImageLoader.setImage(vsearch.getV_thumb(), propic, null, "");
 
                                             cancel.setOnClickListener(new View.OnClickListener() {
                                                 @Override
@@ -439,7 +447,9 @@ public class AddVisitor extends AppCompatActivity implements IPickResult{
                                                     username.requestFocus();
                                                     alertDialog.dismiss();
                                                     Log.e(TAG, "onClick: image url = "+vsearch.getV_thumb());
-                                                    UniversalImageLoader.setImage(vsearch.getV_thumb(), userphoto, null, "");
+                                                    Glide.with(context).load(vsearch.getV_thumb()).placeholder(R.drawable.male1).into(userphoto);
+
+//                                                    UniversalImageLoader.setImage(vsearch.getV_thumb(), userphoto, null, "");
                                                 }
                                             });
 

@@ -16,6 +16,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -26,7 +27,6 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.rokkhi.rokkhiguard.Model.ServiceBuilding;
 import com.rokkhi.rokkhiguard.Model.Swroker;
 import com.rokkhi.rokkhiguard.Utils.Normalfunc;
-import com.rokkhi.rokkhiguard.Utils.UniversalImageLoader;
 
 import java.util.ArrayList;
 
@@ -84,7 +84,11 @@ public class SWorkerAdapter extends RecyclerView.Adapter<SWorkerAdapter.SWorkerV
                         if(documentSnapshot.exists()){
                             Swroker sworker = documentSnapshot.toObject(Swroker.class);
                             holder.name.setText(sworker.getS_name());
-                            UniversalImageLoader.setImage(sworker.getThumb_s_pic(), holder.propic, null, "");
+
+                            Glide.with(context).load(sworker.getThumb_s_pic()).placeholder(R.drawable.male1).into(holder.propic);
+
+
+//                            UniversalImageLoader.setImage(sworker.getThumb_s_pic(), holder.propic, null, "");
 
                         }
                     }

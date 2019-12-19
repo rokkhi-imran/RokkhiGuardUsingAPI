@@ -10,8 +10,8 @@ import android.widget.Filterable;
 import android.widget.TextView;
 
 
+import com.bumptech.glide.Glide;
 import com.rokkhi.rokkhiguard.Model.UDetails;
-import com.rokkhi.rokkhiguard.Utils.UniversalImageLoader;
 
 import java.util.ArrayList;
 
@@ -75,8 +75,12 @@ public class UsersAdapter extends BaseAdapter implements Filterable {
         }
         viewHolder.name.setText(uDetails.getName());
         viewHolder.flatnumber.setText(uDetails.getF_no());
-        if( !uDetails.getThumb_pic().isEmpty() && !uDetails.getThumb_pic().equals("none"))
-        UniversalImageLoader.setImage(uDetails.getThumb_pic(), viewHolder.propic, null, "");
+        if( !uDetails.getThumb_pic().isEmpty() && !uDetails.getThumb_pic().equals("none")){
+
+            Glide.with(context).load(uDetails.getThumb_pic()).placeholder(R.drawable.male1).into(viewHolder.propic);
+
+//            UniversalImageLoader.setImage(uDetails.getThumb_pic(), viewHolder.propic, null, "");
+        }
         return convertView;
     }
     private class Holder {
