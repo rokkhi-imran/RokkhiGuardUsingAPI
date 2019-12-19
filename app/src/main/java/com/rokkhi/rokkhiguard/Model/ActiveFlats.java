@@ -15,7 +15,6 @@ public class ActiveFlats {
 
     @PrimaryKey
     @NotNull  private String flat_id ="none";
-
     private String build_id="none";
     private String comm_id="none";
     private String f_no="none";
