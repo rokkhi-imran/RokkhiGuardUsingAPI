@@ -1,7 +1,6 @@
 package com.rokkhi.rokkhiguard;
 
 import android.Manifest;
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -9,7 +8,6 @@ import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.CountDownTimer;
-import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -68,7 +66,7 @@ public class VisitorWaitingAdapter extends RecyclerView.Adapter<VisitorWaitingAd
     private String res = "pending";
 
 
-    public VisitorWaitingAdapter(ArrayList<Visitors> visitorsArrayList, MainPage mainPage) {
+    public VisitorWaitingAdapter(ArrayList<Visitors> visitorsArrayList, Context mainPage) {
         this.visitorsArrayList = visitorsArrayList;
         this.context = mainPage;
         firebaseFirestore = FirebaseFirestore.getInstance();
@@ -256,7 +254,7 @@ public class VisitorWaitingAdapter extends RecyclerView.Adapter<VisitorWaitingAd
                             Toast.makeText(context, "Done!", Toast.LENGTH_SHORT).show();
                             progressBar.setVisibility(View.GONE);
                             alertconfirm.dismiss();
-                            cleardata();
+
                         }
                     }
                 });
@@ -284,7 +282,7 @@ public class VisitorWaitingAdapter extends RecyclerView.Adapter<VisitorWaitingAd
                             Toast.makeText(context, "Done!", Toast.LENGTH_SHORT).show();
                             progressBar.setVisibility(View.GONE);
                             alertconfirm.dismiss();
-                            cleardata();
+
                         }
                     }
                 });
@@ -309,7 +307,6 @@ public class VisitorWaitingAdapter extends RecyclerView.Adapter<VisitorWaitingAd
 
                             progressBar.setVisibility(View.GONE);
                             alertconfirm.dismiss();
-                            cleardata();
                         }
                     }
                 });
@@ -509,9 +506,6 @@ public class VisitorWaitingAdapter extends RecyclerView.Adapter<VisitorWaitingAd
     }
 
 
-    public void cleardata() {
-        Intent intent = new Intent(context, MainPage.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK| FLAG_ACTIVITY_CLEAR_TOP);
-        context.startActivity(intent);
-    }
+
 
 }

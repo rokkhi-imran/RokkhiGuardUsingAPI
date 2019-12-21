@@ -153,6 +153,7 @@ public class MainPage extends AppCompatActivity {
                         }
 
                         visitorsArrayList.clear();
+
                         for (DocumentSnapshot snapshot:queryDocumentSnapshots.getDocuments()){
                             Visitors visitors =snapshot.toObject(Visitors.class);
                             visitorsArrayList.add(visitors);

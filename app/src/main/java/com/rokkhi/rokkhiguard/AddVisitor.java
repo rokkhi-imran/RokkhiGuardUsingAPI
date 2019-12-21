@@ -20,6 +20,7 @@ import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.appcompat.widget.Toolbar;
 import android.text.Editable;
@@ -135,6 +136,10 @@ public class AddVisitor extends AppCompatActivity implements IPickResult{
     FlatsRepository flatsRepository;
     WhiteListRepository whiteListRepository;
 
+    RecyclerView recyclerViewWaitingList;
+
+    ArrayList<Visitors>visitorsArrayList;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -147,6 +152,9 @@ public class AddVisitor extends AppCompatActivity implements IPickResult{
         normalfunc = new Normalfunc();
         flag = false;
 
+
+        recyclerViewWaitingList=findViewById(R.id.visitorListRecycelrViewID);
+        visitorsArrayList=new ArrayList<>();
 
         done = findViewById(R.id.done);
         username = findViewById(R.id.user_name);
@@ -175,6 +183,52 @@ public class AddVisitor extends AppCompatActivity implements IPickResult{
 
         initonclick();
         listener();
+
+
+        LinearLayoutManager linearLayoutManager=new LinearLayoutManager( this);
+        linearLayoutManager.setOrientation(RecyclerView.HORIZONTAL);
+        recyclerViewWaitingList.setLayoutManager(linearLayoutManager);
+
+        loadWaitingVisitorList();
+
+
+    }
+
+    private void loadWaitingVisitorList() {
+
+
+
+        firebaseFirestore.collection(getString(R.string.col_visitors))
+                .whereEqualTo("completed", false)
+                .whereEqualTo("build_id", buildid)
+                .orderBy("time", Query.Direction.DESCENDING)
+                .limit(15)
+                .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                    @Override
+                    public void onEvent(@androidx.annotation.Nullable QuerySnapshot queryDocumentSnapshots, @androidx.annotation.Nullable FirebaseFirestoreException e) {
+
+                        if (queryDocumentSnapshots==null){
+                            return;
+                        }
+
+                        visitorsArrayList.clear();
+
+                        for (DocumentSnapshot snapshot:queryDocumentSnapshots.getDocuments()){
+                            Visitors visitors =snapshot.toObject(Visitors.class);
+                            visitorsArrayList.add(visitors);
+                        }
+
+                        VisitorWaitingAdapter visitorWaitingAdapter = new VisitorWaitingAdapter(visitorsArrayList,AddVisitor.this);
+                        recyclerViewWaitingList.setAdapter(visitorWaitingAdapter);
+
+                        Log.e(TAG, "onComplete: visitors size = " + visitorsArrayList.size());
+
+                    }
+                });
+
+
+        //Load Visitor Waiting List End
+
 
 
     }

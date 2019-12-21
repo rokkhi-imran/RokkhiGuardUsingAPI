@@ -15,35 +15,30 @@
         android:background="@color/white"
         android:padding="20dp">
 
-
-
         <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
             android:id="@+id/prorel"
-            >
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/visitorListRecycelrViewID"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/user_photo"
-                android:layout_width="150dp"
-                android:src="@drawable/male1"
-                android:layout_height="150dp"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_below="@id/visitorListRecycelrViewID"
                 android:layout_centerHorizontal="true"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="10dp"
                 android:layout_marginBottom="10dp"
+                android:src="@drawable/male1"
                 app:civ_border_color="@color/black"
                 app:civ_border_width=".5dp" />
 
-
-
-
-
         </RelativeLayout>
-
-
-
-
-
 
 
         <LinearLayout
@@ -51,7 +46,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/prorel"
-            android:layout_marginTop="70dp"
+            android:layout_marginTop="20dp"
             android:background="@drawable/grey_border_bottom"
             android:orientation="vertical">
 
@@ -68,11 +63,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:background="@drawable/round_edittext2"
-                android:textSize="24sp"
+                android:hint="Contact no"
+                android:inputType="numberDecimal"
                 android:paddingStart="10dp"
                 android:paddingEnd="1dp"
-                android:hint="Contact no"
-                android:inputType="numberDecimal" />
+                android:textSize="24sp" />
 
         </LinearLayout>
 
@@ -100,16 +95,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:background="@drawable/round_edittext2"
-                android:textSize="24sp"
+                android:hint="Name"
+                android:inputType="textNoSuggestions"
                 android:paddingStart="10dp"
                 android:paddingEnd="1dp"
-                android:hint="Name"
-                android:inputType="textNoSuggestions" />
+                android:textSize="24sp" />
 
         </LinearLayout>
-
-
-
 
 
         <LinearLayout
@@ -134,11 +126,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:background="@drawable/round_edittext2"
-                android:textSize="24sp"
+                android:hint="From where you come"
+                android:inputType="textNoSuggestions"
                 android:paddingStart="10dp"
                 android:paddingEnd="1dp"
-                android:hint="From where you come"
-                android:inputType="textNoSuggestions" />
+                android:textSize="24sp" />
 
         </LinearLayout>
 
@@ -152,11 +144,11 @@
             android:orientation="vertical">
 
             <TextView
+                android:id="@+id/xx"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="15dp"
                 android:text="Flat no *     ( ফ্ল্যাট নাম্বার)"
-                android:id="@+id/xx"
                 android:textColor="@color/orange"
                 android:textSize="20sp" />
 
@@ -165,20 +157,18 @@
                 android:id="@+id/flat"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
+                android:layout_below="@+id/xx"
                 android:background="@drawable/round_edittext2"
-                android:textSize="24sp"
+                android:focusable="false"
+                android:hint="Flat no"
+                android:inputType="textNoSuggestions"
+
                 android:paddingStart="10dp"
                 android:paddingEnd="1dp"
-                android:hint="Flat no"
-
-                android:layout_below="@+id/xx"
-                android:focusable="false"
-                android:inputType="textNoSuggestions" />
-
+                android:textSize="24sp" />
 
 
         </RelativeLayout>
-
 
 
         <RelativeLayout
@@ -191,11 +181,11 @@
             android:orientation="vertical">
 
             <TextView
+                android:id="@+id/t1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="15dp"
                 android:text="Purpose     ( উদ্দেশ্য )"
-                android:id="@+id/t1"
                 android:textColor="@color/orange"
                 android:textSize="20sp" />
 
@@ -204,24 +194,23 @@
                 android:id="@+id/pupose"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
+                android:layout_below="@+id/t1"
                 android:background="@drawable/round_edittext2"
-                android:textSize="24sp"
+                android:hint="Issue of visiting"
+                android:inputType="textNoSuggestions"
                 android:paddingStart="10dp"
                 android:paddingEnd="1dp"
                 android:text="visiting"
-                android:layout_below="@+id/t1"
-                android:hint="Issue of visiting"
-                android:inputType="textNoSuggestions" />
+                android:textSize="24sp" />
 
             <ImageView
                 android:id="@+id/cut"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:layout_alignEnd="@+id/pupose"
-                android:layout_marginEnd="15dp"
                 android:layout_marginTop="50dp"
-                android:background="@drawable/ic_cut"
-                />
+                android:layout_marginEnd="15dp"
+                android:background="@drawable/ic_cut" />
 
         </RelativeLayout>
 
@@ -247,16 +236,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:background="@drawable/round_edittext2"
-                android:textSize="24sp"
+                android:hint="Your vehicle no"
+                android:inputType="text"
                 android:paddingStart="10dp"
                 android:paddingEnd="1dp"
-                android:hint="Your vehicle no"
-                android:inputType="text" />
+                android:textSize="24sp" />
 
         </LinearLayout>
-
-
-
 
 
         <LinearLayout
@@ -281,30 +267,27 @@
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:background="@drawable/round_edittext2"
-                android:textSize="24sp"
+                android:hint="House provided id card number(If given any)"
+                android:inputType="textNoSuggestions"
                 android:paddingStart="10dp"
                 android:paddingEnd="1dp"
-                android:hint="House provided id card number(If given any)"
-                android:inputType="textNoSuggestions" />
+                android:textSize="24sp" />
 
         </LinearLayout>
 
 
-
-
         <Button
+            android:id="@+id/done"
             android:layout_width="match_parent"
             android:layout_height="60dp"
-            android:text="Done   ( শেষ )"
-            android:id="@+id/done"
-            android:background="@drawable/round_button"
-            android:textColor="@color/white"
             android:layout_below="@+id/relmembers"
+            android:layout_centerHorizontal="true"
             android:layout_marginTop="70dp"
             android:layout_marginBottom="50dp"
-            android:textSize="18sp"
-            android:layout_centerHorizontal="true"
-            />
+            android:background="@drawable/round_button"
+            android:text="Done   ( শেষ )"
+            android:textColor="@color/white"
+            android:textSize="18sp" />
 
         <ProgressBar
             android:id="@+id/progressBar1"
@@ -317,14 +300,7 @@
             />
 
 
-
-
     </RelativeLayout>
-
-
-
-
-
 
 
 </ScrollView>
