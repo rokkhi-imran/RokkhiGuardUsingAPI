@@ -10,15 +10,31 @@ public class BuildingChanges {
     //sobgula array tei guardphone er UI thakbe... konta change hoy bujhar jnno
     private ArrayList<String> flats= new ArrayList<>();
     private ArrayList<String> whitelists= new ArrayList<>();
+    private ArrayList<String> blacklists= new ArrayList<>();
     private ArrayList<String> vehicles= new ArrayList<>();
 
     public BuildingChanges() {
     }
 
-    public BuildingChanges(ArrayList<String> flats, ArrayList<String> whitelists, ArrayList<String> vehicles) {
+    /*public BuildingChanges(ArrayList<String> flats, ArrayList<String> whitelists, ArrayList<String> vehicles) {
         this.flats = flats;
         this.whitelists = whitelists;
         this.vehicles = vehicles;
+    }*/
+
+    public BuildingChanges(ArrayList<String> flats, ArrayList<String> whitelists, ArrayList<String> blacklists, ArrayList<String> vehicles) {
+        this.flats = flats;
+        this.whitelists = whitelists;
+        this.blacklists = blacklists;
+        this.vehicles = vehicles;
+    }
+
+    public ArrayList<String> getBlacklists() {
+        return blacklists;
+    }
+
+    public void setBlacklists(ArrayList<String> blacklists) {
+        this.blacklists = blacklists;
     }
 
     public ArrayList<String> getFlats() {

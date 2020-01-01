@@ -46,10 +46,12 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.SetOptions;
 import com.rokkhi.rokkhiguard.Model.ActiveFlats;
 import com.rokkhi.rokkhiguard.Model.Activebuilding;
+import com.rokkhi.rokkhiguard.Model.BlackList;
 import com.rokkhi.rokkhiguard.Model.BuildingChanges;
 import com.rokkhi.rokkhiguard.Model.Vehicle;
 import com.rokkhi.rokkhiguard.Model.Visitors;
 import com.rokkhi.rokkhiguard.Model.Whitelist;
+import com.rokkhi.rokkhiguard.data.BlackListRepository;
 import com.rokkhi.rokkhiguard.data.FlatsRepository;
 import com.rokkhi.rokkhiguard.data.VehiclesRepository;
 import com.rokkhi.rokkhiguard.data.WhiteListRepository;
@@ -78,6 +80,7 @@ public class MainPage extends AppCompatActivity {
     ArrayList<Vehicle> allVehicles;
     FlatsRepository flatsRepository;
     WhiteListRepository whiteListRepository;
+    BlackListRepository blackListRepository;
     VehiclesRepository vehiclesRepository;
     String thismobileuid;
     String appVersion;
@@ -289,6 +292,7 @@ public class MainPage extends AppCompatActivity {
 
         flatsRepository = new FlatsRepository(this);
         whiteListRepository = new WhiteListRepository(this);
+        blackListRepository = new BlackListRepository(this);
         vehiclesRepository = new VehiclesRepository(this);
 
         logout.setOnClickListener(new View.OnClickListener() {
@@ -500,6 +504,52 @@ public class MainPage extends AppCompatActivity {
 
     }
 
+    public void getAllBlackListAndSaveToLocalDatabase(final BuildingChanges buildingChanges) {
+        //final FlatsRepository flatsRepository = new FlatsRepository(this);
+
+
+        firebaseFirestore.collection(getString(R.string.col_blackList))
+                .whereEqualTo("build_id", buildid)
+                .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+
+                    for (DocumentSnapshot documentSnapshot : task.getResult()) {
+                        BlackList blackList= documentSnapshot.toObject(BlackList.class);
+                        blackListRepository.deleteBlackList(blackList);
+                        blackListRepository.insert(blackList);
+                    }
+
+
+                    Map<String, Object> data = new HashMap<>();
+                    ArrayList<String> wldata = new ArrayList<>();
+                    wldata = buildingChanges.getBlacklists();
+                    wldata.add(thismobileuid);
+                    data.put("blackLists", wldata);
+
+
+                    firebaseFirestore.collection("buildingChanges").document(buildid)
+                            .set(data, SetOptions.merge()).addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+
+                            Log.e(TAG, "onComplete: Black Lsit updated " );
+                            Toast.makeText(context, "black list data changed!", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+
+//                    whiteListRepository.deleteTask(buildid);
+
+
+                } else {
+                    Log.d(TAG, "onComplete: xxx5");
+                }
+            }
+        });
+
+    }
+
     public void matchanddelete(ArrayList<Vehicle> check, Vehicle vehicle) {
         boolean flag = false;
 
@@ -580,13 +630,15 @@ public class MainPage extends AppCompatActivity {
         super.onStart();
 
 
-        FirebaseFirestore.getInstance().collection("buildingChanges").document(buildid).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+        FirebaseFirestore.getInstance().collection("buildingChanges")
+                .document(buildid).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 if (documentSnapshot.exists()) {
                     BuildingChanges buildingChanges = documentSnapshot.toObject(BuildingChanges.class);
                     ArrayList<String> flats = buildingChanges.getFlats();
                     ArrayList<String> whitelists = buildingChanges.getWhitelists();
+                    ArrayList<String> blacklists= buildingChanges.getBlacklists();
                     ArrayList<String> vehicles = buildingChanges.getVehicles();
 
 
@@ -605,6 +657,11 @@ public class MainPage extends AppCompatActivity {
                         getAllWhiteListAndSaveToLocalDatabase(buildingChanges);
                     }
 
+                    Log.e(TAG, "onSuccess: imarn blacklist" +blacklists);
+                    if (!blacklists.contains(thismobileuid)) {
+                        getAllBlackListAndSaveToLocalDatabase(buildingChanges);
+                    }
+
                     if (!vehicles.contains(thismobileuid)) {
                         Log.d("firebase", "Getting new Vehicles data because data is changed or updated");
                         getVehiclesAndSaveToLocalDatabase(buildingChanges);
@@ -612,49 +669,16 @@ public class MainPage extends AppCompatActivity {
 
                 } else {
                     BuildingChanges buildingChanges = new BuildingChanges(new ArrayList<String>(), new ArrayList<String>()
-                            , new ArrayList<String>());
+                            ,new ArrayList<String>(), new ArrayList<String>());
                     getAllActiveFlatsAndSaveToLocalDatabase(buildingChanges);
                     getAllWhiteListAndSaveToLocalDatabase(buildingChanges);
+                    getAllBlackListAndSaveToLocalDatabase(buildingChanges);
                     getVehiclesAndSaveToLocalDatabase(buildingChanges);
                 }
             }
         });
 
 
-        //getting the data from repository example
-
-//        flatsRepository.getAllActiveFlats().observe(this, new Observer<List<ActiveFlats>>() {
-//            @Override
-//            public void onChanged(@Nullable List<ActiveFlats> allFlats) {
-//                for(ActiveFlats flat : allFlats) {
-//                    Log.d("room" , "found a new Flat   " + flat.getF_no()+"  -- > " + flat.getFlat_id());
-//                }
-//            }
-//        });
-
-
-        //getting the data from repository example
-//        final WhiteListRepository whiteListRepository = new WhiteListRepository(this);
-//        whiteListRepository.getAllWhiteList().observe(this, new Observer<List<Whitelist>>() {
-//            @Override
-//            public void onChanged(@Nullable List<Whitelist> allWhiteLists) {
-//                for(Whitelist whiteList : allWhiteLists) {
-//                    Log.d("room" , "found a new WhiteList   " + whiteList.getF_no()+"  -- > " + whiteList.getFlat_id());
-//                }
-//            }
-//        });
-//
-//
-//
-//        final VehiclesRepository vehiclesRepository = new VehiclesRepository(this);
-//        vehiclesRepository.getAllVehicle().observe(this, new Observer<List<Vehicle>>() {
-//            @Override
-//            public void onChanged(@Nullable List<Vehicle> allVehicles) {
-//                for(Vehicle vehicle : allVehicles) {
-//                    Log.d("room" , "found a new Vehicle   " + vehicle.getF_no()+"  -- > " + vehicle.getFlat_id());
-//                }
-//            }
-//        });
     }
 
 

@@ -348,7 +348,6 @@ public class AddVisitor extends AppCompatActivity implements IPickResult{
                         Log.d("firebase", " Flats data is not changed or updated");
                     }
 
-
                     if (!whitelists.contains(thismobileuid)) {
                         getAllWhiteListAndSaveToLocalDatabase(buildingChanges);
                     }
@@ -420,11 +419,11 @@ public class AddVisitor extends AppCompatActivity implements IPickResult{
                 if (s.length() == 11 && !flag) {
                     flag = true;
 
-                    String xx=normalfunc.makephone14(phone.getText().toString());
+                    String visitorNumber=normalfunc.makephone14(phone.getText().toString());
 
                     Log.d(TAG, "onTextChanged:  nnn1 "+ flag);
                     firebaseFirestore.collection("search")
-                            .document(xx).get()
+                            .document(visitorNumber).get()
                             .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                                 @Override
                                 public void onComplete(@NonNull Task<DocumentSnapshot> task) {
@@ -770,19 +769,6 @@ public class AddVisitor extends AppCompatActivity implements IPickResult{
                     }
                 });
 
-//                firebaseFirestore.collection(getString(R.string.col_visitors)).document(uid)
-//                        .update("response", "accepted"
-//                        ,"responder",FirebaseAuth.getInstance().getCurrentUser().getUid()).addOnCompleteListener(new OnCompleteListener<Void>() {
-//                    @Override
-//                    public void onComplete(@NonNull Task<Void> task) {
-//                        if (task.isSuccessful()) {
-//                            Toast.makeText(context, "Done!", Toast.LENGTH_SHORT).show();
-//                            progressBar.setVisibility(View.GONE);
-//                            alertconfirm.dismiss();
-//                            cleardata();
-//                        }
-//                    }
-//                });
             }
         });
 
@@ -810,20 +796,6 @@ public class AddVisitor extends AppCompatActivity implements IPickResult{
                         }
                     }
                 });
-//                firebaseFirestore.collection(getString(R.string.col_visitors)).document(uid)
-//                        .update("response", "rejected",
-//                                "in",false,"responder",
-//                                FirebaseAuth.getInstance().getCurrentUser().getUid()).addOnCompleteListener(new OnCompleteListener<Void>() {
-//                    @Override
-//                    public void onComplete(@NonNull Task<Void> task) {
-//                        if (task.isSuccessful()) {
-//                            Toast.makeText(context, "Done!", Toast.LENGTH_SHORT).show();
-//                            progressBar.setVisibility(View.GONE);
-//                            alertconfirm.dismiss();
-//                            cleardata();
-//                        }
-//                    }
-//                });
             }
         });
 

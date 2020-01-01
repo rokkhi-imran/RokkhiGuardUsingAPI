@@ -180,6 +180,7 @@
     <string name="msg_subscribe_failed">Failed to subscribe to office notification</string>
     <string name="fcm_message">FCM Message</string>
     <string name="title_activity_call">CallActivity</string>
+    <string name="col_blackList">blackLists</string>
     <string-array name="pref_example_list_titles">
         <item>Always</item>
         <item>When possible</item>
