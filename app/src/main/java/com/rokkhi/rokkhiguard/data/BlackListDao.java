@@ -20,8 +20,8 @@ public interface BlackListDao {
     @Query("SELECT * FROM BlackList WHERE buildID=:buildID ORDER BY flatNo desc")
    public LiveData<List<BlackList>> fetchAllBlackLists(String buildID);
 
-    @Query("SELECT * FROM BlackList WHERE flatID =:flatId AND phone=:w_phone")
-    public LiveData<List<BlackList>> fetchBlackListWithPhoneAndFlatId(int flatId , String w_phone);
+    @Query("SELECT * FROM BlackList WHERE flatID =:flatId AND phone=:b_phone")
+    public LiveData<List<BlackList>> fetchBlackListWithPhoneAndFlatId(int flatId , String b_phone);
 
     @Delete
     public void deleteBlackList(BlackList note);

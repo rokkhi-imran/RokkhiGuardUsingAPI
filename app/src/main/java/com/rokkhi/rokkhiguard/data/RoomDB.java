@@ -9,7 +9,7 @@ import com.rokkhi.rokkhiguard.Model.BlackList;
 import com.rokkhi.rokkhiguard.Model.Vehicle;
 import com.rokkhi.rokkhiguard.Model.Whitelist;
 
-@Database(entities = {ActiveFlats.class , Whitelist.class, BlackList.class, Vehicle.class}, version = 4 , exportSchema = false)
+@Database(entities = {ActiveFlats.class , Whitelist.class, BlackList.class, Vehicle.class}, version = 5 , exportSchema = false)
 
 public abstract class RoomDB extends RoomDatabase {
 

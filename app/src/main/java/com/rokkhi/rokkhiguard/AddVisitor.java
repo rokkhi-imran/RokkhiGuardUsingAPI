@@ -63,12 +63,14 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.rokkhi.rokkhiguard.CallerApp.MainActivity;
 import com.rokkhi.rokkhiguard.Model.ActiveFlats;
+import com.rokkhi.rokkhiguard.Model.BlackList;
 import com.rokkhi.rokkhiguard.Model.BuildingChanges;
 import com.rokkhi.rokkhiguard.Model.UDetails;
 import com.rokkhi.rokkhiguard.Model.Visitors;
 import com.rokkhi.rokkhiguard.Model.Vsearch;
 import com.rokkhi.rokkhiguard.Model.Whitelist;
 import com.rokkhi.rokkhiguard.Utils.Normalfunc;
+import com.rokkhi.rokkhiguard.data.BlackListRepository;
 import com.rokkhi.rokkhiguard.data.FlatsRepository;
 import com.rokkhi.rokkhiguard.data.WhiteListRepository;
 import com.vansuita.pickimage.bean.PickResult;
@@ -128,13 +130,16 @@ public class AddVisitor extends AppCompatActivity implements IPickResult{
     ImageView cut;
 
     ArrayList<String> wflats;
+    ArrayList<String> bflats;
     ArrayList<Whitelist> whitelists;
+    ArrayList<BlackList> blackLists;
 
     String linkFromSearch = "";
     boolean approve;
     String thismobileuid;
     FlatsRepository flatsRepository;
     WhiteListRepository whiteListRepository;
+    BlackListRepository blackListRepository;
 
     RecyclerView recyclerViewWaitingList;
 
@@ -179,6 +184,7 @@ public class AddVisitor extends AppCompatActivity implements IPickResult{
         thismobileuid = FirebaseAuth.getInstance().getUid();
         flatsRepository = new FlatsRepository(this);
         whiteListRepository = new WhiteListRepository(this);
+        blackListRepository=new BlackListRepository(this);
 
 
         initonclick();
@@ -371,6 +377,19 @@ public class AddVisitor extends AppCompatActivity implements IPickResult{
             }
         });
 
+        blackListRepository.getAllBlackList(buildid).observe(this, new Observer<List<BlackList>>() {
+            @Override
+            public void onChanged(@Nullable List<BlackList> allBlackList) {
+                bflats = new ArrayList<>();
+                blackLists= new ArrayList<>();
+                for (BlackList blackList: allBlackList) {
+                    bflats.add(blackList.getPhone()+blackList.getFlatID());
+                    blackLists.add(blackList);
+                    Log.d("room", "found a new WhiteList   " + blackList.getFlatNo() + "  -- > " + blackList.getFlatID());
+                }
+            }
+        });
+
         addallflats();
 
     }
@@ -532,6 +551,9 @@ public class AddVisitor extends AppCompatActivity implements IPickResult{
         if(wflats.contains(wlcheck)){
             res = "whitelisted";  //vvvvvv
             vtype="whitelisted";
+        }else if(bflats.contains(wlcheck)){
+            res = "blackListed";  //vvvvvv
+            vtype="blackListed";
         }
         else{
             res = "pending"; //TODO this should be pending  //vvvvvv
@@ -580,7 +602,14 @@ public class AddVisitor extends AppCompatActivity implements IPickResult{
         doc.put("v_vehicleno", vehicle.getText().toString());
         doc.put("v_pic", "");
         doc.put("thumb_v_pic", "");
-        if(res.equals("whitelisted"))doc.put("statusOfEntry", "in");
+
+        if(res.equals("whitelisted")){
+            doc.put("statusOfEntry", "in");
+        }
+        if(res.equals("blackListed")){
+            doc.put("statusOfEntry", "in");
+        }
+
         else doc.put("statusOfEntry", "pending");
         doc.put("in", true);
         doc.put("completed", false);
@@ -849,6 +878,17 @@ public class AddVisitor extends AppCompatActivity implements IPickResult{
                 progressBar.setVisibility(View.GONE);
                 status.setText("Accepted  ( গৃহীত )");
                 whitelisted.setVisibility(View.VISIBLE);
+                status.setTextColor(Color.GREEN);
+            }
+            if (res.equals("blackListed")) {
+                Log.d(TAG, "dialogconfirmation: xxx");
+                enter.setVisibility(View.GONE);
+                cancel.setVisibility(View.GONE);
+                submit.setVisibility(View.VISIBLE);
+                progressBar.setVisibility(View.GONE);
+                status.setText("Cancel  ( প্রবেশ নিষেধ )");
+                whitelisted.setVisibility(View.VISIBLE);
+                whitelisted.setText("প্রবেশ নিষেধ ");
                 status.setTextColor(Color.GREEN);
             }
 
