@@ -9,15 +9,16 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:gravity="center_horizontal"
+        android:gravity="center_vertical|center"
         android:padding="2sp"
+        android:fontFamily="serif"
         android:textColor="@color/black"
         android:scrollHorizontally="true"
         android:minHeight="250sp"
         android:overScrollMode="always"
         android:scrollbarStyle="insideInset"
         android:scrollbars="vertical"
-        android:text="you could do a class extends Dialog, also something like this:"
+        android:text="You could do a class extends Dialog, also something like this:"
         android:textSize="25sp" />
 
     <Button

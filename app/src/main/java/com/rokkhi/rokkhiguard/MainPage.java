@@ -26,11 +26,14 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.telecom.TelecomManager;
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -443,6 +446,9 @@ public class MainPage extends AppCompatActivity {
         public void showDialog(final Activity activity, String msg){
             final Dialog dialog = new Dialog(activity);
 //            dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            dialog.getWindow().getAttributes().height =
+                    (int) (getDeviceMetrics(context).heightPixels*0.8);
+
             dialog.setCancelable(false);
             dialog.setContentView(R.layout.dialog_emergency);
 
@@ -478,6 +484,13 @@ public class MainPage extends AppCompatActivity {
             dialog.show();
 
 
+    }
+    public static DisplayMetrics getDeviceMetrics(Context context) {
+        DisplayMetrics metrics = new DisplayMetrics();
+        WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+        Display display = wm.getDefaultDisplay();
+        display.getMetrics(metrics);
+        return metrics;
     }
 
 
