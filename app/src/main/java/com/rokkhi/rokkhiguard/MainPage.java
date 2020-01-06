@@ -4,15 +4,18 @@ import androidx.lifecycle.Observer;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.net.VpnService;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.ParcelFileDescriptor;
 import android.preference.PreferenceManager;
 
 import androidx.annotation.NonNull;
@@ -25,9 +28,12 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.telecom.TelecomManager;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -55,8 +61,10 @@ import com.rokkhi.rokkhiguard.data.BlackListRepository;
 import com.rokkhi.rokkhiguard.data.FlatsRepository;
 import com.rokkhi.rokkhiguard.data.VehiclesRepository;
 import com.rokkhi.rokkhiguard.data.WhiteListRepository;
+import android.net.VpnService;
 
 
+import java.net.DatagramSocket;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -65,6 +73,10 @@ import java.util.Map;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class MainPage extends AppCompatActivity {
+
+    String[] appPackages = {
+            "com.rokkhi.rokkhiguard"};
+
 
     private static final String TAG = "MainPage";
     CircleImageView gatepass, logout, addvis, vislist, notice, parcel, create, vehicle, child, callLogs, guardList;
@@ -92,11 +104,8 @@ public class MainPage extends AppCompatActivity {
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_page);
-
-
-        Log.e(TAG, "onCreate: " + "xxx");
-
         context = MainPage.this;
+
 
         visitorsArrayList = new ArrayList<>();
         gatepass = findViewById(R.id.gatepass);
@@ -125,6 +134,39 @@ public class MainPage extends AppCompatActivity {
         editor = sharedPref.edit();
         buildid = sharedPref.getString("buildid", "none");
         commid = sharedPref.getString("commid", "none");
+
+        //check app has any problem start
+        firebaseFirestore.collection(getString(R.string.col_guardApkProblem))
+                .document("N7DtYbwS0TVE64TVxXg4")
+                .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()){
+                    DocumentSnapshot snapshot=task.getResult();
+                    if (snapshot.exists()) {
+                        String text = snapshot.getString("text");
+                        boolean problemStatus = snapshot.getBoolean("problemStatus");
+                        Log.e(TAG, "onComplete: text = "+text );
+                        Log.e(TAG, "onComplete: problem = "+problemStatus);
+                        if (problemStatus){
+//                            ViewDialog();
+                            showDialog(MainPage.this,text);
+                        }
+
+                    }
+
+                    }
+
+
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(context, "Data Emergency Load Faild", Toast.LENGTH_SHORT).show();
+            }
+        });
+        //check app has any problem End
+
 
         //set default caller
 
@@ -396,6 +438,45 @@ public class MainPage extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+    }
+        public void showDialog(final Activity activity, String msg){
+            final Dialog dialog = new Dialog(activity);
+//            dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            dialog.setCancelable(false);
+            dialog.setContentView(R.layout.dialog_emergency);
+
+            final TextView text = (TextView) dialog.findViewById(R.id.alertDetailsTV);
+            text.setText(msg);
+
+            Button dialogButton = (Button) dialog.findViewById(R.id.okButtonAlert);
+
+            text.setOnTouchListener(new View.OnTouchListener() {
+                public boolean onTouch(View v, MotionEvent event) {
+                    if (text.hasFocus()) {
+                        v.getParent().requestDisallowInterceptTouchEvent(true);
+                        switch (event.getAction() & MotionEvent.ACTION_MASK) {
+                            case MotionEvent.ACTION_SCROLL:
+                                v.getParent().requestDisallowInterceptTouchEvent(false);
+                                return true;
+                        }
+                    }
+                    return false;
+                }
+            });
+
+
+            dialogButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    dialog.dismiss();
+                    startActivity(new Intent(activity,DaroanPass.class));
+                    finish();
+                }
+            });
+
+            dialog.show();
+
 
     }
 

@@ -106,7 +106,8 @@ public class DaroanPass extends AppCompatActivity implements View.OnClickListene
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_daroan_pass);
         context = DaroanPass.this;
-//        Toast.makeText(context, "Updated Apk", Toast.LENGTH_SHORT).show();
+
+
 
         //check Stroage permission Start
 

@@ -181,6 +181,7 @@
     <string name="fcm_message">FCM Message</string>
     <string name="title_activity_call">CallActivity</string>
     <string name="col_blackList">blackLists</string>
+    <string name="col_guardApkProblem">guardApkProblem</string>
     <string-array name="pref_example_list_titles">
         <item>Always</item>
         <item>When possible</item>
