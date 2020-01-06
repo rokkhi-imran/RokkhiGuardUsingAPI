@@ -889,7 +889,7 @@ public class AddVisitor extends AppCompatActivity implements IPickResult{
                 status.setText("Cancel  ( প্রবেশ নিষেধ )");
                 whitelisted.setVisibility(View.VISIBLE);
                 whitelisted.setText("প্রবেশ নিষেধ ");
-                status.setTextColor(Color.GREEN);
+                status.setTextColor(Color.RED);
             }
 
             new CountDownTimer(60000, 100) {
