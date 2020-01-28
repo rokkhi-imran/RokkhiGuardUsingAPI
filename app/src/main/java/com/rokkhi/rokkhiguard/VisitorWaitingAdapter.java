@@ -323,7 +323,9 @@ public class VisitorWaitingAdapter extends RecyclerView.Adapter<VisitorWaitingAd
                 @Override
                 public void onClick(View v) {
 
-                    if(!phoneno.equals("none") && !phoneno.isEmpty()) onCallBtnClick();
+                    if(!phoneno.equals("none") && !phoneno.isEmpty()) {
+                        onCallBtnClick();
+                    }
                     else{
                         showUsers();
                     }
@@ -445,7 +447,9 @@ public class VisitorWaitingAdapter extends RecyclerView.Adapter<VisitorWaitingAd
 //            context.requestPermissions(permissions, PERMISSION_REQUEST_READ_PHONE_STATE);
         }
 
-        else phoneCall();
+        else {
+            phoneCall();
+        }
 
 
     }
@@ -453,10 +457,16 @@ public class VisitorWaitingAdapter extends RecyclerView.Adapter<VisitorWaitingAd
     private void phoneCall() {
         if (ActivityCompat.checkSelfPermission(context,
                 Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_GRANTED) {
+            if (phoneno.equals("error")){
+                Toast.makeText(context, "No Number Found", Toast.LENGTH_SHORT).show();
+                return;
+            }
 
             Toast.makeText(context, ""+phoneno, Toast.LENGTH_SHORT).show();
             Intent callIntent = new Intent(Intent.ACTION_CALL);
-            if (!phoneno.isEmpty())callIntent.setData(Uri.parse("tel:"+ phoneno));
+            if (!phoneno.isEmpty()){
+                callIntent.setData(Uri.parse("tel:"+ phoneno));
+            }
 
             context.startActivity(callIntent);
 

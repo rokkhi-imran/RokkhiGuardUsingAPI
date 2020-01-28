@@ -152,7 +152,11 @@ public class VisitorAdapter extends RecyclerView.Adapter<VisitorAdapter.VisitorV
                         DocumentReference updatehasdone = firebaseFirestore
                                 .collection(context.getString(R.string.col_visitors)).document(visitor.getV_uid());
                         Log.d(TAG, "onClick: hhh "+ visitor.getV_uid()+ " "+id);
-                        batch.update(updatehasdone, "another_uid",id,"completed",true);
+                        batch.update(updatehasdone, "another_uid",id,"completed",true,"in",false);
+
+//                        batch.update(updatehasdone, "another_uid",id,"completed",true,"statusOfEntry","out");
+
+
                         batch.commit().addOnCompleteListener(new OnCompleteListener<Void>() {
                             @Override
                             public void onComplete(@NonNull Task<Void> task) {
@@ -204,7 +208,7 @@ public class VisitorAdapter extends RecyclerView.Adapter<VisitorAdapter.VisitorV
             propic = view.findViewById(R.id.one);
             intime = view.findViewById(R.id.starttime);
             outtime = view.findViewById(R.id.endtime);
-            out = view.findViewById(R.id.out);
+            out = view.findViewById(R.id.outItems);
             flat = view.findViewById(R.id.towhom);
         }
     }

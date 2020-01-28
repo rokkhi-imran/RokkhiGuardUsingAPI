@@ -186,7 +186,13 @@ public class AddVisitor extends AppCompatActivity implements IPickResult{
         whiteListRepository = new WhiteListRepository(this);
         blackListRepository=new BlackListRepository(this);
 
-
+phone.setOnClickListener(new View.OnClickListener() {
+    @Override
+    public void onClick(View v) {
+        phone.setFocusableInTouchMode(true);
+        phone.setFocusable(true);
+    }
+});
         initonclick();
         listener();
 
@@ -426,6 +432,8 @@ public class AddVisitor extends AppCompatActivity implements IPickResult{
 
     public void listener() {
         getdate();
+
+
         phone.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -546,6 +554,13 @@ public class AddVisitor extends AppCompatActivity implements IPickResult{
 
 
     public void upload() {
+        Log.e(TAG, "upload: getFlat_id() = = "+selected );
+        if (selected==null){
+            dismissdialog();
+            flat.setText("");
+            Toast.makeText(context, "Select Flat Number", Toast.LENGTH_SHORT).show();
+            return;
+        }
 
         String wlcheck=normalfunc.makephone14(phone.getText().toString())+selected.getFlat_id();
         if(wflats.contains(wlcheck)){
@@ -1120,6 +1135,9 @@ public class AddVisitor extends AppCompatActivity implements IPickResult{
         userphoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+                phone.setFocusable(false);
+
                 PickSetup setup = new PickSetup()
                         .setTitle("Choose Photo")
                         .setBackgroundColor(Color.WHITE)
@@ -1307,12 +1325,13 @@ public class AddVisitor extends AppCompatActivity implements IPickResult{
 
             //Setting the real returned image.
             //getImageView().setImageURI(r.getUri());
-
             mFileUri = r.getUri().toString();
             bitmap = r.getBitmap();
             if(bitmap==null) Log.d(TAG, "onPickResult: bitmapnull");
             else Log.d(TAG, "onPickResult:  bitmapnullna");
             userphoto.setImageBitmap(r.getBitmap());
+
+
 
             //r.getPath();
         } else {
