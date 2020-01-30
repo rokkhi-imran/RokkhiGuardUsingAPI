@@ -1,6 +1,7 @@
 package com.rokkhi.rokkhiguard;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import androidx.annotation.NonNull;
@@ -163,6 +164,8 @@ public class VisitorAdapter extends RecyclerView.Adapter<VisitorAdapter.VisitorV
                                 if (task.isSuccessful()) {
                                     myInterface.loadagain();
                                     alertDialog.dismiss();
+                                    context.startActivity(new Intent(context,VisitorsList.class)
+                                    .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_CLEAR_TOP));
                                 }
                             }
                         });

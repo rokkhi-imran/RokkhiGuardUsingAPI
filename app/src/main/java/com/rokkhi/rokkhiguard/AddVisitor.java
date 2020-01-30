@@ -5,6 +5,7 @@ import android.app.Dialog;
 
 import androidx.core.content.ContextCompat;
 import androidx.lifecycle.Observer;
+
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -16,6 +17,7 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.SystemClock;
 import android.preference.PreferenceManager;
+
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.appcompat.app.AlertDialog;
@@ -23,6 +25,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.appcompat.widget.Toolbar;
+
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -91,25 +94,22 @@ import javax.annotation.Nullable;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 
-public class AddVisitor extends AppCompatActivity implements IPickResult{
-
+public class AddVisitor extends AppCompatActivity implements IPickResult {
 
 
     private static final int PERMISSION_REQUEST_READ_PHONE_STATE = 1;
+    private static final String TAG = "AddVisitor";
     CircleImageView userphoto;
     EditText username, phone, purpose, idcardno, org, flat, vehicle;
     Button done;
     Map<String, Object> doc;
-    String phoneno="";
+    String phoneno = "";
     String mFileUri = "";
     Context context;
     FirebaseFirestore firebaseFirestore;
     ArrayList<ActiveFlats> allflats;
-    private Bitmap bitmap = null;
     FirebaseUser firebaseUser;
     Date low, high;
-    private static final String TAG = "AddVisitor";
-    private long mLastClickTime = 0;
     Timestamp out = new Timestamp(0, 0);
     SharedPreferences.Editor editor;
     SharedPreferences sharedPref;
@@ -119,32 +119,28 @@ public class AddVisitor extends AppCompatActivity implements IPickResult{
     String flatid = "", buildid = "", commid = "", famid = "", userid = "";
     ActiveFlats selected;
     ArrayList<UDetails> flatusers;
-
     Calendar myCalendar;
     Normalfunc normalfunc;
-
-    private String res = "pending",vtype="visitor";
     AlertDialog alertDialog;
     RecyclerView recyclerView;
     boolean flag;
     ImageView cut;
-
     ArrayList<String> wflats;
     ArrayList<String> bflats;
     ArrayList<Whitelist> whitelists;
     ArrayList<BlackList> blackLists;
-
     String linkFromSearch = "";
     boolean approve;
     String thismobileuid;
     FlatsRepository flatsRepository;
     WhiteListRepository whiteListRepository;
     BlackListRepository blackListRepository;
-
     RecyclerView recyclerViewWaitingList;
-
-    ArrayList<Visitors>visitorsArrayList;
-
+    ArrayList<Visitors> visitorsArrayList;
+    Dialog mdialog;
+    private Bitmap bitmap = null;
+    private long mLastClickTime = 0;
+    private String res = "pending", vtype = "visitor";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -158,8 +154,8 @@ public class AddVisitor extends AppCompatActivity implements IPickResult{
         flag = false;
 
 
-        recyclerViewWaitingList=findViewById(R.id.visitorListRecycelrViewID);
-        visitorsArrayList=new ArrayList<>();
+        recyclerViewWaitingList = findViewById(R.id.visitorListRecycelrViewID);
+        visitorsArrayList = new ArrayList<>();
 
         done = findViewById(R.id.done);
         username = findViewById(R.id.user_name);
@@ -184,20 +180,20 @@ public class AddVisitor extends AppCompatActivity implements IPickResult{
         thismobileuid = FirebaseAuth.getInstance().getUid();
         flatsRepository = new FlatsRepository(this);
         whiteListRepository = new WhiteListRepository(this);
-        blackListRepository=new BlackListRepository(this);
+        blackListRepository = new BlackListRepository(this);
 
-phone.setOnClickListener(new View.OnClickListener() {
-    @Override
-    public void onClick(View v) {
-        phone.setFocusableInTouchMode(true);
-        phone.setFocusable(true);
-    }
-});
+        phone.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                phone.setFocusableInTouchMode(true);
+                phone.setFocusable(true);
+            }
+        });
         initonclick();
         listener();
 
 
-        LinearLayoutManager linearLayoutManager=new LinearLayoutManager( this);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         linearLayoutManager.setOrientation(RecyclerView.HORIZONTAL);
         recyclerViewWaitingList.setLayoutManager(linearLayoutManager);
 
@@ -209,7 +205,6 @@ phone.setOnClickListener(new View.OnClickListener() {
     private void loadWaitingVisitorList() {
 
 
-
         firebaseFirestore.collection(getString(R.string.col_visitors))
                 .whereEqualTo("completed", false)
                 .whereEqualTo("build_id", buildid)
@@ -219,18 +214,18 @@ phone.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onEvent(@androidx.annotation.Nullable QuerySnapshot queryDocumentSnapshots, @androidx.annotation.Nullable FirebaseFirestoreException e) {
 
-                        if (queryDocumentSnapshots==null){
+                        if (queryDocumentSnapshots == null) {
                             return;
                         }
 
                         visitorsArrayList.clear();
 
-                        for (DocumentSnapshot snapshot:queryDocumentSnapshots.getDocuments()){
-                            Visitors visitors =snapshot.toObject(Visitors.class);
+                        for (DocumentSnapshot snapshot : queryDocumentSnapshots.getDocuments()) {
+                            Visitors visitors = snapshot.toObject(Visitors.class);
                             visitorsArrayList.add(visitors);
                         }
 
-                        VisitorWaitingAdapter visitorWaitingAdapter = new VisitorWaitingAdapter(visitorsArrayList,AddVisitor.this);
+                        VisitorWaitingAdapter visitorWaitingAdapter = new VisitorWaitingAdapter(visitorsArrayList, AddVisitor.this);
                         recyclerViewWaitingList.setAdapter(visitorWaitingAdapter);
 
                         Log.e(TAG, "onComplete: visitors size = " + visitorsArrayList.size());
@@ -240,7 +235,6 @@ phone.setOnClickListener(new View.OnClickListener() {
 
 
         //Load Visitor Waiting List End
-
 
 
     }
@@ -289,10 +283,7 @@ phone.setOnClickListener(new View.OnClickListener() {
 
     }
 
-
-
     public void getAllActiveFlatsAndSaveToLocalDatabase(final BuildingChanges buildingChanges) {
-
 
 
         // allActiveFlats = new ArrayList<>();
@@ -339,44 +330,44 @@ phone.setOnClickListener(new View.OnClickListener() {
 
         FirebaseFirestore.getInstance().collection("buildingChanges").document(buildid).get()
                 .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-            @Override
-            public void onSuccess(DocumentSnapshot documentSnapshot) {
-                if (documentSnapshot.exists()) {
-                    BuildingChanges buildingChanges = documentSnapshot.toObject(BuildingChanges.class);
-                    ArrayList<String> flats = buildingChanges.getFlats();
-                    ArrayList<String> whitelists = buildingChanges.getWhitelists();
-                    ArrayList<String> vehicles = buildingChanges.getVehicles();
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        if (documentSnapshot.exists()) {
+                            BuildingChanges buildingChanges = documentSnapshot.toObject(BuildingChanges.class);
+                            ArrayList<String> flats = buildingChanges.getFlats();
+                            ArrayList<String> whitelists = buildingChanges.getWhitelists();
+                            ArrayList<String> vehicles = buildingChanges.getVehicles();
 
 
-                    if (!flats.contains(thismobileuid)) {
-                        Log.d("firebase", "Getting new Flats data because data is changed or updated");
+                            if (!flats.contains(thismobileuid)) {
+                                Log.d("firebase", "Getting new Flats data because data is changed or updated");
 
-                        getAllActiveFlatsAndSaveToLocalDatabase(buildingChanges);
+                                getAllActiveFlatsAndSaveToLocalDatabase(buildingChanges);
 
 
-                        //TODO alhn ei uid add korte hbe database a
+                                //TODO alhn ei uid add korte hbe database a
 
-                    } else {
-                        Log.d("firebase", " Flats data is not changed or updated");
+                            } else {
+                                Log.d("firebase", " Flats data is not changed or updated");
+                            }
+
+                            if (!whitelists.contains(thismobileuid)) {
+                                getAllWhiteListAndSaveToLocalDatabase(buildingChanges);
+                            }
+
+
+                        }
                     }
-
-                    if (!whitelists.contains(thismobileuid)) {
-                        getAllWhiteListAndSaveToLocalDatabase(buildingChanges);
-                    }
-
-
-                }
-            }
-        });
+                });
 
 
         whiteListRepository.getAllWhiteList(buildid).observe(this, new Observer<List<Whitelist>>() {
             @Override
             public void onChanged(@Nullable List<Whitelist> allWhiteLists) {
                 wflats = new ArrayList<>();
-                whitelists= new ArrayList<>();
+                whitelists = new ArrayList<>();
                 for (Whitelist whiteList : allWhiteLists) {
-                    wflats.add(whiteList.getW_phone()+whiteList.getFlat_id());
+                    wflats.add(whiteList.getW_phone() + whiteList.getFlat_id());
                     whitelists.add(whiteList);
                     Log.d("room", "found a new WhiteList   " + whiteList.getF_no() + "  -- > " + whiteList.getFlat_id());
                 }
@@ -387,9 +378,9 @@ phone.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onChanged(@Nullable List<BlackList> allBlackList) {
                 bflats = new ArrayList<>();
-                blackLists= new ArrayList<>();
-                for (BlackList blackList: allBlackList) {
-                    bflats.add(blackList.getPhone()+blackList.getFlatID());
+                blackLists = new ArrayList<>();
+                for (BlackList blackList : allBlackList) {
+                    bflats.add(blackList.getPhone() + blackList.getFlatID());
                     blackLists.add(blackList);
                     Log.d("room", "found a new WhiteList   " + blackList.getFlatNo() + "  -- > " + blackList.getFlatID());
                 }
@@ -442,13 +433,13 @@ phone.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                Log.d(TAG, "onTextChanged: nnn2 "+ flag);
+                Log.d(TAG, "onTextChanged: nnn2 " + flag);
                 if (s.length() == 11 && !flag) {
                     flag = true;
 
-                    String visitorNumber=normalfunc.makephone14(phone.getText().toString());
+                    String visitorNumber = normalfunc.makephone14(phone.getText().toString());
 
-                    Log.d(TAG, "onTextChanged:  nnn1 "+ flag);
+                    Log.d(TAG, "onTextChanged:  nnn1 " + flag);
                     firebaseFirestore.collection("search")
                             .document(visitorNumber).get()
                             .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -474,10 +465,10 @@ phone.setOnClickListener(new View.OnClickListener() {
                                             relativeLayout.setOnClickListener(new View.OnClickListener() {
                                                 @Override
                                                 public void onClick(View v) {
-                                                    flag=true;
+                                                    flag = true;
                                                     username.setText(vsearch.getV_name());
-                                                   // phone.setText("");
-                                                    Log.d(TAG, "onClick: oooo "+ vsearch.getV_phone() +" "+normalfunc.makephone11(vsearch.getV_phone()));
+                                                    // phone.setText("");
+                                                    Log.d(TAG, "onClick: oooo " + vsearch.getV_phone() + " " + normalfunc.makephone11(vsearch.getV_phone()));
                                                     phone.setText(normalfunc.makephone11(vsearch.getV_phone()));
                                                     org.setText(vsearch.getV_where());
                                                     if (!vsearch.getV_purpose().isEmpty())
@@ -488,7 +479,7 @@ phone.setOnClickListener(new View.OnClickListener() {
                                                     }
                                                     username.requestFocus();
                                                     alertDialog.dismiss();
-                                                    Log.e(TAG, "onClick: image url = "+vsearch.getV_thumb());
+                                                    Log.e(TAG, "onClick: image url = " + vsearch.getV_thumb());
 
                                                     Glide.with(context).load(vsearch.getV_thumb()).placeholder(R.drawable.male1).into(userphoto);
 
@@ -512,10 +503,10 @@ phone.setOnClickListener(new View.OnClickListener() {
                                             select.setOnClickListener(new View.OnClickListener() {
                                                 @Override
                                                 public void onClick(View v) {
-                                                    flag=true;
+                                                    flag = true;
                                                     username.setText(vsearch.getV_name());
                                                     // phone.setText("");
-                                                    Log.d(TAG, "onClick: oooo "+ vsearch.getV_phone() +" "+normalfunc.makephone11(vsearch.getV_phone()));
+                                                    Log.d(TAG, "onClick: oooo " + vsearch.getV_phone() + " " + normalfunc.makephone11(vsearch.getV_phone()));
                                                     phone.setText(normalfunc.makephone11(vsearch.getV_phone()));
                                                     org.setText(vsearch.getV_where());
                                                     if (!vsearch.getV_purpose().isEmpty())
@@ -526,7 +517,7 @@ phone.setOnClickListener(new View.OnClickListener() {
                                                     }
                                                     username.requestFocus();
                                                     alertDialog.dismiss();
-                                                    Log.e(TAG, "onClick: image url = "+vsearch.getV_thumb());
+                                                    Log.e(TAG, "onClick: image url = " + vsearch.getV_thumb());
                                                     Glide.with(context).load(vsearch.getV_thumb()).placeholder(R.drawable.male1).into(userphoto);
 
 //                                                    UniversalImageLoader.setImage(vsearch.getV_thumb(), userphoto, null, "");
@@ -540,7 +531,7 @@ phone.setOnClickListener(new View.OnClickListener() {
                             });
                 } else if (s.length() != 11) {
                     flag = false;
-                    Log.d(TAG, "onTextChanged: nnn3 "+flag+" "+s.length());
+                    Log.d(TAG, "onTextChanged: nnn3 " + flag + " " + s.length());
                 }
             }
 
@@ -552,45 +543,43 @@ phone.setOnClickListener(new View.OnClickListener() {
         });
     }
 
-
     public void upload() {
-        Log.e(TAG, "upload: getFlat_id() = = "+selected );
-        if (selected==null){
+        Log.e(TAG, "upload: getFlat_id() = = " + selected);
+        if (selected == null) {
             dismissdialog();
             flat.setText("");
             Toast.makeText(context, "Select Flat Number", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        String wlcheck=normalfunc.makephone14(phone.getText().toString())+selected.getFlat_id();
-        if(wflats.contains(wlcheck)){
+        String wlcheck = normalfunc.makephone14(phone.getText().toString()) + selected.getFlat_id();
+        if (wflats.contains(wlcheck)) {
             res = "whitelisted";  //vvvvvv
-            vtype="whitelisted";
-        }else if(bflats.contains(wlcheck)){
+            vtype = "whitelisted";
+        } else if (bflats.contains(wlcheck)) {
             res = "blackListed";  //vvvvvv
-            vtype="blackListed";
-        }
-        else{
+            vtype = "blackListed";
+        } else {
             res = "pending"; //TODO this should be pending  //vvvvvv
-            vtype="visitor";
+            vtype = "visitor";
 
         }
 
-        flatusers= new ArrayList<>();
-        firebaseFirestore.collection(getString(R.string.col_udetails)).whereEqualTo("flat_id",selected.getFlat_id())
+        flatusers = new ArrayList<>();
+        firebaseFirestore.collection(getString(R.string.col_udetails)).whereEqualTo("flat_id", selected.getFlat_id())
                 .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if(task.isSuccessful()){
-                    for(DocumentSnapshot documentSnapshot: task.getResult()){
-                        UDetails uDetails= documentSnapshot.toObject(UDetails.class);
+                if (task.isSuccessful()) {
+                    for (DocumentSnapshot documentSnapshot : task.getResult()) {
+                        UDetails uDetails = documentSnapshot.toObject(UDetails.class);
                         flatusers.add(uDetails);
                     }
                 }
             }
         });
 
-        Log.d(TAG, "upload: yyyyx44 "+ res);
+        Log.d(TAG, "upload: yyyyx44 " + res);
 
         List<String> ll = normalfunc.splitstring(username.getText().toString());
         ll.add(selected.getF_no());
@@ -606,7 +595,7 @@ phone.setOnClickListener(new View.OnClickListener() {
         doc.put("another_uid", "");
         doc.put("v_name", username.getText().toString());
         doc.put("v_mail", "");
-        doc.put("v_phone",normalfunc.makephone14(phone.getText().toString()) );
+        doc.put("v_phone", normalfunc.makephone14(phone.getText().toString()));
         doc.put("v_purpose", purpose.getText().toString());
         doc.put("v_where", org.getText().toString());
         doc.put("v_gpass", idcardno.getText().toString());
@@ -618,23 +607,20 @@ phone.setOnClickListener(new View.OnClickListener() {
         doc.put("v_pic", "");
         doc.put("thumb_v_pic", "");
 
-        if(res.equals("whitelisted")){
+        if (res.equals("whitelisted")) {
             doc.put("statusOfEntry", "in");
         }
-        if(res.equals("blackListed")){
+        if (res.equals("blackListed")) {
             doc.put("statusOfEntry", "in");
-        }
-
-        else doc.put("statusOfEntry", "pending");
+        } else doc.put("statusOfEntry", "pending");
         doc.put("in", true);
         doc.put("completed", false);
         doc.put("response", res);
         doc.put("v_type", vtype);
         doc.put("v_array", ll);
         doc.put("responder", firebaseUser.getUid());
-        
-        
-        
+
+
         if (!linkFromSearch.isEmpty()) {
             doc.put("v_pic", linkFromSearch);
             doc.put("thumb_v_pic", linkFromSearch);
@@ -649,8 +635,6 @@ phone.setOnClickListener(new View.OnClickListener() {
 
         photoRef = FirebaseStorage.getInstance().getReference()
                 .child("visitors/" + visitorid + "/v_pic");
-
-
 
 
         // Upload file to Firebase Storage
@@ -714,20 +698,19 @@ phone.setOnClickListener(new View.OnClickListener() {
                     .collection(getString(R.string.col_visitors)).document(visitorid)
                     .set(doc).
                     addOnCompleteListener(new OnCompleteListener<Void>() {
-                @Override
-                public void onComplete(@NonNull Task<Void> task) {
-                    if (task.isSuccessful()) {
-                        Log.d(TAG, "onComplete: yyy2 ");
-                        dialogconfirmation(visitorid);
-                        //progressBar.setVisibility(View.GONE);
-                        dismissdialog();
-                        Toast.makeText(context, "Done!", Toast.LENGTH_SHORT).show();
-                    }
-                    else{
-                        Log.d(TAG, "onComplete: yyy3");
-                    }
-                }
-            });
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if (task.isSuccessful()) {
+                                Log.d(TAG, "onComplete: yyy2 ");
+                                dialogconfirmation(visitorid);
+                                //progressBar.setVisibility(View.GONE);
+                                dismissdialog();
+                                Toast.makeText(context, "Done!", Toast.LENGTH_SHORT).show();
+                            } else {
+                                Log.d(TAG, "onComplete: yyy3");
+                            }
+                        }
+                    });
         }
     }
 
@@ -735,28 +718,25 @@ phone.setOnClickListener(new View.OnClickListener() {
 
         if (selected.isVacant() || !selected.isUsing()) {
             approve = false;
-        }
-        else approve = true;
+        } else approve = true;
 
 
         firebaseFirestore.collection(getString(R.string.col_eintercom)).document(selected.getFlat_id())
                 .addSnapshotListener(new EventListener<DocumentSnapshot>() {
                     @Override
                     public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
-                        if(e!=null){
+                        if (e != null) {
                             Log.w(TAG, "Listen failed.", e);
                             return;
                         }
 
-                        if(documentSnapshot.exists()){
-                            phoneno= documentSnapshot.getString("number");
-                            Log.d(TAG, "onEvent: oooo "+ phoneno);
-                        }
-                        else phoneno="none";
+                        if (documentSnapshot.exists()) {
+                            phoneno = documentSnapshot.getString("number");
+                            Log.d(TAG, "onEvent: oooo " + phoneno);
+                        } else phoneno = "none";
                     }
                 });
 
-        
 
         Log.d(TAG, "dialogconfirmation:  approve " + approve);
 
@@ -781,7 +761,7 @@ phone.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 alertconfirm.dismiss();
-                Intent intent= new Intent(context,AddVisitor.class);
+                Intent intent = new Intent(context, AddVisitor.class);
                 startActivity(intent);
                 finish();
             }
@@ -793,15 +773,15 @@ phone.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
 
 
-                Map<String, Object> mm= new HashMap<>();
-                mm.put("response","accepted");
-                mm.put("in",true);
-                mm.put("completed",true);
-                mm.put("responder",FirebaseAuth.getInstance().getCurrentUser().getUid());
-                mm.put("statusOfEntry","in");
+                Map<String, Object> mm = new HashMap<>();
+                mm.put("response", "accepted");
+                mm.put("in", true);
+                mm.put("completed", true);
+                mm.put("responder", FirebaseAuth.getInstance().getCurrentUser().getUid());
+                mm.put("statusOfEntry", "in");
 
                 firebaseFirestore.collection(getString(R.string.col_visitors)).document(uid)
-                        .set(mm,SetOptions.merge()).addOnCompleteListener(new OnCompleteListener<Void>() {
+                        .set(mm, SetOptions.merge()).addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful()) {
@@ -821,15 +801,15 @@ phone.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 progressBar.setVisibility(View.VISIBLE);
 
-                Map<String, Object> mm= new HashMap<>();
-                mm.put("response","rejected");
-                mm.put("in",false);
-                mm.put("completed",true);
-                mm.put("responder",FirebaseAuth.getInstance().getCurrentUser().getUid());
-                mm.put("statusOfEntry","out");
+                Map<String, Object> mm = new HashMap<>();
+                mm.put("response", "rejected");
+                mm.put("in", false);
+                mm.put("completed", true);
+                mm.put("responder", FirebaseAuth.getInstance().getCurrentUser().getUid());
+                mm.put("statusOfEntry", "out");
 
                 firebaseFirestore.collection(getString(R.string.col_visitors)).document(uid)
-                        .set(mm,SetOptions.merge()).addOnCompleteListener(new OnCompleteListener<Void>() {
+                        .set(mm, SetOptions.merge()).addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful()) {
@@ -847,13 +827,13 @@ phone.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                Map<String, Object> mm= new HashMap<>();
-                mm.put("completed",true);
+                Map<String, Object> mm = new HashMap<>();
+                mm.put("completed", true);
 
                 progressBar.setVisibility(View.VISIBLE);
 
                 firebaseFirestore.collection(getString(R.string.col_visitors)).document(uid)
-                        .set(mm,SetOptions.merge()).addOnCompleteListener(new OnCompleteListener<Void>() {
+                        .set(mm, SetOptions.merge()).addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful()) {
@@ -871,15 +851,13 @@ phone.setOnClickListener(new View.OnClickListener() {
         });
 
 
-
-
         if (approve) {
             call.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
 
-                    if(!phoneno.equals("none") && !phoneno.isEmpty()) onCallBtnClick();
-                    else{
+                    if (!phoneno.equals("none") && !phoneno.isEmpty()) onCallBtnClick();
+                    else {
                         showUsers();
                     }
                 }
@@ -913,7 +891,7 @@ phone.setOnClickListener(new View.OnClickListener() {
                 }
 
                 public void onFinish() {
-                    if (res.equals("pending") ) {
+                    if (res.equals("pending")) {
                         progressBar.setVisibility(View.GONE);
                         status.setText("No response ( সাড়া পাওয়া যায়নি )");
                         status.setTextColor(Color.BLUE);
@@ -942,7 +920,7 @@ phone.setOnClickListener(new View.OnClickListener() {
                                     //vvvvvv
                                     enter.setVisibility(View.GONE);
                                     cancel.setVisibility(View.GONE);
-                                    responPic.setImageDrawable(ContextCompat.getDrawable(context,R.drawable.reject));
+                                    responPic.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.reject));
                                     submit.setVisibility(View.VISIBLE);
                                     progressBar.setVisibility(View.GONE);
                                     status.setText("Rejected  ( বাতিল )");
@@ -952,28 +930,26 @@ phone.setOnClickListener(new View.OnClickListener() {
                                     cancel.setVisibility(View.GONE);
                                     submit.setVisibility(View.VISIBLE);
                                     progressBar.setVisibility(View.GONE);
-                                    responPic.setImageDrawable(ContextCompat.getDrawable(context,R.drawable.accept));
+                                    responPic.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.accept));
                                     status.setText("Accepted  ( গৃহীত )");
                                     status.setTextColor(Color.GREEN);
-                                }
-                                else if(res.equals("intercom")){
+                                } else if (res.equals("intercom")) {
 //                                    enter.setVisibility(View.GONE);
 //                                    cancel.setVisibility(View.GONE);
 //                                    submit.setVisibility(View.VISIBLE);
-                                    responPic.setImageDrawable(ContextCompat.getDrawable(context,R.drawable.telephone));
+                                    responPic.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.telephone));
                                     progressBar.setVisibility(View.GONE);
                                     status.setText("ইন্টারকম এ কল করুন");
-                                    status.setTextColor(ContextCompat.getColor(context,R.color.yellow));
-                                }
-                                else if(res.equals("mobile")){
+                                    status.setTextColor(ContextCompat.getColor(context, R.color.yellow));
+                                } else if (res.equals("mobile")) {
 //                                    flatusers.clear();
-                                    String responder= visitors.getResponder();
-                                    for(int i=0;i<flatusers.size();i++){
-                                        if(!flatusers.get(i).getUser_id().equals(responder)){
+                                    String responder = visitors.getResponder();
+                                    for (int i = 0; i < flatusers.size(); i++) {
+                                        if (!flatusers.get(i).getUser_id().equals(responder)) {
                                             flatusers.remove(flatusers.get(i));
                                         }
                                     }
-                                    responPic.setImageDrawable(ContextCompat.getDrawable(context,R.drawable.smartphone));
+                                    responPic.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.smartphone));
 //                                    enter.setVisibility(View.GONE);
 //                                    cancel.setVisibility(View.GONE);
 //                                    submit.setVisibility(View.VISIBLE);
@@ -1018,7 +994,6 @@ phone.setOnClickListener(new View.OnClickListener() {
         alertcompany.show();
 
 
-
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -1030,7 +1005,7 @@ phone.setOnClickListener(new View.OnClickListener() {
                 editor.putString("from", "2");
                 editor.apply();
 
-                phoneno= typeselected.getPhone();
+                phoneno = typeselected.getPhone();
 
 //                onCallBtnClick();
                 alertcompany.dismiss();
@@ -1042,11 +1017,10 @@ phone.setOnClickListener(new View.OnClickListener() {
         });
     }
 
-
     public void addallflats() {
 
 
-        Log.e(TAG, "addallflats: "+buildid );
+        Log.e(TAG, "addallflats: " + buildid);
         //getting the data from repository example
         //final FlatsRepository flatsRepository = new FlatsRepository(this);
         flatsRepository.getAllActiveFlats(buildid).observe(this, new Observer<List<ActiveFlats>>() {
@@ -1063,10 +1037,9 @@ phone.setOnClickListener(new View.OnClickListener() {
 
     }
 
-
     public void showallflats() {
 
-        Log.d(TAG, "showallflats: kk "+allflats.size());
+        Log.d(TAG, "showallflats: kk " + allflats.size());
 
         final ActiveFlatAdapter valueAdapter = new ActiveFlatAdapter(allflats, context);
         final AlertDialog alertcompany = new AlertDialog.Builder(context).create();
@@ -1118,8 +1091,6 @@ phone.setOnClickListener(new View.OnClickListener() {
         });
     }
 
-
-
     public void initonclick() {
 
 
@@ -1151,7 +1122,6 @@ phone.setOnClickListener(new View.OnClickListener() {
                 PickImageDialog.build(setup)
                         //.setOnClick(this)
                         .show(AddVisitor.this);
-
 
 
             }
@@ -1238,8 +1208,6 @@ phone.setOnClickListener(new View.OnClickListener() {
 
     }
 
-    Dialog mdialog;
-
     public void initdialog() {
         mdialog = new Dialog(this);
 
@@ -1259,16 +1227,12 @@ phone.setOnClickListener(new View.OnClickListener() {
     }
 
 
-
-
-    private void onCallBtnClick(){
+    private void onCallBtnClick() {
 
         if (checkSelfPermission(Manifest.permission.READ_PHONE_STATE) == PackageManager.PERMISSION_DENIED || checkSelfPermission(Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_DENIED) {
             String[] permissions = {Manifest.permission.READ_PHONE_STATE, Manifest.permission.CALL_PHONE};
             requestPermissions(permissions, PERMISSION_REQUEST_READ_PHONE_STATE);
-        }
-
-        else phoneCall();
+        } else phoneCall();
 
 
     }
@@ -1278,11 +1242,11 @@ phone.setOnClickListener(new View.OnClickListener() {
         boolean permissionGranted = false;
 
 
-        switch(requestCode){
+        switch (requestCode) {
             case PERMISSION_REQUEST_READ_PHONE_STATE: {
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     Toast.makeText(this, "Permission granted: " + PERMISSION_REQUEST_READ_PHONE_STATE, Toast.LENGTH_SHORT).show();
-                    permissionGranted=true;
+                    permissionGranted = true;
                 } else {
                     Toast.makeText(this, "Permission NOT granted: " + PERMISSION_REQUEST_READ_PHONE_STATE, Toast.LENGTH_SHORT).show();
                 }
@@ -1290,27 +1254,26 @@ phone.setOnClickListener(new View.OnClickListener() {
 
             }
         }
-        if(permissionGranted){
+        if (permissionGranted) {
             phoneCall();
-        }else {
+        } else {
             Toast.makeText(context, "You don't assign permission.", Toast.LENGTH_SHORT).show();
         }
     }
 
 
-
-    private void phoneCall(){
+    private void phoneCall() {
         if (ActivityCompat.checkSelfPermission(context,
                 Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_GRANTED) {
 
-            Toast.makeText(context, ""+phoneno, Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, "" + phoneno, Toast.LENGTH_SHORT).show();
             Intent callIntent = new Intent(Intent.ACTION_CALL);
-            if (!phoneno.isEmpty())callIntent.setData(Uri.parse("tel:"+ phoneno));
+            if (!phoneno.isEmpty()) callIntent.setData(Uri.parse("tel:" + phoneno));
 
             startActivity(callIntent);
 
 
-        }else{
+        } else {
             Toast.makeText(context, "You don't assign permission.", Toast.LENGTH_SHORT).show();
         }
     }
@@ -1327,10 +1290,9 @@ phone.setOnClickListener(new View.OnClickListener() {
             //getImageView().setImageURI(r.getUri());
             mFileUri = r.getUri().toString();
             bitmap = r.getBitmap();
-            if(bitmap==null) Log.d(TAG, "onPickResult: bitmapnull");
+            if (bitmap == null) Log.d(TAG, "onPickResult: bitmapnull");
             else Log.d(TAG, "onPickResult:  bitmapnullna");
             userphoto.setImageBitmap(r.getBitmap());
-
 
 
             //r.getPath();
