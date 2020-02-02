@@ -1,8 +1,11 @@
 package com.rokkhi.rokkhiguard.Model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.util.Date;
 
-public class Notifications {
+public class Notifications implements Parcelable {
 
     private String who_add="none"; //userid
     private String build_id="none";
@@ -28,6 +31,28 @@ public class Notifications {
         this.n_title = n_title;
         this.n_uid = n_uid;
     }
+
+    protected Notifications(Parcel in) {
+        who_add = in.readString();
+        build_id = in.readString();
+        comm_id = in.readString();
+        n_type = in.readString();
+        n_body = in.readString();
+        n_title = in.readString();
+        n_uid = in.readString();
+    }
+
+    public static final Creator<Notifications> CREATOR = new Creator<Notifications>() {
+        @Override
+        public Notifications createFromParcel(Parcel in) {
+            return new Notifications(in);
+        }
+
+        @Override
+        public Notifications[] newArray(int size) {
+            return new Notifications[size];
+        }
+    };
 
     public String getWho_add() {
         return who_add;
@@ -91,5 +116,21 @@ public class Notifications {
 
     public void setN_uid(String n_uid) {
         this.n_uid = n_uid;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(who_add);
+        dest.writeString(build_id);
+        dest.writeString(comm_id);
+        dest.writeString(n_type);
+        dest.writeString(n_body);
+        dest.writeString(n_title);
+        dest.writeString(n_uid);
     }
 }

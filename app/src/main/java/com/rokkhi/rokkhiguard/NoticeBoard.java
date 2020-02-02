@@ -76,6 +76,7 @@ public class NoticeBoard extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         mrootView=findViewById(R.id.root);
         sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+        sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
         buildid = sharedPref.getString("buildid", "none");
         commid = sharedPref.getString("commid", "none");
        // title= findViewById(R.id.title);

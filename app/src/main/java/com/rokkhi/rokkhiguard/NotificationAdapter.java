@@ -1,6 +1,7 @@
 package com.rokkhi.rokkhiguard;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import androidx.annotation.NonNull;
@@ -10,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -18,6 +20,7 @@ import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.rokkhi.rokkhiguard.Model.Notifications;
+import com.rokkhi.rokkhiguard.Utils.NoticeDetailsActivity;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -130,6 +133,16 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
             propic=view.findViewById(R.id.one);
             date= view.findViewById(R.id.date);
             body= view.findViewById(R.id.starttime);
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    context.startActivity(new Intent(context.getApplicationContext(), NoticeDetailsActivity.class)
+                    .putExtra("noticeDetails",list.get(getAdapterPosition())));
+
+                }
+            });
         }
     }
 

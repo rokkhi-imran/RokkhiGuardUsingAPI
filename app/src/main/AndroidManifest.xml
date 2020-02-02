@@ -37,6 +37,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
+        <activity android:name=".Utils.NoticeDetailsActivity"></activity>
         <activity android:name=".GuardQRCodeActivity" />
         <activity android:name=".GuardListActivity" />
         <activity android:name=".SWorkersActivity" />
@@ -148,8 +149,6 @@
                 <action android:name="android.telecom.InCallService" />
             </intent-filter>
         </service>
-
-
     </application>
 
 </manifest>
