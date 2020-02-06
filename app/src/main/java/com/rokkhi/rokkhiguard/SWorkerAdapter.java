@@ -76,6 +76,10 @@ public class SWorkerAdapter extends RecyclerView.Adapter<SWorkerAdapter.SWorkerV
 
         final ServiceBuilding serviceBuilding = list.get(position);
 
+
+
+        Log.e(TAG, "onBindViewHolder: S ID  =  "+serviceBuilding.getS_id() );
+
         firebaseFirestore.collection(context.getString(R.string.col_sworker)).document(serviceBuilding.getS_id())
                 .addSnapshotListener(new EventListener<DocumentSnapshot>() {
                     @Override
@@ -83,6 +87,7 @@ public class SWorkerAdapter extends RecyclerView.Adapter<SWorkerAdapter.SWorkerV
                         if(e!=null)return;
                         if(documentSnapshot.exists()){
                             Swroker sworker = documentSnapshot.toObject(Swroker.class);
+                            Log.e(TAG, "onEvent:getAddress "+sworker.getAddress() );
                             holder.name.setText(sworker.getS_name());
 
                             Glide.with(context).load(sworker.getThumb_s_pic()).placeholder(R.drawable.male1).into(holder.propic);

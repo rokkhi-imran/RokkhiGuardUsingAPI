@@ -24,7 +24,7 @@
             android:layout_marginStart="20dp"
             android:drawableEnd="@drawable/ic_search"
             android:layout_marginEnd="20dp"
-            android:hint="অতিথির নাম অথবা আইডি নাম্বার দিয়ে খুঁজুন  "
+            android:hint="বাচ্চাদের নাম অথবা ফ্লাট নাম্বার দিয়ে খুঁজুন  "
             android:paddingEnd="20dp"
             />
 

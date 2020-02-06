@@ -795,7 +795,7 @@ public class CreateProfile extends AppCompatActivity implements ActiveFlatAdapte
     public void upload() {
 
 
-        List<String> ll = normalfunc.splitstring(username.getText().toString());
+        List<String> ll = normalfunc.splitstring(username.getText().toString().toLowerCase());
         ll.add(normalfunc.makephone11(phone.getText().toString()));
         ll.add(normalfunc.makephone14(phone.getText().toString()));
         ll.addAll(normalfunc.splitchar(typeselected.getEnglish().toLowerCase()));
