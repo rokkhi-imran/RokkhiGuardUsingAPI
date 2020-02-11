@@ -58,7 +58,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         if (remoteMessage.getData().size() > 0) {
             Log.d(TAG, "Message data payload: " + remoteMessage.getData());
 
-            handleNowdataforvisitor(remoteMessage);
+//            handleNowdataforvisitor(remoteMessage);
 
 
         }
@@ -96,7 +96,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
 
     private void handleNow(RemoteMessage remoteMessage) {
-        String click_Action="";
+        String click_Action ="";
 
         if(remoteMessage.getNotification().getClickAction()!=null) click_Action = remoteMessage.getNotification().getClickAction();
 
@@ -137,6 +137,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         Log.d(TAG, "Short lived task is done.");
     }
 
+/*
 
     private void handleNowdataforvisitor(final RemoteMessage remoteMessage) {
 
@@ -203,6 +204,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
     }
 
+*/
 
 
 
