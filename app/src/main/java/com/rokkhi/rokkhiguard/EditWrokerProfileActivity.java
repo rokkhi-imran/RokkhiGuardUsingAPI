@@ -2,6 +2,7 @@ package com.rokkhi.rokkhiguard;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
@@ -9,6 +10,7 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -56,6 +58,7 @@ import com.vansuita.pickimage.dialog.PickImageDialog;
 import com.vansuita.pickimage.listeners.IPickResult;
 
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -64,7 +67,7 @@ import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class EditWrokerProfileActivity extends AppCompatActivity implements View.OnClickListener, IPickResult {
+public class EditWrokerProfileActivity extends AppCompatActivity implements View.OnClickListener{
 
 
     protected TextView userPhoneTV;
@@ -96,6 +99,10 @@ public class EditWrokerProfileActivity extends AppCompatActivity implements View
 
     Types typeselected;
     String flatName = "";
+
+    private static final int TAKE_PICTURE_CODE = 101;
+    private static final int PICK_IMAGE_REQUEST = 10;
+    Intent cameraIntent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -348,7 +355,7 @@ public class EditWrokerProfileActivity extends AppCompatActivity implements View
                         historyflatno = sLastHistory.getFlatsNo();
                         flatName = "";
                         for (int i = 0; i < historyflatno.size(); i++) {
-                            Log.e("TAG", "onComplete: " + historyflatno.get(i));
+//                            Log.e("TAG", "onComplete: " + historyflatno.get(i));
 
                             flatName = flatName + " " + historyflatno.get(i);
                         }
@@ -366,6 +373,64 @@ public class EditWrokerProfileActivity extends AppCompatActivity implements View
         final ProgressDialog progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("Executing Action.....");
         progressDialog.show();
+
+        DocumentReference docRef = firebaseFirestore
+                .collection("sworkers")
+                .document(sID);
+        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+               swroker =  task.getResult().toObject(Swroker.class);
+
+                userPhoneTV.setText(normalfunc.getNumberWithoutCountryCode(swroker.getS_phone()));
+                userPin.setText(swroker.getS_pass());
+                userName.setText(swroker.getS_name());
+                final String typeID = swroker.getType();
+
+                picurl=  swroker.getS_pic();
+
+                Log.e(TAG, "onSuccess: picurl = "+picurl );
+                Log.e(TAG, "onSuccess: bitmap = "+bitmap);
+
+                if(bitmap==null && !swroker.getS_pic().isEmpty() && !swroker.getS_pic().equals("none")){
+
+                    Glide.with(context).load(swroker.getS_pic()).placeholder(R.drawable.male1).into(userPhoto);
+
+                }
+
+
+
+
+                firebaseFirestore.collection("stype")
+                        .whereEqualTo("type_id", typeID).get()
+                        .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+
+                                for (DocumentSnapshot documentSnapshot : task.getResult()) {
+                                    Types types = documentSnapshot.toObject(Types.class);
+                                    userWtype.setText(types.getBangla());
+                                }
+                            }
+                        });
+
+
+//                userWtype.setText(swroker.getType());
+
+
+                progressDialog.dismiss();
+
+
+
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+
+            }
+        });
+
+        /*
         DocumentReference docRef = firebaseFirestore
                 .collection("sworkers")
                 .document(sID);
@@ -381,11 +446,14 @@ public class EditWrokerProfileActivity extends AppCompatActivity implements View
                 final String typeID = swroker.getType();
 
                 picurl=  swroker.getS_pic();
-                if( !swroker.getS_pic().isEmpty() && !swroker.getS_pic().equals("none")){
+
+                Log.e(TAG, "onSuccess: picurl = "+picurl );
+                Log.e(TAG, "onSuccess: bitmap = "+bitmap);
+
+                if(bitmap!=null && !swroker.getS_pic().isEmpty() && !swroker.getS_pic().equals("none")){
 
                     Glide.with(context).load(swroker.getS_pic()).placeholder(R.drawable.male1).into(userPhoto);
 
-//                    UniversalImageLoader.setImage(swroker.getS_pic(), userPhoto, null, "");
                 }
 
 
@@ -412,7 +480,7 @@ public class EditWrokerProfileActivity extends AppCompatActivity implements View
 
 
             }
-        });
+        });*/
 
     }
 
@@ -523,6 +591,9 @@ public class EditWrokerProfileActivity extends AppCompatActivity implements View
 
         }
 
+        Log.e(TAG, "upload: bitmap - "+bitmap );
+        Log.e(TAG, "upload: picurl - "+picurl );
+
         if(bitmap==null && picurl.isEmpty()){
             progressDialog.dismiss();
 
@@ -628,7 +699,7 @@ public class EditWrokerProfileActivity extends AppCompatActivity implements View
                                                 userPhoneTV.setText("");
                                                 userFlat.setText("");
                                                 userWtype.setText("");
-                                                startActivity(new Intent(EditWrokerProfileActivity.this, MainPage.class)
+                                                startActivity(new Intent(EditWrokerProfileActivity.this, SWorkersActivity.class)
                                                         .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
 //                    UniversalImageLoader.setImage("", , null, "");
                                             }
@@ -741,7 +812,8 @@ public class EditWrokerProfileActivity extends AppCompatActivity implements View
         userPhoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                PickSetup setup = new PickSetup()
+                selectImage();
+                /*PickSetup setup = new PickSetup()
                         .setTitle("Choose Photo")
                         .setBackgroundColor(Color.WHITE)
                         .setButtonOrientation(LinearLayout.HORIZONTAL)
@@ -753,25 +825,91 @@ public class EditWrokerProfileActivity extends AppCompatActivity implements View
 
                 PickImageDialog.build(setup)
                         //.setOnClick(this)
-                        .show(EditWrokerProfileActivity.this);
+                        .show(EditWrokerProfileActivity.this);*/
             }
         });
     }
 
-    @Override
+ /*   @Override
     public void onPickResult(PickResult r) {
         if (r.getError() == null) {
             //progressBar.setVisibility(View.VISIBLE);
 
-            userPhoto.setImageBitmap(null);
+//            userPhoto.setImageBitmap(null);
+
+
 
             mFileUri = r.getUri().toString();
             bitmap = r.getBitmap();
+            Log.d(TAG, "onPickResult: uuu "+ bitmap);
             userPhoto.setImageBitmap(r.getBitmap());
 
         } else {
             Toast.makeText(context, r.getError().getMessage(), Toast.LENGTH_LONG).show();
 
         }
+    }
+
+*/
+    public void selectImage() {
+        final CharSequence[] options = {"Take Photo", "Choose from Gallery", "Cancel"};
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Choose Photo Option..");
+        builder.setItems(options, new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // TODO Auto-generated method stub
+                if (options[which].equals("Take Photo")) {
+                    cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+                    startActivityForResult(cameraIntent, TAKE_PICTURE_CODE);
+                } else if (options[which].equals("Choose from Gallery")) {
+                    Intent intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                    startActivityForResult(intent, PICK_IMAGE_REQUEST);
+                } else if (options[which].equals("Cancel")) {
+                    dialog.dismiss();
+                }
+
+            }
+        });
+        builder.show();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK
+                && data != null && data.getData() != null) {
+            try {
+
+                bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), data.getData());
+
+                int nh = (int) (bitmap.getHeight() * (512.0 / bitmap.getWidth()));
+                bitmap = Bitmap.createScaledBitmap(bitmap, 512, nh, true);
+
+
+                Glide.with(getApplicationContext()).load(data.getData()).into(userPhoto);
+
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        if (requestCode == TAKE_PICTURE_CODE && resultCode == RESULT_OK ) {
+
+//            Toast.makeText(context, ""+data.getExtras().get("data"), Toast.LENGTH_SHORT).show();
+
+            bitmap = (Bitmap) data.getExtras().get("data");
+
+            int nh = (int) (bitmap.getHeight() * (512.0 / bitmap.getWidth()));
+            bitmap = Bitmap.createScaledBitmap(bitmap, 512, nh, true);
+            Glide.with(getApplicationContext()).load(bitmap).into(userPhoto);
+
+//            userPhoto.setImageBitmap(bitmap);
+
+        }
+
     }
 }

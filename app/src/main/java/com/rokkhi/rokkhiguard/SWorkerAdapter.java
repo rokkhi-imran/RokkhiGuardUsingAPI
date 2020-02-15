@@ -90,7 +90,7 @@ public class SWorkerAdapter extends RecyclerView.Adapter<SWorkerAdapter.SWorkerV
                             Log.e(TAG, "onEvent:getAddress "+sworker.getAddress() );
                             holder.name.setText(sworker.getS_name());
 
-                            Glide.with(context).load(sworker.getThumb_s_pic()).placeholder(R.drawable.male1).into(holder.propic);
+                            Glide.with(context.getApplicationContext()).load(sworker.getThumb_s_pic()).placeholder(R.drawable.male1).into(holder.propic);
 
 
 //                            UniversalImageLoader.setImage(sworker.getThumb_s_pic(), holder.propic, null, "");
