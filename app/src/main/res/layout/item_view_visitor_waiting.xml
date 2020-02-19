@@ -8,6 +8,7 @@
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/visitorImageID"
         android:layout_width="70sp"
+        android:layout_gravity="center"
         android:layout_height="70sp"
         android:src="@drawable/useravatar"/>
     <TextView

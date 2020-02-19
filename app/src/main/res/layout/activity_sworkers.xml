@@ -60,7 +60,7 @@
         android:id="@+id/search"
         android:layout_width="match_parent"
         android:layout_height="45dp"
-        android:hint="Search"
+        android:hint="নাম দিয়ে খুজুন "
         android:background="@drawable/round_edittext2"
         android:textSize="25sp"
         android:paddingEnd="5dp"

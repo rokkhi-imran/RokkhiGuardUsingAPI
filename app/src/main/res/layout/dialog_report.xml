@@ -24,7 +24,7 @@
         android:layout_width="match_parent"
         android:layout_height="45dp"
         android:layout_below="@+id/tik"
-        android:background="@drawable/round_edittext"
+        android:background="@drawable/round_edittext2"
         android:gravity="center_vertical"
         android:hint="Report title  (  শিরোনাম  )"
         android:paddingStart="20dp"
