@@ -37,7 +37,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".Utils.NoticeDetailsActivity"></activity>
+        <activity android:name=".FlatListActivity"></activity>
+        <activity android:name=".Utils.NoticeDetailsActivity" />
         <activity android:name=".GuardQRCodeActivity" />
         <activity android:name=".GuardListActivity" />
         <activity android:name=".SWorkersActivity" />

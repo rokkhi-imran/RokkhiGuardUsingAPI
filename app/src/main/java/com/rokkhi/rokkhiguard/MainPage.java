@@ -82,7 +82,8 @@ public class MainPage extends AppCompatActivity {
 
 
     private static final String TAG = "MainPage";
-    CircleImageView gatepass, logout, addvis, vislist, notice, parcel, create, vehicle, child, callLogs, guardList;
+    CircleImageView gatepass, logout, addvis, vislist, notice, parcel, create, vehicle,
+            child, callLogs, guardList,coronaLayout;
     Context context;
     ImageButton settings;
     FirebaseFirestore firebaseFirestore;
@@ -124,6 +125,8 @@ public class MainPage extends AppCompatActivity {
         callLogs = findViewById(R.id.callLogs);
         guardList = findViewById(R.id.guardList);
         buildingName = findViewById(R.id.buildingNameTV);
+        coronaLayout=findViewById(R.id.coronaLayout);
+
         recyclerViewVisitorAdapter = findViewById(R.id.recyclerviewVisitorWaitingListID);
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context);
@@ -438,6 +441,13 @@ public class MainPage extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainPage.this, GuardListActivity.class);
+                startActivity(intent);
+            }
+        });
+        coronaLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent=new Intent(MainPage.this,FlatListActivity.class);
                 startActivity(intent);
             }
         });

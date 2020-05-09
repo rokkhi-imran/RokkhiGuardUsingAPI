@@ -475,6 +475,40 @@
                     android:gravity="center">
 
                     <de.hdodenhof.circleimageview.CircleImageView
+                        android:id="@+id/coronaLayout"
+                        android:layout_width="100dp"
+                        android:layout_height="100dp"
+                        android:src="@drawable/corona_icon"
+                        android:layout_centerHorizontal="true"
+                        android:layout_margin="5dp"
+                        />
+
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/coronaLayout"
+                        android:layout_centerInParent="true"
+                        android:layout_centerHorizontal="true"
+                        android:text=" লকডাউন  "
+                        android:layout_marginTop="5dp"
+                        android:textSize="18sp"
+                        android:textColor="@color/darkRed"
+                        android:textStyle="bold"
+
+                        />
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_margin="5dp"
+                    android:layout_weight="1"
+                    android:gravity="center">
+
+                    <de.hdodenhof.circleimageview.CircleImageView
                         android:id="@+id/logout"
                         android:layout_width="100dp"
                         android:layout_height="100dp"
