@@ -435,10 +435,11 @@ public class CreateProfile extends AppCompatActivity implements ActiveFlatAdapte
                     activeFlatAdapter.notifyDataSetChanged();
                     historyFlats.add(activeFlats.get(i));
                     totaltext = totaltext + " " + activeFlats.get(i).getF_no() + " ";
-                    tt.setText(totaltext);
                     unselectbutton.setVisibility(View.VISIBLE);
                     selectbutton.setVisibility(View.GONE);
                 }
+                tt.setText(totaltext);
+
             }
         });
 
@@ -451,10 +452,11 @@ public class CreateProfile extends AppCompatActivity implements ActiveFlatAdapte
                     activeFlatAdapter.notifyDataSetChanged();
                     historyFlats.remove(activeFlats.get(i));
                     totaltext = totaltext.replace(" " + activeFlats.get(i).getF_no(), " ");
-                    tt.setText(totaltext);
                     unselectbutton.setVisibility(View.GONE);
                     selectbutton.setVisibility(View.VISIBLE);
                 }
+                totaltext = "";
+                tt.setText(totaltext);
                 historyFlats.clear();
             }
         });
@@ -496,7 +498,22 @@ public class CreateProfile extends AppCompatActivity implements ActiveFlatAdapte
                     activeFlatAdapter.changedata(ss.getF_no(), false);
                     historyFlats.remove(ss);
 
-                    totaltext = totaltext.replace(ss.getF_no(), "");
+
+                    totaltext = "";
+                    //add again
+                    for (int i = 0; i < historyFlats.size(); i++) {
+
+//                        activeFlatAdapter.changedata(activeFlats.get(i).getF_no(), true);
+//                        activeFlatAdapter.notifyDataSetChanged();
+//                        historyFlats.add(activeFlats.get(i));
+                        totaltext = totaltext + " " + historyFlats.get(i).getF_no() + " ";
+
+                    }
+//                    tt.setText(totaltext);
+
+
+//                    totaltext = totaltext.replace(ss.getF_no(), "");
+
                     activeFlatAdapter.notifyDataSetChanged();
                     tt.setText(totaltext);
 

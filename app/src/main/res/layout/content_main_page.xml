@@ -493,7 +493,7 @@
                         android:text=" লকডাউন  "
                         android:layout_marginTop="5dp"
                         android:textSize="18sp"
-                        android:textColor="@color/darkRed"
+                        android:textColor="#E17F86"
                         android:textStyle="bold"
 
                         />
