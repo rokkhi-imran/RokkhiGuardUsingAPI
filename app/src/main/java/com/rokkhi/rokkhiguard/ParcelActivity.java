@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.net.Uri;
@@ -14,6 +15,8 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+
+import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -29,6 +32,11 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
+
+import com.androidnetworking.AndroidNetworking;
+import com.androidnetworking.common.Priority;
+import com.androidnetworking.error.ANError;
+import com.androidnetworking.interfaces.JSONObjectRequestListener;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -55,7 +63,11 @@ import com.vansuita.pickimage.bundle.PickSetup;
 import com.vansuita.pickimage.dialog.PickImageDialog;
 import com.vansuita.pickimage.listeners.IPickResult;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -102,6 +114,9 @@ public class ParcelActivity extends AppCompatActivity implements IPickResult{
 
         context = ParcelActivity.this;
         normalfunc= new Normalfunc();
+
+        AndroidNetworking.initialize(getApplicationContext());
+
 
         done = findViewById(R.id.done);
         cname = findViewById(R.id.cname);
@@ -508,7 +523,77 @@ public class ParcelActivity extends AppCompatActivity implements IPickResult{
         // Upload file to Firebase Storage
         Log.d(TAG, "uploadFromUri:dst:" + photoRef.getPath());
         if (bitmap != null) {
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+
+            ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+            String path = MediaStore.Images.Media.insertImage(context.getContentResolver(), bitmap, "Title", null);
+            Uri uri = Uri.parse(path);
+            Cursor cursor = getContentResolver().query(uri, null, null, null, null);
+            cursor.moveToFirst();
+            int idx = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA);
+            File file = new File(cursor.getString(idx));
+
+            Log.e(TAG, "upload: visitor image file =  "+file );
+            Log.e(TAG, "upload: visitor id =  "+parcelid );
+            AndroidNetworking.upload(StaticField.url)
+                    .addMultipartFile("image",file)// posting any type of file
+                    .addMultipartParameter("folder","parcels")
+                    .addMultipartParameter("subfolder",parcelid)
+                    .addMultipartParameter("filename","p_pic")
+                    .setPriority(Priority.MEDIUM)
+                    .build()
+                    .getAsJSONObject(new JSONObjectRequestListener() {
+                        @Override
+                        public void onResponse(JSONObject response) {
+
+                            try {
+                                String imageDownloadLink=response.getString("url");
+                                Log.e("TAG", "uploadImage: File Path =  "+imageDownloadLink);
+
+
+                                parcels.setP_pic(imageDownloadLink);
+                                parcels.setThumb_p_pic(imageDownloadLink);
+                                // doc.put("p_thumb", uri.toString());
+                                // Log.d(TAG, "onSuccess: yyyy");
+                                WriteBatch batch = firebaseFirestore.batch();
+
+                                DocumentReference off = firebaseFirestore
+                                        .collection(getString(R.string.col_parcels)).
+                                                document(parcelid);
+                                batch.set(off, parcels);
+
+                                batch.commit().addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<Void> task) {
+                                        if (task.isSuccessful()) {
+                                            //progressBar.setVisibility(View.GONE);
+                                            dismissdialog();
+                                            Toast.makeText(context, "Done!", Toast.LENGTH_SHORT).show();
+                                            gomainpage();
+                                        }
+                                    }
+                                });
+                            } catch (JSONException e) {
+                                dismissdialog();
+                                e.printStackTrace();
+                            }
+                        }
+                        @Override
+                        public void onError(ANError error) {
+                            // handle error
+//                            fullScreenAlertDialog.dismissdialog();
+
+                            dismissdialog();
+                            Toast.makeText(context, "Failed To send User", Toast.LENGTH_SHORT).show();
+
+                            Log.e("TAG = ", "onError: "+error.getErrorBody());
+                            Log.e("TAG = ", "onError: "+error.getMessage());
+                            Log.e("TAG = ", "onError: "+error);
+                        }
+                    });
+
+
+           /* ByteArrayOutputStream baos = new ByteArrayOutputStream();
             bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
 
             byte[] data = baos.toByteArray();
@@ -563,7 +648,8 @@ public class ParcelActivity extends AppCompatActivity implements IPickResult{
                             Log.w(TAG, "uploadFromUri:onFailure", exception);
 
                         }
-                    });
+                    });*/
+
         } else {
 
             WriteBatch batch = firebaseFirestore.batch();

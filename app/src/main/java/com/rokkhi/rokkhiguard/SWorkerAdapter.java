@@ -76,9 +76,7 @@ public class SWorkerAdapter extends RecyclerView.Adapter<SWorkerAdapter.SWorkerV
 
         final ServiceBuilding serviceBuilding = list.get(position);
 
-
-
-        Log.e(TAG, "onBindViewHolder: S ID  =  "+serviceBuilding.getS_id() );
+        Log.e(TAG, "onBindViewHolder: S ID  =  "+serviceBuilding );
 
         firebaseFirestore.collection(context.getString(R.string.col_sworker)).document(serviceBuilding.getS_id())
                 .addSnapshotListener(new EventListener<DocumentSnapshot>() {

@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.net.Uri;
@@ -17,6 +18,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.Observer;
 
+import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -35,6 +37,10 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.androidnetworking.AndroidNetworking;
+import com.androidnetworking.common.Priority;
+import com.androidnetworking.error.ANError;
+import com.androidnetworking.interfaces.JSONObjectRequestListener;
 import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -68,7 +74,11 @@ import com.vansuita.pickimage.bundle.PickSetup;
 import com.vansuita.pickimage.dialog.PickImageDialog;
 import com.vansuita.pickimage.listeners.IPickResult;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -131,6 +141,8 @@ public class CreateProfile extends AppCompatActivity implements ActiveFlatAdapte
         setSupportActionBar(toolbar);
         normalfunc = new Normalfunc();
         flag = false;
+
+        AndroidNetworking.initialize(getApplicationContext());
 
         context = CreateProfile.this;
 
@@ -850,6 +862,119 @@ public class CreateProfile extends AppCompatActivity implements ActiveFlatAdapte
         // Upload file to Firebase Storage
         Log.d(TAG, "uploadFromUri:dst:" + photoRef.getPath());
         if (bitmap != null) {
+
+
+
+
+            ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+            String path = MediaStore.Images.Media.insertImage(context.getContentResolver(), bitmap, "Title", null);
+            Uri uri = Uri.parse(path);
+            Cursor cursor = getContentResolver().query(uri, null, null, null, null);
+            cursor.moveToFirst();
+            int idx = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA);
+            File file = new File(cursor.getString(idx));
+
+            Log.e(TAG, "upload: visitor image file =  "+file );
+            Log.e(TAG, "upload: s_id  id =  "+s_id );
+            AndroidNetworking.upload(StaticField.url)
+                    .addMultipartFile("image",file)// posting any type of file
+                    .addMultipartParameter("folder","sworkers")
+                    .addMultipartParameter("subfolder",s_id)
+                    .addMultipartParameter("filename","s_pic")
+                    .setPriority(Priority.MEDIUM)
+                    .build()
+                    .getAsJSONObject(new JSONObjectRequestListener() {
+                        @Override
+                        public void onResponse(JSONObject response) {
+
+                            try {
+                                String imageDownloadLink=response.getString("url");
+                                Log.e("TAG", "uploadImage: File Path =  "+imageDownloadLink);
+
+
+
+                                doc.put("s_pic", imageDownloadLink);
+                                doc.put("thumb_s_pic", imageDownloadLink);
+
+                                WriteBatch batch = firebaseFirestore.batch();
+
+
+                                //office update
+
+                                DocumentReference setsworker = firebaseFirestore.collection(getString(R.string.col_sworker))
+                                        .document(s_id);
+
+                                batch.set(setsworker, doc);
+
+                                if (typeselected.getEnglish().equals("guard")) {
+
+                                    final Guards guards = new Guards(buildid, commid, username.getText().toString()
+                                            , normalfunc.getRandomNumberString5(), "", Calendar.getInstance().getTime(),  Calendar.getInstance().getTime(), "", imageDownloadLink, "", imageDownloadLink,
+                                            normalfunc.makephone14(phone.getText().toString()), s_id, ll1);
+                                    DocumentReference setguard = firebaseFirestore.collection(getString(R.string.col_guards))
+                                            .document(s_id);
+
+                                    batch.set(setguard, guards);
+
+                                }
+
+                                ArrayList<String> stringid = new ArrayList<>();
+                                ArrayList<String> stringno = new ArrayList<>();
+
+                                for (int i = 0; i < historyFlats.size(); i++) {
+                                    stringid.add(historyFlats.get(i).getFlat_id());
+                                    stringno.add(historyFlats.get(i).getF_no());
+                                }
+
+                                SLastHistory sLastHistory = new SLastHistory(s_id, buildid, stringid, stringno, Calendar.getInstance().getTime());
+                                DocumentReference setflat = firebaseFirestore.collection(getString(R.string.col_sworker))
+                                        .document(s_id).collection("shistory").document(buildid);
+
+                                batch.set(setflat, sLastHistory);
+
+
+                                batch.commit().addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<Void> task) {
+                                        if (task.isSuccessful()) {
+                                            Log.d(TAG, "onComplete: yyyy");
+                                            //progressBar.setVisibility(View.GONE);
+                                            dismissdialog();
+                                            Toast.makeText(context, "Done!", Toast.LENGTH_SHORT).show();
+                                            username.setText("");
+                                            phone.setText("");
+                                            flats.setText("");
+                                            type.setText("");
+
+//                                                UniversalImageLoader.setImage("", userphoto, null, "");
+                                        }
+                                    }
+                                });
+
+
+
+                            } catch (JSONException e) {
+                                dismissdialog();
+                                e.printStackTrace();
+                            }
+                        }
+                        @Override
+                        public void onError(ANError error) {
+                            // handle error
+//                            fullScreenAlertDialog.dismissdialog();
+
+                            dismissdialog();
+                            Toast.makeText(context, "Failed To Upload Image Try again Later", Toast.LENGTH_SHORT).show();
+
+                            Log.e("TAG = ", "onError: "+error.getErrorBody());
+                            Log.e("TAG = ", "onError: "+error.getMessage());
+                            Log.e("TAG = ", "onError: "+error);
+                        }
+                    });
+
+
+/*
             final ByteArrayOutputStream baos = new ByteArrayOutputStream();
             bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
 
@@ -940,7 +1065,7 @@ public class CreateProfile extends AppCompatActivity implements ActiveFlatAdapte
                             Log.w(TAG, "uploadFromUri:onFailure", exception);
 
                         }
-                    });
+                    });*/
         } else {
             WriteBatch batch = firebaseFirestore.batch();
 
