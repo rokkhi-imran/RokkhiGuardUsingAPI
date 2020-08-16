@@ -209,7 +209,7 @@ public class GatePass extends AppCompatActivity implements View.OnClickListener,
                         profilecreate.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                Intent intent= new Intent(context, CreateProfile.class);
+                                Intent intent= new Intent(context, CreateProfileActivity.class);
                                 startActivity(intent);
                                 finish();
                             }
@@ -271,7 +271,7 @@ public class GatePass extends AppCompatActivity implements View.OnClickListener,
                         profilecreate.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                Intent intent= new Intent(context, CreateProfile.class);
+                                Intent intent= new Intent(context, CreateProfileActivity.class);
                                 startActivity(intent);
                                 finish();
                             }

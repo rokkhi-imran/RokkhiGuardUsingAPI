@@ -43,7 +43,6 @@ import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONObjectRequestListener;
 import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -58,9 +57,10 @@ import com.google.firebase.firestore.SetOptions;
 import com.google.firebase.firestore.WriteBatch;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
 import com.rokkhi.rokkhiguard.Model.ActiveFlats;
 import com.rokkhi.rokkhiguard.Model.BuildingChanges;
+import com.rokkhi.rokkhiguard.Model.BuildingServiceWorkers;
+import com.rokkhi.rokkhiguard.Model.FlatServiceWorkers;
 import com.rokkhi.rokkhiguard.Model.Guards;
 import com.rokkhi.rokkhiguard.Model.SLastHistory;
 import com.rokkhi.rokkhiguard.Model.Swroker;
@@ -91,14 +91,14 @@ import javax.annotation.Nullable;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 
-public class CreateProfile extends AppCompatActivity implements ActiveFlatAdapter.MyInterface, IPickResult {
+public class CreateProfileActivity extends AppCompatActivity implements ActiveFlatAdapter.MyInterface, IPickResult {
 
     private static final String TAG = "CreateProfile";
     CircleImageView userphoto;
     ArrayList<Types> types;
     ArrayList<ActiveFlats> activeFlats;
     EditText username, phone, type, flats, pins;
-    Button done, generate;
+    Button SubmitBtn, generate;
     Map<String, Object> doc, shistory;
     String mFileUri = "";
     Context context;
@@ -107,7 +107,6 @@ public class CreateProfile extends AppCompatActivity implements ActiveFlatAdapte
     SharedPreferences.Editor editor;
     SharedPreferences sharedPref;
     ProgressBar progressBar;
-    StorageReference photoRef;
     Calendar myCalendar;
     Types typeselected;
     ActiveFlats flatselected;
@@ -144,9 +143,9 @@ public class CreateProfile extends AppCompatActivity implements ActiveFlatAdapte
 
         AndroidNetworking.initialize(getApplicationContext());
 
-        context = CreateProfile.this;
+        context = CreateProfileActivity.this;
 
-        done = findViewById(R.id.done);
+        SubmitBtn = findViewById(R.id.done);
         username = findViewById(R.id.user_name);
         phone = findViewById(R.id.user_Phone_ET);
         //changepic = findViewById(R.id.changeProfilePhoto);
@@ -639,7 +638,7 @@ public class CreateProfile extends AppCompatActivity implements ActiveFlatAdapte
                                         Log.e(TAG, "onClick: " + list.get(0).getS_id());
                                         Log.e(TAG, "onClick: " + list.get(0).getWho_add());
 
-                                        startActivity(new Intent(CreateProfile.this, EditWrokerProfileActivity.class)
+                                        startActivity(new Intent(CreateProfileActivity.this, EditWrokerProfileActivity.class)
                                                 .putExtra("s_id", list.get(0).getS_id())
                                                 .putExtra("who_add", list.get(0).getWho_add())
                                                 .putExtra("buildingNameTV", list.get(0).getS_name())
@@ -679,7 +678,7 @@ public class CreateProfile extends AppCompatActivity implements ActiveFlatAdapte
 
                                 name.setText(list.get(0).getS_name());
                                 gatepass.setText("Gatepass: " + list.get(0).getS_pass());
-                                Glide.with(CreateProfile.this).load(list.get(0).getThumb_s_pic())
+                                Glide.with(CreateProfileActivity.this).load(list.get(0).getThumb_s_pic())
                                         .placeholder(R.drawable.male1).into(pic);
 
 //                                UniversalImageLoader.setImage(list.get(0).getThumb_s_pic(), pic, null, "");
@@ -728,11 +727,11 @@ public class CreateProfile extends AppCompatActivity implements ActiveFlatAdapte
 
                 PickImageDialog.build(setup)
                         //.setOnClick(this)
-                        .show(CreateProfile.this);
+                        .show(CreateProfileActivity.this);
             }
         });
 
-        done.setOnClickListener(new View.OnClickListener() {
+        SubmitBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
@@ -824,7 +823,7 @@ public class CreateProfile extends AppCompatActivity implements ActiveFlatAdapte
     public void upload() {
 
 
-        List<String> ll = normalfunc.splitstring(username.getText().toString().toLowerCase());
+        final List<String> ll = normalfunc.splitstring(username.getText().toString().toLowerCase());
         ll.add(normalfunc.makephone11(phone.getText().toString()));
         ll.add(normalfunc.makephone14(phone.getText().toString()));
         ll.addAll(normalfunc.splitchar(typeselected.getEnglish().toLowerCase()));
@@ -833,6 +832,9 @@ public class CreateProfile extends AppCompatActivity implements ActiveFlatAdapte
 
 
         final String s_id = firebaseFirestore.collection(getString(R.string.col_sworker)).document().getId();
+
+        final String autoID_buildingServiceWorkers = firebaseFirestore.collection("BuildingServiceWorkers").document().getId();
+
 
         doc = new HashMap<>();
         doc.put("s_name", username.getText().toString()); //
@@ -854,17 +856,7 @@ public class CreateProfile extends AppCompatActivity implements ActiveFlatAdapte
         doc.put("address", new ArrayList<>());
         doc.put("s_array", ll); //
 
-
-        photoRef = FirebaseStorage.getInstance().getReference()
-                .child("sworkers/" + s_id + "/s_pic");
-
-
-        // Upload file to Firebase Storage
-        Log.d(TAG, "uploadFromUri:dst:" + photoRef.getPath());
         if (bitmap != null) {
-
-
-
 
             ByteArrayOutputStream bytes = new ByteArrayOutputStream();
             bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
@@ -934,6 +926,68 @@ public class CreateProfile extends AppCompatActivity implements ActiveFlatAdapte
                                 batch.set(setflat, sLastHistory);
 
 
+                                //add worker on building and flat
+
+                                BuildingServiceWorkers buildingServiceWorkers = new BuildingServiceWorkers(
+                                        autoID_buildingServiceWorkers,
+                                        buildid,
+                                        commid,
+                                        s_id,
+                                        "",
+                                        typeselected.getType_id(),
+                                        ll,
+                                        0,
+                                        FirebaseAuth.getInstance().getUid(),
+                                        Calendar.getInstance().getTime(),
+                                        "",
+                                        Calendar.getInstance().getTime(),
+                                        "",
+                                        Calendar.getInstance().getTime(),
+                                        Calendar.getInstance().getTime(),
+                                        Calendar.getInstance().getTime()
+                                );
+
+                                DocumentReference buildingServiceWorkersRef = firebaseFirestore.collection("BuildingServiceWorkers")
+                                        .document(autoID_buildingServiceWorkers);
+
+                                batch.set(buildingServiceWorkersRef, buildingServiceWorkers);
+
+                                for(int i=0;i<historyFlats.size();i++){
+                                    final String autoID_FlatServiceWorkers = firebaseFirestore.collection("FlatServiceWorkers").document().getId();
+
+                                    FlatServiceWorkers flatServiceWorkers = new FlatServiceWorkers(
+                                            autoID_FlatServiceWorkers,
+                                            historyFlats.get(i).getF_no(),
+                                            historyFlats.get(i).getFlat_id(),
+                                            buildid,
+                                            commid,
+                                            s_id,
+                                            typeselected.getType_id(),
+                                            ll,
+                                            0,
+                                            0,
+                                            "",
+                                            Calendar.getInstance().getTime(),
+                                            Calendar.getInstance().getTime(),
+                                            0,
+                                            FirebaseAuth.getInstance().getUid(),
+                                            Calendar.getInstance().getTime(),
+                                            "",
+                                            Calendar.getInstance().getTime(),
+                                            Calendar.getInstance().getTime(),
+                                            Calendar.getInstance().getTime(),
+                                            normalfunc.makephone14(phone.getText().toString())
+                                    );
+                                    DocumentReference flatServiceWorkersRef = firebaseFirestore.collection("FlatServiceWorkers")
+                                            .document(autoID_FlatServiceWorkers);
+
+                                    batch.set(flatServiceWorkersRef, flatServiceWorkers);
+                                }
+                                //add worker on building and flat End
+
+
+
+
                                 batch.commit().addOnCompleteListener(new OnCompleteListener<Void>() {
                                     @Override
                                     public void onComplete(@NonNull Task<Void> task) {
@@ -947,7 +1001,6 @@ public class CreateProfile extends AppCompatActivity implements ActiveFlatAdapte
                                             flats.setText("");
                                             type.setText("");
 
-//                                                UniversalImageLoader.setImage("", userphoto, null, "");
                                         }
                                     }
                                 });
@@ -961,9 +1014,6 @@ public class CreateProfile extends AppCompatActivity implements ActiveFlatAdapte
                         }
                         @Override
                         public void onError(ANError error) {
-                            // handle error
-//                            fullScreenAlertDialog.dismissdialog();
-
                             dismissdialog();
                             Toast.makeText(context, "Failed To Upload Image Try again Later", Toast.LENGTH_SHORT).show();
 
@@ -1102,6 +1152,68 @@ public class CreateProfile extends AppCompatActivity implements ActiveFlatAdapte
             batch.set(setflat, sLastHistory);
 
 
+
+            //add worker on building and flat
+
+            BuildingServiceWorkers buildingServiceWorkers = new BuildingServiceWorkers(
+                    autoID_buildingServiceWorkers,
+                    buildid,
+                    commid,
+                    s_id,
+                    "",
+                    typeselected.getType_id(),
+                    ll,
+                    0,
+                    FirebaseAuth.getInstance().getUid(),
+                    Calendar.getInstance().getTime(),
+                    "",
+                    Calendar.getInstance().getTime(),
+                    "",
+                    Calendar.getInstance().getTime(),
+                    Calendar.getInstance().getTime(),
+                    Calendar.getInstance().getTime()
+            );
+
+            DocumentReference buildingServiceWorkersRef = firebaseFirestore.collection("BuildingServiceWorkers")
+                    .document(autoID_buildingServiceWorkers);
+
+            batch.set(buildingServiceWorkersRef, buildingServiceWorkers);
+
+            for(int i=0;i<historyFlats.size();i++){
+                final String autoID_FlatServiceWorkers = firebaseFirestore.collection("FlatServiceWorkers").document().getId();
+
+
+                FlatServiceWorkers flatServiceWorkers = new FlatServiceWorkers(
+                        autoID_FlatServiceWorkers,
+                        historyFlats.get(i).getF_no(),
+                        historyFlats.get(i).getFlat_id(),
+                        buildid,
+                        commid,
+                        s_id,
+                        typeselected.getType_id(),
+                        ll,
+                        0,
+                        0,
+                        "",
+                        Calendar.getInstance().getTime(),
+                        Calendar.getInstance().getTime(),
+                        0,
+                        FirebaseAuth.getInstance().getUid(),
+                        Calendar.getInstance().getTime(),
+                        "",
+                        Calendar.getInstance().getTime(),
+                        Calendar.getInstance().getTime(),
+                        Calendar.getInstance().getTime(),
+                        normalfunc.makephone14(phone.getText().toString())
+                );
+                DocumentReference flatServiceWorkersRef = firebaseFirestore.collection("FlatServiceWorkers")
+                        .document(autoID_FlatServiceWorkers);
+
+                batch.set(flatServiceWorkersRef, flatServiceWorkers);
+            }
+            //add worker on building and flat End
+
+
             batch.commit().addOnCompleteListener(new OnCompleteListener<Void>() {
                 @Override
                 public void onComplete(@NonNull Task<Void> task) {
@@ -1114,7 +1226,7 @@ public class CreateProfile extends AppCompatActivity implements ActiveFlatAdapte
                         phone.setText("");
                         flats.setText("");
                         type.setText("");
-//                        UniversalImageLoader.setImage("", userphoto, null, "");
+
                     }
                 }
             });
@@ -1129,14 +1241,7 @@ public class CreateProfile extends AppCompatActivity implements ActiveFlatAdapte
     @Override
     public void onPickResult(PickResult r) {
         if (r.getError() == null) {
-            //If you want the Uri.
-            //Mandatory to refresh image from Uri.
-            //getImageView().setImageURI(null);
 
-            //Setting the real returned image.
-            //getImageView().setImageURI(r.getUri());
-
-            //If you want the Bitmap.
 
             userphoto.setImageURI(null);
 
@@ -1144,7 +1249,7 @@ public class CreateProfile extends AppCompatActivity implements ActiveFlatAdapte
             bitmap = r.getBitmap();
             userphoto.setImageBitmap(r.getBitmap());
 
-            //r.getPath();
+
         } else {
             //Handle possible errors
             //TODO: do what you have to do with r.getError();

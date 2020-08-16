@@ -129,7 +129,7 @@ public class DaroanPass extends AppCompatActivity implements View.OnClickListene
 
         //check Storage permission End
 
-        //check  unknown Source INstall Start
+   /*     //check  unknown Source INstall Start
 
         boolean success = false;
         int result = Settings.Secure.getInt(getContentResolver(),
@@ -139,7 +139,7 @@ public class DaroanPass extends AppCompatActivity implements View.OnClickListene
             Toast.makeText(this, "status = "+success, Toast.LENGTH_SHORT).show();
         }
 
-        //check  unknown Source INstall End
+        //check  unknown Source Install End*/
 
 
         Log.d(TAG, "onCreate: xxx ");
