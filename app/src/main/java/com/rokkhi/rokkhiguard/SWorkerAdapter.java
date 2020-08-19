@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -76,7 +77,6 @@ public class SWorkerAdapter extends RecyclerView.Adapter<SWorkerAdapter.SWorkerV
 
         final ServiceBuilding serviceBuilding = list.get(position);
 
-        Log.e(TAG, "onBindViewHolder: S ID  =  "+serviceBuilding );
 
         firebaseFirestore.collection(context.getString(R.string.col_sworker)).document(serviceBuilding.getS_id())
                 .addSnapshotListener(new EventListener<DocumentSnapshot>() {
@@ -84,14 +84,21 @@ public class SWorkerAdapter extends RecyclerView.Adapter<SWorkerAdapter.SWorkerV
                     public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
                         if(e!=null)return;
                         if(documentSnapshot.exists()){
-                            Swroker sworker = documentSnapshot.toObject(Swroker.class);
-                            Log.e(TAG, "onEvent:getAddress "+sworker.getAddress() );
-                            holder.name.setText(sworker.getS_name());
+                            try {
 
-                            Glide.with(context.getApplicationContext()).load(sworker.getThumb_s_pic()).placeholder(R.drawable.male1).into(holder.propic);
+                                Swroker sworker = documentSnapshot.toObject(Swroker.class);
+                                Log.e(TAG, "onEvent:getAddress "+sworker.getAddress() );
+                                holder.name.setText(sworker.getS_name());
 
+                                Glide.with(context.getApplicationContext()).load(sworker.getThumb_s_pic()).placeholder(R.drawable.male1).into(holder.propic);
 
-//                            UniversalImageLoader.setImage(sworker.getThumb_s_pic(), holder.propic, null, "");
+                            }catch (Exception e1){
+                                Log.e(TAG, "onBindViewHolder: S ID  =  "+serviceBuilding.getS_id() );
+
+                                StaticField.sendExceptionFunction(e1,context,"SWorkerAdapter");
+
+                                Toast.makeText(context, "Somethings got unexpected", Toast.LENGTH_SHORT).show();
+                            }
 
                         }
                     }
@@ -101,7 +108,9 @@ public class SWorkerAdapter extends RecyclerView.Adapter<SWorkerAdapter.SWorkerV
         holder.view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showdialog(serviceBuilding.getS_id());
+
+                    showdialog(serviceBuilding.getS_id());
+
             }
         });
 
@@ -127,14 +136,20 @@ public class SWorkerAdapter extends RecyclerView.Adapter<SWorkerAdapter.SWorkerV
                     Log.d(TAG, "onComplete:  cjj2 " );
                     ArrayList<Swroker> list1 = new ArrayList<>();
                     for (DocumentSnapshot document : task.getResult()) {
-                        Swroker swroker = document.toObject(Swroker.class);
-                        list1.add(swroker);
-                    }
+                        try {
 
+                            Swroker swroker = document.toObject(Swroker.class);
+                            list1.add(swroker);
+
+                        }catch (Exception e){
+                            alertDialog.dismiss();
+                            StaticField.sendExceptionFunction(e,context,"SWorkerAdapter");
+                            Toast.makeText(context, R.string.somethig_got_unexpected, Toast.LENGTH_SHORT).show();
+                        }
+                    }
                     GateAdapter gateAdapter = new GateAdapter(list1,context);
                     gateAdapter.setHasStableIds(true);
                     recyclerView.setAdapter(gateAdapter);
-
 
                 }
                 else Log.d(TAG, "onComplete:  cjj3");

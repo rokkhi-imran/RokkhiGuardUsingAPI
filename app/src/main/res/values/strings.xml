@@ -182,6 +182,7 @@
     <string name="title_activity_call">CallActivity</string>
     <string name="col_blackList">blackLists</string>
     <string name="col_guardApkProblem">guardApkProblem</string>
+    <string name="somethig_got_unexpected">Something got Unexpected</string>
     <string-array name="pref_example_list_titles">
         <item>Always</item>
         <item>When possible</item>
