@@ -31,6 +31,9 @@ public interface WhiteListDao {
 
     @Delete
     void deleteWhiteList(Whitelist note);
+
+    @Query("DELETE FROM Whitelist")
+    void dropWhiteListTable();
 /*
 
     @Query("DELETE  FROM Whitelist WHERE build_id !=:buildId")

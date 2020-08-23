@@ -36,4 +36,8 @@ public interface ActiveFlatsDao {
     @Delete
     void deleteActiveFlat(ActiveFlats note);
 
+
+    @Query("DELETE FROM ActiveFlats")
+    void dropActiveFlat();
+
 }

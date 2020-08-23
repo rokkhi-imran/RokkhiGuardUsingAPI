@@ -23,8 +23,12 @@ public interface BlackListDao {
     @Query("SELECT * FROM BlackList WHERE flatID =:flatId AND phone=:b_phone")
     public LiveData<List<BlackList>> fetchBlackListWithPhoneAndFlatId(int flatId , String b_phone);
 
+
     @Delete
     public void deleteBlackList(BlackList note);
 
+
+    @Query("DELETE FROM BlackList")
+    public void dropBlackListTable();
 
 }

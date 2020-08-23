@@ -33,25 +33,6 @@ public class WhiteListRepository {
         }.execute();
     }
 
- /*   public static void deleteTask(final String build_id) {
-        //final LiveData<ActiveFlats> task = getTask(id);
-        new AsyncTask<Void, Void, Void>() {
-            @Override
-            protected Void doInBackground(Void... voids) {
-                whitelistDatabase.whiteListDao().getWhitelistsforDeletion(build_id);
-                return null;
-            }
-        }.execute();
-    }
-*/
-
-
-/*
-
-    public LiveData<List<Whitelist>> getWhiteListFromPhoneAndFlatId(int flat_id , String w_phone) {
-        return whitelistDatabase.whiteListDao().fetchWhiteListWithPhoneAndFlatId(flat_id , w_phone);
-    }
-*/
 
 
     public LiveData<List<Whitelist>> getAllWhiteList(String buildID) {
@@ -63,6 +44,16 @@ public class WhiteListRepository {
             @Override
             protected Void doInBackground(Void... voids) {
                 whitelistDatabase.whiteListDao().deleteWhiteList(whiteList);
+                return null;
+            }
+        }.execute();
+    }
+
+    public static void dropWhiteListTable() {
+        new AsyncTask<Void, Void, Void>() {
+            @Override
+            protected Void doInBackground(Void... voids) {
+                whitelistDatabase.whiteListDao().dropWhiteListTable();
                 return null;
             }
         }.execute();

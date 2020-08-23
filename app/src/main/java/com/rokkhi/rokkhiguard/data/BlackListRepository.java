@@ -48,5 +48,14 @@ public class BlackListRepository {
             }
         }.execute();
     }
+    public static void dropBlackListTable() {
+        new AsyncTask<Void, Void, Void>() {
+            @Override
+            protected Void doInBackground(Void... voids) {
+                blacklistDatabase.blackListDao().dropBlackListTable();
+                return null;
+            }
+        }.execute();
+    }
 
 }

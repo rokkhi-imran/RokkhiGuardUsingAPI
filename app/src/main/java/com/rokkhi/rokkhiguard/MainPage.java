@@ -530,6 +530,10 @@ public class MainPage extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {
+
+                    //drop flat table
+                    flatsRepository.dropActiveFlat();
+
                     Log.e(TAG, "onComplete: pppp");
                     for (DocumentSnapshot documentSnapshot : task.getResult()) {
                         ActiveFlats activeFlat = documentSnapshot.toObject(ActiveFlats.class);
@@ -575,6 +579,11 @@ public class MainPage extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {
+
+                    //drop WhiteList Table
+
+                    whiteListRepository.dropWhiteListTable();
+
 
                     for (DocumentSnapshot documentSnapshot : task.getResult()) {
                         Whitelist whitelist = documentSnapshot.toObject(Whitelist.class);
@@ -625,14 +634,18 @@ public class MainPage extends AppCompatActivity {
 
                 if (task.isSuccessful()) {
 
-                    Log.e(TAG, "onComplete: black Task success" );
-                    for (DocumentSnapshot documentSnapshot : task.getResult()) {
+                    //first remove the table data
+                    blackListRepository.dropBlackListTable();
 
-                        BlackList blackList = documentSnapshot.toObject(BlackList.class);
-                        Log.e(TAG, "onComplete: BlackList = " + blackList.getPhone());
-                        blackListRepository.deleteBlackList(blackList);
-                        blackListRepository.insert(blackList);
-                    }
+                        for (DocumentSnapshot documentSnapshot : task.getResult()) {
+
+                            BlackList blackList = documentSnapshot.toObject(BlackList.class);
+                            Log.e(TAG, "onComplete: BlackList add = " + blackList.getPhone());
+                            blackListRepository.deleteBlackList(blackList);
+                            blackListRepository.insert(blackList);
+                        }
+
+
 
 
                     Map<String, Object> data = new HashMap<>();
@@ -690,6 +703,9 @@ public class MainPage extends AppCompatActivity {
                 if (task.isSuccessful()) {
 
                     final ArrayList<Vehicle> check = new ArrayList<>();
+                    //first drop the table
+                    vehiclesRepository.dropVehicleTable();
+
                     Log.e("room", "getting new vehicle success " + "adsf");
                     for (DocumentSnapshot documentSnapshot : task.getResult()) {
                         Vehicle vehicle = documentSnapshot.toObject(Vehicle.class);

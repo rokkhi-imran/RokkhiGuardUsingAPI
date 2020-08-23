@@ -35,4 +35,7 @@ public interface VehiclesDao {
 
     @Delete
     void deleteVehicle(Vehicle vehicle);
+
+    @Query("DELETE FROM Vehicle")
+    void dropVehicleTable();
 }

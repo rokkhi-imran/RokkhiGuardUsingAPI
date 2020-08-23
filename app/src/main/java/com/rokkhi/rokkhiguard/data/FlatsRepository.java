@@ -34,46 +34,28 @@ public class FlatsRepository {
     }
 
 
-
-//    public LiveData<ActiveFlats> getFlatWithId(int flat_id) {
-//        return activeFlatsDatabase.roomDao().getActiveFlat(flat_id);
-//    }
-
     public LiveData<List<ActiveFlats>> getAllActiveFlats(String buildID) {
         return activeFlatsDatabase.roomDao().fetchAllActiveFlats(buildID);
 
 
     }
 
-//    public static void updateTask(final ActiveFlats activeFlats) {
-//        activeFlats.setModifiedAt(AppUtils.getCurrentDateTime());
-//
-//        new  AsyncTask<Void, Void, Void>() {
-//            @Override
-//            protected Void doInBackground(Void... voids) {
-//                RoomDB.roomDao().updateTask(activeFlats);
-//                return null;
-//            }
-//        }.execute();
-//    }
-//
-/*    public static void deleteTask(final String build_id) {
-        //final LiveData<ActiveFlats> task = getTask(id);
-        new AsyncTask<Void, Void, Void>() {
-            @Override
-            protected Void doInBackground(Void... voids) {
-                activeFlatsDatabase.roomDao().getActiveFlatsforDeletion(build_id);
-                return null;
-            }
-        }.execute();
-    }*/
-//
     public static void deleteActiveFlat(final ActiveFlats activeFlats) {
         new AsyncTask<Void, Void, Void>() {
             @Override
             protected Void doInBackground(Void... voids) {
 
                 activeFlatsDatabase.roomDao().deleteActiveFlat(activeFlats);
+                return null;
+            }
+        }.execute();
+    }
+    public static void dropActiveFlat() {
+        new AsyncTask<Void, Void, Void>() {
+            @Override
+            protected Void doInBackground(Void... voids) {
+
+                activeFlatsDatabase.roomDao().dropActiveFlat();
                 return null;
             }
         }.execute();

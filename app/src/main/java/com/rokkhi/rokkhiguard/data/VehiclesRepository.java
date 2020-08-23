@@ -65,6 +65,15 @@ public class VehiclesRepository {
             }
         }.execute();
     }
+    public static void dropVehicleTable() {
+        new AsyncTask<Void, Void, Void>() {
+            @Override
+            protected Void doInBackground(Void... voids) {
+                vehiclesDatabase.vehicleDao().dropVehicleTable();
+                return null;
+            }
+        }.execute();
+    }
 
 }
 
