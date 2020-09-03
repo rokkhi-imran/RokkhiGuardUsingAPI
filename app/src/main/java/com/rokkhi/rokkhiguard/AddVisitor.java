@@ -165,6 +165,7 @@ public class AddVisitor extends AppCompatActivity implements IPickResult {
         normalfunc = new Normalfunc();
         flag = false;
 
+
         AndroidNetworking.initialize(getApplicationContext());
 
         recyclerViewWaitingList = findViewById(R.id.visitorListRecycelrViewID);
@@ -205,6 +206,7 @@ public class AddVisitor extends AppCompatActivity implements IPickResult {
         initonclick();
         listener();
 
+        visitorDataPushDemo();
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         linearLayoutManager.setOrientation(RecyclerView.HORIZONTAL);
@@ -214,6 +216,7 @@ public class AddVisitor extends AppCompatActivity implements IPickResult {
 
 
     }
+
 
     private void loadWaitingVisitorList() {
 
@@ -556,8 +559,73 @@ public class AddVisitor extends AppCompatActivity implements IPickResult {
         });
     }
 
+
+    private void visitorDataPushDemo() {
+
+        List<String> ll = normalfunc.splitstring("abc");
+        ll.add("abc");
+        ll.add("abc");
+        ll.add("abc");
+
+
+
+
+        doc = new HashMap<>();
+        doc.put("time", FieldValue.serverTimestamp());
+        doc.put("another_uid", "");
+        doc.put("v_name", "abc");
+        doc.put("v_mail", "");
+        doc.put("v_phone", "abc");
+        doc.put("v_purpose", "abc");
+        doc.put("v_where", "abc");
+        doc.put("v_gpass", "abc");
+        doc.put("flat_id", "abc");
+        doc.put("f_no", "abc");
+        doc.put("comm_id", "abc");
+        doc.put("build_id", "abc");
+        doc.put("v_vehicleno", "abc");
+        doc.put("v_pic", "");
+        doc.put("thumb_v_pic", "");
+
+        doc.put("in", true);
+        doc.put("completed", false);
+        doc.put("response", "abc");
+        doc.put("v_type", "abc");
+        doc.put("v_array", ll);
+        doc.put("responder", "abc");
+
+        visitorid = firebaseFirestore
+                .collection(getString(R.string.col_visitors)).document().getId();
+        doc.put("v_uid", visitorid);
+
+
+            firebaseFirestore
+                    .collection(getString(R.string.col_visitors)).document(visitorid)
+                    .set(doc).
+                    addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if (task.isSuccessful()) {
+
+                                FirebaseFirestore firebaseFirestore1=FirebaseFirestore.getInstance();
+                                firebaseFirestore1.collection(getString(R.string.col_visitors))
+                                        .document(visitorid).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void aVoid) {
+                                        Toast.makeText(context, "Removed", Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+
+                            } else {
+                                Log.d(TAG, "onComplete: yyy3");
+                            }
+                        }
+                    });
+
+    }
+
     public void upload() {
-        Log.e(TAG, "upload: getFlat_id() = = " + selected);
+
         if (selected == null) {
             dismissdialog();
             flat.setText("");
