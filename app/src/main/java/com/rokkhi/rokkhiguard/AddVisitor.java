@@ -598,7 +598,6 @@ public class AddVisitor extends AppCompatActivity implements IPickResult {
                 .collection(getString(R.string.col_visitors)).document().getId();
         doc.put("v_uid", visitorid);
 
-
             firebaseFirestore
                     .collection(getString(R.string.col_visitors)).document(visitorid)
                     .set(doc).
@@ -612,7 +611,7 @@ public class AddVisitor extends AppCompatActivity implements IPickResult {
                                         .document(visitorid).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
                                     @Override
                                     public void onSuccess(Void aVoid) {
-                                        Toast.makeText(context, "Removed", Toast.LENGTH_SHORT).show();
+
                                     }
                                 });
 
