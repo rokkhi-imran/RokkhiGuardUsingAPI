@@ -100,8 +100,6 @@ public class ChildAdapter extends RecyclerView.Adapter<ChildAdapter.ChildViewHol
 
         Glide.with(context).load(child.getThumb_m_pic()).placeholder(R.drawable.male1).into(holder.propic);
 
-
-//        UniversalImageLoader.setImage(child.getThumb_m_pic(), holder.propic, null, "");
         if (child.isActivated()) {
             holder.active.setText("ACTIVE");
             holder.active.setTextColor(ContextCompat.getColor(context, R.color.green));
@@ -113,13 +111,7 @@ public class ChildAdapter extends RecyclerView.Adapter<ChildAdapter.ChildViewHol
             @Override
             public void onClick(View view) {
 
-/*
-//make phone call
-                view.getContext().startActivity(new Intent(view.getContext(), MainActivity.class)
-                .putExtra("phoneNumber",child.getPhoneno()));
-//                myInterface.callparents(child.getPhoneno());
 
-                */
                 getFlatUser(child.getFlat_id());
 
 

@@ -301,7 +301,7 @@ public class CreateProfileActivity extends AppCompatActivity implements ActiveFl
         // final FlatsRepository flatsRepository = new FlatsRepository(this);
 
         firebaseFirestore.collection(getString(R.string.col_activeflat))
-                .whereEqualTo("build_id", buildid).orderBy("f_no", Query.Direction.ASCENDING).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                .whereEqualTo("build_id", buildid).orderBy("f_no", Query.Direction.DESCENDING).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {

@@ -526,7 +526,7 @@ public class MainPage extends AppCompatActivity {
         Log.e(TAG, "getAllActiveFlatsAndSaveToLocalDatabase: save flats");
 
         firebaseFirestore.collection(getString(R.string.col_activeflat))
-                .whereEqualTo("build_id", buildid).orderBy("f_no", Query.Direction.ASCENDING).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                .whereEqualTo("build_id", buildid).orderBy("f_no", Query.Direction.DESCENDING).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {

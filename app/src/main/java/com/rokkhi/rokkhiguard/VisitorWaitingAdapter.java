@@ -484,7 +484,7 @@ public class VisitorWaitingAdapter extends RecyclerView.Adapter<VisitorWaitingAd
         View convertView = (View) LayoutInflater.from(context).inflate(R.layout.custom_list_forusers, null);
         final ListView lv = (ListView) convertView.findViewById(R.id.listView1);
         alertcompany.setView(convertView);
-        alertcompany.setCancelable(false);
+        alertcompany.setCancelable(true);
         //valueAdapter.notifyDataSetChanged();
 
         lv.setAdapter(usersAdapter);

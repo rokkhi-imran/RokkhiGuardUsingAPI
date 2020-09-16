@@ -19,13 +19,16 @@
 
     <TextView
         android:id="@+id/title"
-        android:layout_width="wrap_content"
+        android:justificationMode="inter_word"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
         android:layout_marginTop="12dp"
+        android:layout_marginEnd="15dp"
         android:text="title"
         android:textColor="@color/black"
         android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/one"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -36,11 +39,13 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
         android:layout_marginTop="4dp"
+        android:justificationMode="inter_word"
+        android:layout_marginEnd="15dp"
+        android:paddingRight="4dp"
         android:text="fhsuafus fsihfihsi diasfhjiawshfi sfjsofjosffsos fsiajfsoihjf sfojsojfos fsojfosjfo focjsofjso
 jfojsofjos fpsfpksp fsjjfjspfj"
         android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@+id/one"
         app:layout_constraintTop_toBottomOf="@+id/title" />
 

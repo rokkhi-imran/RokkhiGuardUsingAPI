@@ -56,8 +56,8 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_marginTop="20sp"
             android:layout_height="match_parent"
+            android:layout_marginTop="20sp"
             android:orientation="vertical">
 
             <de.hdodenhof.circleimageview.CircleImageView
@@ -69,27 +69,28 @@
                 android:src="@color/grey" />
 
             <LinearLayout
-android:orientation="horizontal"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
 
                 <TextView
                     android:layout_width="0dp"
-                    android:textSize="25sp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:paddingLeft="10dp"
                     android:text="Title:"
                     android:textColor="@color/orange"
-                    android:paddingLeft="10dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"/>
+                    android:textSize="25sp" />
 
                 <TextView
                     android:id="@+id/noticeTitleTV"
                     android:layout_width="0dp"
+                    android:layout_height="wrap_content"
                     android:layout_weight="5"
-                    android:layout_height="80dp"
+                    android:justificationMode="inter_word"
                     android:gravity="center_vertical"
+                    android:padding="10dp"
                     android:text="Notice title"
-                    android:paddingLeft="10dp"
                     android:textColor="@color/black"
                     android:textSize="25sp" />
 
@@ -99,29 +100,31 @@ android:orientation="horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
-                android:text="Details :"
                 android:paddingLeft="10dp"
+                android:text="Details :"
                 android:textColor="@color/orange"
                 android:textSize="25sp" />
 
             <TextView
                 android:id="@+id/noticeDetailsTV"
-                android:layout_marginTop="10dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
                 android:gravity="center_vertical"
+                android:justificationMode="inter_word"
+                android:padding="10dp"
                 android:text="Notice Details"
-                android:paddingLeft="10dp"
                 android:textColor="@color/black"
                 android:textSize="25sp" />
+
             <Button
                 android:id="@+id/okButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_margin="50sp"
                 android:background="@drawable/less_round_button_red"
                 android:text="Ok"
-                android:textSize="25sp"
-                android:layout_margin="50sp"/>
+                android:textSize="25sp" />
 
 
         </LinearLayout>
