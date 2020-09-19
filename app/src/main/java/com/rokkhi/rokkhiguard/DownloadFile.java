@@ -1,11 +1,7 @@
 package com.rokkhi.rokkhiguard;
 
-
-
-import android.app.DownloadManager;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -16,8 +12,6 @@ import android.widget.Toast;
 
 import androidx.core.content.FileProvider;
 
-import com.squareup.okhttp.Request;
-
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -25,9 +19,6 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URL;
 import java.net.URLConnection;
-import java.security.PrivateKey;
-
-import static android.content.Context.DOWNLOAD_SERVICE;
 
 public class DownloadFile extends AsyncTask<String, Integer, String> {
     String downloadLink;
@@ -38,6 +29,7 @@ public class DownloadFile extends AsyncTask<String, Integer, String> {
         this.downloadLink = downloadLink;
         this.progressDialog = progressDialog;
         this.context=context;
+
     }
 
     @Override

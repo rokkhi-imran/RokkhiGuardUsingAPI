@@ -1,15 +1,6 @@
 package com.rokkhi.rokkhiguard.Utils;
 
-import android.graphics.Bitmap;
-import android.graphics.Matrix;
 import android.util.Log;
-
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.WriteBatch;
-import com.rokkhi.rokkhiguard.Model.UDetails;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -106,27 +97,7 @@ public class Normalfunc {
         List<String> ll= new ArrayList<>();
         List<String> tokens= new ArrayList<>();
         tokens.add(utoken);
-        // Log.d(TAG, "onSuccess: tokenxx "+ useertoken +"xx"+ utoken);
 
-        UDetails uDetails= new UDetails(userid,name,"","",date,gender,mailid,true,ulogin,"","","","","",tokens,new ArrayList<String>()
-                ,false,Calendar.getInstance().getTime(),Calendar.getInstance().getTime(),false,ll);
-
-
-        FirebaseFirestore firebaseFirestore= FirebaseFirestore.getInstance();
-
-        WriteBatch batch= firebaseFirestore.batch();
-
-        DocumentReference userset1 = firebaseFirestore.collection("userdetails").document(userid);
-        batch.set(userset1, uDetails);
-
-        batch.commit().addOnCompleteListener(new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete( Task<Void> task) {
-                if(task.isSuccessful()){
-
-                }
-            }
-        });
 
 
     }

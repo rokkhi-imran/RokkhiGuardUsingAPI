@@ -15,7 +15,6 @@ import com.github.arekolek.phone.asString
 import com.google.android.gms.tasks.OnFailureListener
 import com.google.android.gms.tasks.OnSuccessListener
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.FirebaseFirestore
 import com.rokkhi.rokkhiguard.Model.CallLogClass
 import com.rokkhi.rokkhiguard.R
 import io.reactivex.disposables.CompositeDisposable
@@ -39,10 +38,6 @@ class CallActivity : AppCompatActivity() {
     private var isDial: Boolean = false;
     private var flatName = "";
 
-//    var isReceived = false;
-
-
-    lateinit var firebaseFirestore: FirebaseFirestore
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -50,7 +45,6 @@ class CallActivity : AppCompatActivity() {
         setContentView(R.layout.activity_call)
         number = intent.data.schemeSpecificPart
 
-        firebaseFirestore = FirebaseFirestore.getInstance();
 
 
         val sharedPref = PreferenceManager.getDefaultSharedPreferences(this)
@@ -153,21 +147,7 @@ class CallActivity : AppCompatActivity() {
 
             endTime = Calendar.getInstance().getTime()
 
-            var id = firebaseFirestore.collection(getString(R.string.col_callLog)).document()
 
-            var callLogClass = CallLogClass(id.id, buildid, thismobileuid, myPhoneNumber,
-                    number, startTime, endTime, flatName, isReceived);
-
-            firebaseFirestore.collection(getString(R.string.col_callLog)).document(id.id)
-                    .set(callLogClass)
-                    .addOnSuccessListener(OnSuccessListener<Void?> {
-
-                        Toast.makeText(this, "Data Save", Toast.LENGTH_LONG).show()
-                    })
-                    .addOnFailureListener(OnFailureListener {
-                        Toast.makeText(this, "Failed", Toast.LENGTH_LONG).show()
-
-                    })
 
         }
 

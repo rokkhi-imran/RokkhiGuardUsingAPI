@@ -22,15 +22,12 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Intent;
 import android.graphics.Color;
-import android.os.Build;
-import android.os.CountDownTimer;
 import android.util.Log;
 
 import androidx.core.app.NotificationCompat;
 
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
-import com.rokkhi.rokkhiguard.FullscreenVisitorNormal;
 import com.rokkhi.rokkhiguard.R;
 
 

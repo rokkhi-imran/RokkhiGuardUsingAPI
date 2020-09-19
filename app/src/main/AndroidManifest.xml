@@ -30,7 +30,6 @@
         tools:ignore="ProtectedPermissions" />
 
     <application
-        android:name=".RokkhiGuard"
         android:allowBackup="false"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -39,15 +38,11 @@
         android:usesCleartextTraffic="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".FlatListActivity"></activity>
         <activity android:name=".Utils.NoticeDetailsActivity" />
-        <activity android:name=".GuardQRCodeActivity" />
-        <activity android:name=".GuardListActivity" />
-        <activity android:name=".SWorkersActivity" />
-        <activity android:name=".CallLogsActivity" />
-        <activity android:name=".EditWrokerProfileActivity" /> <!-- <activity android:name=".CallChildActivity" /> -->
+        <activity android:name=".Activity.SWorkersActivity" />
+        <activity android:name=".Activity.EditWrokerProfileActivity" /> <!-- <activity android:name=".CallChildActivity" /> -->
         <activity
-            android:name=".DaroanPass"
+            android:name=".Activity.DaroanPassActivity"
             android:label="Rokkhi"
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="stateAlwaysHidden">
@@ -57,25 +52,19 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".MainPage" />
+        <activity android:name=".Activity.MainPageActivity" />
+        <activity android:name=".Activity.AddVisitorActivity" />
+        <activity android:name=".Activity.VisitorsListActivity" />
+        <activity android:name=".Activity.NoticeBoardActivity" />
+        <activity android:name=".Activity.CreateProfileActivity" />
+        <activity android:name=".Activity.ParcelActivity" />
+        <activity android:name=".Activity.SettingsActivity" />
         <activity
-            android:name=".GatePass"
-            android:label="@string/title_activity_gate_pass"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:windowSoftInputMode="stateAlwaysHidden" />
-        <activity android:name=".AddVisitor" />
-        <activity android:name=".VisitorsList" />
-        <activity android:name=".NoticeBoard" />
-        <activity android:name=".CreateProfileActivity" />
-        <activity android:name=".ParcelActivity" />
-        <activity android:name=".SettingsActivity" />
-        <activity
-            android:name=".GeneralActivity"
+            android:name=".Activity.GeneralActivity"
             android:label="General Settings"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".ChildrenList" />
-        <activity android:name=".ParkingActivity" />
-        <activity android:name=".FullscreenVisitorNormal" />
+        <activity android:name=".Activity.ChildrenListActivity" />
+        <activity android:name=".Activity.ParkingActivity" />
 
         <service android:name=".Utils.MyFirebaseMessagingService">
             <intent-filter>
@@ -86,14 +75,11 @@
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_icon"
             android:resource="@drawable/logooffice35" />
-        <!--
-             Set color used with incoming notification messages. This is used when no color is set for the incoming
-             notification message. See README(https://goo.gl/6BKBk7) for more.
-        -->
+
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_color"
-            android:resource="@color/colorAccent" /> <!-- [END fcm_default_icon] -->
-        <!-- [START fcm_default_channel] -->
+            android:resource="@color/colorAccent" />
+
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_channel_id"
             android:value="@string/default_notification_channel_id" />
