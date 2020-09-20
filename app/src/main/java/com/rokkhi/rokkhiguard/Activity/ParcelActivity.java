@@ -2,9 +2,12 @@ package com.rokkhi.rokkhiguard.Activity;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
@@ -16,6 +19,8 @@ import com.rokkhi.rokkhiguard.Model.Types;
 import com.rokkhi.rokkhiguard.R;
 import com.rokkhi.rokkhiguard.Utils.Normalfunc;
 import com.vansuita.pickimage.bean.PickResult;
+import com.vansuita.pickimage.bundle.PickSetup;
+import com.vansuita.pickimage.dialog.PickImageDialog;
 import com.vansuita.pickimage.listeners.IPickResult;
 
 import java.util.ArrayList;
@@ -61,6 +66,28 @@ public class ParcelActivity extends AppCompatActivity implements IPickResult{
         parcelphoto = findViewById(R.id.parcel_photo);
         progressBar = findViewById(R.id.progressBar1);
         myCalendar = Calendar.getInstance();
+
+        parcelphoto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                PickSetup setup = new PickSetup()
+                        .setTitle("Choose Photo")
+                        .setBackgroundColor(Color.WHITE)
+                        .setButtonOrientation(LinearLayout.HORIZONTAL)
+                        .setGalleryButtonText("Gallery")
+                        .setCameraIcon(R.mipmap.camera_colored)
+                        .setGalleryIcon(R.mipmap.gallery_colored)
+                        .setCameraToPictures(false)
+                        .setMaxSize(300);
+
+                PickImageDialog.build(setup)
+                        //.setOnClick(this)
+                        .show(ParcelActivity.this);
+
+
+            }
+        });
 
 
     }

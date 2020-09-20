@@ -2,78 +2,66 @@ package com.rokkhi.rokkhiguard.Adapter;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import com.rokkhi.rokkhiguard.Model.Notifications;
+
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.rokkhi.rokkhiguard.Model.api.NoticeModelClass;
 import com.rokkhi.rokkhiguard.R;
 import com.rokkhi.rokkhiguard.Utils.NoticeDetailsActivity;
-
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-import java.util.Locale;
+import com.rokkhi.rokkhiguard.helper.SharedPrefHelper;
+import com.squareup.picasso.Picasso;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
 
 
-public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapter.NotoficationViewHolder> {
-    AlertDialog alertDialog;
+public class NoticeAdapter extends RecyclerView.Adapter<NoticeAdapter.NotoficationViewHolder> {
 
-
-
-    public List<Notifications> list;
+    public NoticeModelClass noticeModelClass;
     private static final String TAG = "NotificationAdapter";
-    SharedPreferences sharedPref;
-
+    SharedPrefHelper sharedPref;
 
     private Context context;
-    NotificationAdapter(List<Notifications> list, Context context) {
-        this.list = list;
+    public NoticeAdapter(NoticeModelClass list, Context context) {
+        this.noticeModelClass = list;
         this.context=context;
-
     }
-
 
     @NonNull
     @Override
     public NotoficationViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_notice, parent, false);
         NotoficationViewHolder notoficationViewHolder=new NotoficationViewHolder(view);
-        sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
+        sharedPref = new SharedPrefHelper(context);
         return notoficationViewHolder;
     }
 
     @Override
     public void onBindViewHolder(@NonNull final NotoficationViewHolder holder, int position) {
+        try {
 
-        final Notifications notifications = list.get(position);
-        holder.title.setText(notifications.getN_title());
+            holder.title.setText(noticeModelClass.getData().get(position).getTitle());
+            holder.body.setText(noticeModelClass.getData().get(position).getBody());
+            holder.date.setText(noticeModelClass.getData().get(position).getDate());
+            Picasso.get()
+                    .load("").error(R.drawable.noticeboard).into(holder.propic);
 
-        Date date1=notifications.getN_time();
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(date1);
 
-        String myFormat = "EEE, MMM d , hh:mm a"; //In which you need put here
-        SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.getDefault());
-        holder.date.setText(sdf.format(cal.getTime()));
+        }catch (Exception e ){
 
-        holder.body.setText(notifications.getN_body());
+        }
 
 
     }
 
     @Override
     public int getItemCount() {
-        return list.size();
+        return noticeModelClass.getData().size();
     }
 
 
@@ -100,12 +88,15 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
             date= view.findViewById(R.id.date);
             body= view.findViewById(R.id.starttime);
 
+
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
 
                     context.startActivity(new Intent(context.getApplicationContext(), NoticeDetailsActivity.class)
-                    .putExtra("noticeDetails",list.get(getAdapterPosition())));
+                    .putExtra("noticeTitle",noticeModelClass.getData().get(getAdapterPosition()).getTitle())
+                    .putExtra("noticeDetails",noticeModelClass.getData().get(getAdapterPosition()).getBody())
+                    );
 
                 }
             });

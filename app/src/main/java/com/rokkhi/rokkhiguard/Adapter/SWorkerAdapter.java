@@ -1,8 +1,6 @@
 package com.rokkhi.rokkhiguard.Adapter;
 
 import android.content.Context;
-import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,11 +9,11 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.rokkhi.rokkhiguard.Model.ServiceBuilding;
+import com.rokkhi.rokkhiguard.Model.api.SWorkerModelClass;
 import com.rokkhi.rokkhiguard.R;
 import com.rokkhi.rokkhiguard.Utils.Normalfunc;
-
-import java.util.ArrayList;
+import com.squareup.picasso.NetworkPolicy;
+import com.squareup.picasso.Picasso;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -24,18 +22,15 @@ public class SWorkerAdapter extends RecyclerView.Adapter<SWorkerAdapter.SWorkerV
 
 
 
-    private ArrayList<ServiceBuilding> mvisitorFilterList;
     private LayoutInflater mInflater;
     Normalfunc normalfunc;
 
-    public ArrayList<ServiceBuilding> list;
+    public SWorkerModelClass list;
     private static final String TAG = "SWorkerAdapter";
-    SharedPreferences sharedPref;
 
     private Context context;
-    SWorkerAdapter(ArrayList<ServiceBuilding> list, Context context) {
+    public SWorkerAdapter(SWorkerModelClass list, Context context) {
         this.list = list;
-        mvisitorFilterList = list;
         this.context = context;
         mInflater = LayoutInflater.from(context);
 
@@ -47,10 +42,7 @@ public class SWorkerAdapter extends RecyclerView.Adapter<SWorkerAdapter.SWorkerV
     public SWorkerViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_sworkers, parent, false);
         SWorkerViewHolder visitorViewHolder = new SWorkerViewHolder(view);
-        sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
         normalfunc= new Normalfunc();
-        //oCanNotification= sharedPref.getBoolean("oCanNotification",true);
-
 
         return visitorViewHolder;
     }
@@ -58,13 +50,21 @@ public class SWorkerAdapter extends RecyclerView.Adapter<SWorkerAdapter.SWorkerV
     @Override
     public void onBindViewHolder(@NonNull final SWorkerViewHolder holder, int position) {
 
+        try {
+            holder.name.setText(list.getData().get(position).getName());
+            holder.lastcome.setText(list.getData().get(position).getPhone());
+            Picasso.get().load(list.getData().get(position).getImage()).networkPolicy(NetworkPolicy.NO_CACHE).into(holder.propic);
+        }catch (Exception e){
+
+        }
+
 
     }
 
 
     @Override
     public int getItemCount() {
-        return list.size();
+        return list.getData().size();
     }
 
 

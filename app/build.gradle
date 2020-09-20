@@ -63,15 +63,22 @@ dependencies {
 //QR Code
     implementation 'me.dm7.barcodescanner:zxing:1.9.8'
 
+    //Picasso Image Loader
+    implementation 'com.squareup.picasso:picasso:2.71828'
+
+
+
     //glide Image Loader
     implementation 'com.github.bumptech.glide:glide:4.10.0'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.10.0'
 
 //android network
     implementation 'com.amitshekhar.android:android-networking:1.0.2'
+    implementation 'com.amitshekhar.android:jackson-android-networking:1.0.2'
 
-    implementation 'com.squareup.retrofit2:retrofit:2.9.0'
-    implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
+
+//    implementation 'com.squareup.retrofit2:retrofit:2.9.0'
+//    implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
 
 
 

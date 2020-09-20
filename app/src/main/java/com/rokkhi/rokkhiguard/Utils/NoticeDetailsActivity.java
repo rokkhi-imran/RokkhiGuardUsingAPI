@@ -8,7 +8,6 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.rokkhi.rokkhiguard.Model.Notifications;
 import com.rokkhi.rokkhiguard.R;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -27,9 +26,10 @@ public class NoticeDetailsActivity extends AppCompatActivity implements View.OnC
         super.setContentView(R.layout.activity_notice_details);
         initView();
 
-        Notifications notification = getIntent().getParcelableExtra("noticeDetails");
-        noticeTitleTV.setText(notification.getN_title());
-        noticeDetailsTV.setText(notification.getN_body());
+        String noticeDataDetails = getIntent().getStringExtra("noticeDetails");
+        String noticeDataTitle = getIntent().getStringExtra("noticeTitle");
+        noticeTitleTV.setText(noticeDataTitle);
+        noticeDetailsTV.setText(noticeDataDetails);
     }
 
     @Override
