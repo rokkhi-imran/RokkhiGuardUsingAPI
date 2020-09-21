@@ -12,11 +12,9 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.rokkhi.rokkhiguard.Model.Child;
-import com.rokkhi.rokkhiguard.Model.UDetails;
+import com.rokkhi.rokkhiguard.Model.api.ChildModelClass;
 import com.rokkhi.rokkhiguard.R;
-
-import java.util.ArrayList;
+import com.squareup.picasso.Picasso;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -25,14 +23,13 @@ public class ChildAdapter extends RecyclerView.Adapter<ChildAdapter.ChildViewHol
 
 
     private static final String TAG = "ChildAdapter";
-    public ArrayList<Child> list;
+    public ChildModelClass list;
     SharedPreferences sharedPref;
-    private ArrayList<Child> mchildFilterList;
-    private ArrayList<UDetails> flatusers;
+    private ChildModelClass mchildFilterList;
     private LayoutInflater mInflater;
     private Context context;
 
-    ChildAdapter(ArrayList<Child> list, Context context) {
+    public ChildAdapter(ChildModelClass list, Context context) {
         this.list = list;
         mchildFilterList = list;
         this.context = context;
@@ -55,9 +52,10 @@ public class ChildAdapter extends RecyclerView.Adapter<ChildAdapter.ChildViewHol
     @Override
     public void onBindViewHolder(@NonNull final ChildViewHolder holder, int position) {
 
-        final Child child = list.get(position);
-        holder.name.setText(child.getM_name());
-        holder.flat.setText("Flat:  " + child.getF_no());
+        holder.name.setText(list.getData().get(position).getName());
+        holder.flat.setText("Flat:  Data Not Found From api" );
+
+        Picasso.get().load(list.getData().get(position).getImage()).placeholder(R.drawable.male1).error(R.drawable.male1).into(holder.propic);
 
 
     }
@@ -66,7 +64,7 @@ public class ChildAdapter extends RecyclerView.Adapter<ChildAdapter.ChildViewHol
 
     @Override
     public int getItemCount() {
-        return list.size();
+        return list.getData().size();
     }
 
     @Override
@@ -78,6 +76,8 @@ public class ChildAdapter extends RecyclerView.Adapter<ChildAdapter.ChildViewHol
     public int getItemViewType(int position) {
         return position;
     }
+
+
 
 
     public class ChildViewHolder extends RecyclerView.ViewHolder {
@@ -94,7 +94,7 @@ public class ChildAdapter extends RecyclerView.Adapter<ChildAdapter.ChildViewHol
             propic = view.findViewById(R.id.one);
             active = view.findViewById(R.id.activated);
             call = view.findViewById(R.id.call);
-            flat = view.findViewById(R.id.flat);
+            flat = view.findViewById(R.id.flatNumberET);
         }
     }
 }

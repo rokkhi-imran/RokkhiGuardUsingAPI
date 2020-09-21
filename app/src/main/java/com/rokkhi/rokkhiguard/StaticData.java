@@ -15,6 +15,11 @@ import com.rokkhi.rokkhiguard.helper.SharedPrefHelper;
 public class StaticData {
 
     public static final String KEY_FIREBASE_ID_TOKEN = "FIREBASE_ID_TOKEN";
+    public static final String FLAT_ID = "FLAT_ID";
+    public static final String BUILD_ID = "BUILDING_ID";
+    public static final String COMM_ID = "COMM_ID";
+    public static final String USER_ID = "USER_ID";
+    public static String imageUploadURL ="http://ec2-54-183-244-125.us-west-1.compute.amazonaws.com:8000/upload";
 
     public static final void getIdToken(final Context context) {
         FirebaseAuth.getInstance().getCurrentUser().getIdToken(true).addOnSuccessListener(new OnSuccessListener<GetTokenResult>() {
@@ -49,6 +54,7 @@ public class StaticData {
     public static final String baseURL= "http://home.api.rokkhi.com:3000";
     public static final String getNotice= "/api/v1/notice/getNotices";
     public static final String getUsersList= "/api/v1/user/getUsersList";
+    public static final String addParcel= "/api/v1/entrance/addParcel";
 
 
     //user role

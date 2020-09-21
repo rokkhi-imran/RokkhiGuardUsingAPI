@@ -45,13 +45,13 @@
         android:textColor="@color/green"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@+id/one"
-        app:layout_constraintTop_toBottomOf="@+id/flat" />
+        app:layout_constraintTop_toBottomOf="@+id/flatNumberET" />
 
 
 
 
     <TextView
-        android:id="@+id/flat"
+        android:id="@+id/flatNumberET"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"

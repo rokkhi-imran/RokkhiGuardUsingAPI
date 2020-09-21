@@ -4,29 +4,21 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
-import androidx.annotation.NonNull;
-import androidx.core.content.ContextCompat;
-import androidx.appcompat.app.AlertDialog;
-import androidx.recyclerview.widget.RecyclerView;
-
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.GridView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.rokkhi.rokkhiguard.Activity.EditWrokerProfileActivity;
 import com.rokkhi.rokkhiguard.Model.ActiveFlats;
-
 import com.rokkhi.rokkhiguard.Model.SLastHistory;
 import com.rokkhi.rokkhiguard.Model.Swroker;
 import com.rokkhi.rokkhiguard.R;
@@ -84,6 +76,7 @@ public class GateAdapter extends RecyclerView.Adapter<GateAdapter.ListViewHolder
 
         return listViewHolder;
     }
+/*
 
     public void addallflats(final ListViewHolder holder) {
 
@@ -164,7 +157,8 @@ public class GateAdapter extends RecyclerView.Adapter<GateAdapter.ListViewHolder
                     selectbutton.setVisibility(View.VISIBLE);
                 }
 
-                /*for(int i=0;i<allflats.size();i++){
+                */
+/*for(int i=0;i<allflats.size();i++){
 //                    view.setBackground(ContextCompat.getDrawable(context, R.color.orange_light));
                     activeFlatAdapter.changedata(allflats.get(i).getF_no(), false);
                     activeFlatAdapter.notifyDataSetChanged();
@@ -174,7 +168,8 @@ public class GateAdapter extends RecyclerView.Adapter<GateAdapter.ListViewHolder
                     tt.setText( holder.total);
                     unSelectAllBtn.setVisibility(View.GONE);
                     selectAllBtn.setVisibility(View.VISIBLE);
-                }*/
+                }*//*
+
 
             }
         });
@@ -239,6 +234,7 @@ public class GateAdapter extends RecyclerView.Adapter<GateAdapter.ListViewHolder
         });
 
     }
+*/
 
     @Override
     public void onBindViewHolder(@NonNull final ListViewHolder holder, int position) {

@@ -53,8 +53,8 @@ public class NoticeBoardActivity extends AppCompatActivity {
 
         Map<String, String> dataPost = new HashMap<>();
         dataPost.put("noticeFor", "");
-        dataPost.put("buildingId", "2");
-        dataPost.put("communityId", "2");
+        dataPost.put("buildingId", sharedPrefHelper.getString(StaticData.BUILD_ID));
+        dataPost.put("communityId", sharedPrefHelper.getString(StaticData.COMM_ID));
         dataPost.put("fromDate", "");
         dataPost.put("toDate", "");
 

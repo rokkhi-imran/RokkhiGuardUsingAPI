@@ -9,7 +9,6 @@ import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.TextView;
 
-import com.rokkhi.rokkhiguard.Model.Types;
 import com.rokkhi.rokkhiguard.R;
 
 import java.util.ArrayList;
@@ -17,14 +16,14 @@ import java.util.ArrayList;
 
 public class TypesAdapter extends BaseAdapter implements Filterable {
 
-    private ArrayList<Types> Stringlist;
-    private ArrayList<Types> mStringFilterList;
+    private ArrayList<String> parcelList;
+    private ArrayList<String> mStringFilterList;
     private LayoutInflater mInflater;
     private ValueFilter valueFilter;
 
-    public TypesAdapter(ArrayList<Types> mStringList, Context context) {
+    public TypesAdapter(ArrayList<String> mStringList, Context context) {
 
-        this.Stringlist = mStringList;
+        this.parcelList = mStringList;
         this.mStringFilterList = mStringList;
         mInflater = LayoutInflater.from(context);
         getFilter();
@@ -33,13 +32,13 @@ public class TypesAdapter extends BaseAdapter implements Filterable {
     //How many items are in the data set represented by this Adapter.
     @Override
     public int getCount() {
-        return Stringlist.size();
+        return parcelList.size();
     }
 
     //Get the data item associated with the specified position in the data set.
     @Override
     public Object getItem(int position) {
-        return Stringlist.get(position);
+        return parcelList.get(position);
     }
 
     //Get the row id associated with the specified position in the list.
@@ -53,7 +52,7 @@ public class TypesAdapter extends BaseAdapter implements Filterable {
     public View getView(int position, View convertView, ViewGroup parent) {
 
         Holder viewHolder;
-        final Types type= Stringlist.get(position);
+//        final Types type= Stringlist.get(position);
         if (convertView == null) {
             viewHolder = new Holder();
             convertView = mInflater.inflate(R.layout.item_string, null);
@@ -63,7 +62,7 @@ public class TypesAdapter extends BaseAdapter implements Filterable {
         } else {
             viewHolder = (Holder) convertView.getTag();
         }
-        viewHolder.name.setText(type.getBangla());
+        viewHolder.name.setText(parcelList.get(position));
         return convertView;
     }
     private class Holder {
@@ -89,12 +88,12 @@ public class TypesAdapter extends BaseAdapter implements Filterable {
 
             if (constraint != null && constraint.length() > 0) {
 
-                ArrayList<Types> filterList = new ArrayList<>();
+                ArrayList<String> filterList = new ArrayList<>();
 
                 for (int i = 0; i < mStringFilterList.size(); i++) {
-                    //muserFilterList.get(i).getE_name().toLowerCase().startsWith(constraint.toString().toLowerCase())
-                    if (mStringFilterList.get(i).getEnglish().toLowerCase().contains(constraint.toString().toLowerCase())) {
-                        filterList.add(mStringFilterList.get(i));
+
+                    if (parcelList.get(i).toLowerCase().contains(constraint.toString().toLowerCase())) {
+                        filterList.add(parcelList.get(i));
                     }
                 }
 
@@ -121,7 +120,10 @@ public class TypesAdapter extends BaseAdapter implements Filterable {
         protected void publishResults(CharSequence constraint,
                                       FilterResults results) {
 
-            Stringlist = (ArrayList<Types>) results.values;
+            if (results.values!=null){
+
+                parcelList = (ArrayList<String>) results.values;
+            }
 
             notifyDataSetChanged();
 

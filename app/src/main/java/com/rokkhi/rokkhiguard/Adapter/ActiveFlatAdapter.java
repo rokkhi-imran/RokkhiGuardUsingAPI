@@ -1,8 +1,6 @@
 package com.rokkhi.rokkhiguard.Adapter;
 
 import android.content.Context;
-
-import androidx.core.content.ContextCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,8 +11,10 @@ import android.widget.Filterable;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.core.content.ContextCompat;
 
-import com.rokkhi.rokkhiguard.Model.ActiveFlats;
+import com.rokkhi.rokkhiguard.Model.api.ActiveFlatData;
+import com.rokkhi.rokkhiguard.Model.api.ActiveFlatsModelClass;
 import com.rokkhi.rokkhiguard.R;
 
 import java.util.ArrayList;
@@ -32,18 +32,18 @@ public class ActiveFlatAdapter extends BaseAdapter implements Filterable {
     private static final String TAG = "ActiveFlatAdapter";
 
 
-    private ArrayList<ActiveFlats> activeFlats;
+    private ArrayList<ActiveFlatData> activeFlats;
     private Map<String,Boolean> bb= new HashMap<>();
-    private ArrayList<ActiveFlats> mFlatFilterList;
+    private ArrayList<ActiveFlatData> mFlatFilterList;
     private LayoutInflater mInflater;
     private ValueFilter valueFilter;
     Context context;
 
-    public ActiveFlatAdapter(ArrayList<ActiveFlats> mStringList, Context context) {
+    public ActiveFlatAdapter(ActiveFlatsModelClass mStringList, Context context) {
 
-        this.activeFlats = mStringList;
+        this.activeFlats = (ArrayList<ActiveFlatData>) mStringList.getData();
 
-        this.mFlatFilterList = mStringList;
+        this.mFlatFilterList = (ArrayList<ActiveFlatData>) mStringList.getData();
         this.context=context;
 
         mInflater = LayoutInflater.from(context);
@@ -56,7 +56,7 @@ public class ActiveFlatAdapter extends BaseAdapter implements Filterable {
         getFilter();
 
         for(int i=0;i<activeFlats.size();i++){
-            bb.put(activeFlats.get(i).getF_no(),false);
+            bb.put(activeFlats.get(i).getNumber(),false);
         }
     }
 
@@ -112,22 +112,19 @@ public class ActiveFlatAdapter extends BaseAdapter implements Filterable {
         }
 
 
-        viewHolder.name.setText(activeFlats.get(position).getF_no());
+        viewHolder.name.setText(activeFlats.get(position).getNumber());
 
-        if(bb.get(activeFlats.get(position).getF_no())!=null){
-            Boolean flag=bb.get(activeFlats.get(position).getF_no());
+        if(bb.get(activeFlats.get(position).getNumber())!=null){
+            Boolean flag=bb.get(activeFlats.get(position).getNumber());
             if(flag!=null && flag){
 
                 viewHolder.name.setTextColor(ContextCompat.getColor(context,R.color.white));
-//                viewHolder.buildingNameTV.setBackgroundColor(context.getResources().getColor(R.color.orange));
                 viewHolder.name.setBackground(ContextCompat.getDrawable(context,R.drawable.rectangletextviewwithbg));
 
             }
             else{
-//                convertView.setBackground(ContextCompat.getDrawable(context,R.color.white));
 
                 viewHolder.name.setTextColor(ContextCompat.getColor(context,R.color.black));
-//                viewHolder.buildingNameTV.setTextColor(context.getResources().getColor(R.color.black));
                 viewHolder.name.setBackground(ContextCompat.getDrawable(context,R.drawable.rectangletextview));
 
             }
@@ -172,13 +169,13 @@ public class ActiveFlatAdapter extends BaseAdapter implements Filterable {
 
             if (constraint != null && constraint.length() > 0) {
 
-                ArrayList<ActiveFlats> filterList = new ArrayList<>();
+                ArrayList<ActiveFlatData> filterList = new ArrayList<>();
 
                 for (int i = 0; i < mFlatFilterList.size(); i++) {
 
 
 
-                    if (mFlatFilterList.get(i).getF_no().toLowerCase().contains(constraint.toString().toLowerCase())
+                    if (mFlatFilterList.get(i).getNumber().toLowerCase().contains(constraint.toString().toLowerCase())
                     ) {
 
                         filterList.add(mFlatFilterList.get(i));
@@ -211,7 +208,10 @@ public class ActiveFlatAdapter extends BaseAdapter implements Filterable {
         protected void publishResults(CharSequence constraint,
                                       FilterResults results) {
 
-            activeFlats = (ArrayList<ActiveFlats>) results.values;
+            if (results.values!=null){
+
+                activeFlats = (ArrayList<ActiveFlatData>) results.values;
+            }
 
             notifyDataSetChanged();
 

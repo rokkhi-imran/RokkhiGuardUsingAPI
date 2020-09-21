@@ -70,16 +70,12 @@ public class SWorkersActivity extends AppCompatActivity implements View.OnClickL
 
 
         Map<String, String> dataPost = new HashMap<>();
-        dataPost.put("buildingId", "2");
-        dataPost.put("communityId", "2");
-        dataPost.put("flatId", "");
+        dataPost.put("buildingId", sharedPrefHelper.getString(StaticData.BUILD_ID));
+        dataPost.put("communityId", sharedPrefHelper.getString(StaticData.COMM_ID));
+        dataPost.put("flatId", sharedPrefHelper.getString(StaticData.FLAT_ID));
         dataPost.put("userRoleCode", StaticData.SERVICE_WORKER.toString());
 
         JSONObject jsonDataPost = new JSONObject(dataPost);
-
-//        JSONArray jsonDataPost=new JSONArray();
-//        jsonDataPost.put(dataPost);
-
 
         String url = StaticData.baseURL + "" + StaticData.getUsersList;
         String token = sharedPrefHelper.getString(StaticData.KEY_FIREBASE_ID_TOKEN);
@@ -144,8 +140,7 @@ public class SWorkersActivity extends AppCompatActivity implements View.OnClickL
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            default:
-                break;
+
             case R.id.search:
                 break;
         }

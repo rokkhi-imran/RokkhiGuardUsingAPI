@@ -9,7 +9,6 @@ import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -28,6 +27,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.rokkhi.rokkhiguard.R;
 import com.rokkhi.rokkhiguard.StaticData;
+import com.rokkhi.rokkhiguard.helper.SharedPrefHelper;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -59,7 +59,6 @@ public class DaroanPassActivity extends AppCompatActivity implements View.OnClic
     Context context;
     AuthUI.IdpConfig phoneConfigWithDefaultNumber;
     FirebaseUser firebaseUser;
-    SharedPreferences sharedPref;
     SharedPreferences.Editor editor;
     String tabpass = "";
     String flatid = "", buildid = "", commid = "", userid = "";
@@ -69,13 +68,20 @@ public class DaroanPassActivity extends AppCompatActivity implements View.OnClic
     private View mRootView;
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
+    SharedPrefHelper sharedPrefHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_daroan_pass);
         context = DaroanPassActivity.this;
+        sharedPrefHelper=new SharedPrefHelper(context);
 
+
+        sharedPrefHelper.putString(StaticData.FLAT_ID,"6");
+        sharedPrefHelper.putString(StaticData.BUILD_ID,"2");
+        sharedPrefHelper.putString(StaticData.COMM_ID,"2");
+        sharedPrefHelper.putString(StaticData.USER_ID,"1");
 
         //check Stroage permission Start
         if (!checkPermissionForWriteExtertalStorage(this)) {
@@ -101,14 +107,8 @@ public class DaroanPassActivity extends AppCompatActivity implements View.OnClic
 
 
         circlePinField = findViewById(R.id.circleField);
-        sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
         mRootView = findViewById(R.id.root);
         homename = findViewById(R.id.buildingname);
-        flatid = sharedPref.getString("flatid", "none");
-        buildid = sharedPref.getString("buildid", "none");
-        commid = sharedPref.getString("commid", "none");
-
-        editor = sharedPref.edit();
 
 
         one = findViewById(R.id.one);
@@ -294,7 +294,7 @@ public class DaroanPassActivity extends AppCompatActivity implements View.OnClic
                     Toast.makeText(context, "Select building", Toast.LENGTH_SHORT).show();
                 }
             } else {
-                tabpass = sharedPref.getString("pass", "none");
+//                tabpass = sharedPref.getString("pass", "none");
                 if (tabpass != null && tabpass.equals(passtext)) {
                     //passtext="";
 
