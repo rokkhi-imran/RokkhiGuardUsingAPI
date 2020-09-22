@@ -1,9 +1,7 @@
 package com.rokkhi.rokkhiguard.Activity;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -17,16 +15,26 @@ import androidx.core.widget.NestedScrollView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.messaging.FirebaseMessaging;
-import com.rokkhi.rokkhiguard.Model.Visitors;
-import com.rokkhi.rokkhiguard.R;
+import com.androidnetworking.AndroidNetworking;
+import com.androidnetworking.common.Priority;
+import com.androidnetworking.error.ANError;
+import com.androidnetworking.interfaces.JSONObjectRequestListener;
+import com.google.gson.Gson;
 import com.rokkhi.rokkhiguard.Adapter.VisitorAdapter;
+import com.rokkhi.rokkhiguard.Model.Visitors;
+import com.rokkhi.rokkhiguard.Model.api.GetInsideVisitorData;
+import com.rokkhi.rokkhiguard.Model.api.GetVisitorInsideModelClass;
+import com.rokkhi.rokkhiguard.R;
+import com.rokkhi.rokkhiguard.StaticData;
+import com.rokkhi.rokkhiguard.helper.SharedPrefHelper;
+
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 
 public class VisitorsListActivity extends AppCompatActivity implements VisitorAdapter.MyInterface {
@@ -35,18 +43,17 @@ public class VisitorsListActivity extends AppCompatActivity implements VisitorAd
     ArrayList<Visitors> list;
     RecyclerView recyclerView;
     VisitorAdapter visitorAdapter;
-    FirebaseUser user;
     View mrootView;
     ProgressBar progressBar;
     Context context;
-    SharedPreferences sharedPref;
     EditText search;
-    SharedPreferences.Editor editor;
 
     NestedScrollView myNestedScroll;
-    Date d;
     Date low,high;
-    String  buildid = "", commid = "";
+
+    SharedPrefHelper sharedPrefHelper;
+    GetVisitorInsideModelClass getVisitorInsideModelClass;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,8 +62,6 @@ public class VisitorsListActivity extends AppCompatActivity implements VisitorAd
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FirebaseMessaging.getInstance().setAutoInitEnabled(true);
-        user = FirebaseAuth.getInstance().getCurrentUser();
         context= VisitorsListActivity.this;
         myNestedScroll= (NestedScrollView) findViewById(R.id.nested);
         progressBar= findViewById(R.id.progressBar2);
@@ -64,13 +69,8 @@ public class VisitorsListActivity extends AppCompatActivity implements VisitorAd
         recyclerView.setNestedScrollingEnabled(false);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         mrootView=findViewById(R.id.root);
-        sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
-        editor= sharedPref.edit();
         search = findViewById(R.id.search);
-        buildid = sharedPref.getString("buildid", "none");
-        commid = sharedPref.getString("commid", "none");
-        getdate();
-
+        sharedPrefHelper=new SharedPrefHelper(context);
 
         search.addTextChangedListener(new TextWatcher() {
             @Override
@@ -84,6 +84,72 @@ public class VisitorsListActivity extends AppCompatActivity implements VisitorAd
             public void afterTextChanged(Editable s) {
             }
         });
+
+
+
+
+        Map<String, String> dataPost = new HashMap<>();
+        dataPost.put("buildingId", sharedPrefHelper.getString(StaticData.BUILD_ID));
+        dataPost.put("communityId", sharedPrefHelper.getString(StaticData.COMM_ID));
+        dataPost.put("flatId", sharedPrefHelper.getString(StaticData.FLAT_ID));
+        dataPost.put("status", StaticData.INSIDE_COMPOUND);
+        dataPost.put("fromDate", "");
+        dataPost.put("toDate", "");
+
+        JSONObject jsonDataPost = new JSONObject(dataPost);
+
+        String url = StaticData.baseURL + "" + StaticData.getVisitors;
+        String token = sharedPrefHelper.getString(StaticData.KEY_FIREBASE_ID_TOKEN);
+
+        Log.e("TAG", "onCreate: " + jsonDataPost);
+        Log.e("TAG", "onCreate: " + url);
+        Log.e("TAG", "onCreate: " + token);
+        Log.e("TAG", "onCreate: ---------------------- ");
+
+
+        AndroidNetworking.post(url)
+                .addHeaders("authtoken", token)
+                .setContentType("application/json")
+                .addJSONObjectBody(jsonDataPost)
+                .setPriority(Priority.MEDIUM)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+
+                        progressBar.setVisibility(View.GONE);
+
+                        Log.e("TAG ","onResponse: =   " + response);
+
+                        Gson gson = new Gson();
+                        getVisitorInsideModelClass = gson.fromJson(String.valueOf(response), GetVisitorInsideModelClass.class);
+
+//                        SWorkerAdapter sWorkerAdapter = new SWorkerAdapter(sWorkerModelClass, context);
+                        visitorAdapter=new VisitorAdapter((ArrayList<GetInsideVisitorData>) getVisitorInsideModelClass.getData(),context);
+//
+                        recyclerView.setAdapter(visitorAdapter);
+
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+
+                        progressBar.setVisibility(View.GONE);
+
+                        StaticData.showErrorAlertDialog(context, "Alert !", "আবার চেষ্টা করুন ।");
+
+                        Log.e("TAG", "onResponse: error message =  " + anError.getMessage());
+                        Log.e("TAG", "onResponse: error code =  " + anError.getErrorCode());
+                        Log.e("TAG", "onResponse: error body =  " + anError.getErrorBody());
+                        Log.e("TAG", "onResponse: error  getErrorDetail =  " + anError.getErrorDetail());
+                    }
+                });
+
+
+
+
+
+
     }
 
     public void getdate(){

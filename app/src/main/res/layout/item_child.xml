@@ -33,24 +33,6 @@
 
 
     <TextView
-        android:id="@+id/activated"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"
-        android:text="ACTIVE"
-        android:textStyle="bold"
-        android:textSize="16sp"
-        android:textColor="@color/green"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/one"
-        app:layout_constraintTop_toBottomOf="@+id/flatNumberET" />
-
-
-
-
-    <TextView
         android:id="@+id/flatNumberET"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

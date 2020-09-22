@@ -16,21 +16,18 @@
         android:padding="20dp">
 
 
-
-
         <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
             android:id="@+id/prorel"
-            >
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/user_photo"
                 android:layout_width="120dp"
                 android:layout_height="120dp"
-                android:src="@drawable/male1"
                 android:layout_centerHorizontal="true"
                 android:layout_marginBottom="10dp"
+                android:src="@drawable/male1"
                 app:civ_border_color="@color/black"
                 app:civ_border_width=".5dp" />
 
@@ -43,7 +40,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/prorel"
             android:layout_marginTop="30dp"
-            
+
             android:orientation="vertical">
 
             <TextView
@@ -59,11 +56,11 @@
                 android:id="@+id/user_name"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:paddingStart="10dp"
                 android:background="@drawable/round_edittext2"
                 android:hint=" নাম"
-                android:textSize="24sp"
-                android:inputType="textNoSuggestions" />
+                android:inputType="textNoSuggestions"
+                android:paddingStart="10dp"
+                android:textSize="24sp" />
         </LinearLayout>
 
         <LinearLayout
@@ -72,7 +69,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/relname"
             android:layout_marginTop="50dp"
-            
+
             android:orientation="vertical">
 
             <TextView
@@ -88,11 +85,11 @@
                 android:id="@+id/user_Phone_ET"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:paddingStart="10dp"
                 android:background="@drawable/round_edittext2"
                 android:hint=" মোবাইল নাম্বার"
-                android:textSize="24sp"
-                android:inputType="numberDecimal" />
+                android:inputType="numberDecimal"
+                android:paddingStart="10dp"
+                android:textSize="24sp" />
 
         </LinearLayout>
 
@@ -103,7 +100,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/relPhone"
             android:layout_marginTop="30dp"
-            
+
             android:orientation="vertical">
 
             <TextView
@@ -119,13 +116,13 @@
                 android:id="@+id/user_wtype"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:paddingStart="10dp"
                 android:background="@drawable/round_edittext2"
-                
-                android:hint=" কি ধরনের প্রোফাইল"
                 android:focusable="false"
-                android:textSize="24sp"
-                android:inputType="numberDecimal" />
+
+                android:hint=" কি ধরনের প্রোফাইল"
+                android:inputType="numberDecimal"
+                android:paddingStart="10dp"
+                android:textSize="24sp" />
 
         </LinearLayout>
 
@@ -135,7 +132,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/reldesig"
             android:layout_marginTop="30dp"
-            
+
             android:orientation="vertical">
 
             <TextView
@@ -151,44 +148,38 @@
                 android:id="@+id/user_flat"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:paddingStart="10dp"
                 android:background="@drawable/round_edittext2"
-                
-                android:hint=" ফ্ল্যাট"
                 android:focusable="false"
-                android:textSize="24sp"
-                android:inputType="numberDecimal" />
+
+                android:hint=" ফ্ল্যাট"
+                android:inputType="numberDecimal"
+                android:paddingStart="10dp"
+                android:textSize="24sp" />
 
         </LinearLayout>
 
         <Button
+            android:id="@+id/SubmitUserInfoBtn"
             android:layout_width="match_parent"
             android:layout_height="60dp"
-            android:text="Done ( শেষ )"
-            android:id="@+id/done"
-            android:background="@drawable/round_button"
-            android:textColor="@color/white"
             android:layout_below="@+id/relflat"
+            android:layout_centerHorizontal="true"
             android:layout_marginTop="70dp"
             android:layout_marginBottom="50dp"
-            android:textSize="18sp"
-            android:layout_centerHorizontal="true"
-            />
+            android:background="@drawable/round_button"
+            android:text="Done ( শেষ )"
+            android:textColor="@color/white"
+            android:textSize="18sp" />
 
         <ProgressBar
             android:id="@+id/progressBar1"
             style="?android:attr/progressBarStyleLarge"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:visibility="gone"
-            android:layout_centerInParent="true" />
+            android:layout_centerInParent="true"
+            android:visibility="gone" />
 
     </RelativeLayout>
-
-
-
-
-
 
 
 </ScrollView>

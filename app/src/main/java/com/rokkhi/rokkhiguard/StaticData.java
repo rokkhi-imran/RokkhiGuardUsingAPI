@@ -2,14 +2,19 @@ package com.rokkhi.rokkhiguard;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.Color;
 import android.util.Log;
+import android.widget.LinearLayout;
 
 import androidx.appcompat.app.AlertDialog;
+import androidx.fragment.app.FragmentActivity;
 
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.GetTokenResult;
 import com.rokkhi.rokkhiguard.helper.SharedPrefHelper;
+import com.vansuita.pickimage.bundle.PickSetup;
+import com.vansuita.pickimage.dialog.PickImageDialog;
 
 
 public class StaticData {
@@ -55,6 +60,10 @@ public class StaticData {
     public static final String getNotice= "/api/v1/notice/getNotices";
     public static final String getUsersList= "/api/v1/user/getUsersList";
     public static final String addParcel= "/api/v1/entrance/addParcel";
+    public static final String registerOrUpdate= "/api/v1/user/registerOrUpdate";
+    public static final String getVisitors= "/api/v1/entrance/getVisitors";
+    public static final String letTheVisitorOut= "/api/v1/entrance/letTheVisitorOut";
+    public static final String getVehicles= "/api/v1/vehicle/getVehicles";
 
 
     //user role
@@ -67,4 +76,39 @@ public class StaticData {
     public static final Integer COMMITTEE_MEMBER = 1007;
     public static final Integer GUARD = 1008;
 
+
+    public static final String PARCEL_RECEIVED = "PARCEL_RECEIVED";
+    public static final String PARCEL_DELIVERED = "PARCEL_DELIVERED";
+    public static final String INSIDE_COMPOUND = "INSIDE_COMPOUND";
+    public static final String OUTSIDE_COMPOUND = "OUTSIDE_COMPOUND";
+
+    public static void selectImage(FragmentActivity createProfileActivity) {
+        PickSetup setup = new PickSetup()
+                .setTitle("Choose Photo")
+                .setBackgroundColor(Color.WHITE)
+                .setButtonOrientation(LinearLayout.HORIZONTAL)
+                .setGalleryButtonText("Gallery")
+                .setCameraIcon(R.mipmap.camera_colored)
+                .setGalleryIcon(R.mipmap.gallery_colored)
+                .setCameraToPictures(false)
+                .setMaxSize(300);
+
+        PickImageDialog.build(setup)
+                //.setOnClick(this)
+                .show(createProfileActivity);
+    }
+
+    public static void showSuccessDialog(FragmentActivity context, String title, String body) {
+        new AlertDialog.Builder(context)
+                .setTitle(title)
+                .setMessage(body)
+                .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                        context.finish();
+                    }
+                })
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .show();
+    }
 }

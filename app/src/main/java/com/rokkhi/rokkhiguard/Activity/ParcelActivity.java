@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.icu.text.SimpleDateFormat;
 import android.net.Uri;
 import android.os.Bundle;
@@ -19,7 +18,6 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.GridView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -45,8 +43,6 @@ import com.rokkhi.rokkhiguard.Utils.FullScreenAlertDialog;
 import com.rokkhi.rokkhiguard.Utils.Normalfunc;
 import com.rokkhi.rokkhiguard.helper.SharedPrefHelper;
 import com.vansuita.pickimage.bean.PickResult;
-import com.vansuita.pickimage.bundle.PickSetup;
-import com.vansuita.pickimage.dialog.PickImageDialog;
 import com.vansuita.pickimage.listeners.IPickResult;
 
 import org.json.JSONException;
@@ -73,8 +69,8 @@ public class ParcelActivity extends AppCompatActivity implements IPickResult{
     EditText companyNameET, parcelTypeET, flatNumberET;
     Button parcelSubmitButton;
     String mFileUri = "";
-    Context context;
     private Bitmap bitmap = null;
+    Context context;
     private static final String TAG = "ParcelActivity";
 
 
@@ -115,20 +111,7 @@ public class ParcelActivity extends AppCompatActivity implements IPickResult{
             @Override
             public void onClick(View v) {
 
-                PickSetup setup = new PickSetup()
-                        .setTitle("Choose Photo")
-                        .setBackgroundColor(Color.WHITE)
-                        .setButtonOrientation(LinearLayout.HORIZONTAL)
-                        .setGalleryButtonText("Gallery")
-                        .setCameraIcon(R.mipmap.camera_colored)
-                        .setGalleryIcon(R.mipmap.gallery_colored)
-                        .setCameraToPictures(false)
-                        .setMaxSize(300);
-
-                PickImageDialog.build(setup)
-                        //.setOnClick(this)
-                        .show(ParcelActivity.this);
-
+                StaticData.selectImage(ParcelActivity.this);
 
             }
         });
@@ -339,7 +322,7 @@ public class ParcelActivity extends AppCompatActivity implements IPickResult{
         //change lsitview to gridview
 
         final ListView lv = (ListView) convertView.findViewById(R.id.listView1);
-        final Button done = convertView.findViewById(R.id.done);
+        final Button done = convertView.findViewById(R.id.SubmitUserInfoBtn);
         alertcompany.setView(convertView);
         alertcompany.setCancelable(false);
         //valueAdapter.notifyDataSetChanged();
@@ -404,9 +387,6 @@ public class ParcelActivity extends AppCompatActivity implements IPickResult{
 
         ActiveFlatsModelClass activeFlat=new ActiveFlatsModelClass(activeFlatDataArrayList,activeFlatDataArrayList,"Success",200);
 
-
-
-
         final ActiveFlatAdapter activeFlatAdapter = new ActiveFlatAdapter(activeFlat, context);
         final AlertDialog alertcompany = new AlertDialog.Builder(context).create();
         LayoutInflater inflater = getLayoutInflater();
@@ -414,7 +394,7 @@ public class ParcelActivity extends AppCompatActivity implements IPickResult{
         final EditText editText = convertView.findViewById(R.id.sear);
         //change Listview to Gridview
         final GridView lv = (GridView) convertView.findViewById(R.id.listView1);
-        final Button done = convertView.findViewById(R.id.done);
+        final Button done = convertView.findViewById(R.id.SubmitUserInfoBtn);
         final Button selectbutton = convertView.findViewById(R.id.select);
         final Button unselectbutton = convertView.findViewById(R.id.deselect);
         final TextView tt = convertView.findViewById(R.id.selected);

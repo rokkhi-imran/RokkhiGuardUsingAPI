@@ -1,121 +1,123 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="wrap_content"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:padding="20dp"
-    android:layout_margin="20dp"
-    >
+    android:padding="20dp">
+
+
+    <RelativeLayout
+        android:layout_width="280dp"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_marginTop="20dp"
+        android:padding="10dp">
+
+        <TextView
+            android:id="@+id/tik"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:text="একটা  অপশন বাছাই করুন"
+            android:textColor="@color/grey_1000"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/carModelTV"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tik"
+            android:layout_centerHorizontal="true"
+            android:layout_margin="10dp"
+            android:text="Car Model: "
+            android:textColor="@color/orange"
+            android:textStyle="bold" />
 
 
         <RelativeLayout
-            android:layout_width="wrap_content"
-            android:layout_marginTop="20dp"
-            android:padding="20dp"
-            android:layout_centerInParent="true"
-            android:layout_height="wrap_content">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/tik"
-                android:textSize="20sp"
-                android:textColor="@color/grey_1000"
-                android:text= "একটা  অপশন বাছাই করুন"
-                android:layout_centerHorizontal="true"
-                />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:text="Flat no: "
-                android:layout_below="@+id/tik"
-                android:id="@+id/flatno"
-                android:layout_margin="10dp"
-                android:textColor="@color/orange"
-                android:textStyle="bold"
-                />
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/carModelTV"
+            android:gravity="center_horizontal">
 
 
-
-            <RelativeLayout
+            <LinearLayout
+                android:id="@+id/inOutLayout"
                 android:layout_width="match_parent"
-                android:layout_below="@+id/flatno"
-                android:gravity="center_horizontal"
-                android:layout_height="wrap_content">
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-
-                    android:layout_marginTop="20dp"
-                    android:layout_marginEnd="10dp"
-                    android:layout_marginBottom="10dp"
-                    android:gravity="center_horizontal"
-                    android:orientation="vertical"
-                    >
-
-                    <Button
-                        android:id="@+id/in"
-                        android:layout_width="match_parent"
-                        android:layout_height="45dp"
-                        android:layout_gravity="center_horizontal"
-                        android:layout_marginStart="10dp"
-                        android:layout_marginTop="8dp"
-                        android:layout_marginEnd="10dp"
-                        android:layout_marginBottom="8dp"
-                        android:layout_weight="1"
-                        android:textColor="@color/green"
-                        android:background="@drawable/less_round_button_green"
-                        android:text="IN  (  ভেতরে আসছে )"
-                        android:textSize="12sp" />
-
-                    <Button
-                        android:id="@+id/out"
-                        android:layout_width="match_parent"
-                        android:layout_height="45dp"
-                        android:layout_gravity="center_horizontal"
-                        android:layout_marginStart="10dp"
-                        android:layout_marginTop="8dp"
-                        android:layout_marginEnd="10dp"
-                        android:layout_marginBottom="8dp"
-                        android:layout_weight="1"
-                        android:background="@drawable/less_round_button_red"
-                        android:text="OUT  (  বাহিরে যাচ্ছে )"
-                        android:textColor="@color/darkRed"
-                        android:textSize="12sp" />
-
-                    <Button
-                        android:id="@+id/cancel"
-                        android:layout_width="match_parent"
-                        android:layout_height="45dp"
-                        android:layout_gravity="center_horizontal"
-                        android:layout_marginStart="10dp"
-                        android:layout_marginTop="8dp"
-                        android:layout_marginEnd="10dp"
-                        android:layout_marginBottom="8dp"
-                        android:layout_weight="1"
-                        android:background="@drawable/less_round_button"
-                        android:text="Cancel  (  বাতিল )"
-                        android:textColor="@color/orange"
-                        android:textSize="12sp" />
-
-
-
-
-                </LinearLayout>
-
-            </RelativeLayout>
-
-            <ProgressBar
-                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/dialogprogress"
-                android:layout_centerInParent="true"
-                android:visibility="gone"
-                />
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginBottom="10dp"
+                android:gravity="center_horizontal"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/in"
+                    android:layout_width="match_parent"
+                    android:layout_height="45dp"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginBottom="8dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/less_round_button_green"
+                    android:text="IN  (  ভেতরে আসছে )"
+                    android:textColor="@color/green"
+                    android:textSize="12sp" />
+
+                <Button
+                    android:id="@+id/out"
+                    android:layout_width="match_parent"
+                    android:layout_height="45dp"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginBottom="8dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/less_round_button_red"
+                    android:text="OUT  (  বাহিরে যাচ্ছে )"
+                    android:textColor="@color/darkRed"
+                    android:textSize="12sp" />
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:layout_below="@id/inOutLayout"
+                android:layout_height="wrap_content">
+
+                <Button
+                    android:id="@+id/cancel"
+                    android:layout_width="wrap_content"
+                    android:paddingRight="15dp"
+                    android:paddingLeft="15dp"
+                    android:layout_height="45dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginBottom="8dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/less_round_button"
+                    android:gravity="center|center_horizontal"
+                    android:text="Cancel  (  বাতিল )"
+                    android:textColor="@color/orange"
+                    android:textSize="12sp" />
+            </LinearLayout>
+
 
 
         </RelativeLayout>
+
+        <ProgressBar
+            android:id="@+id/dialogprogress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:visibility="gone" />
+
+
+    </RelativeLayout>
 
 
 </RelativeLayout>

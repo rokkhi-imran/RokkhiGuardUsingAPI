@@ -90,7 +90,7 @@ public class EditWrokerProfileActivity extends AppCompatActivity {
         userWtype = (EditText) findViewById(R.id.user_wtype);
         userFlat = (EditText) findViewById(R.id.user_flat);
         userPhoto= findViewById(R.id.user_photo_IV);
-        done = (Button) findViewById(R.id.done);
+        done = (Button) findViewById(R.id.SubmitUserInfoBtn);
 
         allflats = new ArrayList<>();
         historyflatno = new ArrayList<>();

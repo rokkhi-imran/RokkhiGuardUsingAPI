@@ -3,6 +3,7 @@ package com.rokkhi.rokkhiguard.Adapter;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,20 +15,29 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
+import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.androidnetworking.AndroidNetworking;
+import com.androidnetworking.common.Priority;
+import com.androidnetworking.error.ANError;
+import com.androidnetworking.interfaces.JSONObjectRequestListener;
 import com.bumptech.glide.Glide;
-import com.rokkhi.rokkhiguard.Model.Visitors;
+import com.google.gson.Gson;
+import com.rokkhi.rokkhiguard.Model.api.GetInsideVisitorData;
+import com.rokkhi.rokkhiguard.Model.api.VisitorOutModelClass;
 import com.rokkhi.rokkhiguard.R;
+import com.rokkhi.rokkhiguard.StaticData;
+import com.rokkhi.rokkhiguard.Utils.FullScreenAlertDialog;
+import com.rokkhi.rokkhiguard.helper.SharedPrefHelper;
 
-import java.text.SimpleDateFormat;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.Locale;
+import java.util.HashMap;
+import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
-
 
 
 public class VisitorAdapter extends RecyclerView.Adapter<VisitorAdapter.VisitorViewHolder> implements Filterable {
@@ -37,17 +47,19 @@ public class VisitorAdapter extends RecyclerView.Adapter<VisitorAdapter.VisitorV
     public interface MyInterface {
         public void loadagain();
     }
+
     private MyInterface myInterface;
-    private ArrayList<Visitors> mvisitorFilterList;
+    private ArrayList<GetInsideVisitorData> mvisitorFilterList;
     private LayoutInflater mInflater;
     private ValueFilter valueFilter;
 
-    public ArrayList<Visitors> list;
+    public ArrayList<GetInsideVisitorData> list;
     private static final String TAG = "VisitorAdapter";
     SharedPreferences sharedPref;
 
     private Context context;
-    VisitorAdapter(ArrayList<Visitors> list, Context context) {
+
+    public VisitorAdapter(ArrayList<GetInsideVisitorData> list, Context context) {
         this.list = list;
         mvisitorFilterList = list;
         this.context = context;
@@ -60,6 +72,7 @@ public class VisitorAdapter extends RecyclerView.Adapter<VisitorAdapter.VisitorV
             throw new ClassCastException("Activity must implement AdapterCallback.");
         }
     }
+
     @Override
     public Filter getFilter() {
 
@@ -86,19 +99,18 @@ public class VisitorAdapter extends RecyclerView.Adapter<VisitorAdapter.VisitorV
     @Override
     public void onBindViewHolder(@NonNull final VisitorViewHolder holder, int position) {
 
-        final Visitors visitor = list.get(position);
-        holder.name.setText(visitor.getV_name());
+        final GetInsideVisitorData visitor = list.get(position);
+        holder.name.setText(visitor.getName());
 
-        Glide.with(context).load(visitor.getThumb_v_pic()).placeholder(R.drawable.male1).into(holder.propic);
+        Glide.with(context).load(visitor.getImage()).placeholder(R.drawable.male1).into(holder.propic);
 
-//        UniversalImageLoader.setImage(visitor.getThumb_v_pic(), holder.propic, null, "");
-        Date date1 = visitor.getTime();
+       /* Date date1 = visitor.getTime();
         Calendar cal = Calendar.getInstance();
         cal.setTime(date1);
-
-
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("hh:mm a", Locale.getDefault());
-        holder.intime.setText(simpleDateFormat.format(cal.getTime()));
+        */
+
+        holder.intime.setText(visitor.getInTime());
         holder.out.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -113,7 +125,6 @@ public class VisitorAdapter extends RecyclerView.Adapter<VisitorAdapter.VisitorV
                 alertDialog.setCancelable(false);
                 alertDialog.show();
 
-
                 cancel.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -121,13 +132,70 @@ public class VisitorAdapter extends RecyclerView.Adapter<VisitorAdapter.VisitorV
                     }
                 });
 
+                confirm.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        callVisitorOutFunction(context, visitor.getId());
+                    }
+                });
 
 
             }
         });
 
 
-        holder.flat.setText("To: " + visitor.getF_no());
+        holder.flat.setText("To: NO FLAT FROM API");
+
+    }
+
+    private void callVisitorOutFunction(Context context, int id) {
+
+
+        FullScreenAlertDialog fullScreenAlertDialog = new FullScreenAlertDialog(context);
+
+        Map<String, String> dataPost = new HashMap<>();
+        dataPost.put("visitorId", String.valueOf(id));
+
+        JSONObject jsonDataPost = new JSONObject(dataPost);
+        String url = StaticData.baseURL + "" + StaticData.letTheVisitorOut;
+        SharedPrefHelper sharedPrefHelper = new SharedPrefHelper(context);
+        String token = sharedPrefHelper.getString(StaticData.KEY_FIREBASE_ID_TOKEN);
+
+
+        AndroidNetworking.post(url)
+                .addHeaders("authtoken", token)
+                .setContentType("application/json")
+                .addJSONObjectBody(jsonDataPost)
+                .setPriority(Priority.MEDIUM)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+
+                        fullScreenAlertDialog.dismissdialog();
+
+
+                        Log.e(TAG, "onResponse: =  =----------- " + response);
+
+                        Gson gson = new Gson();
+                        VisitorOutModelClass visitorOutModelClass = gson.fromJson(String.valueOf(response), VisitorOutModelClass.class);
+                        StaticData.showSuccessDialog((FragmentActivity) context, "OUT Alert !", "Successfully out");
+
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+
+                        fullScreenAlertDialog.dismissdialog();
+
+                        StaticData.showErrorAlertDialog(context, "Alert !", "আবার চেষ্টা করুন ।");
+
+                        Log.e(TAG, "onResponse: error message =  " + anError.getMessage());
+                        Log.e(TAG, "onResponse: error code =  " + anError.getErrorCode());
+                        Log.e(TAG, "onResponse: error body =  " + anError.getErrorBody());
+                        Log.e(TAG, "onResponse: error  getErrorDetail =  " + anError.getErrorDetail());
+                    }
+                });
 
     }
 
@@ -177,13 +245,12 @@ public class VisitorAdapter extends RecyclerView.Adapter<VisitorAdapter.VisitorV
 
             if (constraint != null && constraint.length() > 0) {
 
-                ArrayList<Visitors> filterList = new ArrayList<>();
+                ArrayList<GetInsideVisitorData> filterList = new ArrayList<>();
 
                 for (int i = 0; i < mvisitorFilterList.size(); i++) {
-                    if (mvisitorFilterList.get(i).getV_name().toLowerCase().contains(constraint.toString().toLowerCase())
-                            || mvisitorFilterList.get(i).getV_gpass().toLowerCase().contains(constraint.toString().toLowerCase())
-                            || mvisitorFilterList.get(i).getF_no().toLowerCase().contains(constraint.toString().toLowerCase()
-                    )) {
+                    if (mvisitorFilterList.get(i).getName().toLowerCase().contains(constraint.toString().toLowerCase())
+
+                    ) {
                         filterList.add(mvisitorFilterList.get(i));
                     }
                 }
@@ -211,7 +278,7 @@ public class VisitorAdapter extends RecyclerView.Adapter<VisitorAdapter.VisitorV
         protected void publishResults(CharSequence constraint,
                                       FilterResults results) {
 
-            list = (ArrayList<Visitors>) results.values;
+            list = (ArrayList<GetInsideVisitorData>) results.values;
 
             notifyDataSetChanged();
 

@@ -83,7 +83,7 @@ public class ChildAdapter extends RecyclerView.Adapter<ChildAdapter.ChildViewHol
     public class ChildViewHolder extends RecyclerView.ViewHolder {
         public View view;
         TextView name;
-        TextView active, flat;
+        TextView  flat;
         CircleImageView propic;
         ImageView call;
 
@@ -92,7 +92,6 @@ public class ChildAdapter extends RecyclerView.Adapter<ChildAdapter.ChildViewHol
             view = itemView;
             name = view.findViewById(R.id.name);
             propic = view.findViewById(R.id.one);
-            active = view.findViewById(R.id.activated);
             call = view.findViewById(R.id.call);
             flat = view.findViewById(R.id.flatNumberET);
         }

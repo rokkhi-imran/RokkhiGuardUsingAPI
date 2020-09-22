@@ -127,3 +127,115 @@ data class ChildData(
     val thumbImage: String,
     val updatedDate: String
 )
+
+data class RegisterUserModelClass(
+    val data: RegisterUserData,
+    val errors: List<Any>,
+    val status: String,
+    val statusCode: Int
+)
+
+data class RegisterUserData(
+    val address: String,
+    val age: Int,
+    val building: Int,
+    val community: Int,
+    val createdDate: String,
+    val email: String,
+    val firebaseId: String,
+    val flat: Int,
+    val gender: String,
+    val id: Int,
+    val image: String,
+    val isActive: Boolean,
+    val name: String,
+    val nid: String,
+    val organization: String,
+    val password: String,
+    val phone: String,
+    val primaryRoleCode: String,
+    val thumbImage: String,
+    val updatedDate: String,
+    val userRoles: List<UserRole>
+)
+
+data class UserRole(
+    val code: String,
+    val createdDate: String,
+    val description: String,
+    val id: Int,
+    val name: String,
+    val updatedDate: String
+)
+
+data class GetVisitorInsideModelClass(
+    val `data`: List<GetInsideVisitorData>,
+    val errors: List<Any>,
+    val status: String,
+    val statusCode: Int
+)
+
+data class GetInsideVisitorData(
+    val address: String,
+    val company: String,
+    val contact: String,
+    val createdDate: String,
+    val email: String,
+    val exitTime: Any,
+    val id: Int,
+    val image: String,
+    val inTime: String,
+    val name: String,
+    val purpose: String,
+    val status: String,
+    val thumbImage: String,
+    val type: String,
+    val updatedDate: String
+)
+
+data class VisitorOutModelClass(
+    val data: VisitorOutData,
+    val errors: List<Any>,
+    val status: String,
+    val statusCode: Int
+)
+
+data class VisitorOutData(
+    val address: String,
+    val company: String,
+    val contact: String,
+    val createdDate: String,
+    val email: String,
+    val exitTime: String,
+    val id: Int,
+    val image: String,
+    val inTime: String,
+    val name: String,
+    val purpose: String,
+    val status: String,
+    val thumbImage: String,
+    val type: String,
+    val updatedDate: String
+)
+
+data class VehicleListModelClass(
+    val `data`: List<VehicleData>,
+    val errors: List<Any>,
+    val status: String,
+    val statusCode: Int
+)
+
+data class VehicleData(
+    val color: String,
+    val createdDate: String,
+    val id: Int,
+    val image: String,
+    val model: String,
+    val name: String,
+    val number: String,
+    val registrationNumber: String,
+    val taxTokenNumber: String,
+    val thumbImage: String,
+    val type: String,
+    val updatedDate: String
+)

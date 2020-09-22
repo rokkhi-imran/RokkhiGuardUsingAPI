@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="150dp"
+    android:layout_height="wrap_content"
+    android:layout_margin="5dp"
+    android:layout_gravity="center"
+    android:orientation="vertical"
+    android:background="@drawable/rectangletextview"
+    android:gravity="center">
+
+    <TextView
+        android:id="@+id/carNumberTV"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:padding="9dp"
+        android:text="Dhaka_12041"
+        android:textColor="@color/orange"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+    <TextView
+        android:id="@+id/carModelTV"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:padding="9dp"
+        android:text="Honda Civic type-R"
+        android:textColor="@color/orange"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+    <TextView
+        android:id="@+id/carColorTV"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:padding="9dp"
+        android:text="Black"
+        android:textColor="@color/orange"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+</LinearLayout>
