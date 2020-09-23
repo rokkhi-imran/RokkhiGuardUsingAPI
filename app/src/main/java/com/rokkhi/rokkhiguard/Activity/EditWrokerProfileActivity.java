@@ -86,7 +86,7 @@ public class EditWrokerProfileActivity extends AppCompatActivity {
         userPhoneTV = (TextView) findViewById(R.id.user_Phone_TV);
         generatepin = (Button) findViewById(R.id.generatepin);
         userPin = (EditText) findViewById(R.id.user_pin);
-        userName = (EditText) findViewById(R.id.user_name);
+        userName = (EditText) findViewById(R.id.user_nameET);
         userWtype = (EditText) findViewById(R.id.user_wtype);
         userFlat = (EditText) findViewById(R.id.user_flat);
         userPhoto= findViewById(R.id.user_photo_IV);

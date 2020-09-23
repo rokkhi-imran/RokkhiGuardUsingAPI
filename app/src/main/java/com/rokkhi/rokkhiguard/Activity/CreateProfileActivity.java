@@ -139,9 +139,9 @@ public class CreateProfileActivity extends AppCompatActivity implements IPickRes
     }
 
     private void initView() {
-        userPhotoImageView = (CircleImageView) findViewById(R.id.user_photo);
+        userPhotoImageView = (CircleImageView) findViewById(R.id.user_photoIV);
         userPhotoImageView.setOnClickListener(this);
-        mUserName = (EditText) findViewById(R.id.user_name);
+        mUserName = (EditText) findViewById(R.id.user_nameET);
         mUserPhoneET = (EditText) findViewById(R.id.user_Phone_ET);
         mUserWtype = (EditText) findViewById(R.id.user_wtype);
         mUserWtype.setOnClickListener(this);
@@ -158,7 +158,7 @@ public class CreateProfileActivity extends AppCompatActivity implements IPickRes
         switch (v.getId()) {
             default:
                 break;
-            case R.id.user_photo:
+            case R.id.user_photoIV:
 
                 StaticData.selectImage(CreateProfileActivity.this);
 

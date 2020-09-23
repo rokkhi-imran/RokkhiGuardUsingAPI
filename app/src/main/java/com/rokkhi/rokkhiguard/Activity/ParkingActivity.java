@@ -75,11 +75,9 @@ public class ParkingActivity extends AppCompatActivity implements View.OnClickLi
         });
 
         Map<String, String> dataPost = new HashMap<>();
-
         dataPost.put("buildingId", sharedPrefHelper.getString(StaticData.BUILD_ID));
-        dataPost.put("flatId", sharedPrefHelper.getString(StaticData.FLAT_ID));
+        dataPost.put("flatId", "");
         dataPost.put("communityId", sharedPrefHelper.getString(StaticData.COMM_ID));
-
         JSONObject jsonDataPost = new JSONObject(dataPost);
 
 

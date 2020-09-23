@@ -24,24 +24,24 @@ public class StaticData {
     public static final String BUILD_ID = "BUILDING_ID";
     public static final String COMM_ID = "COMM_ID";
     public static final String USER_ID = "USER_ID";
-    public static String imageUploadURL ="http://ec2-54-183-244-125.us-west-1.compute.amazonaws.com:8000/upload";
+    public static String imageUploadURL = "http://ec2-54-183-244-125.us-west-1.compute.amazonaws.com:8000/upload";
 
     public static final void getIdToken(final Context context) {
         FirebaseAuth.getInstance().getCurrentUser().getIdToken(true).addOnSuccessListener(new OnSuccessListener<GetTokenResult>() {
             @Override
             public void onSuccess(GetTokenResult getTokenResult) {
-                Log.e("TAG", "onSuccess: "+getTokenResult.getToken() );
+                Log.e("TAG", "onSuccess: " + getTokenResult.getToken());
 
-                SharedPrefHelper sharedPrefHelper=new SharedPrefHelper(context);
-                sharedPrefHelper.putString(StaticData.KEY_FIREBASE_ID_TOKEN,getTokenResult.getToken());
-                Log.e("TAG", "onSuccess: "+getTokenResult.getToken() );
+                SharedPrefHelper sharedPrefHelper = new SharedPrefHelper(context);
+                sharedPrefHelper.putString(StaticData.KEY_FIREBASE_ID_TOKEN, getTokenResult.getToken());
+                Log.e("TAG", "onSuccess: " + getTokenResult.getToken());
 
             }
         });
 
     }
 
-    public static final void showErrorAlertDialog(Context context,String alertTitle,String alertBody){
+    public static final void showErrorAlertDialog(Context context, String alertTitle, String alertBody) {
 
         new AlertDialog.Builder(context)
                 .setTitle(alertTitle)
@@ -56,14 +56,15 @@ public class StaticData {
 
     }
 
-    public static final String baseURL= "http://home.api.rokkhi.com:3000";
-    public static final String getNotice= "/api/v1/notice/getNotices";
-    public static final String getUsersList= "/api/v1/user/getUsersList";
-    public static final String addParcel= "/api/v1/entrance/addParcel";
-    public static final String registerOrUpdate= "/api/v1/user/registerOrUpdate";
-    public static final String getVisitors= "/api/v1/entrance/getVisitors";
-    public static final String letTheVisitorOut= "/api/v1/entrance/letTheVisitorOut";
-    public static final String getVehicles= "/api/v1/vehicle/getVehicles";
+    public static final String baseURL = "http://home.api.rokkhi.com:3000";
+    public static final String getNotice = "/api/v1/notice/getNotices";
+    public static final String getUsersList = "/api/v1/user/getUsersList";
+    public static final String addParcel = "/api/v1/entrance/addParcel";
+    public static final String registerOrUpdate = "/api/v1/user/registerOrUpdate";
+    public static final String getVisitors = "/api/v1/entrance/getVisitors";
+    public static final String letTheVisitorOut = "/api/v1/entrance/letTheVisitorOut";
+    public static final String getVehicles = "/api/v1/vehicle/getVehicles";
+    public static final String recordVehicleEntry = "/api/v1/entrance/recordVehicleEntry";
 
 
     //user role
@@ -81,6 +82,13 @@ public class StaticData {
     public static final String PARCEL_DELIVERED = "PARCEL_DELIVERED";
     public static final String INSIDE_COMPOUND = "INSIDE_COMPOUND";
     public static final String OUTSIDE_COMPOUND = "OUTSIDE_COMPOUND";
+
+    //    NoticeForConstants
+    public static final String ALL = "ALL";
+    public static final String FLAT_MEMBERS = "FLAT_MEMBERS";
+    public static final String BUILDING_OWNERS = "BUILDING_OWNERS";
+    public static final String COMMITTEE_MEMBERS = "COMMITTEE_MEMBERS";
+    public static final String GUARDS = "GUARDS";
 
     public static void selectImage(FragmentActivity createProfileActivity) {
         PickSetup setup = new PickSetup()

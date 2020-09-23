@@ -60,7 +60,7 @@ public class ChildrenListActivity extends AppCompatActivity {
 
         dataPost.put("buildingId", sharedPrefHelper.getString(StaticData.BUILD_ID));
         dataPost.put("communityId", sharedPrefHelper.getString(StaticData.COMM_ID));
-        dataPost.put("flatId", sharedPrefHelper.getString(StaticData.FLAT_ID));
+        dataPost.put("flatId", "");
         dataPost.put("userRoleCode", StaticData.CHILD.toString());
 
         JSONObject jsonDataPost = new JSONObject(dataPost);

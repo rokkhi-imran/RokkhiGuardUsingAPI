@@ -72,7 +72,7 @@ public class SWorkersActivity extends AppCompatActivity implements View.OnClickL
         Map<String, String> dataPost = new HashMap<>();
         dataPost.put("buildingId", sharedPrefHelper.getString(StaticData.BUILD_ID));
         dataPost.put("communityId", sharedPrefHelper.getString(StaticData.COMM_ID));
-        dataPost.put("flatId", sharedPrefHelper.getString(StaticData.FLAT_ID));
+        dataPost.put("flatId", "");
         dataPost.put("userRoleCode", StaticData.SERVICE_WORKER.toString());
 
         JSONObject jsonDataPost = new JSONObject(dataPost);

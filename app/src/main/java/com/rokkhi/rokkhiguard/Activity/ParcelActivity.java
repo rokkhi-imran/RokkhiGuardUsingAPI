@@ -162,7 +162,7 @@ public class ParcelActivity extends AppCompatActivity implements IPickResult{
                     AndroidNetworking.upload(StaticData.imageUploadURL)
                             .addMultipartFile("image", file)// posting any type of file
                             .addMultipartParameter("folder", "parcels")
-                            .addMultipartParameter("subfolder", sharedPrefHelper.getString(StaticData.FLAT_ID))
+                            .addMultipartParameter("subfolder", sharedPrefHelper.getString(StaticData.BUILD_ID))
                             .addMultipartParameter("filename", currentDateandTime)
                             .setPriority(Priority.MEDIUM)
                             .build()
@@ -198,11 +198,6 @@ public class ParcelActivity extends AppCompatActivity implements IPickResult{
                                     Log.e("TAG = ", "onError: " + error);
                                 }
                             });
-
-
-
-
-
                 }
             }
         });
@@ -234,7 +229,7 @@ public class ParcelActivity extends AppCompatActivity implements IPickResult{
         dataPost.put("acknowledgedBy", "");
         dataPost.put("guardId", sharedPrefHelper.getString(StaticData.USER_ID));
         dataPost.put("buildingId", sharedPrefHelper.getString(StaticData.BUILD_ID));
-        dataPost.put("flatId", sharedPrefHelper.getString(StaticData.FLAT_ID));
+        dataPost.put("flatId", flatNumberET.getText().toString());
         dataPost.put("communityId", sharedPrefHelper.getString(StaticData.COMM_ID));
 
         JSONObject jsonDataPost = new JSONObject(dataPost);

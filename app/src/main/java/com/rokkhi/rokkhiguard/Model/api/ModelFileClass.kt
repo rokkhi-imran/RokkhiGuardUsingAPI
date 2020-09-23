@@ -239,3 +239,33 @@ data class VehicleData(
     val type: String,
     val updatedDate: String
 )
+
+data class RecordVehicleEntryModleClass(
+    val `data`:  RecordVehicleEntryData,
+    val errors: List<Any>,
+    val status: String,
+    val statusCode: Int
+)
+
+data class  RecordVehicleEntryData(
+    val address: String,
+    val associatedVehicle: Int,
+    val building: Int,
+    val community: Int,
+    val company: String,
+    val contact: String,
+    val createdDate: String,
+    val email: String,
+    val exitTime: Any,
+    val flat: Int,
+    val id: Int,
+    val image: String,
+    val inTime: String,
+    val name: String,
+    val purpose: String,
+    val receivedBy: Int,
+    val status: String,
+    val thumbImage: String,
+    val type: String,
+    val updatedDate: String
+)

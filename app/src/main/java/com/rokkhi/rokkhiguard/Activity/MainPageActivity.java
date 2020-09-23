@@ -83,7 +83,7 @@ public class MainPageActivity extends AppCompatActivity {
         parcel = findViewById(R.id.parcel);
         create = findViewById(R.id.profile);
         settings = findViewById(R.id.settings);
-        vehicle = findViewById(R.id.vehicle);
+        vehicle = findViewById(R.id.vehicleET);
         child = findViewById(R.id.child);
         buildingName = findViewById(R.id.buildingNameTV);
 

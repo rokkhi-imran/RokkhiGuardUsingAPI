@@ -22,17 +22,17 @@
 
 
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/visitorListRecycelrViewID"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:id="@+id/visitorPendingListRecycelrViewID"
+                android:layout_width="361dp"
+                android:visibility="gone"
+                android:layout_height="92dp" />
 
             <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/user_photo"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:layout_below="@id/visitorListRecycelrViewID"
+                android:id="@+id/user_photoIV"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_below="@id/visitorPendingListRecycelrViewID"
                 android:layout_centerHorizontal="true"
-                android:layout_marginTop="10dp"
                 android:layout_marginBottom="10dp"
                 android:src="@drawable/male1"
                 app:civ_border_color="@color/black"
@@ -50,21 +50,14 @@
             android:background="@drawable/grey_border_bottom"
             android:orientation="vertical">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="15dp"
-                android:text="Phone *     (  মোবাইল নাম্বার )"
-                android:textColor="@color/orange"
-                android:textSize="20sp" />
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:orientation="horizontal"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
 
                 <EditText
-                    android:id="@+id/phone_no"
+                    android:id="@+id/phone_noET"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:background="@drawable/round_edittext2"
@@ -89,16 +82,9 @@
             android:background="@drawable/grey_border_bottom"
             android:orientation="vertical">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="15dp"
-                android:text="Name *     ( নাম )"
-                android:textColor="@color/orange"
-                android:textSize="20sp" />
 
             <EditText
-                android:id="@+id/user_name"
+                android:id="@+id/user_nameET"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:background="@drawable/round_edittext2"
@@ -111,65 +97,25 @@
         </LinearLayout>
 
 
-        <LinearLayout
-            android:id="@+id/relwhere"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/relname"
-            android:layout_marginTop="10dp"
-            android:background="@drawable/grey_border_bottom"
-            android:orientation="vertical">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="15dp"
-                android:text="Organization   (প্রতিষ্ঠান)"
-                android:textColor="@color/orange"
-                android:textSize="20sp" />
-
-            <EditText
-                android:id="@+id/fromwhere"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:background="@drawable/round_edittext2"
-                android:hint="কোন প্রতিষ্টান থেকে এসেছে"
-                android:inputType="textNoSuggestions"
-                android:paddingStart="10dp"
-                android:paddingEnd="1dp"
-                android:textSize="24sp" />
-
-        </LinearLayout>
 
         <RelativeLayout
             android:id="@+id/whomtomeet"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/relwhere"
+            android:layout_below="@+id/relname"
             android:layout_marginTop="15dp"
             android:background="@drawable/grey_border_bottom"
             android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/xx"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="15dp"
-                android:text="Flat no *     ( ফ্ল্যাট নাম্বার)"
-                android:textColor="@color/orange"
-                android:textSize="20sp" />
 
 
             <EditText
                 android:id="@+id/flatNumberET"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:layout_below="@+id/xx"
                 android:background="@drawable/round_edittext2"
                 android:focusable="false"
                 android:hint=" কোন ফ্লাটে যাবে"
                 android:inputType="textNoSuggestions"
-
                 android:paddingStart="10dp"
                 android:paddingEnd="1dp"
                 android:textSize="24sp" />
@@ -187,21 +133,10 @@
             android:background="@drawable/grey_border_bottom"
             android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/t1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="15dp"
-                android:text="Purpose     ( উদ্দেশ্য )"
-                android:textColor="@color/orange"
-                android:textSize="20sp" />
-
-
             <EditText
-                android:id="@+id/pupose"
+                android:id="@+id/puposeET"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:layout_below="@+id/t1"
                 android:background="@drawable/round_edittext2"
                 android:hint="Issue of visiting"
                 android:inputType="textNoSuggestions"
@@ -210,19 +145,10 @@
                 android:text="visiting"
                 android:textSize="24sp" />
 
-            <ImageView
-                android:id="@+id/cut"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_alignEnd="@+id/pupose"
-                android:layout_marginTop="50dp"
-                android:layout_marginEnd="15dp"
-                android:background="@drawable/ic_cut" />
-
         </RelativeLayout>
 
         <LinearLayout
-            android:id="@+id/relvehicle"
+            android:id="@+id/reladdress"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/relpurpose"
@@ -230,16 +156,31 @@
             android:background="@drawable/grey_border_bottom"
             android:orientation="vertical">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="15dp"
-                android:text="Vehicle no    ( গাড়ি নং  )"
-                android:textColor="@color/orange"
-                android:textSize="20sp" />
 
             <EditText
-                android:id="@+id/vehicle"
+                android:id="@+id/addressET"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:background="@drawable/round_edittext2"
+                android:hint=" ঠিকানা "
+                android:inputType="text"
+                android:paddingStart="10dp"
+                android:paddingEnd="1dp"
+                android:textSize="24sp" />
+
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/relvehicle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/reladdress"
+            android:layout_marginTop="15dp"
+            android:background="@drawable/grey_border_bottom"
+            android:orientation="vertical">
+
+
+            <EditText
+                android:id="@+id/vehicleET"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:background="@drawable/round_edittext2"
@@ -252,44 +193,13 @@
         </LinearLayout>
 
 
-        <LinearLayout
-            android:id="@+id/relmembers"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/relvehicle"
-            android:layout_marginTop="15dp"
-            android:background="@drawable/grey_border_bottom"
-            android:orientation="vertical">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="15dp"
-                android:text="ID number   ( আইডি নাম্বার )"
-                android:textColor="@color/orange"
-                android:textSize="20sp" />
-
-            <EditText
-                android:id="@+id/card_no"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:background="@drawable/round_edittext2"
-                android:hint=" আইডি নাম্বার ( যদি থাকে )"
-                android:inputType="textNoSuggestions"
-                android:paddingStart="10dp"
-                android:paddingEnd="1dp"
-                android:textSize="24sp" />
-
-        </LinearLayout>
-
-
         <Button
             android:id="@+id/SubmitUserInfoBtn"
             android:layout_width="match_parent"
             android:layout_height="60dp"
-            android:layout_below="@+id/relmembers"
+            android:layout_below="@+id/relvehicle"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="70dp"
+            android:layout_marginTop="30dp"
             android:layout_marginBottom="50dp"
             android:background="@drawable/round_button"
             android:text="Done   ( শেষ )"

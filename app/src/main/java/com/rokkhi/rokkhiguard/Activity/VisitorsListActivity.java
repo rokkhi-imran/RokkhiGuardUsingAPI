@@ -91,7 +91,7 @@ public class VisitorsListActivity extends AppCompatActivity implements VisitorAd
         Map<String, String> dataPost = new HashMap<>();
         dataPost.put("buildingId", sharedPrefHelper.getString(StaticData.BUILD_ID));
         dataPost.put("communityId", sharedPrefHelper.getString(StaticData.COMM_ID));
-        dataPost.put("flatId", sharedPrefHelper.getString(StaticData.FLAT_ID));
+        dataPost.put("flatId", "");
         dataPost.put("status", StaticData.INSIDE_COMPOUND);
         dataPost.put("fromDate", "");
         dataPost.put("toDate", "");

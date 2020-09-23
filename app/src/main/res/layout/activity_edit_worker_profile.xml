@@ -185,7 +185,7 @@
                     android:textSize="22sp" />
 
                 <EditText
-                    android:id="@+id/user_name"
+                    android:id="@+id/user_nameET"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:background="@drawable/round_edittext2"

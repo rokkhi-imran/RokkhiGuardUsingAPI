@@ -3,6 +3,7 @@ package com.rokkhi.rokkhiguard.Adapter;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,20 +11,32 @@ import android.widget.Button;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
+import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.androidnetworking.AndroidNetworking;
+import com.androidnetworking.common.Priority;
+import com.androidnetworking.error.ANError;
+import com.androidnetworking.interfaces.JSONObjectRequestListener;
+import com.google.gson.Gson;
 import com.rokkhi.rokkhiguard.Model.Vehicle;
+import com.rokkhi.rokkhiguard.Model.api.RecordVehicleEntryModleClass;
 import com.rokkhi.rokkhiguard.Model.api.VehicleData;
 import com.rokkhi.rokkhiguard.R;
-import com.rokkhi.rokkhiguard.Utils.Normalfunc;
+import com.rokkhi.rokkhiguard.StaticData;
+import com.rokkhi.rokkhiguard.Utils.FullScreenAlertDialog;
 import com.rokkhi.rokkhiguard.data.VehiclesRepository;
+import com.rokkhi.rokkhiguard.helper.SharedPrefHelper;
+
+import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 public class GridAdapter extends RecyclerView.Adapter<GridAdapter.GridViewHolder> implements Filterable {
@@ -32,7 +45,6 @@ public class GridAdapter extends RecyclerView.Adapter<GridAdapter.GridViewHolder
     private static final String TAG = "GridAdapter";
     SharedPreferences sharedPref;
     AlertDialog alertDialog;
-    Vehicle selected = new Vehicle();
 
 
     public interface MyInterface {
@@ -45,11 +57,9 @@ public class GridAdapter extends RecyclerView.Adapter<GridAdapter.GridViewHolder
     private ArrayList<VehicleData> mflatFilterList;
     private ValueFilter valueFilter;
     private LayoutInflater mInflater;
-    // private ValueFilter valueFilter;
-    private Normalfunc normalfunc;
+
 
     VehiclesRepository vehiclesRepository;
-    ArrayList<Vehicle> allVehicles;
 
     @Override
     public Filter getFilter() {
@@ -68,7 +78,6 @@ public class GridAdapter extends RecyclerView.Adapter<GridAdapter.GridViewHolder
         this.list = list;
         this.context = context;
         mInflater = LayoutInflater.from(context);
-        normalfunc = new Normalfunc();
         mflatFilterList = list;
 
         getFilter();
@@ -94,7 +103,7 @@ public class GridAdapter extends RecyclerView.Adapter<GridAdapter.GridViewHolder
     }
 
 
-    private void confirmdialog(final VehicleData parkings, final int position) {
+    private void confirmdialog(final VehicleData vehicleData, final int position) {
 
 
         alertDialog = new AlertDialog.Builder(context).create();
@@ -104,7 +113,7 @@ public class GridAdapter extends RecyclerView.Adapter<GridAdapter.GridViewHolder
         final Button in = convertView.findViewById(R.id.in);
         final Button out = convertView.findViewById(R.id.out);
         TextView carModelTV = convertView.findViewById(R.id.carModelTV);
-        String ftext = "Car model: " + parkings.getModel();
+        String ftext = "Car model: " + vehicleData.getModel();
 
         carModelTV.setText(ftext);
 
@@ -122,7 +131,7 @@ public class GridAdapter extends RecyclerView.Adapter<GridAdapter.GridViewHolder
             @Override
             public void onClick(View view) {
 
-                Toast.makeText(context, "in", Toast.LENGTH_SHORT).show();
+                callVehicleEntryData(vehicleData,"in",context);
 
             }
         });
@@ -130,7 +139,7 @@ public class GridAdapter extends RecyclerView.Adapter<GridAdapter.GridViewHolder
         out.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(context, "out", Toast.LENGTH_SHORT).show();
+                callVehicleEntryData(vehicleData,"out",context);
 
 
             }
@@ -138,7 +147,66 @@ public class GridAdapter extends RecyclerView.Adapter<GridAdapter.GridViewHolder
 
     }
 
+    private void callVehicleEntryData(VehicleData vehicleData, String inOutStatus, Context context) {
 
+        FullScreenAlertDialog fullScreenAlertDialog=new FullScreenAlertDialog(context);
+
+        SharedPrefHelper sharedPrefHelper=new SharedPrefHelper(context);
+
+        Map<String, String> dataPost = new HashMap<>();
+        dataPost.put("vehicleId", String.valueOf(vehicleData.getId()));
+        dataPost.put("buildingId", sharedPrefHelper.getString(StaticData.BUILD_ID));
+        dataPost.put("flatId", "");
+        dataPost.put("communityId", sharedPrefHelper.getString(StaticData.COMM_ID));
+        dataPost.put("guardId", sharedPrefHelper.getString(StaticData.USER_ID));
+        dataPost.put("acknowledgedBy", "");
+        JSONObject jsonDataPost = new JSONObject(dataPost);
+
+
+        String url = StaticData.baseURL + "" + StaticData.recordVehicleEntry;
+        String token = sharedPrefHelper.getString(StaticData.KEY_FIREBASE_ID_TOKEN);
+
+        Log.e("TAG", "onCreate: " + jsonDataPost);
+        Log.e("TAG", "onCreate: " + url);
+        Log.e("TAG", "onCreate: " + token);
+        Log.e("TAG", "onCreate: ---------------------- ");
+
+
+        AndroidNetworking.post(url)
+                .addHeaders("authtoken", token)
+                .setContentType("application/json")
+                .addJSONObjectBody(jsonDataPost)
+                .setPriority(Priority.MEDIUM)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+
+                        Log.e(TAG, "onResponse: =  =----------- " + response);
+
+                        Gson gson = new Gson();
+                        RecordVehicleEntryModleClass recordVehicleEntryModleClass = gson.fromJson(String.valueOf(response), RecordVehicleEntryModleClass.class);
+
+                        StaticData.showSuccessDialog((FragmentActivity) context,"Success !","Your action completed.");
+
+
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+
+
+                        StaticData.showErrorAlertDialog(context,"Alert !","আবার চেষ্টা করুন ।");
+
+                        Log.e(TAG, "onResponse: error message =  " + anError.getMessage());
+                        Log.e(TAG, "onResponse: error code =  " + anError.getErrorCode());
+                        Log.e(TAG, "onResponse: error body =  " + anError.getErrorBody());
+                        Log.e(TAG, "onResponse: error  getErrorDetail =  " + anError.getErrorDetail());
+                    }
+                });
+
+
+    }
 
 
     @Override
@@ -149,12 +217,7 @@ public class GridAdapter extends RecyclerView.Adapter<GridAdapter.GridViewHolder
         holder.carModelTV.setText(parkings.getModel());
         holder.carColorTV.setText(parkings.getColor());
 
-        holder.view.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                confirmdialog(list.get(position),position);
-            }
-        });
+        holder.view.setOnClickListener(v -> confirmdialog(list.get(position),position));
 
     }
 

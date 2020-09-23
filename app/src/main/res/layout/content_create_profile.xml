@@ -22,7 +22,7 @@
             android:layout_height="wrap_content">
 
             <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/user_photo"
+                android:id="@+id/user_photoIV"
                 android:layout_width="120dp"
                 android:layout_height="120dp"
                 android:layout_centerHorizontal="true"
@@ -53,7 +53,7 @@
                 android:textSize="22sp" />
 
             <EditText
-                android:id="@+id/user_name"
+                android:id="@+id/user_nameET"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:background="@drawable/round_edittext2"
