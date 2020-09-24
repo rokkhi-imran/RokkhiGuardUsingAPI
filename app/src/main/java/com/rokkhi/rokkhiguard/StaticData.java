@@ -65,6 +65,8 @@ public class StaticData {
     public static final String letTheVisitorOut = "/api/v1/entrance/letTheVisitorOut";
     public static final String getVehicles = "/api/v1/vehicle/getVehicles";
     public static final String recordVehicleEntry = "/api/v1/entrance/recordVehicleEntry";
+    public static final String getUserDetails = "/api/v1/user/getUserDetails";
+    public static final String getByPhoneNumber = "/api/v1/user/getByPhoneNumber";
 
 
     //user role
