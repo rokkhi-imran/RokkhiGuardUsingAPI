@@ -27,8 +27,6 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
-import timber.log.Timber;
-
 
 public class ChildrenListActivity extends AppCompatActivity {
     private static final String TAG = "ChildrenList";
@@ -86,7 +84,7 @@ public class ChildrenListActivity extends AppCompatActivity {
 
                         mProgressBar.setVisibility(View.GONE);
 
-                        Timber.e("onResponse: =   " + response);
+                        Log.e(TAG, "onResponse: =   " + response);
 
                         Gson gson = new Gson();
                         childModelClass = gson.fromJson(String.valueOf(response), ChildModelClass.class);

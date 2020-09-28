@@ -18,12 +18,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
-import androidx.fragment.app.FragmentActivity;
 
-import com.androidnetworking.AndroidNetworking;
-import com.androidnetworking.common.Priority;
-import com.androidnetworking.error.ANError;
-import com.androidnetworking.interfaces.JSONObjectRequestListener;
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.ErrorCodes;
 import com.firebase.ui.auth.IdpResponse;
@@ -33,13 +28,12 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GetTokenResult;
 import com.google.gson.Gson;
+import com.rokkhi.rokkhiguard.Model.api.GetUserByPhoneData;
 import com.rokkhi.rokkhiguard.Model.api.UserDetailsModelClass;
 import com.rokkhi.rokkhiguard.R;
 import com.rokkhi.rokkhiguard.StaticData;
 import com.rokkhi.rokkhiguard.Utils.FullScreenAlertDialog;
 import com.rokkhi.rokkhiguard.helper.SharedPrefHelper;
-
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -52,7 +46,6 @@ public class DaroanPassActivity extends AppCompatActivity implements View.OnClic
 
     private static final int RC_SIGN_IN = 12773;
     private static final String TAG = "DaroanPass";
-    public static boolean checked = false;
     static TextView homename;
     CirclePinField circlePinField;
     TextView one;
@@ -85,18 +78,20 @@ public class DaroanPassActivity extends AppCompatActivity implements View.OnClic
 
     UserDetailsModelClass userDetailsData;
 
+    GetUserByPhoneData getUserByPhoneData;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_daroan_pass);
         context = DaroanPassActivity.this;
-        sharedPrefHelper=new SharedPrefHelper(context);
+        sharedPrefHelper = new SharedPrefHelper(context);
 
+        Gson gson = new Gson();
+        getUserByPhoneData = gson.fromJson(getIntent().getStringExtra("guardinfo"), GetUserByPhoneData.class);
 
-        sharedPrefHelper.putString(StaticData.BUILD_ID,"2");
-        sharedPrefHelper.putString(StaticData.COMM_ID,"2");
-        sharedPrefHelper.putString(StaticData.USER_ID,"1");
+        Toast.makeText(context, "" + getUserByPhoneData.getId(), Toast.LENGTH_SHORT).show();
 
         //check Stroage permission Start
         if (!checkPermissionForWriteExtertalStorage(this)) {
@@ -114,7 +109,6 @@ public class DaroanPassActivity extends AppCompatActivity implements View.OnClic
                 e.printStackTrace();
             }
         }
-
 
 
         Log.d(TAG, "onCreate: xxx ");
@@ -173,7 +167,7 @@ public class DaroanPassActivity extends AppCompatActivity implements View.OnClic
     }
 
     private void callTokenID() {
-        fullScreenAlertDialog=new FullScreenAlertDialog(context);
+        fullScreenAlertDialog = new FullScreenAlertDialog(context);
 
         fullScreenAlertDialog.showdialog();
 
@@ -184,70 +178,12 @@ public class DaroanPassActivity extends AppCompatActivity implements View.OnClic
 
                 SharedPrefHelper sharedPrefHelper = new SharedPrefHelper(context);
                 sharedPrefHelper.putString(StaticData.KEY_FIREBASE_ID_TOKEN, getTokenResult.getToken());
-
-                getUserDetailsFunction(getTokenResult.getToken());
+                fullScreenAlertDialog.dismissdialog();
 
             }
         });
     }
 
-    private void getUserDetailsFunction(String token) {
-
-
-
-
-        String url = StaticData.baseURL + "" + StaticData.getUserDetails;
-
-        Log.e("TAG", "onCreate: " + url);
-        Log.e("TAG", "onCreate: " + token);
-        Log.e("TAG", "onCreate: ---------------------- ");
-
-
-        AndroidNetworking.post(url)
-                .addHeaders("authtoken", token)
-                .setContentType("application/json")
-                .setPriority(Priority.MEDIUM)
-                .build()
-                .getAsJSONObject(new JSONObjectRequestListener() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-
-                        fullScreenAlertDialog.dismissdialog();
-
-
-                        Log.e(TAG, "onResponse: =  =----------- " + response);
-
-                        Gson gson = new Gson();
-                        userDetailsData = gson.fromJson(String.valueOf(response), UserDetailsModelClass.class);
-
-                        if (!userDetailsData.getData().getPrimaryRoleCode().equals(StaticData.GUARD)){
-
-                            StaticData.showSuccessDialog((FragmentActivity) context,"Alert !"," আপনার এই অ্যাপ টি ব্যাবহার করার অনুমতি নাই। ");
-
-                        }
-
-
-
-                    }
-
-                    @Override
-                    public void onError(ANError anError) {
-
-                        fullScreenAlertDialog.dismissdialog();
-
-                        StaticData.showErrorAlertDialog(context,"Alert !","আবার চেষ্টা করুন ।");
-
-                        Log.e(TAG, "onResponse: error message =  " + anError.getMessage());
-                        Log.e(TAG, "onResponse: error code =  " + anError.getErrorCode());
-                        Log.e(TAG, "onResponse: error body =  " + anError.getErrorBody());
-                        Log.e(TAG, "onResponse: error  getErrorDetail =  " + anError.getErrorDetail());
-                    }
-                });
-
-
-
-
-    }
 
     //check stroage Permission Start
 
@@ -278,6 +214,7 @@ public class DaroanPassActivity extends AppCompatActivity implements View.OnClic
             throw e;
         }
     }
+
     public void requestPermissionForReadeExtertalStorage(Context context) throws Exception {
         try {
             ActivityCompat.requestPermissions((Activity) context, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
@@ -350,13 +287,11 @@ public class DaroanPassActivity extends AppCompatActivity implements View.OnClic
 
     @Override
     protected void onRestart() {
-        checked = false;
         super.onRestart();
     }
 
     @Override
     protected void onPause() {
-        checked = false;
         super.onPause();
     }
 
@@ -374,39 +309,19 @@ public class DaroanPassActivity extends AppCompatActivity implements View.OnClic
         circlePinField.setText(passtext);
 
         if (passtext.length() == 5) {
-            //circlePinField.setText(passtext);
+
+            tabpass = getUserByPhoneData.getPassword();
             if (tabpass != null && tabpass.equals(passtext)) {
-                // passtext="";
-
-
-                if (DaroanPassActivity.checked) {
-
-                    Intent intent = new Intent(DaroanPassActivity.this, MainPageActivity.class);
-                    startActivity(intent);
-                    finish();
-                    Toast.makeText(context, "ok", Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(context, "Select building", Toast.LENGTH_SHORT).show();
-                }
+                Intent intent = new Intent(DaroanPassActivity.this, MainPageActivity.class);
+                startActivity(intent);
+                finish();
             } else {
-//                tabpass = sharedPref.getString("pass", "none");
-                if (tabpass != null && tabpass.equals(passtext)) {
-                    //passtext="";
 
-                    Intent intent = new Intent(DaroanPassActivity.this, MainPageActivity.class);
-                    startActivity(intent);
-                    finish();
-                } else {
+                passtext = "";
+                Toast.makeText(context, "Wrong pass code!!", Toast.LENGTH_SHORT).show();
 
-                    passtext = "";
-                    Toast.makeText(context, "Wrong passcode!!", Toast.LENGTH_SHORT).show();
-
-
-                    Intent intent = new Intent(DaroanPassActivity.this, MainPageActivity.class);
-                    startActivity(intent);
-                    finish();
-                }
             }
+
 
             new CountDownTimer(100, 100) {
 
@@ -447,7 +362,6 @@ public class DaroanPassActivity extends AppCompatActivity implements View.OnClic
     private void showSnackbar(int errorMessageRes) {
         Snackbar.make(mRootView, errorMessageRes, Snackbar.LENGTH_LONG).show();
     }
-
 
 
 }

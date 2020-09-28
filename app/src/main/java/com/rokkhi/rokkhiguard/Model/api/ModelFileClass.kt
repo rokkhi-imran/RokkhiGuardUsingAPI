@@ -1,5 +1,8 @@
 package com.rokkhi.rokkhiguard.Model.api
 
+import android.os.Parcelable
+import kotlinx.android.parcel.Parcelize
+
 data class NoticeModelClass(
     val data: List<NoticeData>,
     val errors: List<String>,
@@ -311,5 +314,124 @@ data class UserDetailsRoleData(
     val description: String,
     val id: Int,
     val name: String,
+    val updatedDate: String
+)
+
+data class GuardListModelClass(
+    val `data`: List<GuardListData>,
+    val errors: List<Any>,
+    val status: String,
+    val statusCode: Int
+)
+
+data class GuardListData(
+    val address: String,
+    val age: Int,
+    val contactPersonName: String,
+    val contactPersonPhone: String,
+    val createdDate: String,
+    val deletedDate: Any,
+    val email: String,
+    val firebaseId: String,
+    val gender: String,
+    val id: Int,
+    val image: String,
+    val isActive: Boolean,
+    val name: String,
+    val nid: String,
+    val organization: String,
+    val password: String,
+    val phone: String,
+    val primaryRoleCode: String,
+    val thumbImage: String,
+    val updatedDate: String
+)
+
+data class GetUserByPhoneNumberModelClass(
+    val `data`: GetUserByPhoneData,
+    val errors: List<Any>,
+    val status: String,
+    val statusCode: Int
+)
+
+data class GetUserByPhoneData(
+    val address: String,
+    val age: Int,
+    val building: Building,
+    val community: CommunityX,
+    val contactPersonName: String,
+    val contactPersonPhone: String,
+    val createdDate: String,
+    val deletedDate: Any,
+    val email: String,
+    val firebaseId: String,
+    val flat: Any,
+    val gender: String,
+    val id: Int,
+    val image: String,
+    val isActive: Boolean,
+    val name: String,
+    val nid: String,
+    val organization: String,
+    val password: String,
+    val phone: String,
+    val primaryRoleCode: String,
+    val thumbImage: String,
+    val updatedDate: String
+)
+
+data class Building(
+    val address: String,
+    val community: Community,
+    val contactInfo: String,
+    val contactPerson: String,
+    val createdDate: String,
+    val deletedDate: Any,
+    val flatFormat: Any,
+    val id: Int,
+    val isActive: Boolean,
+    val latitude: Any,
+    val longitude: Any,
+    val name: String,
+    val totalFlat: Int,
+    val totalFloor: Int,
+    val totalGate: Int,
+    val totalParking: Int,
+    val updatedDate: String
+)
+
+data class CommunityX(
+    val address: String,
+    val contactInfo: String,
+    val contactPerson: String,
+    val createdDate: String,
+    val deletedDate: Any,
+    val email: String,
+    val firebaseId: String,
+    val id: Int,
+    val isActive: Boolean,
+    val latitude: Any,
+    val longitude: Any,
+    val name: String,
+    val password: String,
+    val type: String,
+    val updatedDate: String
+)
+
+data class Community(
+    val address: String,
+    val contactInfo: String,
+    val contactPerson: String,
+    val createdDate: String,
+    val deletedDate: Any,
+    val email: String,
+    val firebaseId: String,
+    val id: Int,
+    val isActive: Boolean,
+    val latitude: Any,
+    val longitude: Any,
+    val name: String,
+    val password: String,
+    val type: String,
     val updatedDate: String
 )

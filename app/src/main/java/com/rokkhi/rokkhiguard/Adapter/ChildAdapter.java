@@ -55,7 +55,12 @@ public class ChildAdapter extends RecyclerView.Adapter<ChildAdapter.ChildViewHol
         holder.name.setText(list.getData().get(position).getName());
         holder.flat.setText("Flat:  Data Not Found From api" );
 
-        Picasso.get().load(list.getData().get(position).getImage()).placeholder(R.drawable.male1).error(R.drawable.male1).into(holder.propic);
+        if (list.getData().get(position).getImage().isEmpty()){
+
+        }else {
+
+            Picasso.get().load(list.getData().get(position).getImage()).placeholder(R.drawable.male1).error(R.drawable.male1).into(holder.propic);
+        }
 
 
     }

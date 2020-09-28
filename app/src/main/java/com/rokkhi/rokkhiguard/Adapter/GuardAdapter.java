@@ -7,11 +7,10 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Filter;
 import android.widget.Filterable;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.rokkhi.rokkhiguard.Model.Guards;
+import com.rokkhi.rokkhiguard.Model.api.GuardListData;
 import com.rokkhi.rokkhiguard.R;
 
 import java.util.ArrayList;
@@ -22,12 +21,12 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class GuardAdapter extends BaseAdapter implements Filterable {
 
-    private ArrayList<Guards> guardslist;
-    private ArrayList<Guards> mguardsFilterList;
+    private ArrayList<GuardListData> guardslist;
+    private ArrayList<GuardListData> mguardsFilterList;
     private LayoutInflater mInflater;
     private ValueFilter valueFilter;
 
-    public GuardAdapter(ArrayList<Guards> mStringList, Context context) {
+    public GuardAdapter(ArrayList<GuardListData> mStringList, Context context) {
 
         this.guardslist = mStringList;
         this.mguardsFilterList = mStringList;
@@ -58,24 +57,20 @@ public class GuardAdapter extends BaseAdapter implements Filterable {
     public View getView(int position, View convertView, ViewGroup parent) {
 
         Holder viewHolder;
-        final Guards guard= guardslist.get(position);
+        final GuardListData guardListData = guardslist.get(position);
         if (convertView == null) {
             viewHolder = new Holder();
-            convertView = mInflater.inflate(R.layout.item_list, null);
-            viewHolder.name = (TextView) convertView.findViewById(R.id.name);
-            viewHolder.pic =  convertView.findViewById(R.id.pic);
-            viewHolder.green =  convertView.findViewById(R.id.green);
-            viewHolder.org = convertView.findViewById(R.id.org);
+            convertView = mInflater.inflate(R.layout.item_guard_list, null);
+            viewHolder.name = (TextView) convertView.findViewById(R.id.name_Guard_TV);
+            viewHolder.pic =  convertView.findViewById(R.id.propic_guard_image);
             convertView.setTag(viewHolder);
 
         } else {
             viewHolder = (Holder) convertView.getTag();
         }
-        viewHolder.green.setVisibility(View.GONE);
-        viewHolder.org.setText(guard.getG_org());
-        viewHolder.name.setText(guard.getG_name());
+        viewHolder.name.setText(guardListData.getName());
 
-        Glide.with(convertView.getContext()).load(guard.getThumb_g_pic()).placeholder(R.drawable.male1)
+        Glide.with(convertView.getContext()).load(guardListData.getImage()).placeholder(R.drawable.male1)
                 .into(viewHolder.pic);
 
 
@@ -85,9 +80,8 @@ public class GuardAdapter extends BaseAdapter implements Filterable {
 
     private class Holder {
 
-        TextView name,org;
+        TextView name;
         CircleImageView pic;
-        ImageView green;
     }
 
     //Returns a filter that can be used to constrain data with a filtering pattern.
@@ -108,11 +102,11 @@ public class GuardAdapter extends BaseAdapter implements Filterable {
 
             if (constraint != null && constraint.length() > 0) {
 
-                ArrayList<Guards> filterList = new ArrayList<>();
+                ArrayList<GuardListData> filterList = new ArrayList<>();
 
                 for (int i = 0; i < mguardsFilterList.size(); i++) {
                     //muserFilterList.get(i).getE_name().toLowerCase().startsWith(constraint.toString().toLowerCase())
-                    if (mguardsFilterList.get(i).getG_name().toLowerCase().contains(constraint.toString().toLowerCase())) {
+                    if (mguardsFilterList.get(i).getName().toLowerCase().contains(constraint.toString().toLowerCase())) {
                         filterList.add(mguardsFilterList.get(i));
                     }
                 }
@@ -140,7 +134,7 @@ public class GuardAdapter extends BaseAdapter implements Filterable {
         protected void publishResults(CharSequence constraint,
                                       FilterResults results) {
 
-            guardslist = (ArrayList<Guards>) results.values;
+            guardslist = (ArrayList<GuardListData>) results.values;
 
             notifyDataSetChanged();
 

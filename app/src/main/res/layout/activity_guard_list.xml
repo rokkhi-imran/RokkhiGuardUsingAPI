@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".GuardListActivity">
+    android:id="@+id/root"
+    tools:context=".Activity.GuardListActivity">
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
@@ -60,6 +61,7 @@
         android:id="@+id/guardListRecyclerView"
         android:layout_width="match_parent"
 
-        android:layout_height="match_parent"/>
+        tools:listitem="@layout/item_guard_list"
+        android:layout_height="match_parent" />
 
 </LinearLayout>
