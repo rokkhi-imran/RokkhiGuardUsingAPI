@@ -234,10 +234,6 @@ public class ParcelActivity extends AppCompatActivity implements IPickResult{
 
         JSONObject jsonDataPost = new JSONObject(dataPost);
 
-//        JSONArray jsonDataPost=new JSONArray();
-//        jsonDataPost.put(dataPost);
-
-
         String url = StaticData.baseURL + "" + StaticData.addParcel;
         String token = sharedPrefHelper.getString(StaticData.KEY_FIREBASE_ID_TOKEN);
 
@@ -361,26 +357,10 @@ public class ParcelActivity extends AppCompatActivity implements IPickResult{
 
     public void showAllflats() {
 
-        ActiveFlatData activeFlatData=new ActiveFlatData(
-                "01",
-                "",
-                "",
-                "",
-                "",
-                0,
-                true,false,"Flat 1",
-                "6",
-                1202,
-                2,
-                3,
-                2,
-                ""
-        );
-        ArrayList<ActiveFlatData> activeFlatDataArrayList=new ArrayList<>();
+        Gson gson = new Gson();
+        String json = sharedPrefHelper.getString(StaticData.ALL_FLATS);
+        ActiveFlatsModelClass activeFlat = gson.fromJson(json, ActiveFlatsModelClass.class);
 
-        activeFlatDataArrayList.add(activeFlatData);
-
-        ActiveFlatsModelClass activeFlat=new ActiveFlatsModelClass(activeFlatDataArrayList,activeFlatDataArrayList,"Success",200);
 
         final ActiveFlatAdapter activeFlatAdapter = new ActiveFlatAdapter(activeFlat, context);
         final AlertDialog alertcompany = new AlertDialog.Builder(context).create();

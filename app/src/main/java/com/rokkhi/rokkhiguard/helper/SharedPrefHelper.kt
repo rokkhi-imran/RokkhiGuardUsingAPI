@@ -2,6 +2,7 @@ package com.rokkhi.rokkhiguard.helper
 
 import android.app.Application
 import android.content.Context
+import com.rokkhi.rokkhiguard.Model.api.AllFlatsModelClass
 
 class SharedPrefHelper(application: Context) {
     private val sharedPreferences = application.getSharedPreferences("live.qtec.mpos",0)
@@ -39,4 +40,5 @@ class SharedPrefHelper(application: Context) {
         editor.clear()
         editor.apply()
     }
+
 }

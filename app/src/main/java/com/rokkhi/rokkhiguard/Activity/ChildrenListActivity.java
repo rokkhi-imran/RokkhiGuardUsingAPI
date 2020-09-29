@@ -2,8 +2,11 @@ package com.rokkhi.rokkhiguard.Activity;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ProgressBar;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -16,7 +19,8 @@ import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONObjectRequestListener;
 import com.google.gson.Gson;
-import com.rokkhi.rokkhiguard.Adapter.ChildAdapter;
+import com.rokkhi.rokkhiguard.Adapter.ChildListAdapter;
+import com.rokkhi.rokkhiguard.Model.api.ChildData;
 import com.rokkhi.rokkhiguard.Model.api.ChildModelClass;
 import com.rokkhi.rokkhiguard.R;
 import com.rokkhi.rokkhiguard.StaticData;
@@ -24,21 +28,23 @@ import com.rokkhi.rokkhiguard.helper.SharedPrefHelper;
 
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 
-public class ChildrenListActivity extends AppCompatActivity {
+public class ChildrenListActivity extends AppCompatActivity  {
     private static final String TAG = "ChildrenList";
 
 
     RecyclerView recyclerView;
-    ChildAdapter childAdapter;
+    ChildListAdapter childAdapter;
 
     SharedPrefHelper sharedPrefHelper;
     Context context;
     ChildModelClass childModelClass;
     ProgressBar mProgressBar;
+    EditText searchET;
 
 
     @Override
@@ -53,6 +59,22 @@ public class ChildrenListActivity extends AppCompatActivity {
         recyclerView.setNestedScrollingEnabled(false);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         sharedPrefHelper=new SharedPrefHelper(getApplicationContext());
+        searchET=findViewById(R.id.search);
+
+
+        searchET.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                childAdapter.getFilter().filter(s);
+            }
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        });
+
 
         Map<String, String> dataPost = new HashMap<>();
 
@@ -90,9 +112,10 @@ public class ChildrenListActivity extends AppCompatActivity {
                         childModelClass = gson.fromJson(String.valueOf(response), ChildModelClass.class);
 
 
-                    childAdapter = new ChildAdapter(childModelClass, context);
+                    childAdapter = new ChildListAdapter((ArrayList<ChildData>) childModelClass.getData(), context);
                     childAdapter.setHasStableIds(true);
                     recyclerView.setAdapter(childAdapter);
+
 
                     }
 
@@ -114,5 +137,6 @@ public class ChildrenListActivity extends AppCompatActivity {
 
 
     }
+
 
 }

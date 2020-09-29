@@ -19,7 +19,7 @@ import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONObjectRequestListener;
 import com.google.gson.Gson;
-import com.rokkhi.rokkhiguard.Adapter.GridAdapter;
+import com.rokkhi.rokkhiguard.Adapter.CarListAdapter;
 import com.rokkhi.rokkhiguard.Model.api.VehicleData;
 import com.rokkhi.rokkhiguard.Model.api.VehicleListModelClass;
 import com.rokkhi.rokkhiguard.R;
@@ -35,15 +35,14 @@ import java.util.Map;
 
 public class ParkingActivity extends AppCompatActivity implements View.OnClickListener {
     private static final String TAG = "ParkingActivity";
-    /**
-     * ফ্ল্যাট নাম্বার দিয়ে খুঁজতে পারেন
-     */
+
+
     private EditText mSearch;
     private RecyclerView mRecyclerview;
     private ProgressBar mProgressBar1;
     SharedPrefHelper sharedPrefHelper;
 
-    GridAdapter gridAdapter;
+    CarListAdapter carListAdapter;
     Context context;
 
     VehicleListModelClass vehicleListModelClass;
@@ -65,7 +64,7 @@ public class ParkingActivity extends AppCompatActivity implements View.OnClickLi
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                gridAdapter.getFilter().filter(s);
+                carListAdapter.getFilter().filter(s);
             }
 
             @Override
@@ -114,9 +113,9 @@ public class ParkingActivity extends AppCompatActivity implements View.OnClickLi
                         mRecyclerview.setLayoutManager(layoutManager);
 
 
-                        gridAdapter = new GridAdapter((ArrayList<VehicleData>) vehicleListModelClass.getData(),context);
-                        gridAdapter.setHasStableIds(true);
-                        mRecyclerview.setAdapter(gridAdapter);
+                        carListAdapter = new CarListAdapter((ArrayList<VehicleData>) vehicleListModelClass.getData(),context);
+                        carListAdapter.setHasStableIds(true);
+                        mRecyclerview.setAdapter(carListAdapter);
 
                     }
 

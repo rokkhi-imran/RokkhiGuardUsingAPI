@@ -42,13 +42,10 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class VisitorAdapter extends RecyclerView.Adapter<VisitorAdapter.VisitorViewHolder> implements Filterable {
 
-    AlertDialog alertDialog, alertDialog2;
+    AlertDialog alertDialog;
 
-    public interface MyInterface {
-        public void loadagain();
-    }
 
-    private MyInterface myInterface;
+
     private ArrayList<GetInsideVisitorData> mvisitorFilterList;
     private LayoutInflater mInflater;
     private ValueFilter valueFilter;
@@ -66,11 +63,7 @@ public class VisitorAdapter extends RecyclerView.Adapter<VisitorAdapter.VisitorV
         mInflater = LayoutInflater.from(context);
 
         getFilter();
-        try {
-            this.myInterface = ((MyInterface) context);
-        } catch (ClassCastException e) {
-            throw new ClassCastException("Activity must implement AdapterCallback.");
-        }
+
     }
 
     @Override
@@ -104,11 +97,6 @@ public class VisitorAdapter extends RecyclerView.Adapter<VisitorAdapter.VisitorV
 
         Glide.with(context).load(visitor.getImage()).placeholder(R.drawable.male1).into(holder.propic);
 
-       /* Date date1 = visitor.getTime();
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(date1);
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("hh:mm a", Locale.getDefault());
-        */
 
         holder.intime.setText(visitor.getInTime());
         holder.out.setOnClickListener(new View.OnClickListener() {

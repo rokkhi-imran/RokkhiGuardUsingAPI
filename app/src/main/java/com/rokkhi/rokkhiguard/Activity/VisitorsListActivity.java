@@ -37,7 +37,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 
-public class VisitorsListActivity extends AppCompatActivity implements VisitorAdapter.MyInterface {
+public class VisitorsListActivity extends AppCompatActivity  {
 
     private static final String TAG = "VisitorsList";
     ArrayList<Visitors> list;
@@ -173,12 +173,4 @@ public class VisitorsListActivity extends AppCompatActivity implements VisitorAd
 
     }
 
-
-    @Override
-    public void loadagain() {
-        list.clear();
-        progressBar.setVisibility(View.VISIBLE);
-        search.setText("");
-
-    }
 }

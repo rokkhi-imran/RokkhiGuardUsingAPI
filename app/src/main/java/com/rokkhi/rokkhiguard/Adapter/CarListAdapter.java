@@ -39,7 +39,7 @@ import java.util.List;
 import java.util.Map;
 
 
-public class GridAdapter extends RecyclerView.Adapter<GridAdapter.GridViewHolder> implements Filterable {
+public class CarListAdapter extends RecyclerView.Adapter<CarListAdapter.GridViewHolder> implements Filterable {
 
     public List<VehicleData> list;
     private static final String TAG = "GridAdapter";
@@ -74,7 +74,7 @@ public class GridAdapter extends RecyclerView.Adapter<GridAdapter.GridViewHolder
 
     private Context context;
 
-    public GridAdapter(ArrayList<VehicleData> list, Context context) {
+    public CarListAdapter(ArrayList<VehicleData> list, Context context) {
         this.list = list;
         this.context = context;
         mInflater = LayoutInflater.from(context);

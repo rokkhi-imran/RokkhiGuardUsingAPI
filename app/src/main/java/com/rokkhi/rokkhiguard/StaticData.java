@@ -24,6 +24,7 @@ public class StaticData {
     public static final String BUILD_ID = "BUILDING_ID";
     public static final String COMM_ID = "COMM_ID";
     public static final String USER_ID = "USER_ID";
+    public static final String ALL_FLATS = "ALL_FLATS";
     public static String imageUploadURL = "http://ec2-54-183-244-125.us-west-1.compute.amazonaws.com:8000/upload";
 
     public static final void getIdToken(final Context context) {
@@ -67,6 +68,9 @@ public class StaticData {
     public static final String recordVehicleEntry = "/api/v1/entrance/recordVehicleEntry";
     public static final String getUserDetails = "/api/v1/user/getUserDetails";
     public static final String getByPhoneNumber = "/api/v1/user/getByPhoneNumber";
+    public static final String recordChildrenExitFromCompound = "/api/v1/entrance/recordChildrenExitFromCompound";
+    public static final String getFlats = "/api/v1/flat/getFlats";
+    public static final String addVisitor = "/api/v1/entrance/addVisitor";
 
 
     //user role

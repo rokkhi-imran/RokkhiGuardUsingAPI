@@ -179,30 +179,11 @@ public class CreateProfileActivity extends AppCompatActivity implements IPickRes
 
     public void showAllflats() {
 
-        ActiveFlatData activeFlatData=new ActiveFlatData(
-                "01",
-                "",
-                "",
-                "",
-                "",
-                0,
-                true,false,"Flat 1",
-                "6",
-                1202,
-                2,
-                3,
-                2,
-                ""
-        );
-        ArrayList<ActiveFlatData> activeFlatDataArrayList=new ArrayList<>();
+        Gson gson = new Gson();
+        String json = sharedPrefHelper.getString(StaticData.ALL_FLATS);
+        ActiveFlatsModelClass activeFlat = gson.fromJson(json, ActiveFlatsModelClass.class);
 
-        activeFlatDataArrayList.add(activeFlatData);
-
-        ActiveFlatsModelClass activeFlat=new ActiveFlatsModelClass(activeFlatDataArrayList,activeFlatDataArrayList,"Success",200);
-
-
-
-
+        
         final ActiveFlatAdapter activeFlatAdapter = new ActiveFlatAdapter(activeFlat, context);
         final AlertDialog alertcompany = new AlertDialog.Builder(context).create();
         LayoutInflater inflater = getLayoutInflater();

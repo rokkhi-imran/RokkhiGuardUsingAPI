@@ -435,3 +435,29 @@ data class Community(
     val type: String,
     val updatedDate: String
 )
+
+data class AllFlatsModelClass(
+    val `data`: List<Data>,
+    val errors: List<Any>,
+    val status: String,
+    val statusCode: Int
+)
+
+data class Data(
+    val contact: String,
+    val contactInfo: String,
+    val contactPerson: String,
+    val createdDate: String,
+    val deletedDate: Any,
+    val description: String,
+    val id: Int,
+    val isRented: Boolean,
+    val isVacant: Boolean,
+    val name: String,
+    val number: String,
+    val size: Int,
+    val totalBalcony: Int,
+    val totalRoom: Int,
+    val totalWashRoom: Int,
+    val updatedDate: String
+)

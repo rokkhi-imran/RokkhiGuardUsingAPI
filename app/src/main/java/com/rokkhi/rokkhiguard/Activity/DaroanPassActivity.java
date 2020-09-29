@@ -19,6 +19,10 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
+import com.androidnetworking.AndroidNetworking;
+import com.androidnetworking.common.Priority;
+import com.androidnetworking.error.ANError;
+import com.androidnetworking.interfaces.JSONObjectRequestListener;
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.ErrorCodes;
 import com.firebase.ui.auth.IdpResponse;
@@ -29,15 +33,20 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GetTokenResult;
 import com.google.gson.Gson;
 import com.rokkhi.rokkhiguard.Model.api.GetUserByPhoneData;
+import com.rokkhi.rokkhiguard.Model.api.GetUserByPhoneNumberModelClass;
 import com.rokkhi.rokkhiguard.Model.api.UserDetailsModelClass;
 import com.rokkhi.rokkhiguard.R;
 import com.rokkhi.rokkhiguard.StaticData;
 import com.rokkhi.rokkhiguard.Utils.FullScreenAlertDialog;
 import com.rokkhi.rokkhiguard.helper.SharedPrefHelper;
 
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import huwi.joldi.abrar.rokkhiguardo.Kotlin.CirclePinField;
 
@@ -66,7 +75,6 @@ public class DaroanPassActivity extends AppCompatActivity implements View.OnClic
     FirebaseUser firebaseUser;
     SharedPreferences.Editor editor;
     String tabpass = "";
-    String flatid = "", buildid = "", commid = "", userid = "";
     ArrayAdapter<String> adapter;
 
     List<String> buildingsName;
@@ -91,7 +99,8 @@ public class DaroanPassActivity extends AppCompatActivity implements View.OnClic
         Gson gson = new Gson();
         getUserByPhoneData = gson.fromJson(getIntent().getStringExtra("guardinfo"), GetUserByPhoneData.class);
 
-        Toast.makeText(context, "" + getUserByPhoneData.getId(), Toast.LENGTH_SHORT).show();
+        Log.e(TAG, "onCreate: getUserByPhoneData = "+getUserByPhoneData );
+
 
         //check Stroage permission Start
         if (!checkPermissionForWriteExtertalStorage(this)) {
@@ -178,10 +187,72 @@ public class DaroanPassActivity extends AppCompatActivity implements View.OnClic
 
                 SharedPrefHelper sharedPrefHelper = new SharedPrefHelper(context);
                 sharedPrefHelper.putString(StaticData.KEY_FIREBASE_ID_TOKEN, getTokenResult.getToken());
-                fullScreenAlertDialog.dismissdialog();
+
+                callUserInformation(fullScreenAlertDialog);
 
             }
         });
+    }
+
+    private void callUserInformation(FullScreenAlertDialog fullScreenAlertDialog) {
+
+
+        Map<String, String> dataPost = new HashMap<>();
+        dataPost.put("phoneNumber",getUserByPhoneData.getPhone());
+
+        JSONObject jsonDataPost = new JSONObject(dataPost);
+
+        String url = StaticData.baseURL + "" + StaticData.getByPhoneNumber;
+        String token = sharedPrefHelper.getString(StaticData.KEY_FIREBASE_ID_TOKEN);
+
+        Log.e("TAG", "onCreate: " + jsonDataPost);
+        Log.e("TAG", "onCreate: " + url);
+        Log.e("TAG", "onCreate: " + token);
+        Log.e("TAG", "onCreate: " + FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber());
+        Log.e("TAG", "onCreate: ---------------------- ");
+
+
+        AndroidNetworking.post(url)
+                .addHeaders("authtoken", token)
+                .setContentType("application/json")
+                .addJSONObjectBody(jsonDataPost)
+                .setPriority(Priority.MEDIUM)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+
+                        fullScreenAlertDialog.dismissdialog();
+
+
+                        Log.e("TAG ","onResponse: =   " + response);
+
+                        Gson gson = new Gson();
+                        GetUserByPhoneNumberModelClass userDetailsModelClassUserByPhoneNumberModelClass = gson.fromJson(String.valueOf(response), GetUserByPhoneNumberModelClass.class);
+
+                        sharedPrefHelper.putString(StaticData.BUILD_ID,String.valueOf(userDetailsModelClassUserByPhoneNumberModelClass.getData().getBuilding().getId()));
+                        sharedPrefHelper.putString(StaticData.COMM_ID,String.valueOf(userDetailsModelClassUserByPhoneNumberModelClass.getData().getCommunity().getId()));
+                        sharedPrefHelper.putString(StaticData.USER_ID,String.valueOf(userDetailsModelClassUserByPhoneNumberModelClass.getData().getId()));
+
+                        Log.e("TAG", "onResponse: getPrimaryRoleCode  = ==  "+userDetailsModelClassUserByPhoneNumberModelClass.getData().getPrimaryRoleCode());
+
+
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+                        fullScreenAlertDialog.dismissdialog();
+
+
+                        StaticData.showErrorAlertDialog(context, "Alert !", "আবার চেষ্টা করুন ।");
+
+                        Log.e("TAG", "onResponse: error message =  " + anError.getMessage());
+                        Log.e("TAG", "onResponse: error code =  " + anError.getErrorCode());
+                        Log.e("TAG", "onResponse: error body =  " + anError.getErrorBody());
+                        Log.e("TAG", "onResponse: error  getErrorDetail =  " + anError.getErrorDetail());
+                    }
+                });
+
     }
 
 

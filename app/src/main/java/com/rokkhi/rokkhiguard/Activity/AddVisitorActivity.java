@@ -26,12 +26,14 @@ import android.widget.Toast;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONObjectRequestListener;
+import com.google.gson.Gson;
 import com.rokkhi.rokkhiguard.Adapter.ActiveFlatAdapter;
 import com.rokkhi.rokkhiguard.Adapter.TypesAdapter;
 import com.rokkhi.rokkhiguard.Model.api.ActiveFlatData;
@@ -50,7 +52,9 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -72,7 +76,6 @@ public class AddVisitorActivity extends AppCompatActivity implements View.OnClic
 
     private EditText mAddressET;
 
-    private EditText mVehicleET;
 
     private Button mSubmitUserInfoBtn;
     private ProgressBar mProgressBar1;
@@ -127,7 +130,6 @@ public class AddVisitorActivity extends AppCompatActivity implements View.OnClic
         mPuposeET = (EditText) findViewById(R.id.puposeET);
         mPuposeET.setOnClickListener(this);
         mAddressET = (EditText) findViewById(R.id.addressET);
-        mVehicleET = (EditText) findViewById(R.id.vehicleET);
         mSubmitUserInfoBtn = (Button) findViewById(R.id.SubmitUserInfoBtn);
         mSubmitUserInfoBtn.setOnClickListener(this);
         mProgressBar1 = (ProgressBar) findViewById(R.id.progressBar1);
@@ -249,8 +251,71 @@ public class AddVisitorActivity extends AppCompatActivity implements View.OnClic
 
     }
 
-    private void uploadDataData(String s) {
-        Toast.makeText(context, "need to do work", Toast.LENGTH_SHORT).show();
+    private void uploadDataData(String imageLink) {
+
+fullScreenAlertDialog.showdialog();
+        Map<String, String> dataPost = new HashMap<>();
+        dataPost.put("name",mUserNameET.getText().toString());
+        dataPost.put("address",  mAddressET.getText().toString());
+        dataPost.put("contact", mPhoneNoET.getText().toString());
+        dataPost.put("email", "");
+        dataPost.put("purpose", mPuposeET.getText().toString() );
+
+        dataPost.put("image", imageLink);
+        dataPost.put("thumbImage", imageLink);
+        dataPost.put("communityId", sharedPrefHelper.getString(StaticData.COMM_ID));
+        dataPost.put("buildingId", sharedPrefHelper.getString(StaticData.BUILD_ID));
+        dataPost.put("flatId",String.valueOf(historyFlats.get(0).getId()) );
+        dataPost.put("guardId", sharedPrefHelper.getString(StaticData.USER_ID));
+        dataPost.put("responderId"," " );
+
+        JSONObject jsonDataPost = new JSONObject(dataPost);
+
+        String url = StaticData.baseURL + "" + StaticData.addVisitor;
+        String token = sharedPrefHelper.getString(StaticData.KEY_FIREBASE_ID_TOKEN);
+
+        Log.e("TAG", "onCreate: " + jsonDataPost);
+        Log.e("TAG", "onCreate: " + url);
+        Log.e("TAG", "onCreate: " + token);
+        Log.e("TAG", "onCreate: ---------------------- ");
+
+
+        AndroidNetworking.post(url)
+                .addHeaders("authtoken", token)
+                .setContentType("application/json")
+                .addJSONObjectBody(jsonDataPost)
+                .setPriority(Priority.MEDIUM)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+
+                        fullScreenAlertDialog.dismissdialog();
+
+
+                        Log.e(TAG, "onResponse: =  =----------- " + response);
+
+
+                        StaticData.showSuccessDialog((FragmentActivity) context,"Alert !","Visitor Added ..");
+
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+
+                        fullScreenAlertDialog.dismissdialog();
+
+                        StaticData.showErrorAlertDialog(context,"Alert !","আবার চেষ্টা করুন ।");
+
+                        Log.e(TAG, "onResponse: error message =  " + anError.getMessage());
+                        Log.e(TAG, "onResponse: error code =  " + anError.getErrorCode());
+                        Log.e(TAG, "onResponse: error body =  " + anError.getErrorBody());
+                        Log.e(TAG, "onResponse: error  getErrorDetail =  " + anError.getErrorDetail());
+                    }
+                });
+
+
+
     }
 
     public void showAllParcelTypes() {
@@ -313,26 +378,11 @@ public class AddVisitorActivity extends AppCompatActivity implements View.OnClic
 
     public void showAllflats() {
 
-        ActiveFlatData activeFlatData=new ActiveFlatData(
-                "01",
-                "",
-                "",
-                "",
-                "",
-                0,
-                true,false,"Flat 1",
-                "6",
-                1202,
-                2,
-                3,
-                2,
-                ""
-        );
-        ArrayList<ActiveFlatData> activeFlatDataArrayList=new ArrayList<>();
 
-        activeFlatDataArrayList.add(activeFlatData);
+        Gson gson = new Gson();
+        String json = sharedPrefHelper.getString(StaticData.ALL_FLATS);
+        ActiveFlatsModelClass activeFlat = gson.fromJson(json, ActiveFlatsModelClass.class);
 
-        ActiveFlatsModelClass activeFlat=new ActiveFlatsModelClass(activeFlatDataArrayList,activeFlatDataArrayList,"Success",200);
 
         final ActiveFlatAdapter activeFlatAdapter = new ActiveFlatAdapter(activeFlat, context);
         final AlertDialog alertcompany = new AlertDialog.Builder(context).create();
