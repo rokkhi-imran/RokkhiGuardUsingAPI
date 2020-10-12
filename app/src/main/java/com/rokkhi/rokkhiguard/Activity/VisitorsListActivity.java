@@ -21,7 +21,6 @@ import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONObjectRequestListener;
 import com.google.gson.Gson;
 import com.rokkhi.rokkhiguard.Adapter.VisitorAdapter;
-import com.rokkhi.rokkhiguard.Model.Visitors;
 import com.rokkhi.rokkhiguard.Model.api.GetInsideVisitorData;
 import com.rokkhi.rokkhiguard.Model.api.GetVisitorInsideModelClass;
 import com.rokkhi.rokkhiguard.R;
@@ -40,7 +39,6 @@ import java.util.Map;
 public class VisitorsListActivity extends AppCompatActivity  {
 
     private static final String TAG = "VisitorsList";
-    ArrayList<Visitors> list;
     RecyclerView recyclerView;
     VisitorAdapter visitorAdapter;
     View mrootView;
@@ -124,7 +122,6 @@ public class VisitorsListActivity extends AppCompatActivity  {
                         Gson gson = new Gson();
                         getVisitorInsideModelClass = gson.fromJson(String.valueOf(response), GetVisitorInsideModelClass.class);
 
-//                        SWorkerAdapter sWorkerAdapter = new SWorkerAdapter(sWorkerModelClass, context);
                         visitorAdapter=new VisitorAdapter((ArrayList<GetInsideVisitorData>) getVisitorInsideModelClass.getData(),context);
 //
                         recyclerView.setAdapter(visitorAdapter);

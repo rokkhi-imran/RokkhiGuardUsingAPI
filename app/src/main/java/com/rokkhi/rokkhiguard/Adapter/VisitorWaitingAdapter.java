@@ -10,10 +10,10 @@ import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
 import com.rokkhi.rokkhiguard.Model.UDetails;
 import com.rokkhi.rokkhiguard.Model.Visitors;
 import com.rokkhi.rokkhiguard.R;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -41,7 +41,7 @@ public class VisitorWaitingAdapter extends RecyclerView.Adapter<VisitorWaitingAd
     @Override
     public void onBindViewHolder(@NonNull VisitorViewHolderClass holder, int position) {
 
-        Glide.with(context).load(visitorsArrayList.get(position).getV_pic()).placeholder(R.drawable.male1).into(holder.imageView);
+        Picasso.get().load(visitorsArrayList.get(position).getV_pic()).placeholder(R.drawable.male1).into(holder.imageView);
 
 
         holder.nameVisitorWaitingID.setText(visitorsArrayList.get(position).getV_name());

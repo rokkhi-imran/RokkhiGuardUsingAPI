@@ -7,14 +7,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.Filter;
-import android.widget.Filterable;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -28,7 +23,6 @@ import com.rokkhi.rokkhiguard.Model.api.VisitorOutModelClass;
 import com.rokkhi.rokkhiguard.R;
 import com.rokkhi.rokkhiguard.StaticData;
 import com.rokkhi.rokkhiguard.Utils.FullScreenAlertDialog;
-import com.rokkhi.rokkhiguard.Utils.Normalfunc;
 import com.rokkhi.rokkhiguard.helper.SharedPrefHelper;
 import com.squareup.picasso.Picasso;
 
@@ -41,14 +35,12 @@ import java.util.Map;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 
-public class VisitorAdapter extends RecyclerView.Adapter<VisitorAdapter.VisitorViewHolder> implements Filterable {
+public class VisitorWaitingListAdapter extends RecyclerView.Adapter<VisitorWaitingListAdapter.VisitorViewHolder> {
 
-    AlertDialog alertDialog;
 
 
     private ArrayList<GetInsideVisitorData> mvisitorFilterList;
     private LayoutInflater mInflater;
-    private ValueFilter valueFilter;
 
     public ArrayList<GetInsideVisitorData> list;
     private static final String TAG = "VisitorAdapter";
@@ -56,86 +48,36 @@ public class VisitorAdapter extends RecyclerView.Adapter<VisitorAdapter.VisitorV
 
     private Context context;
 
-    public VisitorAdapter(ArrayList<GetInsideVisitorData> list, Context context) {
+    public VisitorWaitingListAdapter(ArrayList<GetInsideVisitorData> list, Context context) {
         this.list = list;
         mvisitorFilterList = list;
         this.context = context;
         mInflater = LayoutInflater.from(context);
 
-        getFilter();
-
     }
 
-    @Override
-    public Filter getFilter() {
-
-        if (valueFilter == null) {
-
-            valueFilter = new ValueFilter();
-        }
-
-        return valueFilter;
-    }
 
     @NonNull
     @Override
     public VisitorViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_vis, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_view_visitor_waiting, parent, false);
         VisitorViewHolder visitorViewHolder = new VisitorViewHolder(view);
         sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
-        //oCanNotification= sharedPref.getBoolean("oCanNotification",true);
-
 
         return visitorViewHolder;
     }
 
     @Override
     public void onBindViewHolder(@NonNull final VisitorViewHolder holder, int position) {
-        Normalfunc normalfunc = new Normalfunc();
 
         final GetInsideVisitorData visitor = list.get(position);
-        holder.name.setText(visitor.getName());
+        holder.nameVisitorWaitingID.setText(visitor.getName());
 
-        Picasso.get().load(visitor.getImage()).placeholder(R.drawable.male1).into(holder.propic);
+        if (!visitor.getImage().isEmpty()){
 
+            Picasso.get().load(visitor.getImage()).placeholder(R.drawable.male1).into(holder.visitorImageID);
+        }
 
-        holder.intime.setText(visitor.getInTime());
-
-
-        holder.out.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                alertDialog = new AlertDialog.Builder(context).create();
-                LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                View convertView = (View) inflater.inflate(R.layout.dialog_confirm, null);
-                final Button cancel = convertView.findViewById(R.id.cancel);
-                final Button confirm = convertView.findViewById(R.id.confirm);
-
-                alertDialog.setView(convertView);
-                alertDialog.setCancelable(false);
-                alertDialog.show();
-
-                cancel.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        alertDialog.dismiss();
-                    }
-                });
-
-                confirm.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        callVisitorOutFunction(context, visitor.getId());
-                    }
-                });
-
-
-            }
-        });
-
-
-        holder.flat.setText("To: NO FLAT FROM API");
 
     }
 
@@ -208,73 +150,16 @@ public class VisitorAdapter extends RecyclerView.Adapter<VisitorAdapter.VisitorV
 
     public class VisitorViewHolder extends RecyclerView.ViewHolder {
         public View view;
-        TextView name;
-        TextView intime, outtime, flat;
-        CircleImageView propic;
-        ImageView out;
+        TextView nameVisitorWaitingID;
+        CircleImageView visitorImageID;
 
         VisitorViewHolder(View itemView) {
             super(itemView);
             view = itemView;
-            name = view.findViewById(R.id.name);
-            propic = view.findViewById(R.id.one);
-            intime = view.findViewById(R.id.starttime);
-            outtime = view.findViewById(R.id.endtime);
-            out = view.findViewById(R.id.outItems);
-            flat = view.findViewById(R.id.towhom);
-        }
-    }
-
-    private class ValueFilter extends Filter {
-
-
-        //Invoked in a worker thread to filter the data according to the constraint.
-        @Override
-        protected FilterResults performFiltering(CharSequence constraint) {
-
-            FilterResults results = new FilterResults();
-
-            if (constraint != null && constraint.length() > 0) {
-
-                ArrayList<GetInsideVisitorData> filterList = new ArrayList<>();
-
-                for (int i = 0; i < mvisitorFilterList.size(); i++) {
-                    if (mvisitorFilterList.get(i).getName().toLowerCase().contains(constraint.toString().toLowerCase())
-
-                    ) {
-                        filterList.add(mvisitorFilterList.get(i));
-                    }
-                }
-
-
-                results.count = filterList.size();
-
-                results.values = filterList;
-
-            } else {
-
-                results.count = mvisitorFilterList.size();
-
-                results.values = mvisitorFilterList;
-
-            }
-
-            return results;
-        }
-
-
-        //Invoked in the UI thread to publish the filtering results in the user interface.
-        @SuppressWarnings("unchecked")
-        @Override
-        protected void publishResults(CharSequence constraint,
-                                      FilterResults results) {
-
-            list = (ArrayList<GetInsideVisitorData>) results.values;
-
-            notifyDataSetChanged();
+            nameVisitorWaitingID = view.findViewById(R.id.nameVisitorWaitingID);
+            visitorImageID = view.findViewById(R.id.visitorImageID);
 
         }
-
     }
 
 

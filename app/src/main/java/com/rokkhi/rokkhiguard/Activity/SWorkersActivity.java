@@ -48,7 +48,6 @@ public class SWorkersActivity extends AppCompatActivity implements View.OnClickL
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        super.setContentView(R.layout.activity_sworkers);
         setContentView(R.layout.activity_sworkers);
         context=this;
         initView();

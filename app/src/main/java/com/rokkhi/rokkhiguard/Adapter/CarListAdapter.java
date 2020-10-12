@@ -22,13 +22,10 @@ import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONObjectRequestListener;
 import com.google.gson.Gson;
-import com.rokkhi.rokkhiguard.Model.Vehicle;
 import com.rokkhi.rokkhiguard.Model.api.RecordVehicleEntryModleClass;
 import com.rokkhi.rokkhiguard.Model.api.VehicleData;
 import com.rokkhi.rokkhiguard.R;
 import com.rokkhi.rokkhiguard.StaticData;
-import com.rokkhi.rokkhiguard.Utils.FullScreenAlertDialog;
-import com.rokkhi.rokkhiguard.data.VehiclesRepository;
 import com.rokkhi.rokkhiguard.helper.SharedPrefHelper;
 
 import org.json.JSONObject;
@@ -47,11 +44,6 @@ public class CarListAdapter extends RecyclerView.Adapter<CarListAdapter.GridView
     AlertDialog alertDialog;
 
 
-    public interface MyInterface {
-        ArrayList<Vehicle> fetchFlatVehicle(String flatid);
-    }
-
-    private MyInterface myInterface;
 
 
     private ArrayList<VehicleData> mflatFilterList;
@@ -59,7 +51,6 @@ public class CarListAdapter extends RecyclerView.Adapter<CarListAdapter.GridView
     private LayoutInflater mInflater;
 
 
-    VehiclesRepository vehiclesRepository;
 
     @Override
     public Filter getFilter() {
@@ -83,7 +74,6 @@ public class CarListAdapter extends RecyclerView.Adapter<CarListAdapter.GridView
         getFilter();
 
         try {
-            this.myInterface = ((MyInterface) context);
         } catch (ClassCastException e) {
 //            throw new ClassCastException("Activity must implement AdapterCallback.");
         }
@@ -98,7 +88,6 @@ public class CarListAdapter extends RecyclerView.Adapter<CarListAdapter.GridView
         GridViewHolder gridViewHolder = new GridViewHolder(view);
         sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
 
-        vehiclesRepository = new VehiclesRepository(context);
         return gridViewHolder;
     }
 
@@ -149,7 +138,6 @@ public class CarListAdapter extends RecyclerView.Adapter<CarListAdapter.GridView
 
     private void callVehicleEntryData(VehicleData vehicleData, String inOutStatus, Context context) {
 
-        FullScreenAlertDialog fullScreenAlertDialog=new FullScreenAlertDialog(context);
 
         SharedPrefHelper sharedPrefHelper=new SharedPrefHelper(context);
 

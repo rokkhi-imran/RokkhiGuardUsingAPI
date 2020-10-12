@@ -32,16 +32,11 @@ import com.androidnetworking.interfaces.JSONObjectRequestListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.gson.Gson;
-import com.rokkhi.rokkhiguard.Model.Vehicle;
 import com.rokkhi.rokkhiguard.Model.Visitors;
 import com.rokkhi.rokkhiguard.Model.api.AllFlatsModelClass;
 import com.rokkhi.rokkhiguard.R;
 import com.rokkhi.rokkhiguard.StaticData;
 import com.rokkhi.rokkhiguard.Utils.FullScreenAlertDialog;
-import com.rokkhi.rokkhiguard.data.BlackListRepository;
-import com.rokkhi.rokkhiguard.data.FlatsRepository;
-import com.rokkhi.rokkhiguard.data.VehiclesRepository;
-import com.rokkhi.rokkhiguard.data.WhiteListRepository;
 import com.rokkhi.rokkhiguard.helper.SharedPrefHelper;
 
 import org.json.JSONObject;
@@ -62,10 +57,6 @@ public class MainPageActivity extends AppCompatActivity {
     Context context;
     ImageButton settings;
 
-    FlatsRepository flatsRepository;
-    WhiteListRepository whiteListRepository;
-    BlackListRepository blackListRepository;
-    VehiclesRepository vehiclesRepository;
     String appVersion;
 
     RecyclerView recyclerViewVisitorAdapter;
@@ -134,18 +125,14 @@ public class MainPageActivity extends AppCompatActivity {
 
         callFlatList();
 
-        flatsRepository = new FlatsRepository(this);
-        whiteListRepository = new WhiteListRepository(this);
-        blackListRepository = new BlackListRepository(this);
-        vehiclesRepository = new VehiclesRepository(this);
 
         logout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                Intent intent = new Intent(context, DaroanPassActivity.class);
+                Intent intent = new Intent(context, GuardListActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
-                finish();
             }
         });
 
@@ -355,19 +342,7 @@ public class MainPageActivity extends AppCompatActivity {
     }
 
 
-    public void matchanddelete(ArrayList<Vehicle> check, Vehicle vehicle) {
-        boolean flag = false;
 
-        for (int i = 0; i < check.size(); i++) {
-            if (check.get(i).getVehicle_id().equals(vehicle.getVehicle_id())) {
-                //vehiclesRepository.deleteVehicle(vehicle);
-                Log.e(TAG, "matchanddelete: hhhh ");
-                flag = true;
-            }
-        }
-        if (!flag) vehiclesRepository.deleteVehicle(vehicle);
-
-    }
 
     @Override
     protected void onStart() {

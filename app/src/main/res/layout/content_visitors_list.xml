@@ -10,31 +10,36 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_marginStart="@dimen/_10sdp"
+        android:layout_marginEnd="@dimen/_10sdp">
 
-        <EditText
-            android:id="@+id/search"
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/searchlayout"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginEnd="20dp"
-            android:layout_marginBottom="20dp"
-            android:background="@drawable/round_edittext2"
-            android:drawableEnd="@drawable/ic_search"
-            android:hint=" নাম অথবা ফ্লাট নাম্বার দিয়ে খুঁজুন  "
-            android:paddingStart="20dp"
-            android:paddingEnd="20dp"
-            android:visibility="visible" />
+            android:layout_height="wrap_content"
+            android:hint=" নাম অথবা ফ্লাট নাম্বার দিয়ে খুঁজুন  ">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/search"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_50sdp"
+                android:background="@drawable/round_edittext2"
+                android:drawableEnd="@drawable/ic_search"
+                android:paddingEnd="20dp"
+                android:visibility="visible" />
+        </com.google.android.material.textfield.TextInputLayout>
+
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerview"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/search"
-            android:layout_marginStart="10dp"
+            android:layout_below="@+id/searchlayout"
             android:layout_marginTop="10dp"
-            android:layout_marginBottom="200dp">
+            android:layout_marginBottom="200dp"
+            tools:listitem="@layout/item_vis">
 
         </androidx.recyclerview.widget.RecyclerView>
 

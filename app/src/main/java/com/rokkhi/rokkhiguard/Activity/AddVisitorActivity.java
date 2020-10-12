@@ -16,7 +16,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
@@ -27,17 +26,22 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.FragmentActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONObjectRequestListener;
+import com.google.android.material.textfield.TextInputEditText;
 import com.google.gson.Gson;
 import com.rokkhi.rokkhiguard.Adapter.ActiveFlatAdapter;
 import com.rokkhi.rokkhiguard.Adapter.TypesAdapter;
+import com.rokkhi.rokkhiguard.Adapter.VisitorWaitingListAdapter;
 import com.rokkhi.rokkhiguard.Model.api.ActiveFlatData;
 import com.rokkhi.rokkhiguard.Model.api.ActiveFlatsModelClass;
+import com.rokkhi.rokkhiguard.Model.api.GetInsideVisitorData;
+import com.rokkhi.rokkhiguard.Model.api.GetVisitorInsideModelClass;
 import com.rokkhi.rokkhiguard.R;
 import com.rokkhi.rokkhiguard.StaticData;
 import com.rokkhi.rokkhiguard.Utils.FullScreenAlertDialog;
@@ -59,22 +63,23 @@ import java.util.Map;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 
-public class AddVisitorActivity extends AppCompatActivity implements View.OnClickListener , IPickResult {
+public class AddVisitorActivity extends AppCompatActivity implements View.OnClickListener, IPickResult {
 
     private static final String TAG = "AddVisitorActivity";
     Context context;
     private RecyclerView mVisitorPendingListRecycelrViewID;
     private CircleImageView mUserPhotoIV;
 
-    private EditText mPhoneNoET;
+    private TextInputEditText mPhoneNoET;
 
-    private EditText mUserNameET;
+    private TextInputEditText mUserNameET;
 
-    private EditText mFlatNumberET;
+    private TextInputEditText mFlatNumberET;
 
-    private EditText mPuposeET;
+    private TextInputEditText mPuposeET;
 
-    private EditText mAddressET;
+    private TextInputEditText mAddressET;
+    private TextView imageUploadTV;
 
 
     private Button mSubmitUserInfoBtn;
@@ -84,10 +89,10 @@ public class AddVisitorActivity extends AppCompatActivity implements View.OnClic
     private Bitmap bitmap = null;
 
 
-    ArrayList<ActiveFlatData>historyFlats;
-    String totaltext="";
+    ArrayList<ActiveFlatData> historyFlats;
+    String totaltext = "";
     FullScreenAlertDialog fullScreenAlertDialog;
-    
+
     SharedPrefHelper sharedPrefHelper;
 
     @Override
@@ -98,10 +103,84 @@ public class AddVisitorActivity extends AppCompatActivity implements View.OnClic
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         context = AddVisitorActivity.this;
-        historyFlats=new ArrayList<>();
+        historyFlats = new ArrayList<>();
         AndroidNetworking.initialize(getApplicationContext());
-        sharedPrefHelper=new SharedPrefHelper(context);
-        fullScreenAlertDialog=new FullScreenAlertDialog(context);
+        sharedPrefHelper = new SharedPrefHelper(context);
+        fullScreenAlertDialog = new FullScreenAlertDialog(context);
+
+        getVisitorWautingList();
+
+    }
+
+    private void getVisitorWautingList() {
+
+
+        Map<String, String> dataPost = new HashMap<>();
+
+        dataPost.put("limit", "");
+        dataPost.put("pageId", "");
+        dataPost.put("buildingId", sharedPrefHelper.getString(StaticData.BUILD_ID));
+        dataPost.put("communityId", sharedPrefHelper.getString(StaticData.COMM_ID));
+        dataPost.put("flatId", "");
+        dataPost.put("status",StaticData.PENDING_PERMISSION);
+        dataPost.put("fromDate","");
+        dataPost.put("toDate","");
+
+        JSONObject jsonDataPost = new JSONObject(dataPost);
+
+        String url = StaticData.baseURL + "" + StaticData.getVisitors;
+        String token = sharedPrefHelper.getString(StaticData.KEY_FIREBASE_ID_TOKEN);
+
+        Log.e("TAG", "onCreate: " + jsonDataPost);
+        Log.e("TAG", "onCreate: " + url);
+        Log.e("TAG", "onCreate: " + token);
+        Log.e("TAG", "onCreate: ---------------------- ");
+
+
+        AndroidNetworking.post(url)
+                .addHeaders("authtoken", token)
+                .setContentType("application/json")
+                .addJSONObjectBody(jsonDataPost)
+                .setPriority(Priority.MEDIUM)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+
+                        Log.e(TAG, "onResponse: =   " + response);
+
+                        Gson gson = new Gson();
+                        GetVisitorInsideModelClass getVisitorInsideModelClass = gson.fromJson(String.valueOf(response), GetVisitorInsideModelClass.class);
+
+                        VisitorWaitingListAdapter visitorWaitingListAdapter=new VisitorWaitingListAdapter((ArrayList<GetInsideVisitorData>) getVisitorInsideModelClass.getData(),context);
+                        visitorWaitingListAdapter.setHasStableIds(true);
+
+                        if (getVisitorInsideModelClass.getData().size()>0){
+                            LinearLayoutManager layoutManager
+                                    = new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false);
+
+                            mVisitorPendingListRecycelrViewID.setLayoutManager(layoutManager);
+
+                            mVisitorPendingListRecycelrViewID.setVisibility(View.VISIBLE);
+                            mVisitorPendingListRecycelrViewID.setAdapter(visitorWaitingListAdapter);
+                        }
+
+
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+
+
+
+                        StaticData.showErrorAlertDialog(context,"Alert !","আবার চেষ্টা করুন ।");
+
+                        Log.e("TAG", "onResponse: error message =  " + anError.getMessage());
+                        Log.e("TAG", "onResponse: error code =  " + anError.getErrorCode());
+                        Log.e("TAG", "onResponse: error body =  " + anError.getErrorBody());
+                        Log.e("TAG", "onResponse: error  getErrorDetail =  " + anError.getErrorDetail());
+                    }
+                });
 
     }
 
@@ -123,16 +202,19 @@ public class AddVisitorActivity extends AppCompatActivity implements View.OnClic
         mVisitorPendingListRecycelrViewID = (RecyclerView) findViewById(R.id.visitorPendingListRecycelrViewID);
         mUserPhotoIV = (CircleImageView) findViewById(R.id.user_photoIV);
         mUserPhotoIV.setOnClickListener(this);
-        mPhoneNoET = (EditText) findViewById(R.id.phone_noET);
-        mUserNameET = (EditText) findViewById(R.id.user_nameET);
-        mFlatNumberET = (EditText) findViewById(R.id.flatNumberET);
+        mPhoneNoET = (TextInputEditText) findViewById(R.id.phone_noET);
+        mUserNameET = (TextInputEditText) findViewById(R.id.user_nameET);
+        mFlatNumberET =  findViewById(R.id.flatNumberET);
         mFlatNumberET.setOnClickListener(this);
-        mPuposeET = (EditText) findViewById(R.id.puposeET);
+        mPuposeET =  findViewById(R.id.puposeET);
         mPuposeET.setOnClickListener(this);
-        mAddressET = (EditText) findViewById(R.id.addressET);
+        mAddressET = findViewById(R.id.addressET);
         mSubmitUserInfoBtn = (Button) findViewById(R.id.SubmitUserInfoBtn);
         mSubmitUserInfoBtn.setOnClickListener(this);
         mProgressBar1 = (ProgressBar) findViewById(R.id.progressBar1);
+
+        imageUploadTV=findViewById(R.id.imageUploadTV);
+        imageUploadTV.setOnClickListener(this);
     }
 
     @Override
@@ -141,6 +223,7 @@ public class AddVisitorActivity extends AppCompatActivity implements View.OnClic
             default:
                 break;
             case R.id.user_photoIV:
+            case R.id.imageUploadTV:
                 StaticData.selectImage(AddVisitorActivity.this);
                 break;
             case R.id.flatNumberET:
@@ -159,31 +242,31 @@ public class AddVisitorActivity extends AppCompatActivity implements View.OnClic
 
     private void checkValidation() {
 
-        if (mPhoneNoET.getText().toString().isEmpty()){
+        if (mPhoneNoET.getText().toString().isEmpty()) {
             mPhoneNoET.requestFocus();
             mPhoneNoET.setError("Add phone Number");
             return;
         }
-        if (mUserNameET.getText().toString().isEmpty()){
+        if (mUserNameET.getText().toString().isEmpty()) {
             mUserNameET.requestFocus();
             mUserNameET.setError("Add User Name");
             return;
         }
-        if (mFlatNumberET.getText().toString().isEmpty()){
+        if (mFlatNumberET.getText().toString().isEmpty()) {
             mFlatNumberET.requestFocus();
             mFlatNumberET.setError("Add Flat Number");
             return;
         }
-        if (mPuposeET.getText().toString().isEmpty()){
+        if (mPuposeET.getText().toString().isEmpty()) {
             mPuposeET.requestFocus();
             mPuposeET.setError("Add Purpose");
             return;
         }
 
-        if (bitmap==null){
+        if (bitmap == null) {
             uploadDataData("");
 
-        }else {
+        } else {
 
             fullScreenAlertDialog.showdialog();
 
@@ -203,7 +286,7 @@ public class AddVisitorActivity extends AppCompatActivity implements View.OnClic
 
             SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault());
             String currentDateandTime = sdf.format(new Date());
-            Log.e(TAG, "onClick: currentDateandTime =  "+currentDateandTime);
+            Log.e(TAG, "onClick: currentDateandTime =  " + currentDateandTime);
 
             AndroidNetworking.upload(StaticData.imageUploadURL)
                     .addMultipartFile("image", file)// posting any type of file
@@ -220,13 +303,13 @@ public class AddVisitorActivity extends AppCompatActivity implements View.OnClic
                                 String imageDownloadLink = response.getString("url");
 
 
-                                Log.e(TAG, "onResponse: imageDownloadLink "+imageDownloadLink );
+                                Log.e(TAG, "onResponse: imageDownloadLink " + imageDownloadLink);
 
                                 uploadDataData(imageDownloadLink);
 
                             } catch (JSONException e) {
                                 fullScreenAlertDialog.dismissdialog();
-                                StaticData.showErrorAlertDialog(context,"Error !","আবার চেষ্টা করুন । ");
+                                StaticData.showErrorAlertDialog(context, "Error !", "আবার চেষ্টা করুন । ");
                                 e.printStackTrace();
                             }
 
@@ -246,28 +329,27 @@ public class AddVisitorActivity extends AppCompatActivity implements View.OnClic
                     });
 
 
-
         }
 
     }
 
     private void uploadDataData(String imageLink) {
 
-fullScreenAlertDialog.showdialog();
+        fullScreenAlertDialog.showdialog();
         Map<String, String> dataPost = new HashMap<>();
-        dataPost.put("name",mUserNameET.getText().toString());
-        dataPost.put("address",  mAddressET.getText().toString());
+        dataPost.put("name", mUserNameET.getText().toString());
+        dataPost.put("address", mAddressET.getText().toString());
         dataPost.put("contact", mPhoneNoET.getText().toString());
         dataPost.put("email", "");
-        dataPost.put("purpose", mPuposeET.getText().toString() );
+        dataPost.put("purpose", mPuposeET.getText().toString());
 
         dataPost.put("image", imageLink);
         dataPost.put("thumbImage", imageLink);
         dataPost.put("communityId", sharedPrefHelper.getString(StaticData.COMM_ID));
         dataPost.put("buildingId", sharedPrefHelper.getString(StaticData.BUILD_ID));
-        dataPost.put("flatId",String.valueOf(historyFlats.get(0).getId()) );
+        dataPost.put("flatId", String.valueOf(historyFlats.get(0).getId()));
         dataPost.put("guardId", sharedPrefHelper.getString(StaticData.USER_ID));
-        dataPost.put("responderId"," " );
+        dataPost.put("responderId", "0");
 
         JSONObject jsonDataPost = new JSONObject(dataPost);
 
@@ -296,7 +378,7 @@ fullScreenAlertDialog.showdialog();
                         Log.e(TAG, "onResponse: =  =----------- " + response);
 
 
-                        StaticData.showSuccessDialog((FragmentActivity) context,"Alert !","Visitor Added ..");
+                        StaticData.showSuccessDialog((FragmentActivity) context, "Alert !", "Visitor Added ..");
 
                     }
 
@@ -305,7 +387,7 @@ fullScreenAlertDialog.showdialog();
 
                         fullScreenAlertDialog.dismissdialog();
 
-                        StaticData.showErrorAlertDialog(context,"Alert !","আবার চেষ্টা করুন ।");
+                        StaticData.showErrorAlertDialog(context, "Alert !", "আবার চেষ্টা করুন ।");
 
                         Log.e(TAG, "onResponse: error message =  " + anError.getMessage());
                         Log.e(TAG, "onResponse: error code =  " + anError.getErrorCode());
@@ -315,12 +397,11 @@ fullScreenAlertDialog.showdialog();
                 });
 
 
-
     }
 
     public void showAllParcelTypes() {
 
-        ArrayList<String> parcelTypes=new ArrayList<>();
+        ArrayList<String> parcelTypes = new ArrayList<>();
 
         parcelTypes.add("Visit");
         parcelTypes.add("other");
@@ -330,14 +411,14 @@ fullScreenAlertDialog.showdialog();
         final AlertDialog alertcompany = new AlertDialog.Builder(context).create();
         LayoutInflater inflater = getLayoutInflater();
         View convertView = (View) inflater.inflate(R.layout.custom_percel_list, null);
-        final EditText editText = convertView.findViewById(R.id.sear);
+        final TextInputEditText editText = convertView.findViewById(R.id.sear);
 
         //change lsitview to gridview
 
         final ListView lv = (ListView) convertView.findViewById(R.id.listView1);
         final Button done = convertView.findViewById(R.id.SubmitUserInfoBtn);
         alertcompany.setView(convertView);
-        alertcompany.setCancelable(false);
+        alertcompany.setCancelable(true);
         //valueAdapter.notifyDataSetChanged();
 
         lv.setAdapter(valueAdapter);
@@ -346,7 +427,7 @@ fullScreenAlertDialog.showdialog();
         done.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mPuposeET.setText(editText.getText().toString());
+//                mPuposeET.setText(editText.getText().toString());
                 alertcompany.dismiss();
             }
         });
@@ -388,7 +469,7 @@ fullScreenAlertDialog.showdialog();
         final AlertDialog alertcompany = new AlertDialog.Builder(context).create();
         LayoutInflater inflater = getLayoutInflater();
         View convertView = (View) inflater.inflate(R.layout.custom_list_multiple, null);
-        final EditText editText = convertView.findViewById(R.id.sear);
+        final TextInputEditText editText = convertView.findViewById(R.id.sear);
         //change Listview to Gridview
         final GridView lv = (GridView) convertView.findViewById(R.id.listView1);
         final Button done = convertView.findViewById(R.id.SubmitUserInfoBtn);
@@ -401,7 +482,7 @@ fullScreenAlertDialog.showdialog();
 
 
         alertcompany.setView(convertView);
-        alertcompany.setCancelable(false);
+        alertcompany.setCancelable(true);
         //valueAdapter.notifyDataSetChanged();
 
         lv.setAdapter(activeFlatAdapter);
@@ -478,7 +559,7 @@ fullScreenAlertDialog.showdialog();
 
                 ActiveFlatData ss = (ActiveFlatData) lv.getItemAtPosition(position);
 
-                if(!historyFlats.contains(ss)) {
+                if (!historyFlats.contains(ss)) {
                     activeFlatAdapter.changedata(ss.getNumber(), true);
                     historyFlats.add(ss);
                     activeFlatAdapter.notifyDataSetChanged();

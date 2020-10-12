@@ -48,7 +48,7 @@
         </activity>
         <activity android:name=".Utils.NoticeDetailsActivity" />
         <activity android:name=".Activity.SWorkersActivity" />
-        <activity android:name=".Activity.EditWrokerProfileActivity" /> <!-- <activity android:name=".CallChildActivity" /> -->
+        <!-- <activity android:name=".CallChildActivity" /> -->
         <activity
             android:name=".Activity.DaroanPassActivity"
             android:label="Rokkhi"

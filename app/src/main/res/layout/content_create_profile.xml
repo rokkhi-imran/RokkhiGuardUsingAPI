@@ -23,13 +23,25 @@
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/user_photoIV"
-                android:layout_width="120dp"
-                android:layout_height="120dp"
+                android:layout_width="@dimen/_100sdp"
+                android:layout_height="@dimen/_100sdp"
                 android:layout_centerHorizontal="true"
                 android:layout_marginBottom="10dp"
                 android:src="@drawable/male1"
                 app:civ_border_color="@color/black"
                 app:civ_border_width=".5dp" />
+
+            <TextView
+                android:id="@+id/imageUploadTV"
+                android:layout_width="@dimen/_100sdp"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/user_photoIV"
+                android:layout_centerHorizontal="true"
+                android:drawableRight="@drawable/ic_baseline_cloud_upload_24"
+                android:gravity="center"
+                android:text="Upload photo"
+                android:textColor="@color/orange"
+                android:textStyle="bold" />
 
         </RelativeLayout>
 
@@ -39,28 +51,26 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/prorel"
-            android:layout_marginTop="30dp"
-
+            android:layout_marginTop="@dimen/_20sdp"
             android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="15dp"
-                android:text=" নাম  *"
-                android:textColor="@color/orange"
-                android:textSize="22sp" />
-
-            <EditText
-                android:id="@+id/user_nameET"
+            <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:background="@drawable/round_edittext2"
-                android:hint=" নাম"
-                android:inputType="textNoSuggestions"
-                android:paddingStart="10dp"
-                android:textSize="24sp" />
+                android:hint=" নাম  *"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_height="wrap_content">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/user_nameET"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_52sdp"
+                    android:inputType="textNoSuggestions"
+                    android:paddingStart="10dp"
+                    android:textSize="24sp" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+
         </LinearLayout>
 
         <LinearLayout
@@ -68,28 +78,26 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/relname"
-            android:layout_marginTop="50dp"
+            android:layout_marginTop="@dimen/_20sdp"
 
             android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/mail"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="15dp"
-                android:text=" মোবাইল নাম্বার "
-                android:textColor="@color/orange"
-                android:textSize="22sp" />
-
-            <EditText
-                android:id="@+id/user_Phone_ET"
+            <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:background="@drawable/round_edittext2"
-                android:hint=" মোবাইল নাম্বার"
-                android:inputType="numberDecimal"
-                android:paddingStart="10dp"
-                android:textSize="24sp" />
+                android:hint=" মোবাইল নাম্বার "
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_height="wrap_content">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/user_Phone_ET"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_52sdp"
+                    android:inputType="numberDecimal"
+                    android:paddingStart="10dp"
+                    android:textSize="24sp" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
 
         </LinearLayout>
 
@@ -99,30 +107,27 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/relPhone"
-            android:layout_marginTop="30dp"
-
+            android:layout_marginTop="@dimen/_20sdp"
             android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/desig"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="15dp"
-                android:text="পদবী  *"
-                android:textColor="@color/orange"
-                android:textSize="22sp" />
 
-            <EditText
-                android:id="@+id/user_wtype"
+            <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:background="@drawable/round_edittext2"
-                android:focusable="false"
+                android:hint="পদবী  *"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_height="wrap_content">
 
-                android:hint=" কি ধরনের প্রোফাইল"
-                android:inputType="numberDecimal"
-                android:paddingStart="10dp"
-                android:textSize="24sp" />
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/user_wtype"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_52sdp"
+                    android:focusable="false"
+                    android:inputType="numberDecimal"
+                    android:paddingStart="10dp"
+                    android:textSize="24sp" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
 
         </LinearLayout>
 
@@ -131,30 +136,28 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/reldesig"
-            android:layout_marginTop="30dp"
-
+            android:layout_marginTop="@dimen/_20sdp"
             android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/flatNumberET"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="15dp"
-                android:text="কোন কোন ফ্ল্যাটে কাজ করে "
-                android:textColor="@color/orange"
-                android:textSize="22sp" />
 
-            <EditText
-                android:id="@+id/user_flat"
+
+            <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:background="@drawable/round_edittext2"
-                android:focusable="false"
+                android:hint="কোন কোন ফ্ল্যাটে কাজ করে "
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_height="wrap_content">
 
-                android:hint=" ফ্ল্যাট"
-                android:inputType="numberDecimal"
-                android:paddingStart="10dp"
-                android:textSize="24sp" />
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/user_flat"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_52sdp"
+                    android:background="@drawable/round_edittext2"
+                    android:focusable="false"
+                    android:inputType="numberDecimal"
+                    android:paddingStart="10dp"
+                    android:textSize="24sp" />
+            </com.google.android.material.textfield.TextInputLayout>
+
 
         </LinearLayout>
 
@@ -164,9 +167,9 @@
             android:layout_height="60dp"
             android:layout_below="@+id/relflat"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="70dp"
+            android:layout_marginTop="@dimen/_20sdp"
             android:layout_marginBottom="50dp"
-            android:background="@drawable/round_button"
+            android:background="@drawable/rectangle_textsize_with_bg"
             android:text="Done ( শেষ )"
             android:textColor="@color/white"
             android:textSize="18sp" />

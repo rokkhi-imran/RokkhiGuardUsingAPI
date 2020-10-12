@@ -1,59 +1,67 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
+
+<androidx.cardview.widget.CardView
+
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content" >
+    android:layout_marginLeft="@dimen/_2sdp"
+    android:layout_marginRight="@dimen/_2sdp"
+    android:layout_marginBottom="@dimen/_5sdp"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="@dimen/_5sdp"
+    app:layout_goneMarginBottom="@dimen/_5sdp">
 
-
-    <RelativeLayout
-        android:id="@+id/relativeLayout"
-
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:layout_height="wrap_content">
 
-
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/one"
-            android:layout_width="70dp"
-            android:layout_height="70dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="8dp"
-            android:src="@color/grey_300" />
-
-
-        <TextView
-            android:id="@+id/name"
-            android:layout_width="wrap_content"
+        <RelativeLayout
+            android:id="@+id/relativeLayout"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="28dp"
-            android:layout_marginTop="15dp"
-            android:layout_toEndOf="@+id/one"
-            android:text="Name"
-            android:textColor="@color/black"
-            android:textSize="20sp" />
-
-        <TextView
-            android:id="@+id/lastcome"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/name"
-            android:layout_marginStart="28dp"
-            android:layout_marginTop="4dp"
-            android:layout_toEndOf="@+id/one"
-            android:text="last came"
-            android:textColor="@color/link_blue"
-            android:textStyle="italic" />
-    </RelativeLayout>
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/one"
+                android:layout_centerVertical="true"
+                android:padding="@dimen/_5sdp"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:src="@drawable/male1" />
+
+
+            <TextView
+                android:id="@+id/name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="28dp"
+                android:layout_marginTop="@dimen/_8sdp"
+                android:layout_toEndOf="@+id/one"
+                android:text="Name"
+                android:textColor="@color/black"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/lastcome"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/name"
+                android:layout_marginStart="28dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginBottom="@dimen/_8sdp"
+                android:layout_toEndOf="@+id/one"
+                android:text="last came"
+                android:textColor="@color/link_blue"
+                android:textStyle="italic" />
+        </RelativeLayout>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.cardview.widget.CardView>

@@ -57,7 +57,8 @@ public class StaticData {
 
     }
 
-    public static final String baseURL = "http://home.api.rokkhi.com:3000";
+//    public static final String baseURL = "http://home.api.rokkhi.com:3000";
+    public static final String baseURL = "http://13.76.190.212:3000";
     public static final String getNotice = "/api/v1/notice/getNotices";
     public static final String getUsersList = "/api/v1/user/getUsersList";
     public static final String addParcel = "/api/v1/entrance/addParcel";
@@ -88,6 +89,7 @@ public class StaticData {
     public static final String PARCEL_DELIVERED = "PARCEL_DELIVERED";
     public static final String INSIDE_COMPOUND = "INSIDE_COMPOUND";
     public static final String OUTSIDE_COMPOUND = "OUTSIDE_COMPOUND";
+    public static final String PENDING_PERMISSION = "PENDING_PERMISSION";
 
     //    NoticeForConstants
     public static final String ALL = "ALL";

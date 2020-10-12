@@ -13,7 +13,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/white"
-        android:padding="20dp">
+        android:paddingTop="@dimen/_5sdp"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:paddingBottom="20dp"
+        >
 
         <RelativeLayout
             android:id="@+id/prorel"
@@ -24,19 +28,31 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/visitorPendingListRecycelrViewID"
                 android:layout_width="361dp"
-                android:visibility="gone"
-                android:layout_height="92dp" />
+                android:layout_height="92dp"
+                android:visibility="gone" />
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/user_photoIV"
-                android:layout_width="80dp"
-                android:layout_height="80dp"
+                android:layout_width="@dimen/_100sdp"
+                android:layout_height="@dimen/_100sdp"
                 android:layout_below="@id/visitorPendingListRecycelrViewID"
                 android:layout_centerHorizontal="true"
                 android:layout_marginBottom="10dp"
                 android:src="@drawable/male1"
                 app:civ_border_color="@color/black"
                 app:civ_border_width=".5dp" />
+
+            <TextView
+                android:id="@+id/imageUploadTV"
+                android:layout_width="@dimen/_100sdp"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/user_photoIV"
+                android:layout_centerHorizontal="true"
+                android:drawableRight="@drawable/ic_baseline_cloud_upload_24"
+                android:gravity="center"
+                android:text="Upload photo"
+                android:textColor="@color/orange"
+                android:textStyle="bold" />
 
         </RelativeLayout>
 
@@ -46,7 +62,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/prorel"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="@dimen/_18sdp"
             android:background="@drawable/grey_border_bottom"
             android:orientation="vertical">
 
@@ -55,16 +71,23 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
-                <EditText
-                    android:id="@+id/phone_noET"
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/mobileNumberTextField"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:background="@drawable/round_edittext2"
-                    android:hint=" মোবাইল নাম্বার"
-                    android:inputType="numberDecimal"
-                    android:paddingStart="10dp"
-                    android:paddingEnd="1dp"
-                    android:textSize="24sp" />
+                    android:layout_height="wrap_content"
+                    android:hint=" মোবাইল নাম্বার">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/phone_noET"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/_52sdp"
+                        android:inputType="numberDecimal"
+                        android:paddingStart="10dp"
+                        android:paddingEnd="1dp"
+                        android:textSize="24sp" />
+                </com.google.android.material.textfield.TextInputLayout>
+
 
             </LinearLayout>
 
@@ -78,99 +101,128 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/relphone"
-            android:layout_marginTop="15dp"
+            android:layout_marginTop="@dimen/_18sdp"
             android:background="@drawable/grey_border_bottom"
             android:orientation="vertical">
 
-
-            <EditText
-                android:id="@+id/user_nameET"
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/userNameTextField"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:background="@drawable/round_edittext2"
-                android:hint=" নাম"
-                android:inputType="textNoSuggestions"
-                android:paddingStart="10dp"
-                android:paddingEnd="1dp"
-                android:textSize="24sp" />
+                android:layout_height="wrap_content"
+                android:hint=" নাম">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/user_nameET"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_52sdp"
+                    android:inputType="textNoSuggestions"
+                    android:paddingStart="10dp"
+                    android:paddingEnd="1dp"
+                    android:textSize="24sp" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
 
         </LinearLayout>
 
 
-
-        <RelativeLayout
+        <LinearLayout
             android:id="@+id/whomtomeet"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/relname"
-            android:layout_marginTop="15dp"
+            android:layout_marginTop="@dimen/_18sdp"
             android:background="@drawable/grey_border_bottom"
             android:orientation="vertical">
 
-
-            <EditText
-                android:id="@+id/flatNumberET"
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/flatNumberETTextField"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:background="@drawable/round_edittext2"
-                android:focusable="false"
-                android:hint=" কোন ফ্লাটে যাবে"
-                android:inputType="textNoSuggestions"
-                android:paddingStart="10dp"
-                android:paddingEnd="1dp"
-                android:textSize="24sp" />
+                android:layout_height="wrap_content"
+                android:hint=" কোন ফ্লাটে যাবে">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/flatNumberET"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_52sdp"
+                    android:focusable="false"
+                    android:inputType="textNoSuggestions"
+                    android:paddingStart="10dp"
+                    android:paddingEnd="1dp"
+                    android:textSize="24sp" />
+            </com.google.android.material.textfield.TextInputLayout>
 
 
-        </RelativeLayout>
+        </LinearLayout>
 
 
-        <RelativeLayout
+        <LinearLayout
             android:id="@+id/relpurpose"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/whomtomeet"
-            android:layout_marginTop="15dp"
+            android:layout_marginTop="@dimen/_18sdp"
             android:background="@drawable/grey_border_bottom"
             android:orientation="vertical">
 
-            <EditText
-                android:id="@+id/puposeET"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:background="@drawable/round_edittext2"
-                android:hint="Issue of visiting"
-                android:inputType="textNoSuggestions"
-                android:paddingStart="10dp"
-                android:focusable="false"
-                android:paddingEnd="1dp"
-                android:text="visiting"
-                android:textSize="24sp" />
 
-        </RelativeLayout>
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/puposeETTextField"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+
+                android:hint="উদ্দেশ্য">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/puposeET"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_52sdp"
+                    android:focusable="false"
+                    android:inputType="textNoSuggestions"
+                    android:paddingStart="10dp"
+                    android:paddingEnd="1dp"
+                    android:text="visiting"
+                    android:textSize="24sp" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+
+        </LinearLayout>
 
         <LinearLayout
             android:id="@+id/reladdress"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/relpurpose"
-            android:layout_marginTop="15dp"
+            android:layout_marginTop="@dimen/_18sdp"
             android:background="@drawable/grey_border_bottom"
             android:orientation="vertical">
 
 
-            <EditText
-                android:id="@+id/addressET"
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/addressETTextField"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:background="@drawable/round_edittext2"
-                android:hint=" ঠিকানা "
-                android:inputType="text"
-                android:paddingStart="10dp"
-                android:paddingEnd="1dp"
-                android:textSize="24sp" />
+                android:layout_height="wrap_content"
+                android:hint=" ঠিকানা ">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/addressET"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_52sdp"
+                    android:inputType="text"
+                    android:paddingStart="10dp"
+                    android:paddingEnd="1dp"
+                    android:textSize="24sp" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
 
         </LinearLayout>
-
 
 
         <Button
@@ -179,9 +231,9 @@
             android:layout_height="60dp"
             android:layout_below="@+id/reladdress"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="@dimen/_18sdp"
             android:layout_marginBottom="50dp"
-            android:background="@drawable/round_button"
+            android:background="@drawable/rectangle_textsize_with_bg"
             android:text="Done   ( শেষ )"
             android:textColor="@color/white"
             android:textSize="18sp" />

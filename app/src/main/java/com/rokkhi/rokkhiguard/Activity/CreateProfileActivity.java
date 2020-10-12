@@ -30,6 +30,7 @@ import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONObjectRequestListener;
+import com.google.android.material.textfield.TextInputEditText;
 import com.google.gson.Gson;
 import com.rokkhi.rokkhiguard.Adapter.ActiveFlatAdapter;
 import com.rokkhi.rokkhiguard.Adapter.TypesAdapter;
@@ -64,24 +65,25 @@ public class CreateProfileActivity extends AppCompatActivity implements IPickRes
     /**
      * নাম
      */
-    private EditText mUserName;
+    private TextInputEditText mUserName;
     /**
      * মোবাইল নাম্বার
      */
-    private EditText mUserPhoneET;
+    private TextInputEditText mUserPhoneET;
     /**
      * কি ধরনের প্রোফাইল
      */
-    private EditText mUserWtype;
+    private TextInputEditText mUserWtype;
     /**
      * ফ্ল্যাট
      */
-    private EditText UserFlatET;
+    private TextInputEditText UserFlatET;
     /**
      * Done ( শেষ )
      */
     private Button submitUserDataBtn;
     private ProgressBar mProgressBar;
+    private TextView imageUploadTV;
 
     String mFileUri = "";
     private Bitmap bitmap = null;
@@ -141,16 +143,18 @@ public class CreateProfileActivity extends AppCompatActivity implements IPickRes
     private void initView() {
         userPhotoImageView = (CircleImageView) findViewById(R.id.user_photoIV);
         userPhotoImageView.setOnClickListener(this);
-        mUserName = (EditText) findViewById(R.id.user_nameET);
-        mUserPhoneET = (EditText) findViewById(R.id.user_Phone_ET);
-        mUserWtype = (EditText) findViewById(R.id.user_wtype);
+        mUserName =  findViewById(R.id.user_nameET);
+        mUserPhoneET =  findViewById(R.id.user_Phone_ET);
+        mUserWtype =  findViewById(R.id.user_wtype);
         mUserWtype.setOnClickListener(this);
-        UserFlatET = (EditText) findViewById(R.id.user_flat);
+        UserFlatET =  findViewById(R.id.user_flat);
         UserFlatET.setOnClickListener(this);
         submitUserDataBtn = (Button) findViewById(R.id.SubmitUserInfoBtn);
         submitUserDataBtn.setOnClickListener(this);
         mProgressBar = (ProgressBar) findViewById(R.id.progressBar1);
         context = CreateProfileActivity.this;
+        imageUploadTV=findViewById(R.id.imageUploadTV);
+        imageUploadTV.setOnClickListener(this);
     }
 
     @Override
@@ -159,10 +163,12 @@ public class CreateProfileActivity extends AppCompatActivity implements IPickRes
             default:
                 break;
             case R.id.user_photoIV:
+            case R.id.imageUploadTV:
 
                 StaticData.selectImage(CreateProfileActivity.this);
 
                 break;
+
             case R.id.user_wtype:
 
                 sWorkerType();
@@ -202,7 +208,6 @@ public class CreateProfileActivity extends AppCompatActivity implements IPickRes
 
         alertcompany.setView(convertView);
         alertcompany.setCancelable(false);
-        //valueAdapter.notifyDataSetChanged();
 
         lv.setAdapter(activeFlatAdapter);
         alertcompany.show();

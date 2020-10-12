@@ -60,10 +60,10 @@ import java.util.Map;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 
-public class ParcelActivity extends AppCompatActivity implements IPickResult{
+public class ParcelActivity extends AppCompatActivity implements IPickResult {
 
 
-    String totaltext="";
+    String totaltext = "";
 
     CircleImageView parcelphoto;
     EditText companyNameET, parcelTypeET, flatNumberET;
@@ -79,10 +79,11 @@ public class ParcelActivity extends AppCompatActivity implements IPickResult{
     Normalfunc normalfunc;
     FullScreenAlertDialog fullScreenAlertDialog;
     SharedPrefHelper sharedPrefHelper;
+    private TextView imageUploadTV;
 
     ParcelResponseModelClass parcelResponseModelClass;
 
-    ArrayList<ActiveFlatData>historyFlats;
+    ArrayList<ActiveFlatData> historyFlats;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,10 +92,10 @@ public class ParcelActivity extends AppCompatActivity implements IPickResult{
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         context = ParcelActivity.this;
-        normalfunc= new Normalfunc();
-        fullScreenAlertDialog=new FullScreenAlertDialog(context);
-        sharedPrefHelper=new SharedPrefHelper(context);
-        historyFlats=new ArrayList<>();
+        normalfunc = new Normalfunc();
+        fullScreenAlertDialog = new FullScreenAlertDialog(context);
+        sharedPrefHelper = new SharedPrefHelper(context);
+        historyFlats = new ArrayList<>();
 
         AndroidNetworking.initialize(getApplicationContext());
 
@@ -105,9 +106,18 @@ public class ParcelActivity extends AppCompatActivity implements IPickResult{
         parcelTypeET = findViewById(R.id.parcelTypeET);
         parcelphoto = findViewById(R.id.parcel_photo);
         progressBar = findViewById(R.id.progressBar1);
+        imageUploadTV=findViewById(R.id.imageUploadTV);
         myCalendar = Calendar.getInstance();
 
         parcelphoto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                StaticData.selectImage(ParcelActivity.this);
+
+            }
+        });
+        imageUploadTV.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
@@ -120,27 +130,27 @@ public class ParcelActivity extends AppCompatActivity implements IPickResult{
             @Override
             public void onClick(View v) {
 
-                if (companyNameET.getText().toString().isEmpty()){
+                if (companyNameET.getText().toString().isEmpty()) {
                     companyNameET.requestFocus();
                     companyNameET.setError("Company Name ?");
                     return;
                 }
 
-                if (flatNumberET.getText().toString().isEmpty()){
+                if (flatNumberET.getText().toString().isEmpty()) {
                     flatNumberET.requestFocus();
                     flatNumberET.setError("Select flat name");
                     return;
                 }
-                if (parcelTypeET.getText().toString().isEmpty()){
+                if (parcelTypeET.getText().toString().isEmpty()) {
                     parcelTypeET.requestFocus();
                     parcelTypeET.setError("Select parcel type");
                     return;
                 }
 
                 fullScreenAlertDialog.showdialog();
-                if (bitmap==null){
+                if (bitmap == null) {
                     uploadDataData("");
-                }else {
+                } else {
                     ByteArrayOutputStream bytes = new ByteArrayOutputStream();
 
                     bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
@@ -157,7 +167,7 @@ public class ParcelActivity extends AppCompatActivity implements IPickResult{
 
                     SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault());
                     String currentDateandTime = sdf.format(new Date());
-                    Log.e(TAG, "onClick: currentDateandTime =  "+currentDateandTime);
+                    Log.e(TAG, "onClick: currentDateandTime =  " + currentDateandTime);
 
                     AndroidNetworking.upload(StaticData.imageUploadURL)
                             .addMultipartFile("image", file)// posting any type of file
@@ -174,13 +184,13 @@ public class ParcelActivity extends AppCompatActivity implements IPickResult{
                                         String imageDownloadLink = response.getString("url");
 
 
-                                        Log.e(TAG, "onResponse: imageDownloadLink "+imageDownloadLink );
+                                        Log.e(TAG, "onResponse: imageDownloadLink " + imageDownloadLink);
 
                                         uploadDataData(imageDownloadLink);
 
                                     } catch (JSONException e) {
                                         fullScreenAlertDialog.dismissdialog();
-                                        StaticData.showErrorAlertDialog(context,"Error !","আবার চেষ্টা করুন । ");
+                                        StaticData.showErrorAlertDialog(context, "Error !", "আবার চেষ্টা করুন । ");
                                         e.printStackTrace();
                                     }
 
@@ -223,7 +233,7 @@ public class ParcelActivity extends AppCompatActivity implements IPickResult{
 
         Map<String, String> dataPost = new HashMap<>();
         dataPost.put("name", parcelTypeET.getText().toString());
-        dataPost.put("company",  companyNameET.getText().toString());
+        dataPost.put("company", companyNameET.getText().toString());
         dataPost.put("image", imageDownloadLink);
         dataPost.put("thumbImage", imageDownloadLink);
         dataPost.put("acknowledgedBy", "");
@@ -270,7 +280,7 @@ public class ParcelActivity extends AppCompatActivity implements IPickResult{
 
                         fullScreenAlertDialog.dismissdialog();
 
-                        StaticData.showErrorAlertDialog(context,"Alert !","আবার চেষ্টা করুন ।");
+                        StaticData.showErrorAlertDialog(context, "Alert !", "আবার চেষ্টা করুন ।");
 
                         Log.e(TAG, "onResponse: error message =  " + anError.getMessage());
                         Log.e(TAG, "onResponse: error code =  " + anError.getErrorCode());
@@ -297,7 +307,7 @@ public class ParcelActivity extends AppCompatActivity implements IPickResult{
 
     public void showAllParcelTypes() {
 
-        ArrayList<String> parcelTypes=new ArrayList<>();
+        ArrayList<String> parcelTypes = new ArrayList<>();
 
         parcelTypes.add("খাবার");
         parcelTypes.add("চিঠি");
@@ -489,7 +499,6 @@ public class ParcelActivity extends AppCompatActivity implements IPickResult{
         });
 
     }
-
 
 
     @Override

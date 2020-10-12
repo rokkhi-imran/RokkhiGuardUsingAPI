@@ -1,8 +1,5 @@
 package com.rokkhi.rokkhiguard.Model.api
 
-import android.os.Parcelable
-import kotlinx.android.parcel.Parcelize
-
 data class NoticeModelClass(
     val data: List<NoticeData>,
     val errors: List<String>,

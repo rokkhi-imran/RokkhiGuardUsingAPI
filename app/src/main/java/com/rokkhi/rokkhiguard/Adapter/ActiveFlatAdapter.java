@@ -39,11 +39,11 @@ public class ActiveFlatAdapter extends BaseAdapter implements Filterable {
     private ValueFilter valueFilter;
     Context context;
 
-    public ActiveFlatAdapter(ActiveFlatsModelClass mStringList, Context context) {
+    public ActiveFlatAdapter(ActiveFlatsModelClass activeFlatsModelClass, Context context) {
 
-        this.activeFlats = (ArrayList<ActiveFlatData>) mStringList.getData();
+        this.activeFlats = (ArrayList<ActiveFlatData>) activeFlatsModelClass.getData();
 
-        this.mFlatFilterList = (ArrayList<ActiveFlatData>) mStringList.getData();
+        this.mFlatFilterList = (ArrayList<ActiveFlatData>) activeFlatsModelClass.getData();
         this.context=context;
 
         mInflater = LayoutInflater.from(context);
