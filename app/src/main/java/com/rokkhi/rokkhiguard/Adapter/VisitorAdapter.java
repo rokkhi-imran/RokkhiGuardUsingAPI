@@ -28,7 +28,6 @@ import com.rokkhi.rokkhiguard.Model.api.VisitorOutModelClass;
 import com.rokkhi.rokkhiguard.R;
 import com.rokkhi.rokkhiguard.StaticData;
 import com.rokkhi.rokkhiguard.Utils.FullScreenAlertDialog;
-import com.rokkhi.rokkhiguard.Utils.Normalfunc;
 import com.rokkhi.rokkhiguard.helper.SharedPrefHelper;
 import com.squareup.picasso.Picasso;
 
@@ -83,24 +82,19 @@ public class VisitorAdapter extends RecyclerView.Adapter<VisitorAdapter.VisitorV
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_vis, parent, false);
         VisitorViewHolder visitorViewHolder = new VisitorViewHolder(view);
         sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
-        //oCanNotification= sharedPref.getBoolean("oCanNotification",true);
-
 
         return visitorViewHolder;
     }
 
     @Override
     public void onBindViewHolder(@NonNull final VisitorViewHolder holder, int position) {
-        Normalfunc normalfunc = new Normalfunc();
 
         final GetInsideVisitorData visitor = list.get(position);
         holder.name.setText(visitor.getName());
 
         Picasso.get().load(visitor.getImage()).placeholder(R.drawable.male1).into(holder.propic);
 
-
         holder.intime.setText(visitor.getInTime());
-
 
         holder.out.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -142,14 +136,17 @@ public class VisitorAdapter extends RecyclerView.Adapter<VisitorAdapter.VisitorV
     private void callVisitorOutFunction(Context context, int id) {
 
 
+        SharedPrefHelper sharedPrefHelper = new SharedPrefHelper(context);
+
         FullScreenAlertDialog fullScreenAlertDialog = new FullScreenAlertDialog(context);
 
         Map<String, String> dataPost = new HashMap<>();
         dataPost.put("visitorId", String.valueOf(id));
+        dataPost.put("communityId", sharedPrefHelper.getString(StaticData.COMM_ID));
+        dataPost.put("newStatus", StaticData.OUTSIDE_COMPOUND);
 
         JSONObject jsonDataPost = new JSONObject(dataPost);
-        String url = StaticData.baseURL + "" + StaticData.letTheVisitorOut;
-        SharedPrefHelper sharedPrefHelper = new SharedPrefHelper(context);
+        String url = StaticData.baseURL + "" + StaticData.changeVisitorStatus;
         String token = sharedPrefHelper.getString(StaticData.KEY_FIREBASE_ID_TOKEN);
 
 

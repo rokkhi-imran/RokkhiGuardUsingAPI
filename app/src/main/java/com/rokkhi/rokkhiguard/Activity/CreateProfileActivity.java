@@ -477,7 +477,7 @@ public class CreateProfileActivity extends AppCompatActivity implements IPickRes
         dataPost.put("password", "");
         dataPost.put("image", imageDownloadLink);
         dataPost.put("thumbImage", imageDownloadLink);
-        dataPost.put("flatId", sharedPrefHelper.getString(StaticData.FLAT_ID));
+        dataPost.put("flatId", String.valueOf(historyFlats.get(0).getId()));
         dataPost.put("communityId", sharedPrefHelper.getString(StaticData.COMM_ID));
         dataPost.put("buildingId", sharedPrefHelper.getString(StaticData.BUILD_ID));
 

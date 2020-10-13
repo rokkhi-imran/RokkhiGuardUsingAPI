@@ -3,6 +3,8 @@ package com.rokkhi.rokkhiguard.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -21,12 +23,14 @@ import com.androidnetworking.interfaces.JSONObjectRequestListener;
 import com.google.gson.Gson;
 import com.rokkhi.rokkhiguard.Adapter.SWorkerAdapter;
 import com.rokkhi.rokkhiguard.Model.api.SWorkerModelClass;
+import com.rokkhi.rokkhiguard.Model.api.SworkerData;
 import com.rokkhi.rokkhiguard.R;
 import com.rokkhi.rokkhiguard.StaticData;
 import com.rokkhi.rokkhiguard.helper.SharedPrefHelper;
 
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -43,7 +47,16 @@ public class SWorkersActivity extends AppCompatActivity implements View.OnClickL
     private Button mCreateprofile;
 
     SWorkerModelClass sWorkerModelClass;
+    SWorkerAdapter sWorkerAdapter;
 
+
+    @Override
+    protected void onPostResume() {
+        super.onPostResume();
+
+        //call inside this method because when add user and return ,  that time call this function
+        callWorkerList();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,9 +67,7 @@ public class SWorkersActivity extends AppCompatActivity implements View.OnClickL
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         mCreateprofile = findViewById(R.id.createprofile);
-        sharedPrefHelper=new SharedPrefHelper(context);
 
-        AndroidNetworking.initialize(getApplicationContext());
 
 
         mCreateprofile.setOnClickListener(new View.OnClickListener() {
@@ -68,6 +79,27 @@ public class SWorkersActivity extends AppCompatActivity implements View.OnClickL
         });
 
 
+        mSearch.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                sWorkerAdapter.getFilter().filter(s);
+            }
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        });
+
+    }
+
+    private void callWorkerList() {
+
+        sharedPrefHelper=new SharedPrefHelper(context);
+
+
+        AndroidNetworking.initialize(getApplicationContext());
         Map<String, String> dataPost = new HashMap<>();
         dataPost.put("buildingId", sharedPrefHelper.getString(StaticData.BUILD_ID));
         dataPost.put("communityId", sharedPrefHelper.getString(StaticData.COMM_ID));
@@ -102,7 +134,7 @@ public class SWorkersActivity extends AppCompatActivity implements View.OnClickL
                         Gson gson = new Gson();
                         sWorkerModelClass = gson.fromJson(String.valueOf(response), SWorkerModelClass.class);
 
-                        SWorkerAdapter sWorkerAdapter = new SWorkerAdapter(sWorkerModelClass, context);
+                        sWorkerAdapter = new SWorkerAdapter((ArrayList<SworkerData>) sWorkerModelClass.getData(), context);
 
                         mSWorkerRecyclerViewID.setAdapter(sWorkerAdapter);
 
@@ -121,6 +153,7 @@ public class SWorkersActivity extends AppCompatActivity implements View.OnClickL
                         Log.e("TAG", "onResponse: error  getErrorDetail =  " + anError.getErrorDetail());
                     }
                 });
+
 
 
     }

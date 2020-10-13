@@ -72,6 +72,8 @@ public class StaticData {
     public static final String recordChildrenExitFromCompound = "/api/v1/entrance/recordChildrenExitFromCompound";
     public static final String getFlats = "/api/v1/flat/getFlats";
     public static final String addVisitor = "/api/v1/entrance/addVisitor";
+    public static final String changeVisitorStatus = "/api/v1/entrance/changeVisitorStatus";
+
 
 
     //user role

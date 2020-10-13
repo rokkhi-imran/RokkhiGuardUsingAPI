@@ -60,7 +60,6 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/guardListRecyclerView"
         android:layout_width="match_parent"
-
         tools:listitem="@layout/item_guard_list"
         android:layout_height="match_parent" />
 

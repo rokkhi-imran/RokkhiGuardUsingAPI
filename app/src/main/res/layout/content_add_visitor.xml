@@ -13,11 +13,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/white"
-        android:paddingTop="@dimen/_5sdp"
         android:paddingLeft="20dp"
+        android:paddingTop="@dimen/_5sdp"
         android:paddingRight="20dp"
-        android:paddingBottom="20dp"
-        >
+        android:paddingBottom="20dp">
 
         <RelativeLayout
             android:id="@+id/prorel"
@@ -28,8 +27,10 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/visitorPendingListRecycelrViewID"
                 android:layout_width="361dp"
-                android:layout_height="92dp"
-                android:visibility="gone" />
+                android:layout_height="wrap_content"
+                android:visibility="visible" />
+
+
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/user_photoIV"

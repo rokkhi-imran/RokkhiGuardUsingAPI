@@ -122,9 +122,10 @@ public class AddVisitorActivity extends AppCompatActivity implements View.OnClic
         dataPost.put("buildingId", sharedPrefHelper.getString(StaticData.BUILD_ID));
         dataPost.put("communityId", sharedPrefHelper.getString(StaticData.COMM_ID));
         dataPost.put("flatId", "");
-        dataPost.put("status",StaticData.PENDING_PERMISSION);
-        dataPost.put("fromDate","");
-        dataPost.put("toDate","");
+        dataPost.put("status", StaticData.PENDING_PERMISSION);
+        dataPost.put("fromDate", "");
+        dataPost.put("toDate", "");
+
 
         JSONObject jsonDataPost = new JSONObject(dataPost);
 
@@ -152,10 +153,10 @@ public class AddVisitorActivity extends AppCompatActivity implements View.OnClic
                         Gson gson = new Gson();
                         GetVisitorInsideModelClass getVisitorInsideModelClass = gson.fromJson(String.valueOf(response), GetVisitorInsideModelClass.class);
 
-                        VisitorWaitingListAdapter visitorWaitingListAdapter=new VisitorWaitingListAdapter((ArrayList<GetInsideVisitorData>) getVisitorInsideModelClass.getData(),context);
+                        VisitorWaitingListAdapter visitorWaitingListAdapter = new VisitorWaitingListAdapter((ArrayList<GetInsideVisitorData>) getVisitorInsideModelClass.getData(), context);
                         visitorWaitingListAdapter.setHasStableIds(true);
 
-                        if (getVisitorInsideModelClass.getData().size()>0){
+                        if (getVisitorInsideModelClass.getData().size() > 0) {
                             LinearLayoutManager layoutManager
                                     = new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false);
 
@@ -172,8 +173,7 @@ public class AddVisitorActivity extends AppCompatActivity implements View.OnClic
                     public void onError(ANError anError) {
 
 
-
-                        StaticData.showErrorAlertDialog(context,"Alert !","আবার চেষ্টা করুন ।");
+                        StaticData.showErrorAlertDialog(context, "Alert !", "আবার চেষ্টা করুন ।");
 
                         Log.e("TAG", "onResponse: error message =  " + anError.getMessage());
                         Log.e("TAG", "onResponse: error code =  " + anError.getErrorCode());
@@ -204,16 +204,16 @@ public class AddVisitorActivity extends AppCompatActivity implements View.OnClic
         mUserPhotoIV.setOnClickListener(this);
         mPhoneNoET = (TextInputEditText) findViewById(R.id.phone_noET);
         mUserNameET = (TextInputEditText) findViewById(R.id.user_nameET);
-        mFlatNumberET =  findViewById(R.id.flatNumberET);
+        mFlatNumberET = findViewById(R.id.flatNumberET);
         mFlatNumberET.setOnClickListener(this);
-        mPuposeET =  findViewById(R.id.puposeET);
+        mPuposeET = findViewById(R.id.puposeET);
         mPuposeET.setOnClickListener(this);
         mAddressET = findViewById(R.id.addressET);
         mSubmitUserInfoBtn = (Button) findViewById(R.id.SubmitUserInfoBtn);
         mSubmitUserInfoBtn.setOnClickListener(this);
         mProgressBar1 = (ProgressBar) findViewById(R.id.progressBar1);
 
-        imageUploadTV=findViewById(R.id.imageUploadTV);
+        imageUploadTV = findViewById(R.id.imageUploadTV);
         imageUploadTV.setOnClickListener(this);
     }
 
@@ -336,65 +336,72 @@ public class AddVisitorActivity extends AppCompatActivity implements View.OnClic
     private void uploadDataData(String imageLink) {
 
         fullScreenAlertDialog.showdialog();
-        Map<String, String> dataPost = new HashMap<>();
-        dataPost.put("name", mUserNameET.getText().toString());
-        dataPost.put("address", mAddressET.getText().toString());
-        dataPost.put("contact", mPhoneNoET.getText().toString());
-        dataPost.put("email", "");
-        dataPost.put("purpose", mPuposeET.getText().toString());
-
-        dataPost.put("image", imageLink);
-        dataPost.put("thumbImage", imageLink);
-        dataPost.put("communityId", sharedPrefHelper.getString(StaticData.COMM_ID));
-        dataPost.put("buildingId", sharedPrefHelper.getString(StaticData.BUILD_ID));
-        dataPost.put("flatId", String.valueOf(historyFlats.get(0).getId()));
-        dataPost.put("guardId", sharedPrefHelper.getString(StaticData.USER_ID));
-        dataPost.put("responderId", "0");
-
-        JSONObject jsonDataPost = new JSONObject(dataPost);
-
-        String url = StaticData.baseURL + "" + StaticData.addVisitor;
-        String token = sharedPrefHelper.getString(StaticData.KEY_FIREBASE_ID_TOKEN);
-
-        Log.e("TAG", "onCreate: " + jsonDataPost);
-        Log.e("TAG", "onCreate: " + url);
-        Log.e("TAG", "onCreate: " + token);
-        Log.e("TAG", "onCreate: ---------------------- ");
 
 
-        AndroidNetworking.post(url)
-                .addHeaders("authtoken", token)
-                .setContentType("application/json")
-                .addJSONObjectBody(jsonDataPost)
-                .setPriority(Priority.MEDIUM)
-                .build()
-                .getAsJSONObject(new JSONObjectRequestListener() {
-                    @Override
-                    public void onResponse(JSONObject response) {
+        try {
 
-                        fullScreenAlertDialog.dismissdialog();
+            JSONObject dataPost = new JSONObject();
+            dataPost.put("name", mUserNameET.getText().toString());
+            dataPost.put("address", mAddressET.getText().toString());
+            dataPost.put("contact", mPhoneNoET.getText().toString());
+            dataPost.put("email", "");
+            dataPost.put("purpose", mPuposeET.getText().toString());
+            dataPost.put("image", imageLink);
+            dataPost.put("thumbImage", imageLink);
+            dataPost.put("communityId", sharedPrefHelper.getString(StaticData.COMM_ID));
+            dataPost.put("buildingId", sharedPrefHelper.getString(StaticData.BUILD_ID));
+            dataPost.put("flatId", String.valueOf(historyFlats.get(0).getId()));
+            dataPost.put("guardId", sharedPrefHelper.getString(StaticData.USER_ID));
+            dataPost.put("responderId", 0);
+
+            String url = StaticData.baseURL + "" + StaticData.addVisitor;
+            String token = sharedPrefHelper.getString(StaticData.KEY_FIREBASE_ID_TOKEN);
+
+            Log.e("TAG", "onCreate: " + dataPost);
+            Log.e("TAG", "onCreate: " + url);
+            Log.e("TAG", "onCreate: " + token);
+            Log.e("TAG", "onCreate: ---------------------- ");
 
 
-                        Log.e(TAG, "onResponse: =  =----------- " + response);
+            AndroidNetworking.post(url)
+                    .addHeaders("authtoken", token)
+                    .setContentType("application/json")
+                    .addJSONObjectBody(dataPost)
+                    .setPriority(Priority.MEDIUM)
+                    .build()
+                    .getAsJSONObject(new JSONObjectRequestListener() {
+                        @Override
+                        public void onResponse(JSONObject response) {
+
+                            fullScreenAlertDialog.dismissdialog();
 
 
-                        StaticData.showSuccessDialog((FragmentActivity) context, "Alert !", "Visitor Added ..");
+                            Log.e(TAG, "onResponse: =  =----------- " + response);
 
-                    }
 
-                    @Override
-                    public void onError(ANError anError) {
+                            StaticData.showSuccessDialog((FragmentActivity) context, "Alert !", "Visitor Added ..");
 
-                        fullScreenAlertDialog.dismissdialog();
+                        }
 
-                        StaticData.showErrorAlertDialog(context, "Alert !", "আবার চেষ্টা করুন ।");
+                        @Override
+                        public void onError(ANError anError) {
 
-                        Log.e(TAG, "onResponse: error message =  " + anError.getMessage());
-                        Log.e(TAG, "onResponse: error code =  " + anError.getErrorCode());
-                        Log.e(TAG, "onResponse: error body =  " + anError.getErrorBody());
-                        Log.e(TAG, "onResponse: error  getErrorDetail =  " + anError.getErrorDetail());
-                    }
-                });
+                            fullScreenAlertDialog.dismissdialog();
+
+                            StaticData.showErrorAlertDialog(context, "Alert !", "আবার চেষ্টা করুন ।");
+
+                            Log.e(TAG, "onResponse: error message =  " + anError.getMessage());
+                            Log.e(TAG, "onResponse: error code =  " + anError.getErrorCode());
+                            Log.e(TAG, "onResponse: error body =  " + anError.getErrorBody());
+                            Log.e(TAG, "onResponse: error  getErrorDetail =  " + anError.getErrorDetail());
+                        }
+                    });
+
+        } catch (Exception e) {
+
+            Log.e(TAG, "uploadDataData: Visitor add failed for jsonObject = "+e.getMessage() );
+
+        }
 
 
     }
@@ -462,130 +469,136 @@ public class AddVisitorActivity extends AppCompatActivity implements View.OnClic
 
         Gson gson = new Gson();
         String json = sharedPrefHelper.getString(StaticData.ALL_FLATS);
+
         ActiveFlatsModelClass activeFlat = gson.fromJson(json, ActiveFlatsModelClass.class);
 
+        if (activeFlat!=null){
+            final ActiveFlatAdapter activeFlatAdapter = new ActiveFlatAdapter(activeFlat, context);
+            final AlertDialog alertcompany = new AlertDialog.Builder(context).create();
+            LayoutInflater inflater = getLayoutInflater();
+            View convertView = (View) inflater.inflate(R.layout.custom_list_multiple, null);
+            final TextInputEditText editText = convertView.findViewById(R.id.sear);
+            //change Listview to Gridview
+            final GridView lv = (GridView) convertView.findViewById(R.id.listView1);
+            final Button done = convertView.findViewById(R.id.SubmitUserInfoBtn);
+            final Button selectbutton = convertView.findViewById(R.id.select);
+            final Button unselectbutton = convertView.findViewById(R.id.deselect);
+            final TextView tt = convertView.findViewById(R.id.selected);
+            tt.setMovementMethod(new ScrollingMovementMethod());
+            tt.setVisibility(View.VISIBLE);
+            totaltext = "";
 
-        final ActiveFlatAdapter activeFlatAdapter = new ActiveFlatAdapter(activeFlat, context);
-        final AlertDialog alertcompany = new AlertDialog.Builder(context).create();
-        LayoutInflater inflater = getLayoutInflater();
-        View convertView = (View) inflater.inflate(R.layout.custom_list_multiple, null);
-        final TextInputEditText editText = convertView.findViewById(R.id.sear);
-        //change Listview to Gridview
-        final GridView lv = (GridView) convertView.findViewById(R.id.listView1);
-        final Button done = convertView.findViewById(R.id.SubmitUserInfoBtn);
-        final Button selectbutton = convertView.findViewById(R.id.select);
-        final Button unselectbutton = convertView.findViewById(R.id.deselect);
-        final TextView tt = convertView.findViewById(R.id.selected);
-        tt.setMovementMethod(new ScrollingMovementMethod());
-        tt.setVisibility(View.VISIBLE);
-        totaltext = "";
 
+            alertcompany.setView(convertView);
+            alertcompany.setCancelable(true);
+            //valueAdapter.notifyDataSetChanged();
 
-        alertcompany.setView(convertView);
-        alertcompany.setCancelable(true);
-        //valueAdapter.notifyDataSetChanged();
+            lv.setAdapter(activeFlatAdapter);
+            alertcompany.show();
 
-        lv.setAdapter(activeFlatAdapter);
-        alertcompany.show();
-
-        done.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mFlatNumberET.setText(totaltext);
-                alertcompany.dismiss();
-            }
-        });
-
-        selectbutton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                historyFlats.clear();
-                totaltext = "";
-                tt.setText(totaltext);
-
-                //add again
-                for (int i = 0; i < activeFlat.getData().size(); i++) {
-
-                    activeFlatAdapter.changedata(activeFlat.getData().get(i).getNumber(), true);
-                    activeFlatAdapter.notifyDataSetChanged();
-                    historyFlats.add(activeFlat.getData().get(i));
-                    totaltext = totaltext + " " + activeFlat.getData().get(i).getNumber() + " ";
-                    unselectbutton.setVisibility(View.VISIBLE);
-                    selectbutton.setVisibility(View.GONE);
+            done.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    mFlatNumberET.setText(totaltext);
+                    alertcompany.dismiss();
                 }
-                tt.setText(totaltext);
+            });
 
-            }
-        });
-
-        unselectbutton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                for (int i = 0; i < activeFlat.getData().size(); i++) {
-
-                    activeFlatAdapter.changedata(activeFlat.getData().get(i).getNumber(), false);
-                    activeFlatAdapter.notifyDataSetChanged();
-                    historyFlats.remove(activeFlat.getData().get(i));
-                    totaltext = totaltext.replace(" " + activeFlat.getData().get(i).getNumber(), " ");
-                    unselectbutton.setVisibility(View.GONE);
-                    selectbutton.setVisibility(View.VISIBLE);
-                }
-                totaltext = "";
-                tt.setText(totaltext);
-                historyFlats.clear();
-            }
-        });
-
-        editText.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                activeFlatAdapter.getFilter().filter(s);
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-            }
-        });
-
-
-        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-
-                ActiveFlatData ss = (ActiveFlatData) lv.getItemAtPosition(position);
-
-                if (!historyFlats.contains(ss)) {
-                    activeFlatAdapter.changedata(ss.getNumber(), true);
-                    historyFlats.add(ss);
-                    activeFlatAdapter.notifyDataSetChanged();
-                    totaltext = totaltext + "  " + ss.getNumber();
-
-                } else {
-                    activeFlatAdapter.changedata(ss.getNumber(), false);
-                    historyFlats.remove(ss);
-
-
+            selectbutton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    historyFlats.clear();
                     totaltext = "";
-                    //add again
-                    for (int i = 0; i < historyFlats.size(); i++) {
+                    tt.setText(totaltext);
 
-                        totaltext = totaltext + " " + historyFlats.get(i).getNumber() + " ";
+                    //add again
+                    for (int i = 0; i < activeFlat.getData().size(); i++) {
+
+                        activeFlatAdapter.changedata(activeFlat.getData().get(i).getNumber(), true);
+                        activeFlatAdapter.notifyDataSetChanged();
+                        historyFlats.add(activeFlat.getData().get(i));
+                        totaltext = totaltext + " " + activeFlat.getData().get(i).getNumber() + " ";
+                        unselectbutton.setVisibility(View.VISIBLE);
+                        selectbutton.setVisibility(View.GONE);
+                    }
+                    tt.setText(totaltext);
+
+                }
+            });
+
+            unselectbutton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    for (int i = 0; i < activeFlat.getData().size(); i++) {
+
+                        activeFlatAdapter.changedata(activeFlat.getData().get(i).getNumber(), false);
+                        activeFlatAdapter.notifyDataSetChanged();
+                        historyFlats.remove(activeFlat.getData().get(i));
+                        totaltext = totaltext.replace(" " + activeFlat.getData().get(i).getNumber(), " ");
+                        unselectbutton.setVisibility(View.GONE);
+                        selectbutton.setVisibility(View.VISIBLE);
+                    }
+                    totaltext = "";
+                    tt.setText(totaltext);
+                    historyFlats.clear();
+                }
+            });
+
+            editText.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                }
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+                    activeFlatAdapter.getFilter().filter(s);
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) {
+                }
+            });
+
+
+            lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+
+                    ActiveFlatData ss = (ActiveFlatData) lv.getItemAtPosition(position);
+
+                    if (!historyFlats.contains(ss)) {
+                        activeFlatAdapter.changedata(ss.getNumber(), true);
+                        historyFlats.add(ss);
+                        activeFlatAdapter.notifyDataSetChanged();
+                        totaltext = totaltext + "  " + ss.getNumber();
+
+                    } else {
+                        activeFlatAdapter.changedata(ss.getNumber(), false);
+                        historyFlats.remove(ss);
+
+
+                        totaltext = "";
+                        //add again
+                        for (int i = 0; i < historyFlats.size(); i++) {
+
+                            totaltext = totaltext + " " + historyFlats.get(i).getNumber() + " ";
+
+                        }
+
+                        activeFlatAdapter.notifyDataSetChanged();
 
                     }
+                    tt.setText(totaltext);
 
-                    activeFlatAdapter.notifyDataSetChanged();
 
                 }
-                tt.setText(totaltext);
+            });
+        }else {
+            Toast.makeText(context, "Try again", Toast.LENGTH_SHORT).show();
+        }
 
 
-            }
-        });
 
     }
 
@@ -605,5 +618,37 @@ public class AddVisitorActivity extends AppCompatActivity implements View.OnClic
             Toast.makeText(this, r.getError().getMessage(), Toast.LENGTH_LONG).show();
         }
 
+    }
+
+    private class DataClass {
+
+        String name = "";
+        String address = "";
+        String contact = "";
+        String email = "";
+        String purpose = "";
+        String image = "";
+        String thumbImage = "";
+        String communityId = "";
+        String buildingId = "";
+        String flatId = "";
+        String guardId = "";
+        int responderId = 0;
+
+        public DataClass(String name, String address, String contact, String email, String purpose, String image, String thumbImage, String communityId, String buildingId, String flatId,
+                         String guardId, Integer responderId) {
+            this.name = name;
+            this.address = address;
+            this.contact = contact;
+            this.email = email;
+            this.purpose = purpose;
+            this.image = image;
+            this.thumbImage = thumbImage;
+            this.communityId = communityId;
+            this.buildingId = buildingId;
+            this.flatId = flatId;
+            this.guardId = guardId;
+            this.responderId = responderId;
+        }
     }
 }

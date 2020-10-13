@@ -1,7 +1,6 @@
 package com.rokkhi.rokkhiguard.Adapter;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,11 +23,8 @@ import java.util.Map;
 
 public class ActiveFlatAdapter extends BaseAdapter implements Filterable {
 
-    public interface MyInterface{
-        public int foo();
-    }
 
-    private MyInterface listener;
+
     private static final String TAG = "ActiveFlatAdapter";
 
 
@@ -47,11 +43,6 @@ public class ActiveFlatAdapter extends BaseAdapter implements Filterable {
         this.context=context;
 
         mInflater = LayoutInflater.from(context);
-        try {
-            listener = ((MyInterface) context);
-        } catch (ClassCastException e) {
-            Log.d(TAG, "ActiveFlatAdapter: sfsf");
-        }
 
         getFilter();
 
@@ -59,10 +50,6 @@ public class ActiveFlatAdapter extends BaseAdapter implements Filterable {
             bb.put(activeFlats.get(i).getNumber(),false);
         }
     }
-
-
-
-
 
     //How many items are in the data set represented by this Adapter.
     @Override

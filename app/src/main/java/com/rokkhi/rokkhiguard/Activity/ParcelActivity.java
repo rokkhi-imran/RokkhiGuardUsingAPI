@@ -239,7 +239,7 @@ public class ParcelActivity extends AppCompatActivity implements IPickResult {
         dataPost.put("acknowledgedBy", "");
         dataPost.put("guardId", sharedPrefHelper.getString(StaticData.USER_ID));
         dataPost.put("buildingId", sharedPrefHelper.getString(StaticData.BUILD_ID));
-        dataPost.put("flatId", flatNumberET.getText().toString());
+        dataPost.put("flatId", String.valueOf(historyFlats.get(0).getId()));
         dataPost.put("communityId", sharedPrefHelper.getString(StaticData.COMM_ID));
 
         JSONObject jsonDataPost = new JSONObject(dataPost);

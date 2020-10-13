@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.rokkhi.rokkhiguard.Model.api.NoticeModelClass;
 import com.rokkhi.rokkhiguard.R;
-import com.rokkhi.rokkhiguard.Utils.NoticeDetailsActivity;
+import com.rokkhi.rokkhiguard.Activity.NoticeDetailsActivity;
 import com.rokkhi.rokkhiguard.helper.SharedPrefHelper;
 import com.squareup.picasso.Picasso;
 

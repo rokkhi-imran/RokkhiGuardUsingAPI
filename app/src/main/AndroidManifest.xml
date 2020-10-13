@@ -46,7 +46,7 @@
             </intent-filter>
 
         </activity>
-        <activity android:name=".Utils.NoticeDetailsActivity" />
+        <activity android:name=".Activity.NoticeDetailsActivity" />
         <activity android:name=".Activity.SWorkersActivity" />
         <!-- <activity android:name=".CallChildActivity" /> -->
         <activity

@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentActivity;
@@ -39,7 +40,6 @@ public class VisitorWaitingListAdapter extends RecyclerView.Adapter<VisitorWaiti
 
 
 
-    private ArrayList<GetInsideVisitorData> mvisitorFilterList;
     private LayoutInflater mInflater;
 
     public ArrayList<GetInsideVisitorData> list;
@@ -50,7 +50,6 @@ public class VisitorWaitingListAdapter extends RecyclerView.Adapter<VisitorWaiti
 
     public VisitorWaitingListAdapter(ArrayList<GetInsideVisitorData> list, Context context) {
         this.list = list;
-        mvisitorFilterList = list;
         this.context = context;
         mInflater = LayoutInflater.from(context);
 
@@ -159,7 +158,20 @@ public class VisitorWaitingListAdapter extends RecyclerView.Adapter<VisitorWaiti
             nameVisitorWaitingID = view.findViewById(R.id.nameVisitorWaitingID);
             visitorImageID = view.findViewById(R.id.visitorImageID);
 
+            view.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    showWaitingAlertDialog(getAdapterPosition(),list,context);
+                }
+            });
+
         }
+    }
+
+    private void showWaitingAlertDialog(int adapterPosition, ArrayList<GetInsideVisitorData> list, Context context) {
+
+        Toast.makeText(context, "test", Toast.LENGTH_SHORT).show();
+
     }
 
 
