@@ -107,7 +107,7 @@ public class CarListAdapter extends RecyclerView.Adapter<CarListAdapter.GridView
         carModelTV.setText(ftext);
 
         alertDialog.setView(convertView);
-        alertDialog.setCancelable(false);
+        alertDialog.setCancelable(true);
         alertDialog.show();
 
         cancel.setOnClickListener(new View.OnClickListener() {

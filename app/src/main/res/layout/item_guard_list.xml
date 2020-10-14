@@ -18,8 +18,10 @@
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/propic_guard_image"
-            android:layout_width="70dp"
-            android:layout_height="70dp"
+            android:layout_width="@dimen/_90sdp"
+            android:layout_height="@dimen/_90sdp"
+            app:civ_border_width="@dimen/_2sdp"
+            app:civ_border_color="@color/grey"
             android:layout_weight="1"
             android:src="@drawable/male1"
             app:layout_constraintBottom_toBottomOf="parent"

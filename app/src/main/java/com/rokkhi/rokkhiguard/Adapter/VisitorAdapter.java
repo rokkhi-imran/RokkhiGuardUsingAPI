@@ -92,7 +92,7 @@ public class VisitorAdapter extends RecyclerView.Adapter<VisitorAdapter.VisitorV
         final GetInsideVisitorData visitor = list.get(position);
         holder.name.setText(visitor.getName());
 
-        Picasso.get().load(visitor.getImage()).placeholder(R.drawable.male1).into(holder.propic);
+        Picasso.get().load(visitor.getImage()).placeholder( R.drawable.progress_animation ).error(R.drawable.male1).into(holder.propic);
 
         holder.intime.setText(visitor.getInTime());
 

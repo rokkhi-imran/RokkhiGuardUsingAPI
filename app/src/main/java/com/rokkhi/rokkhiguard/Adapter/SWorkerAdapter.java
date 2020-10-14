@@ -65,7 +65,11 @@ public class SWorkerAdapter extends RecyclerView.Adapter<SWorkerAdapter.SWorkerV
         try {
             holder.name.setText(sworkerDataList.get(position).getName());
             holder.lastcome.setText(sworkerDataList.get(position).getPhone());
-            Picasso.get().load(sworkerDataList.get(position).getImage()).networkPolicy(NetworkPolicy.NO_CACHE).into(holder.propic);
+            Picasso.get()
+                    .load(sworkerDataList.get(position).getImage() )
+                    .placeholder( R.drawable.progress_animation )
+                    .into( holder.propic );
+
         } catch (Exception e) {
 
         }
@@ -138,7 +142,7 @@ public class SWorkerAdapter extends RecyclerView.Adapter<SWorkerAdapter.SWorkerV
 
         if(!sworkerData.get(adapterPosition).getImage().isEmpty()){
 
-            Picasso.get().load(sworkerData.get(adapterPosition).getImage()).into(circleImageView);
+            Picasso.get().load(sworkerData.get(adapterPosition).getImage()).placeholder( R.drawable.progress_animation ).into(circleImageView);
         }
 
         editTextFlat.setText("No Flat Found From Api");

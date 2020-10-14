@@ -49,7 +49,7 @@ public class NoticeAdapter extends RecyclerView.Adapter<NoticeAdapter.Notoficati
             holder.body.setText(noticeModelClass.getData().get(position).getBody());
             holder.date.setText(noticeModelClass.getData().get(position).getDate());
             Picasso.get()
-                    .load("").error(R.drawable.noticeboard).into(holder.propic);
+                    .load("").placeholder( R.drawable.progress_animation ).error(R.drawable.noticeboard).into(holder.propic);
 
 
         }catch (Exception e ){

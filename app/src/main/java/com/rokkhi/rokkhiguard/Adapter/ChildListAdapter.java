@@ -12,6 +12,7 @@ import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -78,8 +79,6 @@ public class ChildListAdapter extends RecyclerView.Adapter<ChildListAdapter.Visi
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_child, parent, false);
         VisitorViewHolder visitorViewHolder = new VisitorViewHolder(view);
         sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
-        //oCanNotification= sharedPref.getBoolean("oCanNotification",true);
-
 
         return visitorViewHolder;
     }
@@ -96,7 +95,7 @@ public class ChildListAdapter extends RecyclerView.Adapter<ChildListAdapter.Visi
 
         } else {
 
-            Picasso.get().load(list.get(position).getImage()).placeholder(R.drawable.male1).error(R.drawable.male1).into(holder.propic);
+            Picasso.get().load(list.get(position).getImage()).placeholder( R.drawable.progress_animation ).error(R.drawable.male1).into(holder.propic);
         }
     }
 
@@ -133,13 +132,13 @@ public class ChildListAdapter extends RecyclerView.Adapter<ChildListAdapter.Visi
             flat = view.findViewById(R.id.flatNumberET);
 
 
-            call.setOnClickListener(new View.OnClickListener() {
+            view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
 
                    AlertDialog alertDialog = new AlertDialog.Builder(context).create();
                     LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                    View convertView = (View) inflater.inflate(R.layout.dialog_confirm, null);
+                    View convertView = (View) inflater.inflate(R.layout.dialog_confirm_child_out, null);
                     final Button cancel = convertView.findViewById(R.id.cancel);
                     final Button confirm = convertView.findViewById(R.id.confirm);
 
@@ -163,6 +162,13 @@ public class ChildListAdapter extends RecyclerView.Adapter<ChildListAdapter.Visi
 
 
 
+                }
+            });
+
+            call.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Toast.makeText(context, "Api Problem", Toast.LENGTH_SHORT).show();
                 }
             });
         }

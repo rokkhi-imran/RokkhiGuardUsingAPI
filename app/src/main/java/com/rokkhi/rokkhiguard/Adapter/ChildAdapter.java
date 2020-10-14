@@ -59,7 +59,7 @@ public class ChildAdapter extends RecyclerView.Adapter<ChildAdapter.ChildViewHol
 
         }else {
 
-            Picasso.get().load(list.getData().get(position).getImage()).placeholder(R.drawable.male1).error(R.drawable.male1).into(holder.propic);
+            Picasso.get().load(list.getData().get(position).getImage()).placeholder( R.drawable.progress_animation ).error(R.drawable.male1).into(holder.propic);
         }
 
 

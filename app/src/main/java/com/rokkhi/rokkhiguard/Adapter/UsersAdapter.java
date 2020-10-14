@@ -77,7 +77,7 @@ public class UsersAdapter extends BaseAdapter implements Filterable {
         viewHolder.flatnumber.setText(uDetails.getF_no());
         if( !uDetails.getThumb_pic().isEmpty() && !uDetails.getThumb_pic().equals("none")){
 
-            Picasso.get().load(uDetails.getThumb_pic()).placeholder(R.drawable.male1).into(viewHolder.propic);
+            Picasso.get().load(uDetails.getThumb_pic()).placeholder( R.drawable.progress_animation ).error(R.drawable.male1).into(viewHolder.propic);
 
         }
         return convertView;

@@ -15,7 +15,6 @@ import com.rokkhi.rokkhiguard.Activity.DaroanPassActivity;
 import com.rokkhi.rokkhiguard.Model.api.GuardListData;
 import com.rokkhi.rokkhiguard.R;
 import com.rokkhi.rokkhiguard.Utils.Normalfunc;
-import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -55,12 +54,17 @@ public class GuardListAdapter extends RecyclerView.Adapter<GuardListAdapter.SWor
     @Override
     public void onBindViewHolder(@NonNull final SWorkerViewHolder holder, int position) {
 
-        try {
             holder.name.setText(guardListDataArrayList.get(position).getName());
-            Picasso.get().load(guardListDataArrayList.get(position).getImage()).networkPolicy(NetworkPolicy.NO_CACHE).into(holder.propic);
-        }catch (Exception e){
 
-        }
+            if (!guardListDataArrayList.get(position).getImage().isEmpty()){
+
+                Picasso.get()
+                        .load( guardListDataArrayList.get(position).getImage() )
+                        .placeholder( R.drawable.progress_animation )
+                        .into( holder.propic );
+
+            }
+
 
 
     }

@@ -41,7 +41,7 @@ public class VisitorWaitingAdapter extends RecyclerView.Adapter<VisitorWaitingAd
     @Override
     public void onBindViewHolder(@NonNull VisitorViewHolderClass holder, int position) {
 
-        Picasso.get().load(visitorsArrayList.get(position).getV_pic()).placeholder(R.drawable.male1).into(holder.imageView);
+        Picasso.get().load(visitorsArrayList.get(position).getV_pic()).placeholder( R.drawable.progress_animation ).error(R.drawable.male1).into(holder.imageView);
 
 
         holder.nameVisitorWaitingID.setText(visitorsArrayList.get(position).getV_name());
