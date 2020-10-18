@@ -59,11 +59,9 @@ public class MainPageActivity extends AppCompatActivity {
 
     String appVersion;
 
-    RecyclerView recyclerViewVisitorAdapter;
 
     ArrayList<Visitors> visitorsArrayList;
 
-    Button buildingName;
     SharedPrefHelper sharedPrefHelper;
     FullScreenAlertDialog fullScreenAlertDialog;
 
@@ -87,15 +85,12 @@ public class MainPageActivity extends AppCompatActivity {
         settings = findViewById(R.id.settings);
         vehicle = findViewById(R.id.vehicleET);
         child = findViewById(R.id.child);
-        buildingName = findViewById(R.id.buildingNameTV);
 
-        recyclerViewVisitorAdapter = findViewById(R.id.recyclerviewVisitorWaitingListID);
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context);
 
         linearLayoutManager.setOrientation(RecyclerView.HORIZONTAL);
 
-        recyclerViewVisitorAdapter.setLayoutManager(linearLayoutManager);
 
 
         //get Token And Save

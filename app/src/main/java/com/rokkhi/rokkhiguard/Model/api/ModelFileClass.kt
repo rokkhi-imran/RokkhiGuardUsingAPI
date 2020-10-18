@@ -1,5 +1,8 @@
 package com.rokkhi.rokkhiguard.Model.api
 
+import android.os.Parcelable
+import kotlinx.android.parcel.Parcelize
+
 data class NoticeModelClass(
     val data: List<NoticeData>,
     val errors: List<String>,
@@ -18,7 +21,7 @@ data class NoticeData(
     val updatedDate: String
 )
 
-data class SWorkerModelClass(
+/*data class SWorkerModelClass(
         val `data`: List<SworkerData>,
         val errors: List<Any>,
         val status: String,
@@ -42,6 +45,55 @@ data class SworkerData(
     val phone: String,
     val primaryRoleCode: String,
     val thumbImage: String,
+    val updatedDate: String
+)*/
+
+data class SWorkerModelClass(
+    val `data`: List<SworkerData>,
+    val status: String,
+    val statusCode: Int
+)
+
+data class SworkerData(
+    val address: String,
+    val age: Int,
+    val contactPersonName: String,
+    val contactPersonPhone: String,
+    val createdDate: String,
+    val deletedDate: Any,
+    val email: String,
+    val firebaseId: String,
+    val flat: SworkerFlat,
+    val gender: String,
+    val id: Int,
+    val image: String,
+    val isActive: Boolean,
+    val name: String,
+    val nid: String,
+    val organization: String,
+    val password: String,
+    val phone: String,
+    val primaryRoleCode: String,
+    val thumbImage: String,
+    val updatedDate: String
+)
+
+data class SworkerFlat(
+    val contact: String,
+    val contactInfo: String,
+    val contactPerson: String,
+    val createdDate: String,
+    val deletedDate: Any,
+    val description: String,
+    val id: Int,
+    val isRented: Boolean,
+    val isVacant: Boolean,
+    val name: String,
+    val number: String,
+    val size: Int,
+    val totalBalcony: Int,
+    val totalRoom: Int,
+    val totalWashRoom: Int,
     val updatedDate: String
 )
 
@@ -168,8 +220,8 @@ data class UserRole(
     val updatedDate: String
 )
 
-data class GetVisitorInsideModelClass(
-    val `data`: List<GetInsideVisitorData>,
+/*data class GetVisitorInsideModelClass(
+    val data: List<GetInsideVisitorData>,
     val errors: List<Any>,
     val status: String,
     val statusCode: Int
@@ -181,7 +233,7 @@ data class GetInsideVisitorData(
     val contact: String,
     val createdDate: String,
     val email: String,
-    val exitTime: Any,
+    val exitTime: String,
     val id: Int,
     val image: String,
     val inTime: String,
@@ -191,7 +243,58 @@ data class GetInsideVisitorData(
     val thumbImage: String,
     val type: String,
     val updatedDate: String
+)  */
+
+
+data class GetVisitorInsideModelClass(
+    val data: List<GetInsideVisitorData>,
+    val errors: List<Any>,
+    val status: String,
+    val statusCode: Int
 )
+
+data class GetInsideVisitorData(
+    val address: String,
+    val company: String,
+    val contact: String,
+    val createdDate: String,
+    val deletedDate: Any,
+    val email: String,
+    val exitTime: Any,
+    val flat: FlatVisitor,
+    val flatName: String,
+    val flatNumber: String,
+    val id: Int,
+    val image: String,
+    val inTime: String,
+    val name: String,
+    val permissionStatus: String,
+    val purpose: String,
+    val status: String,
+    val thumbImage: String,
+    val type: String,
+    val updatedDate: String
+)
+
+data class FlatVisitor(
+    val contact: String,
+    val contactInfo: String,
+    val contactPerson: String,
+    val createdDate: String,
+    val deletedDate: Any,
+    val description: String,
+    val id: Int,
+    val isRented: Boolean,
+    val isVacant: Boolean,
+    val name: String,
+    val number: String,
+    val size: Int,
+    val totalBalcony: Int,
+    val totalRoom: Int,
+    val totalWashRoom: Int,
+    val updatedDate: String
+)
+
 
 data class VisitorOutModelClass(
     val data: VisitorOutData,

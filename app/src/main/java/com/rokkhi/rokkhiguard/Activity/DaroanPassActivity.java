@@ -234,6 +234,8 @@ public class DaroanPassActivity extends AppCompatActivity implements View.OnClic
                         sharedPrefHelper.putString(StaticData.COMM_ID,String.valueOf(userDetailsModelClassUserByPhoneNumberModelClass.getData().getCommunity().getId()));
                         sharedPrefHelper.putString(StaticData.USER_ID,String.valueOf(userDetailsModelClassUserByPhoneNumberModelClass.getData().getId()));
 
+                        homename.setText(userDetailsModelClassUserByPhoneNumberModelClass.getData().getBuilding().getName());
+
                         Log.e("TAG", "onResponse: getPrimaryRoleCode  = ==  "+userDetailsModelClassUserByPhoneNumberModelClass.getData().getPrimaryRoleCode());
 
 

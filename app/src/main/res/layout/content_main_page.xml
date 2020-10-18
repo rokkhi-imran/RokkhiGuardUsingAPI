@@ -20,57 +20,13 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-
-            <LinearLayout
-                android:id="@+id/visitorListLayout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:orientation="horizontal"
-                android:weightSum="3">
-
-
-                <androidx.recyclerview.widget.RecyclerView
-
-                    android:id="@+id/recyclerviewVisitorWaitingListID"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal" />
-
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/lin0"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/visitorListLayout"
-                android:layout_marginTop="10dp"
-                android:orientation="horizontal"
-                android:weightSum="3">
-
-                <Button
-                    android:id="@+id/buildingNameTV"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_margin="10dp"
-                    android:background="@drawable/less_round_button"
-                    android:gravity="center"
-                    android:text="Building Name"
-                    android:textColor="@color/Black" />
-
-
-            </LinearLayout>
+            android:layout_height="match_parent">
 
 
             <LinearLayout
                 android:id="@+id/lin1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/lin0"
                 android:layout_marginTop="10dp"
                 android:orientation="horizontal"
                 android:weightSum="3">

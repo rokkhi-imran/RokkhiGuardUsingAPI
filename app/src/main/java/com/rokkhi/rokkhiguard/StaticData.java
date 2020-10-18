@@ -57,14 +57,14 @@ public class StaticData {
 
     }
 
-//    public static final String baseURL = "http://home.api.rokkhi.com:3000";
-    public static final String baseURL = "http://13.76.190.212:3000";
+//    public static final String baseURL = "http://13.76.190.212:3000";
+    public static final String baseURL = "http://rokkhi-home-backend-alb-819652634.ap-south-1.elb.amazonaws.com";
     public static final String getNotice = "/api/v1/notice/getNotices";
     public static final String getUsersList = "/api/v1/user/getUsersList";
     public static final String addParcel = "/api/v1/entrance/addParcel";
     public static final String registerOrUpdate = "/api/v1/user/registerOrUpdate";
     public static final String getVisitors = "/api/v1/entrance/getVisitors";
-    public static final String letTheVisitorOut = "/api/v1/entrance/letTheVisitorOut";
+    public static final String letTheVisitorOut = "/api/v1/entrance/changeVisitorStatus";
     public static final String getVehicles = "/api/v1/vehicle/getVehicles";
     public static final String recordVehicleEntry = "/api/v1/entrance/recordVehicleEntry";
     public static final String getUserDetails = "/api/v1/user/getUserDetails";
@@ -73,6 +73,7 @@ public class StaticData {
     public static final String getFlats = "/api/v1/flat/getFlats";
     public static final String addVisitor = "/api/v1/entrance/addVisitor";
     public static final String changeVisitorStatus = "/api/v1/entrance/changeVisitorStatus";
+    public static final String recordServiceWorkerEntry = "/api/v1/entrance/recordServiceWorkerEntry";
 
 
 
@@ -91,6 +92,7 @@ public class StaticData {
     public static final String PARCEL_DELIVERED = "PARCEL_DELIVERED";
     public static final String INSIDE_COMPOUND = "INSIDE_COMPOUND";
     public static final String OUTSIDE_COMPOUND = "OUTSIDE_COMPOUND";
+    public static final String CANCEL_COMPOUND = "CANCEL_BY_GUARD_COMPOUND";
     public static final String PENDING_PERMISSION = "PENDING_PERMISSION";
 
     //    NoticeForConstants

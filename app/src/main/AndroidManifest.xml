@@ -37,28 +37,30 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:ignore="GoogleAppIndexingWarning">
+        <activity android:name=".Activity.WaitingVisitorActivity"></activity>
+        <activity android:name=".Activity.WaitingVisitorScreenActivity" />
         <activity android:name=".Activity.GuardListActivity">
-
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
         </activity>
         <activity android:name=".Activity.NoticeDetailsActivity" />
-        <activity android:name=".Activity.SWorkersActivity" />
-        <!-- <activity android:name=".CallChildActivity" /> -->
+        <activity android:name=".Activity.SWorkersActivity" /> <!-- <activity android:name=".CallChildActivity" /> -->
         <activity
             android:name=".Activity.DaroanPassActivity"
             android:label="Rokkhi"
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="stateAlwaysHidden">
-           <!-- <intent-filter>
+
+            <!--
+            <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>-->
+            </intent-filter>
+            -->
         </activity>
         <activity android:name=".Activity.MainPageActivity" />
         <activity android:name=".Activity.AddVisitorActivity" />

@@ -108,8 +108,15 @@ public class AddVisitorActivity extends AppCompatActivity implements View.OnClic
         sharedPrefHelper = new SharedPrefHelper(context);
         fullScreenAlertDialog = new FullScreenAlertDialog(context);
 
-        getVisitorWautingList();
 
+    }
+
+
+    @Override
+    protected void onPostResume() {
+        super.onPostResume();
+
+        getVisitorWautingList();
     }
 
     private void getVisitorWautingList() {
