@@ -152,6 +152,7 @@ data class ActiveFlatData(
     val updatedDate: String
 )
 
+/*
 
 data class ChildModelClass(
     val `data`: List<ChildData>,
@@ -179,6 +180,40 @@ data class ChildData(
     val thumbImage: String,
     val updatedDate: String
 )
+
+
+*/
+
+data class ChildModelClass(
+    val `data`: List<ChildData>,
+    val errors: List<Any>,
+    val status: String,
+    val statusCode: Int
+)
+
+data class ChildData(
+    val address: String,
+    val age: Int,
+    val contactPersonName: String,
+    val contactPersonPhone: String,
+    val createdDate: String,
+    val deletedDate: Any,
+    val email: String,
+    val firebaseId: String,
+    val gender: String,
+    val id: Int,
+    val image: String,
+    val isActive: Boolean,
+    val name: String,
+    val nid: String,
+    val organization: String,
+    val password: String,
+    val phone: String,
+    val primaryRoleCode: String,
+    val thumbImage: String,
+    val updatedDate: String
+)
+
 
 data class RegisterUserModelClass(
     val data: RegisterUserData,

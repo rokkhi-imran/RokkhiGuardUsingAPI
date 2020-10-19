@@ -1,7 +1,10 @@
 package com.rokkhi.rokkhiguard.Adapter;
 
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -12,7 +15,6 @@ import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -168,10 +170,30 @@ public class ChildListAdapter extends RecyclerView.Adapter<ChildListAdapter.Visi
             call.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Toast.makeText(context, "Api Problem", Toast.LENGTH_SHORT).show();
+
+                    if (!list.get(getAdapterPosition()).getContactPersonPhone().isEmpty()){
+                        Intent intent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + list.get(getAdapterPosition()).getContactPersonPhone()));// Initiates the Intent
+                        context.startActivity(intent);
+                    }else {
+                        showNoContactAlert();
+                    }
+
                 }
             });
         }
+    }
+
+    private void showNoContactAlert() {
+        new AlertDialog.Builder(context)
+                .setTitle("সমস্যা ! ")
+                .setMessage("কোন নাম্বার পাওয়া যায় নাই । ")
+                .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                })
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .show();
     }
 
     private void childOutRecord(Context context, int adapterPosition) {
