@@ -64,8 +64,6 @@ dependencies {
     //Picasso Image Loader
     implementation 'com.squareup.picasso:picasso:2.71828'
 
-
-
 //android network
     implementation 'com.amitshekhar.android:android-networking:1.0.2'
     implementation 'com.amitshekhar.android:jackson-android-networking:1.0.2'

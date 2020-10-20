@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentActivity;
@@ -23,6 +24,7 @@ import com.rokkhi.rokkhiguard.helper.SharedPrefHelper;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -31,11 +33,10 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class WaitingVisitorActivity extends AppCompatActivity implements View.OnClickListener {
 
-    TextInputEditText nameET;
-    TextInputEditText phoneNumberET;
-    TextInputEditText flatET;
-    TextInputEditText visitET;
-    TextInputEditText addressET;
+    TextView nameET;
+    TextView phoneNumberET;
+    TextView flatET;
+    TextView visitET;
     Button cancleBTn;
     Button entyBtn;
     Button goBack;
@@ -61,7 +62,6 @@ public class WaitingVisitorActivity extends AppCompatActivity implements View.On
         phoneNumberET = findViewById(R.id.phoneET);
         flatET = findViewById(R.id.flatNumberET);
         visitET = findViewById(R.id.visitET_ID);
-        addressET = findViewById(R.id.addressET);
         cancleBTn = findViewById(R.id.cancelUserInfoBtn);
         imageView = findViewById(R.id.imageView_id);
         nameET = findViewById(R.id.nameET);
@@ -91,7 +91,6 @@ public class WaitingVisitorActivity extends AppCompatActivity implements View.On
         phoneNumberET.setText(phone);
         flatET.setText(flat);
         visitET.setText(purpose);
-        addressET.setText(address);
 
 
     }

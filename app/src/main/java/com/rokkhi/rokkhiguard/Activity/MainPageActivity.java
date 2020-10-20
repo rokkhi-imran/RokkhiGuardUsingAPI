@@ -65,6 +65,9 @@ public class MainPageActivity extends AppCompatActivity {
     SharedPrefHelper sharedPrefHelper;
     FullScreenAlertDialog fullScreenAlertDialog;
 
+    TextView buildNameTV;
+    TextView buildAddressTV;
+
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -85,6 +88,12 @@ public class MainPageActivity extends AppCompatActivity {
         settings = findViewById(R.id.settings);
         vehicle = findViewById(R.id.vehicleET);
         child = findViewById(R.id.child);
+
+        buildNameTV=findViewById(R.id.buildingNameTV);
+        buildAddressTV=findViewById(R.id.buildAddressV);
+
+        buildNameTV.setText(sharedPrefHelper.getString(StaticData.BUILD_NAME));
+        buildAddressTV.setText(sharedPrefHelper.getString(StaticData.BUILD_ADDRESS));
 
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context);

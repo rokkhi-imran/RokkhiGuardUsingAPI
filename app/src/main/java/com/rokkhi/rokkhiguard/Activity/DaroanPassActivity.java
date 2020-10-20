@@ -4,18 +4,15 @@ import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.util.Log;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
@@ -23,18 +20,12 @@ import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONObjectRequestListener;
-import com.firebase.ui.auth.AuthUI;
-import com.firebase.ui.auth.ErrorCodes;
-import com.firebase.ui.auth.IdpResponse;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GetTokenResult;
 import com.google.gson.Gson;
 import com.rokkhi.rokkhiguard.Model.api.GetUserByPhoneData;
 import com.rokkhi.rokkhiguard.Model.api.GetUserByPhoneNumberModelClass;
-import com.rokkhi.rokkhiguard.Model.api.UserDetailsModelClass;
 import com.rokkhi.rokkhiguard.R;
 import com.rokkhi.rokkhiguard.StaticData;
 import com.rokkhi.rokkhiguard.Utils.FullScreenAlertDialog;
@@ -43,7 +34,6 @@ import com.rokkhi.rokkhiguard.helper.SharedPrefHelper;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -53,7 +43,6 @@ import huwi.joldi.abrar.rokkhiguardo.Kotlin.CirclePinField;
 
 public class DaroanPassActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private static final int RC_SIGN_IN = 12773;
     private static final String TAG = "DaroanPass";
     static TextView homename;
     CirclePinField circlePinField;
@@ -71,20 +60,13 @@ public class DaroanPassActivity extends AppCompatActivity implements View.OnClic
     TextView clear;
     String passtext = "";
     Context context;
-    AuthUI.IdpConfig phoneConfigWithDefaultNumber;
-    FirebaseUser firebaseUser;
-    SharedPreferences.Editor editor;
+
     String tabpass = "";
-    ArrayAdapter<String> adapter;
 
     List<String> buildingsName;
-    private View mRootView;
-    private FirebaseAuth mAuth;
-    private FirebaseAuth.AuthStateListener mAuthListener;
+
     SharedPrefHelper sharedPrefHelper;
     FullScreenAlertDialog fullScreenAlertDialog;
-
-    UserDetailsModelClass userDetailsData;
 
     GetUserByPhoneData getUserByPhoneData;
 
@@ -125,7 +107,7 @@ public class DaroanPassActivity extends AppCompatActivity implements View.OnClic
 
 
         circlePinField = findViewById(R.id.circleField);
-        mRootView = findViewById(R.id.root);
+
         homename = findViewById(R.id.buildingname);
 
 
@@ -156,21 +138,7 @@ public class DaroanPassActivity extends AppCompatActivity implements View.OnClic
         cross.setOnClickListener(this);
         clear.setOnClickListener(this);
 
-
-        mAuth = FirebaseAuth.getInstance();
-        mAuthListener = new FirebaseAuth.AuthStateListener() {
-            @Override
-            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                firebaseUser = firebaseAuth.getCurrentUser();
-                if (firebaseUser == null) {
-                    gosignpage();
-                } else {
-
-                    callTokenID();
-
-                }
-            }
-        };
+        callTokenID();
 
 
     }
@@ -236,6 +204,9 @@ public class DaroanPassActivity extends AppCompatActivity implements View.OnClic
 
                         homename.setText(userDetailsModelClassUserByPhoneNumberModelClass.getData().getBuilding().getName());
 
+                        sharedPrefHelper.putString(StaticData.BUILD_NAME,userDetailsModelClassUserByPhoneNumberModelClass.getData().getBuilding().getName());
+                        sharedPrefHelper.putString(StaticData.BUILD_ADDRESS,userDetailsModelClassUserByPhoneNumberModelClass.getData().getBuilding().getAddress());
+
                         Log.e("TAG", "onResponse: getPrimaryRoleCode  = ==  "+userDetailsModelClassUserByPhoneNumberModelClass.getData().getPrimaryRoleCode());
 
 
@@ -300,63 +271,7 @@ public class DaroanPassActivity extends AppCompatActivity implements View.OnClic
     //check stroage Permission End
 
 
-    private void gosignpage() {
-        List<String> whitelistedCountries = new ArrayList<String>();
-        whitelistedCountries.add("in");
-        whitelistedCountries.add("bd");
-        phoneConfigWithDefaultNumber = new AuthUI.IdpConfig.PhoneBuilder()
-                .setDefaultCountryIso("bd")
-                .setWhitelistedCountries(whitelistedCountries)
-                .build();
 
-        signInPhone(mRootView);
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (requestCode == RC_SIGN_IN) {
-            handleSignInResponse(resultCode, data);
-
-        }
-    }
-
-
-    private void handleSignInResponse(int resultCode, Intent data) {
-        IdpResponse response = IdpResponse.fromResultIntent(data);
-
-        if (resultCode == RESULT_OK) {
-
-
-        } else {
-            if (response == null) {
-                showSnackbar(R.string.sign_in_cancelled);
-                return;
-            }
-            if (response.getError().getErrorCode() == ErrorCodes.NO_NETWORK) {
-                showSnackbar(R.string.no_internet_connection);
-                return;
-            }
-            if (response.getError().getErrorCode() == ErrorCodes.UNKNOWN_ERROR) {
-                showSnackbar(R.string.unknown_error);
-                return;
-            }
-        }
-
-    }
-
-
-    public void signInPhone(View view) {
-        startActivityForResult(
-                AuthUI.getInstance()
-                        .createSignInIntentBuilder()
-                        .setAvailableProviders(
-                                Arrays.asList(phoneConfigWithDefaultNumber))
-                        .build(),
-                RC_SIGN_IN);
-
-    }
 
     @Override
     protected void onRestart() {
@@ -411,29 +326,6 @@ public class DaroanPassActivity extends AppCompatActivity implements View.OnClic
 
             return;
         }
-    }
-
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        Log.d(TAG, "onStart: xxx");
-        mAuth.addAuthStateListener(mAuthListener);
-
-
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        Log.d(TAG, "onStop: xxx");
-        if (mAuthListener != null) {
-            mAuth.removeAuthStateListener(mAuthListener);
-        }
-    }
-
-    private void showSnackbar(int errorMessageRes) {
-        Snackbar.make(mRootView, errorMessageRes, Snackbar.LENGTH_LONG).show();
     }
 
 

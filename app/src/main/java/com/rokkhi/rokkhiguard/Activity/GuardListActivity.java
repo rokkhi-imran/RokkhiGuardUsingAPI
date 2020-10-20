@@ -106,6 +106,8 @@ public class GuardListActivity extends AppCompatActivity {
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 firebaseUser = firebaseAuth.getCurrentUser();
                 if (firebaseUser == null) {
+
+                    sharedPrefHelper.clearAllData();
                     gosignpage();
                 } else {
                     FirebaseAuth.getInstance().getCurrentUser().getIdToken(true).addOnSuccessListener(new OnSuccessListener<GetTokenResult>() {

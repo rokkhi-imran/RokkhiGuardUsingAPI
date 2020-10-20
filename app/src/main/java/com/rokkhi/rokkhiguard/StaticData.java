@@ -25,6 +25,8 @@ public class StaticData {
     public static final String COMM_ID = "COMM_ID";
     public static final String USER_ID = "USER_ID";
     public static final String ALL_FLATS = "ALL_FLATS";
+    public static final String BUILD_NAME = "BUILD_NAME";
+    public static final String BUILD_ADDRESS = "BUILD_ADDRESS";
     public static String imageUploadURL = "http://ec2-54-183-244-125.us-west-1.compute.amazonaws.com:8000/upload";
 
     public static final void getIdToken(final Context context) {

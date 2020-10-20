@@ -22,12 +22,69 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
+            <androidx.cardview.widget.CardView
+                android:id="@+id/nameLayout"
+                app:cardCornerRadius="@dimen/_10sdp"
+                android:layout_marginLeft="@dimen/_4sdp"
+                android:layout_marginRight="@dimen/_4sdp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:orientation="horizontal"
+                    android:layout_height="wrap_content">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content">
+                        <ImageView
+                            android:layout_width="match_parent"
+                            android:paddingTop="@dimen/_10sdp"
+                            android:paddingBottom="@dimen/_10sdp"
+                            android:src="@drawable/building_icon"
+                            android:layout_height="wrap_content"/>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_weight="3"
+                        android:layout_gravity="center"
+                        android:orientation="vertical"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:id="@+id/buildingNameTV"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Building Name"
+                            android:textSize="@dimen/_15sdp"
+                            android:maxLines="1"
+                            android:textAllCaps="false"
+                            android:textColor="@color/black"/>
+                        <TextView
+                            android:id="@+id/buildAddressV"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="address"
+                            android:maxLines="1"
+                            android:textAllCaps="false"
+                            android:textColor="@color/orange2"/>
+
+                    </LinearLayout>
+
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+
 
             <LinearLayout
                 android:id="@+id/lin1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
+                android:layout_below="@id/nameLayout"
                 android:orientation="horizontal"
                 android:weightSum="3">
 
@@ -57,7 +114,7 @@
                         android:layout_centerHorizontal="true"
                         android:layout_marginTop="5dp"
                         android:text="নতুন অতিথি"
-                        android:textColor="#00ce89"
+                        android:textColor="@color/black"
                         android:textSize="18sp"
                         android:textStyle="bold" />
 
@@ -89,7 +146,7 @@
                         android:layout_centerHorizontal="true"
                         android:layout_marginTop="5dp"
                         android:text="অতিথি লিস্ট"
-                        android:textColor="#dbb51e"
+                        android:textColor="@color/black"
                         android:textSize="18sp"
                         android:textStyle="bold"
 
@@ -123,7 +180,7 @@
                         android:layout_centerHorizontal="true"
                         android:layout_marginTop="5dp"
                         android:text="নোটিস বোর্ড"
-                        android:textColor="@color/lightblue"
+                        android:textColor="@color/black"
                         android:textSize="18sp"
                         android:textStyle="bold" />
 
@@ -167,7 +224,7 @@
                         android:layout_centerHorizontal="true"
                         android:layout_marginTop="5dp"
                         android:text="পার্সেল/ চিঠি "
-                        android:textColor="@color/pink_light"
+                        android:textColor="@color/black"
                         android:textSize="18sp"
                         android:textStyle="bold"
 
@@ -201,7 +258,7 @@
                         android:layout_centerHorizontal="true"
                         android:layout_marginTop="5dp"
                         android:text="প্রোফাইল"
-                        android:textColor="@color/green_light"
+                        android:textColor="@color/black"
                         android:textSize="18sp"
                         android:textStyle="bold"
 
@@ -234,7 +291,7 @@
                         android:layout_centerHorizontal="true"
                         android:layout_marginTop="5dp"
                         android:text="পার্কিং"
-                        android:textColor="@color/car_blue"
+                        android:textColor="@color/black"
                         android:textSize="18sp"
                         android:textStyle="bold"
 
@@ -280,7 +337,7 @@
                         android:layout_centerHorizontal="true"
                         android:layout_marginTop="5dp"
                         android:text=" শিশু সুরক্ষা "
-                        android:textColor="@color/family_brown"
+                        android:textColor="@color/black"
                         android:textSize="18sp"
                         android:textStyle="bold"
 
@@ -313,7 +370,7 @@
                         android:layout_centerHorizontal="true"
                         android:layout_marginTop="5dp"
                         android:text="লগ আউট "
-                        android:textColor="@color/darkRed"
+                        android:textColor="@color/black"
                         android:textSize="18sp"
                         android:textStyle="bold" />
                 </RelativeLayout>
