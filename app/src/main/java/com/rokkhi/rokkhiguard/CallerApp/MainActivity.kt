@@ -21,7 +21,7 @@ class MainActivity : AppCompatActivity() {
 //
 //        phoneNumberInput.setText(intent?.data?.schemeSpecificPart)
         var intent = getIntent();
-        number = intent.getStringExtra("phoneNumber")
+        number = intent.getStringExtra("phoneNumber")!!
 
         makeCall()
 

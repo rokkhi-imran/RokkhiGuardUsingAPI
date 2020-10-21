@@ -43,15 +43,15 @@ class CallActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_call)
-        number = intent.data.schemeSpecificPart
+        number = intent.data!!.schemeSpecificPart
 
 
 
         val sharedPref = PreferenceManager.getDefaultSharedPreferences(this)
-        buildid = sharedPref.getString("buildid", "none")
+        buildid = sharedPref.getString("buildid", "none").toString()
 
         var prefs = getSharedPreferences("FlatNumber", MODE_PRIVATE);
-        flatName = prefs.getString("flat", "No name defined");
+        flatName = prefs.getString("flat", "No name defined").toString();
         thismobileuid = FirebaseAuth.getInstance().uid.toString()
 
         startTime = Calendar.getInstance().getTime()

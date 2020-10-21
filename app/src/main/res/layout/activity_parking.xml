@@ -64,7 +64,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/_2sdp"
                 android:hint=" ফ্ল্যাট নাম্বার দিয়ে খুঁজতে পারেন"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+                style="@style/LoginTextInputLayoutStyle">
 
                 <EditText
                     android:id="@+id/search"

@@ -25,7 +25,7 @@
         android:layout_centerHorizontal="true"
         android:layout_width="match_parent"
         android:layout_below="@+id/selected"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        style="@style/LoginTextInputLayoutStyle"
         android:layout_height="wrap_content">
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/sear"

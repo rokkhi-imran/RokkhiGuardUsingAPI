@@ -16,7 +16,7 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/searchlayout"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            style="@style/LoginTextInputLayoutStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint=" নাম অথবা ফ্লাট নাম্বার দিয়ে খুঁজুন  ">
@@ -25,7 +25,6 @@
                 android:id="@+id/search"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_50sdp"
-                android:background="@drawable/round_edittext2"
                 android:drawableEnd="@drawable/ic_search"
                 android:paddingEnd="20dp"
                 android:visibility="visible" />

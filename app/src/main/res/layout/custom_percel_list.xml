@@ -10,7 +10,7 @@
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/searchlayout"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        style="@style/LoginTextInputLayoutStyle"
         android:layout_width="match_parent"
         android:hint=" নাম দিয়ে খুঁজুন "
         android:layout_marginRight="@dimen/_10sdp"
