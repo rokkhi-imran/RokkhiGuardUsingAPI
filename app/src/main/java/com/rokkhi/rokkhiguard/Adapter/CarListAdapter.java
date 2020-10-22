@@ -22,7 +22,7 @@ import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONObjectRequestListener;
 import com.google.gson.Gson;
-import com.rokkhi.rokkhiguard.Model.api.RecordVehicleEntryModleClass;
+import com.rokkhi.rokkhiguard.Model.api.RecordVehicleEntryModelClass;
 import com.rokkhi.rokkhiguard.Model.api.VehicleData;
 import com.rokkhi.rokkhiguard.R;
 import com.rokkhi.rokkhiguard.StaticData;
@@ -144,7 +144,7 @@ public class CarListAdapter extends RecyclerView.Adapter<CarListAdapter.GridView
         Map<String, String> dataPost = new HashMap<>();
         dataPost.put("vehicleId", String.valueOf(vehicleData.getId()));
         dataPost.put("buildingId", sharedPrefHelper.getString(StaticData.BUILD_ID));
-        dataPost.put("flatId", "");
+        dataPost.put("flatId",String.valueOf( vehicleData.getFlat().getId()));
         dataPost.put("communityId", sharedPrefHelper.getString(StaticData.COMM_ID));
         dataPost.put("guardId", sharedPrefHelper.getString(StaticData.USER_ID));
         dataPost.put("acknowledgedBy", "");
@@ -173,7 +173,7 @@ public class CarListAdapter extends RecyclerView.Adapter<CarListAdapter.GridView
                         Log.e(TAG, "onResponse: =  =----------- " + response);
 
                         Gson gson = new Gson();
-                        RecordVehicleEntryModleClass recordVehicleEntryModleClass = gson.fromJson(String.valueOf(response), RecordVehicleEntryModleClass.class);
+                        RecordVehicleEntryModelClass recordVehicleEntryModleClass = gson.fromJson(String.valueOf(response), RecordVehicleEntryModelClass.class);
 
                         StaticData.showSuccessDialog((FragmentActivity) context,"Success !","Your action completed.");
 
