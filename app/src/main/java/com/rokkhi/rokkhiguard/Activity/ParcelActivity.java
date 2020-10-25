@@ -109,106 +109,90 @@ public class ParcelActivity extends AppCompatActivity implements IPickResult {
         imageUploadTV=findViewById(R.id.imageUploadTV);
         myCalendar = Calendar.getInstance();
 
-        parcelphoto.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        parcelphoto.setOnClickListener(v -> StaticData.selectImage(ParcelActivity.this));
 
-                StaticData.selectImage(ParcelActivity.this);
+        imageUploadTV.setOnClickListener(v -> StaticData.selectImage(ParcelActivity.this));
 
+        parcelSubmitButton.setOnClickListener(v -> {
+
+            if (companyNameET.getText().toString().isEmpty()) {
+                companyNameET.requestFocus();
+                companyNameET.setError("Company Name ?");
+                return;
             }
-        });
-        imageUploadTV.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
 
-                StaticData.selectImage(ParcelActivity.this);
-
+            if (flatNumberET.getText().toString().isEmpty()) {
+                flatNumberET.requestFocus();
+                flatNumberET.setError("Select flat name");
+                return;
             }
-        });
+            if (parcelTypeET.getText().toString().isEmpty()) {
+                parcelTypeET.requestFocus();
+                parcelTypeET.setError("Select parcel type");
+                return;
+            }
 
-        parcelSubmitButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+            fullScreenAlertDialog.showdialog();
+            if (bitmap == null) {
+                uploadDataData("");
+            } else {
+                ByteArrayOutputStream bytes = new ByteArrayOutputStream();
 
-                if (companyNameET.getText().toString().isEmpty()) {
-                    companyNameET.requestFocus();
-                    companyNameET.setError("Company Name ?");
-                    return;
-                }
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
 
-                if (flatNumberET.getText().toString().isEmpty()) {
-                    flatNumberET.requestFocus();
-                    flatNumberET.setError("Select flat name");
-                    return;
-                }
-                if (parcelTypeET.getText().toString().isEmpty()) {
-                    parcelTypeET.requestFocus();
-                    parcelTypeET.setError("Select parcel type");
-                    return;
-                }
+                String path = MediaStore.Images.Media.insertImage(context.getContentResolver(), bitmap, "Title", null);
+                Uri uri = Uri.parse(path);
 
-                fullScreenAlertDialog.showdialog();
-                if (bitmap == null) {
-                    uploadDataData("");
-                } else {
-                    ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+                Cursor cursor = getContentResolver().query(uri, null, null, null, null);
+                cursor.moveToFirst();
+                int idx = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA);
+                File file = new File(cursor.getString(idx));
 
-                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+                Log.e(TAG, "uploadImage: File Path =  " + file);
 
-                    String path = MediaStore.Images.Media.insertImage(context.getContentResolver(), bitmap, "Title", null);
-                    Uri uri = Uri.parse(path);
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault());
+                String currentDateandTime = sdf.format(new Date());
+                Log.e(TAG, "onClick: currentDateandTime =  " + currentDateandTime);
 
-                    Cursor cursor = getContentResolver().query(uri, null, null, null, null);
-                    cursor.moveToFirst();
-                    int idx = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA);
-                    File file = new File(cursor.getString(idx));
+                AndroidNetworking.upload(StaticData.imageUploadURL)
+                        .addMultipartFile("image", file)// posting any type of file
+                        .addMultipartParameter("folder", "parcels")
+                        .addMultipartParameter("subfolder", sharedPrefHelper.getString(StaticData.BUILD_ID))
+                        .addMultipartParameter("filename", currentDateandTime)
+                        .setPriority(Priority.MEDIUM)
+                        .build()
+                        .getAsJSONObject(new JSONObjectRequestListener() {
+                            @Override
+                            public void onResponse(JSONObject response) {
 
-                    Log.e(TAG, "uploadImage: File Path =  " + file);
-
-                    SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault());
-                    String currentDateandTime = sdf.format(new Date());
-                    Log.e(TAG, "onClick: currentDateandTime =  " + currentDateandTime);
-
-                    AndroidNetworking.upload(StaticData.imageUploadURL)
-                            .addMultipartFile("image", file)// posting any type of file
-                            .addMultipartParameter("folder", "parcels")
-                            .addMultipartParameter("subfolder", sharedPrefHelper.getString(StaticData.BUILD_ID))
-                            .addMultipartParameter("filename", currentDateandTime)
-                            .setPriority(Priority.MEDIUM)
-                            .build()
-                            .getAsJSONObject(new JSONObjectRequestListener() {
-                                @Override
-                                public void onResponse(JSONObject response) {
-
-                                    try {
-                                        String imageDownloadLink = response.getString("url");
+                                try {
+                                    String imageDownloadLink = response.getString("url");
 
 
-                                        Log.e(TAG, "onResponse: imageDownloadLink " + imageDownloadLink);
+                                    Log.e(TAG, "onResponse: imageDownloadLink " + imageDownloadLink);
 
-                                        uploadDataData(imageDownloadLink);
+                                    uploadDataData(imageDownloadLink);
 
-                                    } catch (JSONException e) {
-                                        fullScreenAlertDialog.dismissdialog();
-                                        StaticData.showErrorAlertDialog(context, "Error !", "আবার চেষ্টা করুন । ");
-                                        e.printStackTrace();
-                                    }
-
-                                }
-
-                                @Override
-                                public void onError(ANError error) {
-                                    // handle error
+                                } catch (JSONException e) {
                                     fullScreenAlertDialog.dismissdialog();
-
-                                    Toast.makeText(context, "Image Upload Problem wait some Time Later", Toast.LENGTH_SHORT).show();
-
-                                    Log.e("TAG = ", "onError: " + error.getErrorBody());
-                                    Log.e("TAG = ", "onError: " + error.getMessage());
-                                    Log.e("TAG = ", "onError: " + error);
+                                    StaticData.showErrorAlertDialog(context, "Error !", "আবার চেষ্টা করুন । ");
+                                    e.printStackTrace();
                                 }
-                            });
-                }
+
+                            }
+
+                            @Override
+                            public void onError(ANError error) {
+                                // handle error
+                                fullScreenAlertDialog.dismissdialog();
+
+                                Toast.makeText(context, "Image Upload Problem wait some Time Later", Toast.LENGTH_SHORT).show();
+
+                                Log.e("TAG = ", "onError: " + error.getErrorBody());
+                                Log.e("TAG = ", "onError: " + error.getMessage());
+                                Log.e("TAG = ", "onError: " + error);
+                            }
+                        });
             }
         });
 

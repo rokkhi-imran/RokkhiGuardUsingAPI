@@ -161,18 +161,20 @@ public class SWorkerAdapter extends RecyclerView.Adapter<SWorkerAdapter.SWorkerV
 
         editTextFlat.setText(sworkerData.get(adapterPosition).getFlat().getName());
 
-        buttonIn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        buttonIn.setOnClickListener(v -> {
 
-                callWorkerInOutFunction(context,sworkerData,adapterPosition);
 
-            }
+            String url = StaticData.baseURL + "" + StaticData.recordServiceWorkerEntry;
+            callWorkerInOutFunction(context,sworkerData,adapterPosition,url);
+
         });
         buttonOut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                callWorkerInOutFunction(context,sworkerData,adapterPosition);
+
+                String url = StaticData.baseURL + "" + StaticData.recordServiceWorkerExit;
+
+                callWorkerInOutFunction(context,sworkerData,adapterPosition, url);
             }
         });
 
@@ -182,10 +184,7 @@ public class SWorkerAdapter extends RecyclerView.Adapter<SWorkerAdapter.SWorkerV
 
     }
 
-    private void callWorkerInOutFunction(Context context, ArrayList<SworkerData> sworkerData, int adapterPosition) {
-
-
-
+    private void callWorkerInOutFunction(Context context, ArrayList<SworkerData> sWorkerData, int adapterPosition, String url) {
 
         SharedPrefHelper sharedPrefHelper = new SharedPrefHelper(context);
 
@@ -195,15 +194,14 @@ public class SWorkerAdapter extends RecyclerView.Adapter<SWorkerAdapter.SWorkerV
         dataPost.put("limit", "");
         dataPost.put("pageId", "");
         dataPost.put("communityId", sharedPrefHelper.getString(StaticData.COMM_ID));
-        dataPost.put("serviceWorkerId", String.valueOf(sworkerData.get(adapterPosition).getId()));
+        dataPost.put("serviceWorkerId", String.valueOf(sWorkerData.get(adapterPosition).getId()));
         dataPost.put("buildingId", sharedPrefHelper.getString(StaticData.BUILD_ID));
-        dataPost.put("flatId",String.valueOf( sworkerData.get(adapterPosition).getFlat().getId()));
+        dataPost.put("flatId",String.valueOf( sWorkerData.get(adapterPosition).getFlat().getId()));
         dataPost.put("guardId",sharedPrefHelper.getString(StaticData.USER_ID));
         dataPost.put("acknowledgedBy","");
 
 
         JSONObject jsonDataPost = new JSONObject(dataPost);
-        String url = StaticData.baseURL + "" + StaticData.recordServiceWorkerEntry;
         String token = sharedPrefHelper.getString(StaticData.KEY_FIREBASE_ID_TOKEN);
 
 

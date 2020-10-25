@@ -34,7 +34,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class SWorkersActivity extends AppCompatActivity implements View.OnClickListener {
+public class SWorkersActivity extends AppCompatActivity  {
 
 
     Context context;
@@ -161,7 +161,6 @@ public class SWorkersActivity extends AppCompatActivity implements View.OnClickL
 
     private void initView() {
         mSearch = (EditText) findViewById(R.id.search);
-        mSearch.setOnClickListener(this);
         mSWorkerRecyclerViewID = (RecyclerView) findViewById(R.id.sWorkerRecyclerViewID);
         mSWorkerRecyclerViewID.setLayoutManager(new LinearLayoutManager(this));
 
@@ -169,12 +168,4 @@ public class SWorkersActivity extends AppCompatActivity implements View.OnClickL
         mCreateprofile = (Button) findViewById(R.id.createprofile);
     }
 
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-
-            case R.id.search:
-                break;
-        }
-    }
 }

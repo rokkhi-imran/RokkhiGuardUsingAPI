@@ -120,7 +120,8 @@ public class CarListAdapter extends RecyclerView.Adapter<CarListAdapter.GridView
             @Override
             public void onClick(View view) {
 
-                callVehicleEntryData(vehicleData,"in",context);
+                String url = StaticData.baseURL + "" + StaticData.recordVehicleEntry;
+                callVehicleEntryData(vehicleData,context,url);
 
             }
         });
@@ -128,15 +129,16 @@ public class CarListAdapter extends RecyclerView.Adapter<CarListAdapter.GridView
         out.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                callVehicleEntryData(vehicleData,"out",context);
 
+                String url = StaticData.baseURL + "" + StaticData.recordVehicleExit;
+                callVehicleEntryData(vehicleData,context,url);
 
             }
         });
 
     }
 
-    private void callVehicleEntryData(VehicleData vehicleData, String inOutStatus, Context context) {
+    private void callVehicleEntryData(VehicleData vehicleData, Context context, String url) {
 
 
         SharedPrefHelper sharedPrefHelper=new SharedPrefHelper(context);
@@ -151,7 +153,6 @@ public class CarListAdapter extends RecyclerView.Adapter<CarListAdapter.GridView
         JSONObject jsonDataPost = new JSONObject(dataPost);
 
 
-        String url = StaticData.baseURL + "" + StaticData.recordVehicleEntry;
         String token = sharedPrefHelper.getString(StaticData.KEY_FIREBASE_ID_TOKEN);
 
         Log.e("TAG", "onCreate: " + jsonDataPost);

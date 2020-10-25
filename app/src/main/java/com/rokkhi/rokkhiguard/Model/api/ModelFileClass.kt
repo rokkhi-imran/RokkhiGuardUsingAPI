@@ -381,7 +381,7 @@ data class VehicleData(
 
 */
 
-data class VechileListModelClass(
+data class VehicleListModelClass(
     val `data`: List<VehicleData>,
     val errors: List<Any>,
     val status: String,

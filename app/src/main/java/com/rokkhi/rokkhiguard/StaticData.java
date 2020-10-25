@@ -69,6 +69,7 @@ public class StaticData {
     public static final String letTheVisitorOut = "/api/v1/entrance/changeVisitorStatus";
     public static final String getVehicles = "/api/v1/vehicle/getVehicles";
     public static final String recordVehicleEntry = "/api/v1/entrance/recordVehicleEntry";
+    public static final String recordVehicleExit = "/api/v1/entrance/recordVehicleExit";
     public static final String getUserDetails = "/api/v1/user/getUserDetails";
     public static final String getByPhoneNumber = "/api/v1/user/getByPhoneNumber";
     public static final String recordChildrenExitFromCompound = "/api/v1/entrance/recordChildrenExitFromCompound";
@@ -76,6 +77,7 @@ public class StaticData {
     public static final String addVisitor = "/api/v1/entrance/addVisitor";
     public static final String changeVisitorStatus = "/api/v1/entrance/changeVisitorStatus";
     public static final String recordServiceWorkerEntry = "/api/v1/entrance/recordServiceWorkerEntry";
+    public static final String recordServiceWorkerExit = "/api/v1/entrance/recordServiceWorkerExit";
 
 
 
