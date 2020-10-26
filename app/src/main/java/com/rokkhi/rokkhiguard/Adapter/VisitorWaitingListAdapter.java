@@ -109,7 +109,7 @@ public class VisitorWaitingListAdapter extends RecyclerView.Adapter<VisitorWaiti
                 .putExtra("name", list.get(adapterPosition).getName())
                 .putExtra("phone", list.get(adapterPosition).getContact())
                 .putExtra("image", list.get(adapterPosition).getImage())
-                .putExtra("flat", list.get(adapterPosition).getFlat().getName())
+                .putExtra("flat", list.get(adapterPosition).getFlat().getNumber())
                 .putExtra("flatID", list.get(adapterPosition).getFlat().getId())
                 .putExtra("purpose", list.get(adapterPosition).getPurpose())
                 .putExtra("address", list.get(adapterPosition).getAddress())

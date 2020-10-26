@@ -29,6 +29,8 @@
         tools:ignore="ProtectedPermissions" />
 
     <application
+        android:requestLegacyExternalStorage="true"
+
         android:allowBackup="false"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -37,8 +39,8 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".Activity.WaitingVisitorActivity"></activity>
-        <activity android:name=".Activity.WaitingVisitorScreenActivity" />
+
+        <activity android:name=".Activity.WaitingVisitorActivity"/>
         <activity android:name=".Activity.GuardListActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

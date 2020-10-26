@@ -40,6 +40,7 @@ import com.rokkhi.rokkhiguard.Model.api.RegisterUserModelClass;
 import com.rokkhi.rokkhiguard.R;
 import com.rokkhi.rokkhiguard.StaticData;
 import com.rokkhi.rokkhiguard.Utils.FullScreenAlertDialog;
+import com.rokkhi.rokkhiguard.Utils.Normalfunc;
 import com.rokkhi.rokkhiguard.helper.SharedPrefHelper;
 import com.vansuita.pickimage.bean.PickResult;
 import com.vansuita.pickimage.listeners.IPickResult;
@@ -97,6 +98,7 @@ public class CreateProfileActivity extends AppCompatActivity implements IPickRes
     String totaltext="";
 
     ArrayList<ActiveFlatData>historyFlats;
+    Normalfunc normalfunc;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -107,6 +109,7 @@ public class CreateProfileActivity extends AppCompatActivity implements IPickRes
         setSupportActionBar(toolbar);
 
         historyFlats=new ArrayList<>();
+        normalfunc=new Normalfunc();
 
         AndroidNetworking.initialize(getApplicationContext());
 
@@ -220,6 +223,10 @@ public class CreateProfileActivity extends AppCompatActivity implements IPickRes
             }
         });
 
+        selectbutton.setVisibility(View.GONE);
+        unselectbutton.setVisibility(View.GONE);
+
+        /*
         selectbutton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -259,7 +266,7 @@ public class CreateProfileActivity extends AppCompatActivity implements IPickRes
                 historyFlats.clear();
             }
         });
-
+*/
         editText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -282,8 +289,13 @@ public class CreateProfileActivity extends AppCompatActivity implements IPickRes
 
 
                 ActiveFlatData ss = (ActiveFlatData) lv.getItemAtPosition(position);
+                historyFlats.add(ss);
+                totaltext = totaltext + "  " + ss.getNumber();
 
-                //selected na hoile selected er moto kaj korbe.. selection er subidhar jnno
+                UserFlatET.setText(totaltext);
+                alertcompany.dismiss();
+
+              /*
 
                 if (!historyFlats.contains(ss)) {
 
@@ -311,7 +323,7 @@ public class CreateProfileActivity extends AppCompatActivity implements IPickRes
 
                 }
 
-
+*/
             }
         });
 
@@ -388,6 +400,12 @@ public class CreateProfileActivity extends AppCompatActivity implements IPickRes
         if (mUserPhoneET.getText().toString().isEmpty()) {
             mUserPhoneET.requestFocus();
             mUserPhoneET.setError("Worker phone Number ?");
+            return;
+        }
+
+        if (!normalfunc.isvalidphone(mUserPhoneET.getText().toString())) {
+            mUserPhoneET.requestFocus();
+            mUserPhoneET.setError("Add a valid phone Number");
             return;
         }
         if (mUserWtype.getText().toString().isEmpty()) {

@@ -41,11 +41,14 @@ import com.rokkhi.rokkhiguard.Adapter.VisitorWaitingListAdapter;
 import com.rokkhi.rokkhiguard.Model.api.ActiveFlatData;
 import com.rokkhi.rokkhiguard.Model.api.ActiveFlatsModelClass;
 import com.rokkhi.rokkhiguard.Model.api.GetInsideVisitorData;
+import com.rokkhi.rokkhiguard.Model.api.GetUserByPhoneNumberModelClass;
 import com.rokkhi.rokkhiguard.Model.api.GetVisitorInsideModelClass;
 import com.rokkhi.rokkhiguard.R;
 import com.rokkhi.rokkhiguard.StaticData;
 import com.rokkhi.rokkhiguard.Utils.FullScreenAlertDialog;
+import com.rokkhi.rokkhiguard.Utils.Normalfunc;
 import com.rokkhi.rokkhiguard.helper.SharedPrefHelper;
+import com.squareup.picasso.Picasso;
 import com.vansuita.pickimage.bean.PickResult;
 import com.vansuita.pickimage.listeners.IPickResult;
 
@@ -95,6 +98,8 @@ public class AddVisitorActivity extends AppCompatActivity implements View.OnClic
 
     SharedPrefHelper sharedPrefHelper;
 
+    Normalfunc normalfunc;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -107,7 +112,128 @@ public class AddVisitorActivity extends AppCompatActivity implements View.OnClic
         AndroidNetworking.initialize(getApplicationContext());
         sharedPrefHelper = new SharedPrefHelper(context);
         fullScreenAlertDialog = new FullScreenAlertDialog(context);
+        normalfunc=new Normalfunc();
 
+        mPhoneNoET.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (s.length() == 11) {
+                    callUserInformation(s);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        });
+
+
+    }
+
+    private void callUserInformation(CharSequence s) {
+
+        Map<String, String> dataPost = new HashMap<>();
+
+        dataPost.put("limit", "");
+        dataPost.put("pageId", "");
+        dataPost.put("communityId", sharedPrefHelper.getString(StaticData.COMM_ID));
+        dataPost.put("phoneNumber", s.toString());
+
+
+        JSONObject jsonDataPost = new JSONObject(dataPost);
+
+        String url = StaticData.baseURL + "" + StaticData.getByPhoneNumber;
+        String token = sharedPrefHelper.getString(StaticData.KEY_FIREBASE_ID_TOKEN);
+
+        Log.e("TAG", "onCreate: " + jsonDataPost);
+        Log.e("TAG", "onCreate: " + url);
+        Log.e("TAG", "onCreate: " + token);
+        Log.e("TAG", "onCreate: ---------------------- ");
+
+
+        AndroidNetworking.post(url)
+                .addHeaders("authtoken", token)
+                .setContentType("application/json")
+                .addJSONObjectBody(jsonDataPost)
+                .setPriority(Priority.MEDIUM)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+
+                        Log.e(TAG, "onResponse: =   " + response);
+
+                        Gson gson = new Gson();
+                        GetUserByPhoneNumberModelClass getUserByPhoneNumberModelClass = gson.fromJson(String.valueOf(response), GetUserByPhoneNumberModelClass.class);
+                        if (!getUserByPhoneNumberModelClass.getData().getName().isEmpty()) {
+                            showUserInformationDialog(getUserByPhoneNumberModelClass, context);
+                        }
+
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+
+
+                        StaticData.showErrorAlertDialog(context, "Alert !", "আবার চেষ্টা করুন ।");
+
+                        Log.e("TAG", "onResponse: error message =  " + anError.getMessage());
+                        Log.e("TAG", "onResponse: error code =  " + anError.getErrorCode());
+                        Log.e("TAG", "onResponse: error body =  " + anError.getErrorBody());
+                        Log.e("TAG", "onResponse: error  getErrorDetail =  " + anError.getErrorDetail());
+                    }
+                });
+
+
+    }
+
+    private void showUserInformationDialog(GetUserByPhoneNumberModelClass getUserByPhoneNumberModelClass, Context context) {
+
+        final AlertDialog alertcompany = new AlertDialog.Builder(context).create();
+        LayoutInflater inflater = getLayoutInflater();
+        View convertView = (View) inflater.inflate(R.layout.custom_dialo_user_information, null);
+
+
+        TextView name = convertView.findViewById(R.id.nameTV);
+        TextView phone = convertView.findViewById(R.id.phoneTV);
+        TextView address = convertView.findViewById(R.id.addressTV);
+        CircleImageView imageViewAlert = convertView.findViewById(R.id.imageView);
+        Button cancelBtn = convertView.findViewById(R.id.cancelBtn);
+        Button addedBtn = convertView.findViewById(R.id.addedBtn);
+
+        alertcompany.setView(convertView);
+
+        cancelBtn.setOnClickListener(v -> {
+            alertcompany.dismiss();
+        });
+
+        if (getUserByPhoneNumberModelClass.getData().getImage() != null && !getUserByPhoneNumberModelClass.getData().getImage().isEmpty()) {
+
+            Picasso.get().load(getUserByPhoneNumberModelClass.getData().getImage()).placeholder(R.drawable.progress_animation).error(R.drawable.male1).into(imageViewAlert);
+
+        }
+        name.setText(getUserByPhoneNumberModelClass.getData().getName());
+        phone.setText(getUserByPhoneNumberModelClass.getData().getPhone());
+        address.setText(getUserByPhoneNumberModelClass.getData().getAddress());
+
+        addedBtn.setOnClickListener(v -> {
+            alertcompany.dismiss();
+
+            mUserNameET.setText(getUserByPhoneNumberModelClass.getData().getName());
+            mAddressET.setText(getUserByPhoneNumberModelClass.getData().getAddress());
+            if (getUserByPhoneNumberModelClass.getData().getImage() != null && !getUserByPhoneNumberModelClass.getData().getImage().isEmpty()) {
+
+                Picasso.get().load(getUserByPhoneNumberModelClass.getData().getImage()).placeholder(R.drawable.progress_animation).error(R.drawable.male1).into(mUserPhotoIV);
+            }
+
+
+        });
+
+        alertcompany.show();
 
     }
 
@@ -116,10 +242,10 @@ public class AddVisitorActivity extends AppCompatActivity implements View.OnClic
     protected void onPostResume() {
         super.onPostResume();
 
-        getVisitorWautingList();
+        getVisitorWaitingList();
     }
 
-    private void getVisitorWautingList() {
+    private void getVisitorWaitingList() {
 
 
         Map<String, String> dataPost = new HashMap<>();
@@ -163,7 +289,6 @@ public class AddVisitorActivity extends AppCompatActivity implements View.OnClic
                         VisitorWaitingListAdapter visitorWaitingListAdapter = new VisitorWaitingListAdapter((ArrayList<GetInsideVisitorData>) getVisitorInsideModelClass.getData(), context);
                         visitorWaitingListAdapter.setHasStableIds(true);
 
-                        if (getVisitorInsideModelClass.getData().size() > 0) {
                             LinearLayoutManager layoutManager
                                     = new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false);
 
@@ -171,7 +296,6 @@ public class AddVisitorActivity extends AppCompatActivity implements View.OnClic
 
                             mVisitorPendingListRecycelrViewID.setVisibility(View.VISIBLE);
                             mVisitorPendingListRecycelrViewID.setAdapter(visitorWaitingListAdapter);
-                        }
 
 
                     }
@@ -234,7 +358,7 @@ public class AddVisitorActivity extends AppCompatActivity implements View.OnClic
                 StaticData.selectImage(AddVisitorActivity.this);
                 break;
             case R.id.flatNumberET:
-                showAllflats();
+                showAllFlats();
                 break;
             case R.id.puposeET:
                 showAllParcelTypes();
@@ -249,9 +373,15 @@ public class AddVisitorActivity extends AppCompatActivity implements View.OnClic
 
     private void checkValidation() {
 
+
         if (mPhoneNoET.getText().toString().isEmpty()) {
             mPhoneNoET.requestFocus();
             mPhoneNoET.setError("Add phone Number");
+            return;
+        }
+        if (!normalfunc.isvalidphone(mPhoneNoET.getText().toString())) {
+            mPhoneNoET.requestFocus();
+            mPhoneNoET.setError("Add a valid phone Number");
             return;
         }
         if (mUserNameET.getText().toString().isEmpty()) {
@@ -406,7 +536,7 @@ public class AddVisitorActivity extends AppCompatActivity implements View.OnClic
 
         } catch (Exception e) {
 
-            Log.e(TAG, "uploadDataData: Visitor add failed for jsonObject = "+e.getMessage() );
+            Log.e(TAG, "uploadDataData: Visitor add failed for jsonObject = " + e.getMessage());
 
         }
 
@@ -427,7 +557,6 @@ public class AddVisitorActivity extends AppCompatActivity implements View.OnClic
         View convertView = (View) inflater.inflate(R.layout.custom_percel_list, null);
         final TextInputEditText editText = convertView.findViewById(R.id.sear);
 
-        //change lsitview to gridview
 
         final ListView lv = (ListView) convertView.findViewById(R.id.listView1);
         final Button done = convertView.findViewById(R.id.SubmitUserInfoBtn);
@@ -471,7 +600,7 @@ public class AddVisitorActivity extends AppCompatActivity implements View.OnClic
 
     }
 
-    public void showAllflats() {
+    public void showAllFlats() {
 
 
         Gson gson = new Gson();
@@ -479,7 +608,7 @@ public class AddVisitorActivity extends AppCompatActivity implements View.OnClic
 
         ActiveFlatsModelClass activeFlat = gson.fromJson(json, ActiveFlatsModelClass.class);
 
-        if (activeFlat!=null){
+        if (activeFlat != null) {
             final ActiveFlatAdapter activeFlatAdapter = new ActiveFlatAdapter(activeFlat, context);
             final AlertDialog alertcompany = new AlertDialog.Builder(context).create();
             LayoutInflater inflater = getLayoutInflater();
@@ -511,6 +640,9 @@ public class AddVisitorActivity extends AppCompatActivity implements View.OnClic
                 }
             });
 
+            selectbutton.setVisibility(View.GONE);
+            unselectbutton.setVisibility(View.GONE);
+            /*
             selectbutton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -550,7 +682,7 @@ public class AddVisitorActivity extends AppCompatActivity implements View.OnClic
                     historyFlats.clear();
                 }
             });
-
+*/
             editText.addTextChangedListener(new TextWatcher() {
                 @Override
                 public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -574,7 +706,7 @@ public class AddVisitorActivity extends AppCompatActivity implements View.OnClic
 
                     ActiveFlatData ss = (ActiveFlatData) lv.getItemAtPosition(position);
 
-                    if (!historyFlats.contains(ss)) {
+                  /*  if (!historyFlats.contains(ss)) {
                         activeFlatAdapter.changedata(ss.getNumber(), true);
                         historyFlats.add(ss);
                         activeFlatAdapter.notifyDataSetChanged();
@@ -595,16 +727,20 @@ public class AddVisitorActivity extends AppCompatActivity implements View.OnClic
 
                         activeFlatAdapter.notifyDataSetChanged();
 
-                    }
-                    tt.setText(totaltext);
+                    }*/
+
+                    historyFlats.add(ss);
+                    totaltext = totaltext + "  " + ss.getNumber();
+                    mFlatNumberET.setText(totaltext);
+
+                    alertcompany.dismiss();
 
 
                 }
             });
-        }else {
+        } else {
             Toast.makeText(context, "Try again", Toast.LENGTH_SHORT).show();
         }
-
 
 
     }
@@ -627,35 +763,4 @@ public class AddVisitorActivity extends AppCompatActivity implements View.OnClic
 
     }
 
-    private class DataClass {
-
-        String name = "";
-        String address = "";
-        String contact = "";
-        String email = "";
-        String purpose = "";
-        String image = "";
-        String thumbImage = "";
-        String communityId = "";
-        String buildingId = "";
-        String flatId = "";
-        String guardId = "";
-        int responderId = 0;
-
-        public DataClass(String name, String address, String contact, String email, String purpose, String image, String thumbImage, String communityId, String buildingId, String flatId,
-                         String guardId, Integer responderId) {
-            this.name = name;
-            this.address = address;
-            this.contact = contact;
-            this.email = email;
-            this.purpose = purpose;
-            this.image = image;
-            this.thumbImage = thumbImage;
-            this.communityId = communityId;
-            this.buildingId = buildingId;
-            this.flatId = flatId;
-            this.guardId = guardId;
-            this.responderId = responderId;
-        }
-    }
 }

@@ -287,6 +287,7 @@ public class ParcelActivity extends AppCompatActivity implements IPickResult {
                 })
                 .setIcon(android.R.drawable.ic_dialog_alert)
                 .show();
+
     }
 
     public void showAllParcelTypes() {
@@ -387,6 +388,10 @@ public class ParcelActivity extends AppCompatActivity implements IPickResult {
             }
         });
 
+        selectbutton.setVisibility(View.GONE);
+        unselectbutton.setVisibility(View.GONE);
+/*
+
         selectbutton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -426,6 +431,7 @@ public class ParcelActivity extends AppCompatActivity implements IPickResult {
                 historyFlats.clear();
             }
         });
+*/
 
         editText.addTextChangedListener(new TextWatcher() {
             @Override
@@ -443,6 +449,7 @@ public class ParcelActivity extends AppCompatActivity implements IPickResult {
         });
 
 
+
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -451,6 +458,12 @@ public class ParcelActivity extends AppCompatActivity implements IPickResult {
                 ActiveFlatData ss = (ActiveFlatData) lv.getItemAtPosition(position);
 
                 //selected na hoile selected er moto kaj korbe.. selection er subidhar jnno
+
+                historyFlats.add(ss);
+                totaltext = totaltext + "  " + ss.getNumber();
+                flatNumberET.setText(totaltext);
+                alertcompany.dismiss();
+/*
 
                 if (!historyFlats.contains(ss)) {
 
@@ -477,6 +490,7 @@ public class ParcelActivity extends AppCompatActivity implements IPickResult {
                     tt.setText(totaltext);
 
                 }
+*/
 
 
             }

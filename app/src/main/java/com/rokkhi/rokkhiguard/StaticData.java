@@ -3,6 +3,8 @@ package com.rokkhi.rokkhiguard;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Color;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.widget.LinearLayout;
 
@@ -134,5 +136,14 @@ public class StaticData {
                 })
                 .setIcon(android.R.drawable.ic_dialog_alert)
                 .show();
+
+        final Handler handler = new Handler(Looper.getMainLooper());
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                context.finish();
+            }
+        }, 3000);
+
     }
 }
