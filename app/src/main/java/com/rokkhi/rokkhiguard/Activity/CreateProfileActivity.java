@@ -437,8 +437,9 @@ public class CreateProfileActivity extends AppCompatActivity implements IPickRes
             String currentDateandTime = sdf.format(new Date());
             Log.e("TAG", "onClick: currentDateandTime =  " + currentDateandTime);
 
+            String imageUploadUrl = StaticData.baseURL+StaticData.imageUploadURL;
 
-            AndroidNetworking.upload(StaticData.imageUploadURL)
+            AndroidNetworking.upload(imageUploadUrl)
                     .addMultipartFile("image", file)// posting any type of file
                     .addMultipartParameter("folderName", "visitors")
                     .addMultipartParameter("subFolderName", sharedPrefHelper.getString(StaticData.BUILD_ID))

@@ -33,6 +33,8 @@ import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GetTokenResult;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
 import com.google.gson.Gson;
 import com.rokkhi.rokkhiguard.Adapter.GuardListAdapter;
 import com.rokkhi.rokkhiguard.Model.api.GetUserByPhoneNumberModelClass;
@@ -73,6 +75,7 @@ public class GuardListActivity extends AppCompatActivity {
     Normalfunc normalfunc;
 
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -82,6 +85,20 @@ public class GuardListActivity extends AppCompatActivity {
         mProgressbar=findViewById(R.id.progressbar);
         mGuardListRecyclerView=findViewById(R.id.guardListRecyclerView);
         normalfunc=new Normalfunc();
+
+        //print token
+
+        FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener(new OnSuccessListener<InstanceIdResult>() {
+            @Override
+            public void onSuccess(InstanceIdResult instanceIdResult) {
+                String token = instanceIdResult.getToken();
+                Log.e("TAG", "token ID onSuccess : =  "+token);
+
+                // send it to server
+            }
+        });
+
+
 
 
         //check Stroage permission Start

@@ -29,7 +29,6 @@ public class StaticData {
     public static final String ALL_FLATS = "ALL_FLATS";
     public static final String BUILD_NAME = "BUILD_NAME";
     public static final String BUILD_ADDRESS = "BUILD_ADDRESS";
-    public static String imageUploadURL = "http://rokkhi-home-backend-alb-819652634.ap-south-1.elb.amazonaws.com/api/v1/image/uploadSingle";
 
     public static final void getIdToken(final Context context) {
         FirebaseAuth.getInstance().getCurrentUser().getIdToken(true).addOnSuccessListener(new OnSuccessListener<GetTokenResult>() {
@@ -61,8 +60,11 @@ public class StaticData {
 
     }
 
-//    public static final String baseURL = "http://13.76.190.212:3000";
-    public static final String baseURL = "http://rokkhi-home-backend-alb-819652634.ap-south-1.elb.amazonaws.com";
+
+
+    public static final String baseURL = "https://home.api.rokkhi.com";
+    public static String imageUploadURL = "/api/v1/image/uploadSingle";
+
     public static final String getNotice = "/api/v1/notice/getNotices";
     public static final String getUsersList = "/api/v1/user/getUsersList";
     public static final String addParcel = "/api/v1/entrance/addParcel";

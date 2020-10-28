@@ -18,9 +18,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main_call)
-//
-//        phoneNumberInput.setText(intent?.data?.schemeSpecificPart)
-        var intent = getIntent();
+        var intent = intent;
         number = intent.getStringExtra("phoneNumber")!!
 
         makeCall()

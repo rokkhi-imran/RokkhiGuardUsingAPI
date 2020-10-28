@@ -432,7 +432,9 @@ public class AddVisitorActivity extends AppCompatActivity implements View.OnClic
             String currentDateandTime = sdf.format(new Date());
             Log.e(TAG, "onClick: currentDateandTime =  " + currentDateandTime);
 
-            AndroidNetworking.upload(StaticData.imageUploadURL)
+            String imageUploadUrl = StaticData.baseURL+StaticData.imageUploadURL;
+
+            AndroidNetworking.upload(imageUploadUrl)
                     .addMultipartFile("image", file)// posting any type of file
                     .addMultipartParameter("folderName", "visitors")
                     .addMultipartParameter("subFolderName", sharedPrefHelper.getString(StaticData.BUILD_ID))
