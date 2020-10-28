@@ -536,7 +536,7 @@ public class AddVisitorActivity extends AppCompatActivity implements View.OnClic
 
                             }else if (addVisitorResponse.getData().getMessage().equals(StaticData.NO_SPECIALITY)){
 
-                                StaticData.showSuccessDialog((FragmentActivity) context, "Alert !", "অতিথি কে অ্যাড করা হয়েছে । কনফ্ররম এর জন্য অপেক্ষা করুন ");
+                                StaticData.showSuccessDialog((FragmentActivity) context, "Alert !", "অতিথি কে অ্যাড করা হয়েছে । নিশ্চিত হওয়ার জন্য অপেক্ষা করুন ");
                             }else {
                                 //No FLat User Found
                                 showAlertDialog(StaticData.WHITE_LISTED,context,addVisitorResponse);

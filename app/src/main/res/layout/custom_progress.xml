@@ -12,5 +12,13 @@
         android:layout_centerInParent="true"
         style="?android:attr/progressBarStyleLarge"
         android:visibility="visible" />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Loading..."
+        android:layout_below="@id/pbCustomDialog"
+        android:gravity="center"
+        android:textColor="@color/red_light"
+        android:layout_marginTop="@dimen/_5sdp"/>
 
 </RelativeLayout>
