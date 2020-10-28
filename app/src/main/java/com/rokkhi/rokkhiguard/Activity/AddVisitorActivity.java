@@ -172,7 +172,8 @@ public class AddVisitorActivity extends AppCompatActivity implements View.OnClic
 
                         Gson gson = new Gson();
                         GetRecordedUserByPhoneNumber getRecordedUserByPhoneNumber = gson.fromJson(String.valueOf(response), GetRecordedUserByPhoneNumber.class);
-                        if (!getRecordedUserByPhoneNumber.getData().getName().isEmpty()) {
+
+                        if (!getRecordedUserByPhoneNumber.getData().getType().equals("NOT_FOUND")) {
                             showUserInformationDialog(getRecordedUserByPhoneNumber, context);
                         }
 
