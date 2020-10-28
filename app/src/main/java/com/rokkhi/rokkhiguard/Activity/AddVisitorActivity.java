@@ -2,6 +2,7 @@ package com.rokkhi.rokkhiguard.Activity;
 
 
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.icu.text.SimpleDateFormat;
@@ -40,8 +41,9 @@ import com.rokkhi.rokkhiguard.Adapter.TypesAdapter;
 import com.rokkhi.rokkhiguard.Adapter.VisitorWaitingListAdapter;
 import com.rokkhi.rokkhiguard.Model.api.ActiveFlatData;
 import com.rokkhi.rokkhiguard.Model.api.ActiveFlatsModelClass;
+import com.rokkhi.rokkhiguard.Model.api.AddVisitorResponse;
 import com.rokkhi.rokkhiguard.Model.api.GetInsideVisitorData;
-import com.rokkhi.rokkhiguard.Model.api.GetUserByPhoneNumberModelClass;
+import com.rokkhi.rokkhiguard.Model.api.GetRecordedUserByPhoneNumber;
 import com.rokkhi.rokkhiguard.Model.api.GetVisitorInsideModelClass;
 import com.rokkhi.rokkhiguard.R;
 import com.rokkhi.rokkhiguard.StaticData;
@@ -99,6 +101,7 @@ public class AddVisitorActivity extends AppCompatActivity implements View.OnClic
     SharedPrefHelper sharedPrefHelper;
 
     Normalfunc normalfunc;
+    String imageLinkPre="";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -122,7 +125,7 @@ public class AddVisitorActivity extends AppCompatActivity implements View.OnClic
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if (s.length() == 11) {
-                    callUserInformation(s);
+                    callUserInformationByPhoneNumber(s);
                 }
             }
 
@@ -134,7 +137,7 @@ public class AddVisitorActivity extends AppCompatActivity implements View.OnClic
 
     }
 
-    private void callUserInformation(CharSequence s) {
+    private void callUserInformationByPhoneNumber(CharSequence s) {
 
         Map<String, String> dataPost = new HashMap<>();
 
@@ -146,7 +149,7 @@ public class AddVisitorActivity extends AppCompatActivity implements View.OnClic
 
         JSONObject jsonDataPost = new JSONObject(dataPost);
 
-        String url = StaticData.baseURL + "" + StaticData.getByPhoneNumber;
+        String url = StaticData.baseURL + "" + StaticData.getRecordedUserByPhoneNumber;
         String token = sharedPrefHelper.getString(StaticData.KEY_FIREBASE_ID_TOKEN);
 
         Log.e("TAG", "onCreate: " + jsonDataPost);
@@ -168,9 +171,9 @@ public class AddVisitorActivity extends AppCompatActivity implements View.OnClic
                         Log.e(TAG, "onResponse: =   " + response);
 
                         Gson gson = new Gson();
-                        GetUserByPhoneNumberModelClass getUserByPhoneNumberModelClass = gson.fromJson(String.valueOf(response), GetUserByPhoneNumberModelClass.class);
-                        if (!getUserByPhoneNumberModelClass.getData().getName().isEmpty()) {
-                            showUserInformationDialog(getUserByPhoneNumberModelClass, context);
+                        GetRecordedUserByPhoneNumber getRecordedUserByPhoneNumber = gson.fromJson(String.valueOf(response), GetRecordedUserByPhoneNumber.class);
+                        if (!getRecordedUserByPhoneNumber.getData().getName().isEmpty()) {
+                            showUserInformationDialog(getRecordedUserByPhoneNumber, context);
                         }
 
                     }
@@ -179,7 +182,7 @@ public class AddVisitorActivity extends AppCompatActivity implements View.OnClic
                     public void onError(ANError anError) {
 
 
-                        StaticData.showErrorAlertDialog(context, "Alert !", "আবার চেষ্টা করুন ।");
+//                        StaticData.showErrorAlertDialog(context, "Alert !", "আবার চেষ্টা করুন ।");
 
                         Log.e("TAG", "onResponse: error message =  " + anError.getMessage());
                         Log.e("TAG", "onResponse: error code =  " + anError.getErrorCode());
@@ -191,7 +194,7 @@ public class AddVisitorActivity extends AppCompatActivity implements View.OnClic
 
     }
 
-    private void showUserInformationDialog(GetUserByPhoneNumberModelClass getUserByPhoneNumberModelClass, Context context) {
+    private void showUserInformationDialog(GetRecordedUserByPhoneNumber getUserByPhoneNumberModelClass, Context context) {
 
         final AlertDialog alertcompany = new AlertDialog.Builder(context).create();
         LayoutInflater inflater = getLayoutInflater();
@@ -217,7 +220,7 @@ public class AddVisitorActivity extends AppCompatActivity implements View.OnClic
 
         }
         name.setText(getUserByPhoneNumberModelClass.getData().getName());
-        phone.setText(getUserByPhoneNumberModelClass.getData().getPhone());
+        phone.setText(getUserByPhoneNumberModelClass.getData().getContact());
         address.setText(getUserByPhoneNumberModelClass.getData().getAddress());
 
         addedBtn.setOnClickListener(v -> {
@@ -226,6 +229,9 @@ public class AddVisitorActivity extends AppCompatActivity implements View.OnClic
             mUserNameET.setText(getUserByPhoneNumberModelClass.getData().getName());
             mAddressET.setText(getUserByPhoneNumberModelClass.getData().getAddress());
             if (getUserByPhoneNumberModelClass.getData().getImage() != null && !getUserByPhoneNumberModelClass.getData().getImage().isEmpty()) {
+
+                imageLinkPre=getUserByPhoneNumberModelClass.getData().getImage();
+                bitmap=null;
 
                 Picasso.get().load(getUserByPhoneNumberModelClass.getData().getImage()).placeholder(R.drawable.progress_animation).error(R.drawable.male1).into(mUserPhotoIV);
             }
@@ -427,9 +433,9 @@ public class AddVisitorActivity extends AppCompatActivity implements View.OnClic
 
             AndroidNetworking.upload(StaticData.imageUploadURL)
                     .addMultipartFile("image", file)// posting any type of file
-                    .addMultipartParameter("folder", "visitors")
-                    .addMultipartParameter("subfolder", sharedPrefHelper.getString(StaticData.BUILD_ID))
-                    .addMultipartParameter("filename", currentDateandTime)
+                    .addMultipartParameter("folderName", "visitors")
+                    .addMultipartParameter("subFolderName", sharedPrefHelper.getString(StaticData.BUILD_ID))
+                    .addMultipartParameter("fileName", currentDateandTime)
                     .setPriority(Priority.MEDIUM)
                     .build()
                     .getAsJSONObject(new JSONObjectRequestListener() {
@@ -437,11 +443,10 @@ public class AddVisitorActivity extends AppCompatActivity implements View.OnClic
                         public void onResponse(JSONObject response) {
 
                             try {
-                                String imageDownloadLink = response.getString("url");
+                                String imageDownloadLink = response.getString("data");
 
 
                                 Log.e(TAG, "onResponse: imageDownloadLink " + imageDownloadLink);
-
                                 uploadDataData(imageDownloadLink);
 
                             } catch (JSONException e) {
@@ -471,6 +476,10 @@ public class AddVisitorActivity extends AppCompatActivity implements View.OnClic
     }
 
     private void uploadDataData(String imageLink) {
+
+        if (!imageLinkPre.isEmpty() && bitmap==null){
+            imageLink=imageLinkPre;
+        }
 
         fullScreenAlertDialog.showdialog();
 
@@ -512,11 +521,30 @@ public class AddVisitorActivity extends AppCompatActivity implements View.OnClic
 
                             fullScreenAlertDialog.dismissdialog();
 
-
                             Log.e(TAG, "onResponse: =  =----------- " + response);
 
+                            Gson gson = new Gson();
+                            AddVisitorResponse addVisitorResponse = gson.fromJson(String.valueOf(response), AddVisitorResponse.class);
 
-                            StaticData.showSuccessDialog((FragmentActivity) context, "Alert !", "Visitor Added ..");
+                            if (addVisitorResponse.getData().getMessage().equals(StaticData.WHITE_LISTED)){
+
+                                showAlertDialog(StaticData.WHITE_LISTED,context,addVisitorResponse);
+
+                            }else if (addVisitorResponse.getData().getMessage().equals(StaticData.BLACK_LISTED)){
+                                showAlertDialog(StaticData.BLACK_LISTED,context,addVisitorResponse);
+
+
+                            }else if (addVisitorResponse.getData().getMessage().equals(StaticData.NO_SPECIALITY)){
+
+                                StaticData.showSuccessDialog((FragmentActivity) context, "Alert !", "অতিথি কে অ্যাড করা হয়েছে । কনফ্ররম এর জন্য অপেক্ষা করুন ");
+                            }else {
+                                //No FLat User Found
+                                showAlertDialog(StaticData.WHITE_LISTED,context,addVisitorResponse);
+
+
+                            }
+
+
 
                         }
 
@@ -540,6 +568,83 @@ public class AddVisitorActivity extends AppCompatActivity implements View.OnClic
 
         }
 
+
+    }
+
+    private void showAlertDialog(String visitorStatus, Context context, AddVisitorResponse addVisitorResponse) {
+
+
+
+        if (visitorStatus.equals(StaticData.WHITE_LISTED)){
+
+            final AlertDialog alertDialog = new AlertDialog.Builder(context).create();
+            LayoutInflater inflater = getLayoutInflater();
+            View convertView = (View) inflater.inflate(R.layout.custom_white_list_dialog, null);
+            Button okWhiteButton=convertView.findViewById(R.id.okWhitelist);
+            alertDialog.setView(convertView);
+            alertDialog.setCancelable(false);
+
+            okWhiteButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    alertDialog.dismiss();
+                    startActivity(new Intent(context,AddVisitorActivity.class));
+                    finish();
+
+                }
+            });
+
+            alertDialog.show();
+
+
+        }else if (visitorStatus.equals(StaticData.BLACK_LISTED)){
+
+            final AlertDialog alertDialog = new AlertDialog.Builder(context).create();
+            LayoutInflater inflater = getLayoutInflater();
+            View convertView = (View) inflater.inflate(R.layout.custom_black_list_dialog, null);
+            Button okBlackButton=convertView.findViewById(R.id.okBlacklist);
+            alertDialog.setView(convertView);
+            alertDialog.setCancelable(false);
+
+            okBlackButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+
+                    alertDialog.dismiss();
+                    startActivity(new Intent(context,AddVisitorActivity.class));
+                    finish();
+
+                }
+            });
+
+            alertDialog.show();
+
+        }else if (visitorStatus.equals(StaticData.NO_FLAT_MEMBER)){
+
+            final AlertDialog alertDialog = new AlertDialog.Builder(context).create();
+            LayoutInflater inflater = getLayoutInflater();
+            View convertView = (View) inflater.inflate(R.layout.custom_no_flat_user_dialog, null);
+            Button okNoFlatUserBtn=convertView.findViewById(R.id.okNoFlatUserBtn);
+            alertDialog.setView(convertView);
+            alertDialog.setCancelable(false);
+
+            okNoFlatUserBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+
+                    alertDialog.dismiss();
+                    startActivity(new Intent(context,AddVisitorActivity.class));
+                    finish();
+
+                }
+            });
+
+            alertDialog.show();
+
+        }
 
     }
 

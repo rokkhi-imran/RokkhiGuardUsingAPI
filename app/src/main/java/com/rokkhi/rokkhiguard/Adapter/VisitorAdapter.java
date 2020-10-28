@@ -97,7 +97,11 @@ public class VisitorAdapter extends RecyclerView.Adapter<VisitorAdapter.VisitorV
             Picasso.get().load(visitor.getImage()).placeholder( R.drawable.progress_animation ).error(R.drawable.male1).into(holder.propic);
         }
 
-        holder.intime.setText(visitor.getInTime());
+
+            holder.intime.setText(visitor.getInTime());
+
+
+
 
         holder.out.setOnClickListener(new View.OnClickListener() {
             @Override

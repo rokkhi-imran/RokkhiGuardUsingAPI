@@ -29,7 +29,7 @@ public class StaticData {
     public static final String ALL_FLATS = "ALL_FLATS";
     public static final String BUILD_NAME = "BUILD_NAME";
     public static final String BUILD_ADDRESS = "BUILD_ADDRESS";
-    public static String imageUploadURL = "http://ec2-54-183-244-125.us-west-1.compute.amazonaws.com:8000/upload";
+    public static String imageUploadURL = "http://rokkhi-home-backend-alb-819652634.ap-south-1.elb.amazonaws.com/api/v1/image/uploadSingle";
 
     public static final void getIdToken(final Context context) {
         FirebaseAuth.getInstance().getCurrentUser().getIdToken(true).addOnSuccessListener(new OnSuccessListener<GetTokenResult>() {
@@ -80,6 +80,7 @@ public class StaticData {
     public static final String changeVisitorStatus = "/api/v1/entrance/changeVisitorStatus";
     public static final String recordServiceWorkerEntry = "/api/v1/entrance/recordServiceWorkerEntry";
     public static final String recordServiceWorkerExit = "/api/v1/entrance/recordServiceWorkerExit";
+    public static final String getRecordedUserByPhoneNumber = "/api/v1/entrance/getRecordedUserByPhoneNumber";
 
 
 
@@ -100,6 +101,11 @@ public class StaticData {
     public static final String OUTSIDE_COMPOUND = "OUTSIDE_COMPOUND";
     public static final String CANCEL_COMPOUND = "CANCEL_BY_GUARD_COMPOUND";
     public static final String PENDING_PERMISSION = "PENDING_PERMISSION";
+
+    public static final String  WHITE_LISTED = "WHITE_LISTED";
+    public static final String  BLACK_LISTED = "BLACK_LISTED";
+    public static final String  NO_FLAT_MEMBER = "NO_FLAT_MEMBER";
+    public static final String  NO_SPECIALITY = "NO_SPECIALITY";
 
     //    NoticeForConstants
     public static final String ALL = "ALL";

@@ -138,7 +138,10 @@ public class DaroanPassActivity extends AppCompatActivity implements View.OnClic
         cross.setOnClickListener(this);
         clear.setOnClickListener(this);
 
-        callTokenID();
+        if (FirebaseAuth.getInstance().getCurrentUser()!=null){
+
+            callTokenID();
+        }
 
 
     }
@@ -270,19 +273,6 @@ public class DaroanPassActivity extends AppCompatActivity implements View.OnClic
     }
     //check stroage Permission End
 
-
-
-
-    @Override
-    protected void onRestart() {
-        super.onRestart();
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-    }
-
     @Override
     public void onClick(View view) {
 
@@ -309,7 +299,6 @@ public class DaroanPassActivity extends AppCompatActivity implements View.OnClic
                 Toast.makeText(context, "Wrong pass code!!", Toast.LENGTH_SHORT).show();
 
             }
-
 
             new CountDownTimer(100, 100) {
 

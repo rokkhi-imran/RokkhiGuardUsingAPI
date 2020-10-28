@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    android:orientation="vertical"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:text=" আপনার এই অ্যাপ টি ব্যাবহার করার অনুমতি নাই। "
+        android:gravity="center"
+        android:textSize="@dimen/_20sdp"
+        android:textColor="@color/black"
+        android:layout_height="@dimen/_150sdp"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:orientation="horizontal"
+        android:padding="@dimen/_5sdp"
+        android:layout_height="wrap_content">
+
+        <Button
+            android:id="@+id/logoutBtn"
+            android:layout_width="0dp"
+            android:textAllCaps="false"
+            android:text="LogOut"
+            android:layout_margin="@dimen/_5sdp"
+            android:background="@drawable/round_edittext2"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"/>
+        <Button
+            android:id="@+id/knowMore"
+            android:text="Know More"
+            android:textAllCaps="false"
+            android:layout_margin="@dimen/_5sdp"
+            android:background="@drawable/round_edittext2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"/>
+
+    </LinearLayout>
+
+
+</LinearLayout>

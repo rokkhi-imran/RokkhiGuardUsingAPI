@@ -42,7 +42,7 @@
 
         <Preference
             android:key="logout"
-            android:summary="This is feature is only for admins not for guards \n  এই  অপশন গার্ড দের জন্য না , শুধুমাত্র অফিসের জন্য "
+            android:summary="This feature is only for admins not for guards. \nএই  অপশন গার্ড দের জন্য না , শুধুমাত্র বাড়ির ম্যানেজারদের  জন্য ।"
             android:title="Log out"
             />
 

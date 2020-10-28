@@ -156,9 +156,9 @@ public class ParcelActivity extends AppCompatActivity implements IPickResult {
 
                 AndroidNetworking.upload(StaticData.imageUploadURL)
                         .addMultipartFile("image", file)// posting any type of file
-                        .addMultipartParameter("folder", "parcels")
-                        .addMultipartParameter("subfolder", sharedPrefHelper.getString(StaticData.BUILD_ID))
-                        .addMultipartParameter("filename", currentDateandTime)
+                        .addMultipartParameter("folderName", "visitors")
+                        .addMultipartParameter("subFolderName", sharedPrefHelper.getString(StaticData.BUILD_ID))
+                        .addMultipartParameter("fileName", currentDateandTime)
                         .setPriority(Priority.MEDIUM)
                         .build()
                         .getAsJSONObject(new JSONObjectRequestListener() {
@@ -166,7 +166,7 @@ public class ParcelActivity extends AppCompatActivity implements IPickResult {
                             public void onResponse(JSONObject response) {
 
                                 try {
-                                    String imageDownloadLink = response.getString("url");
+                                    String imageDownloadLink = response.getString("data");
 
 
                                     Log.e(TAG, "onResponse: imageDownloadLink " + imageDownloadLink);

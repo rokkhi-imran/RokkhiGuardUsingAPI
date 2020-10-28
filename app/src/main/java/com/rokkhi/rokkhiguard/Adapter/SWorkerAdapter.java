@@ -75,7 +75,13 @@ public class SWorkerAdapter extends RecyclerView.Adapter<SWorkerAdapter.SWorkerV
     public void onBindViewHolder(@NonNull final SWorkerViewHolder holder, int position) {
 
         try {
-            holder.flatNumber.setText(sworkerDataFilterList.get(position).getFlat().getName());
+            if (sworkerDataFilterList.get(position).getFlat().getName().isEmpty()){
+
+                holder.flatNumber.setText(sworkerDataFilterList.get(position).getFlat().getNumber());
+            }else {
+
+                holder.flatNumber.setText(sworkerDataFilterList.get(position).getFlat().getName());
+            }
             holder.name.setText(sworkerDataList.get(position).getName());
             holder.lastcome.setText(sworkerDataList.get(position).getPhone());
             Picasso.get()
@@ -159,13 +165,19 @@ public class SWorkerAdapter extends RecyclerView.Adapter<SWorkerAdapter.SWorkerV
             Picasso.get().load(sworkerData.get(adapterPosition).getImage()).placeholder( R.drawable.progress_animation ).into(circleImageView);
         }
 
-        editTextFlat.setText(sworkerData.get(adapterPosition).getFlat().getName());
+
+        if (sworkerData.get(adapterPosition).getFlat().getName().isEmpty()){
+            editTextFlat.setText(sworkerData.get(adapterPosition).getFlat().getNumber());
+        }else {
+
+            editTextFlat.setText(sworkerData.get(adapterPosition).getFlat().getName());
+        }
 
         buttonIn.setOnClickListener(v -> {
 
 
             String url = StaticData.baseURL + "" + StaticData.recordServiceWorkerEntry;
-            callWorkerInOutFunction(context,sworkerData,adapterPosition,url);
+            callWorkerInOutFunction(context,sworkerData,adapterPosition,url,"In Alert","Service Worker Successfully in this building");
 
         });
         buttonOut.setOnClickListener(new View.OnClickListener() {
@@ -174,7 +186,7 @@ public class SWorkerAdapter extends RecyclerView.Adapter<SWorkerAdapter.SWorkerV
 
                 String url = StaticData.baseURL + "" + StaticData.recordServiceWorkerExit;
 
-                callWorkerInOutFunction(context,sworkerData,adapterPosition, url);
+                callWorkerInOutFunction(context,sworkerData,adapterPosition, url,"OUT Alert !","Service Worker Successfully out from the building");
             }
         });
 
@@ -184,7 +196,7 @@ public class SWorkerAdapter extends RecyclerView.Adapter<SWorkerAdapter.SWorkerV
 
     }
 
-    private void callWorkerInOutFunction(Context context, ArrayList<SworkerData> sWorkerData, int adapterPosition, String url) {
+    private void callWorkerInOutFunction(Context context, ArrayList<SworkerData> sWorkerData, int adapterPosition, String url,String alertTitle,String detailsAlert) {
 
         SharedPrefHelper sharedPrefHelper = new SharedPrefHelper(context);
 
@@ -221,7 +233,7 @@ public class SWorkerAdapter extends RecyclerView.Adapter<SWorkerAdapter.SWorkerV
 
 //                        Gson gson = new Gson();
 //                        VisitorOutModelClass visitorOutModelClass = gson.fromJson(String.valueOf(response), VisitorOutModelClass.class);
-                        StaticData.showSuccessDialog((FragmentActivity) context, "OUT Alert !", "Service Worker Successfully out from the building");
+                        StaticData.showSuccessDialog((FragmentActivity) context, alertTitle, detailsAlert);
 
                     }
 

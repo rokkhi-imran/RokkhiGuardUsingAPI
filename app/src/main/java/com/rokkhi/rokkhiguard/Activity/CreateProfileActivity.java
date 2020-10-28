@@ -144,6 +144,7 @@ public class CreateProfileActivity extends AppCompatActivity implements IPickRes
     }
 
     private void initView() {
+
         userPhotoImageView = (CircleImageView) findViewById(R.id.user_photoIV);
         userPhotoImageView.setOnClickListener(this);
         mUserName =  findViewById(R.id.user_nameET);
@@ -439,9 +440,9 @@ public class CreateProfileActivity extends AppCompatActivity implements IPickRes
 
             AndroidNetworking.upload(StaticData.imageUploadURL)
                     .addMultipartFile("image", file)// posting any type of file
-                    .addMultipartParameter("folder", "sworkers")
-                    .addMultipartParameter("subfolder", sharedPrefHelper.getString(StaticData.BUILD_ID))
-                    .addMultipartParameter("filename", currentDateandTime)
+                    .addMultipartParameter("folderName", "visitors")
+                    .addMultipartParameter("subFolderName", sharedPrefHelper.getString(StaticData.BUILD_ID))
+                    .addMultipartParameter("fileName", currentDateandTime)
                     .setPriority(Priority.MEDIUM)
                     .build()
                     .getAsJSONObject(new JSONObjectRequestListener() {
@@ -449,7 +450,7 @@ public class CreateProfileActivity extends AppCompatActivity implements IPickRes
                         public void onResponse(JSONObject response) {
 
                             try {
-                                String imageDownloadLink = response.getString("url");
+                                String imageDownloadLink = response.getString("data");
 
                                 Log.e("TAG", "onResponse: imageDownloadLink " + imageDownloadLink);
 
@@ -529,7 +530,7 @@ public class CreateProfileActivity extends AppCompatActivity implements IPickRes
                         Gson gson = new Gson();
                         registerUserModelClass = gson.fromJson(String.valueOf(response), RegisterUserModelClass.class);
 
-                        StaticData.showSuccessDialog(CreateProfileActivity.this, "ইনফর্মেশন !", "প্রফাইল্টি তৈরি করা সম্পূর্ণ হয়েছে । ");
+                        StaticData.showSuccessDialog(CreateProfileActivity.this, "ইনফর্মেশন !", "প্রোফাইলটি তৈরি করা সম্পূর্ণ হয়েছে । ");
 
                     }
 

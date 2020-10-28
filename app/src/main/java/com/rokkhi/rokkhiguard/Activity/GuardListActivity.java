@@ -5,16 +5,19 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ProgressBar;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
-import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -321,14 +324,23 @@ public class GuardListActivity extends AppCompatActivity {
                         Gson gson = new Gson();
                        GetUserByPhoneNumberModelClass  userDetailsModelClassUserByPhoneNumberModelClass = gson.fromJson(String.valueOf(response), GetUserByPhoneNumberModelClass.class);
 
-                       sharedPrefHelper.putString(StaticData.BUILD_ID,String.valueOf(userDetailsModelClassUserByPhoneNumberModelClass.getData().getBuilding().getId()));
-                       sharedPrefHelper.putString(StaticData.COMM_ID,String.valueOf(userDetailsModelClassUserByPhoneNumberModelClass.getData().getCommunity().getId()));
+                       if (userDetailsModelClassUserByPhoneNumberModelClass.getData().getBuilding()!=null){
+                           if (String.valueOf(userDetailsModelClassUserByPhoneNumberModelClass.getData().getBuilding().getId())!=null){
+
+                               sharedPrefHelper.putString(StaticData.BUILD_ID,String.valueOf(userDetailsModelClassUserByPhoneNumberModelClass.getData().getBuilding().getId()));
+                           }
+                           if (String.valueOf(userDetailsModelClassUserByPhoneNumberModelClass.getData().getCommunity().getId())!=null){
+
+                               sharedPrefHelper.putString(StaticData.COMM_ID,String.valueOf(userDetailsModelClassUserByPhoneNumberModelClass.getData().getCommunity().getId()));
+                           }
+                       }
+
 
                         Log.e("TAG", "onResponse: getPrimaryRoleCode  = ==  "+userDetailsModelClassUserByPhoneNumberModelClass.getData().getPrimaryRoleCode());
 
                         if (!userDetailsModelClassUserByPhoneNumberModelClass.getData().getPrimaryRoleCode().equals(StaticData.GUARD.toString())){
 
-                            StaticData.showSuccessDialog((FragmentActivity) context,"Alert !"," আপনার এই অ্যাপ টি ব্যাবহার করার অনুমতি নাই। ");
+                            showAlertDialog(context);
 
                         }else {
                             callGuardList();
@@ -351,6 +363,40 @@ public class GuardListActivity extends AppCompatActivity {
                     }
                 });
 
+
+
+
+    }
+
+    private void showAlertDialog(Context context) {
+        final AlertDialog alertDialog = new AlertDialog.Builder(context).create();
+        LayoutInflater inflater = getLayoutInflater();
+        View convertView = (View) inflater.inflate(R.layout.custom_dialog_not_use_this_app, null);
+        alertDialog.setView(convertView);
+        alertDialog.setTitle("Alert !");
+        alertDialog.setCancelable(false);
+        Button logoutBtn=convertView.findViewById(R.id.logoutBtn);
+        Button knowMoreBtn=convertView.findViewById(R.id.knowMore);
+
+        logoutBtn.setOnClickListener(v->{
+
+            alertDialog.dismiss();
+            FirebaseAuth.getInstance().signOut();
+            Intent intent = new Intent(context, GuardListActivity.class);
+            startActivity(intent);
+            finish();
+
+
+        });
+
+        knowMoreBtn.setOnClickListener(view->{
+
+            alertDialog.dismiss();
+            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.rokkhi.com/"));
+            startActivity(browserIntent);
+        });
+
+        alertDialog.show();
 
 
 

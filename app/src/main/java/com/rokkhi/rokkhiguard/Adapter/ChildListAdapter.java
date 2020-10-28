@@ -48,15 +48,15 @@ public class ChildListAdapter extends RecyclerView.Adapter<ChildListAdapter.Visi
     private LayoutInflater mInflater;
     private ValueFilter valueFilter;
 
-    public ArrayList<ChildData> list;
+    public ArrayList<ChildData> childList;
     private static final String TAG = "VisitorAdapter";
     SharedPreferences sharedPref;
 
     private Context context;
 
-    public ChildListAdapter(ArrayList<ChildData> list, Context context) {
-        this.list = list;
-        mvisitorFilterList = list;
+    public ChildListAdapter(ArrayList<ChildData> childList, Context context) {
+        this.childList = childList;
+        mvisitorFilterList = childList;
         this.context = context;
         mInflater = LayoutInflater.from(context);
 
@@ -88,23 +88,23 @@ public class ChildListAdapter extends RecyclerView.Adapter<ChildListAdapter.Visi
     @Override
     public void onBindViewHolder(@NonNull final VisitorViewHolder holder, int position) {
 
-        final ChildData visitor = list.get(position);
 
-        holder.name.setText(list.get(position).getName());
+        holder.name.setText(childList.get(position).getName());
+
         holder.flat.setText("Flat:  Data Not Found From api");
 
-        if (list.get(position).getImage().isEmpty()) {
+        if (childList.get(position).getImage().isEmpty()) {
 
         } else {
 
-            Picasso.get().load(list.get(position).getImage()).placeholder( R.drawable.progress_animation ).error(R.drawable.male1).into(holder.propic);
+            Picasso.get().load(childList.get(position).getImage()).placeholder( R.drawable.progress_animation ).error(R.drawable.male1).into(holder.propic);
         }
     }
 
 
     @Override
     public int getItemCount() {
-        return list.size();
+        return childList.size();
     }
 
 
@@ -171,8 +171,8 @@ public class ChildListAdapter extends RecyclerView.Adapter<ChildListAdapter.Visi
                 @Override
                 public void onClick(View v) {
 
-                    if (!list.get(getAdapterPosition()).getContactPersonPhone().isEmpty()){
-                        Intent intent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + list.get(getAdapterPosition()).getContactPersonPhone()));// Initiates the Intent
+                    if (!childList.get(getAdapterPosition()).getContactPersonPhone().isEmpty()){
+                        Intent intent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + childList.get(getAdapterPosition()).getContactPersonPhone()));// Initiates the Intent
                         context.startActivity(intent);
                     }else {
                         showNoContactAlert();
@@ -204,7 +204,7 @@ public class ChildListAdapter extends RecyclerView.Adapter<ChildListAdapter.Visi
 
         Map<String, String> dataPost = new HashMap<>();
 
-        dataPost.put("childrenId",String.valueOf(list.get(adapterPosition).getId()));
+        dataPost.put("childrenId",String.valueOf(childList.get(adapterPosition).getId()));
         dataPost.put("guardId", sharedPrefHelper.getString(StaticData.USER_ID));
 
         JSONObject jsonDataPost = new JSONObject(dataPost);
@@ -293,7 +293,7 @@ public class ChildListAdapter extends RecyclerView.Adapter<ChildListAdapter.Visi
         protected void publishResults(CharSequence constraint,
                                       FilterResults results) {
 
-            list = (ArrayList<ChildData>) results.values;
+            childList = (ArrayList<ChildData>) results.values;
 
             notifyDataSetChanged();
 

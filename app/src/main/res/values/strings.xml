@@ -57,7 +57,7 @@
     <!-- Example settings for Notifications -->
     <string name="pref_header_about">About</string>
 
-    <string name="summary_about">The future of office security starts here.Manage your visitors,invitees and explore more!</string>
+    <string name="summary_about">The future of this app to Manage your visitors,invites and explore more!</string>
 
     <string name="app_version">1.0</string>
     <string name="summary_support">Got any queries? We are happy to help!</string>

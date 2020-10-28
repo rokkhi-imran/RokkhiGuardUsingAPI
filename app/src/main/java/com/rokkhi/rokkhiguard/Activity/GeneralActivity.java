@@ -132,7 +132,7 @@ public class GeneralActivity extends AppCompatPreferenceActivity {
 
                     FirebaseAuth.getInstance().signOut();
                     progressDialog.dismiss();
-                    Intent intent = new Intent(getContext(), DaroanPassActivity.class);
+                    Intent intent = new Intent(getContext(), GuardListActivity.class);
                     startActivity(intent);
                     getActivity().finish();
 

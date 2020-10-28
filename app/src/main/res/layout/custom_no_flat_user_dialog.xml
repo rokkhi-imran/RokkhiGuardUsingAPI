@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    android:orientation="vertical"
+    android:padding="@dimen/_10sdp"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:layout_width="@dimen/_80sdp"
+        android:layout_height="@dimen/_80sdp"
+        android:layout_gravity="center"
+        android:src="@drawable/cross"/>
+
+    <TextView
+        android:text="এই লোকটি কে ভিতরে যেতে দিবেন না . এই ফ্লাটে কোন লোক নাই । "
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_150sdp"
+        android:gravity="center"
+        android:textColor="@color/black"
+        android:textSize="@dimen/_20sdp"/>
+    <Button
+        android:id="@+id/okNoFlatUserBtn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/_25sdp"
+        android:textColor="@color/white"
+        android:layout_margin="@dimen/_10sdp"
+        android:text="ঠিক আছে"
+        android:backgroundTint="@color/red_light" />
+
+</LinearLayout>

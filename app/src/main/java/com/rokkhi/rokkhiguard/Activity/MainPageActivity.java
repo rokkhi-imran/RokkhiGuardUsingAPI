@@ -191,7 +191,7 @@ public class MainPageActivity extends AppCompatActivity {
 
                 } else {
                     FirebaseAuth.getInstance().signOut();
-                    Intent intent = new Intent(MainPageActivity.this, DaroanPassActivity.class);
+                    Intent intent = new Intent(MainPageActivity.this, GuardListActivity.class);
                     startActivity(intent);
                 }
 

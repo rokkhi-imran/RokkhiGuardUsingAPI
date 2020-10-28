@@ -563,6 +563,35 @@ data class GetUserByPhoneData(
     val updatedDate: String
 )
 
+data class GetRecordedUserByPhoneNumber(
+    val `data`: GetRecordedUserData,
+    val errors: List<Any>,
+    val status: String,
+    val statusCode: Int
+)
+
+data class GetRecordedUserData(
+    val contact: String,
+    val image: String,
+    val name: String,
+    val thumbImage: String,
+    val type: String,
+    val address: String
+)
+
+data class AddVisitorResponse(
+    val data: AddVisitorResponseData,
+    val errors: List<Any>,
+    val status: String,
+    val statusCode: Int
+)
+
+data class AddVisitorResponseData(
+    val flatId: String,
+    val message: String,
+    val visitorName: String
+)
+
 data class Building(
     val address: String,
     val community: Community,
