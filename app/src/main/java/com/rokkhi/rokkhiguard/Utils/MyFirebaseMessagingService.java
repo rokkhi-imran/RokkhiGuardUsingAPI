@@ -1,19 +1,3 @@
-/**
- * Copyright 2016 Google Inc. All Rights Reserved.
- * <p>
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- * <p>
- * http://www.apache.org/licenses/LICENSE-2.0
- * <p>
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package com.rokkhi.rokkhiguard.Utils;
 
 import android.app.Notification;
@@ -28,7 +12,7 @@ import androidx.core.app.NotificationCompat;
 
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
-import com.rokkhi.rokkhiguard.Activity.WaitingVisitorActivity;
+import com.rokkhi.rokkhiguard.Activity.VisitorAcceptedActivity;
 import com.rokkhi.rokkhiguard.R;
 
 
@@ -74,60 +58,49 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     // Visitor FullScreen Notification
     private void handleNowDataForVisitor(final RemoteMessage remoteMessage) {
 
-        String name = remoteMessage.getData().get("name");
-        String where = remoteMessage.getData().get("where");
-        String pic = remoteMessage.getData().get("pic");
-        String uid= remoteMessage.getData().get("uid");
-        String purpose= remoteMessage.getData().get("purpose");
-        String type= remoteMessage.getData().get("type");
-        String org= remoteMessage.getData().get("org");
-        final String click_action= remoteMessage.getData().get("click_action");
-        String response = remoteMessage.getData().get("response");
-
-        Log.e(TAG, "handleNowdataforvisitor: org = "+org);
-        Log.e(TAG, "handleNowdata: mmm "+ type +" "+ name );
-
+        String visitorName = remoteMessage.getData().get("visitorName");
+        String status = remoteMessage.getData().get("status");
+        String visitorAddress = remoteMessage.getData().get("visitorAddress");
+        String visitorImage= remoteMessage.getData().get("visitorImage");
+        String id= remoteMessage.getData().get("id");
+        String visitorContact= remoteMessage.getData().get("visitorContact");
+        String notificationType= remoteMessage.getData().get("notificationType");
+        String flatName= remoteMessage.getData().get("flatName");
 
         int mNotificationID = (int) System.currentTimeMillis();
-
-
-
-        Intent intent = new Intent(getApplicationContext(), WaitingVisitorActivity.class);
+        Intent intent = new Intent(getApplicationContext(), VisitorAcceptedActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NO_USER_ACTION | Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        intent.putExtra("name",name);
-        intent.putExtra("where",where);
-        intent.putExtra("pic",pic);
-        intent.putExtra("uid",uid);
-        intent.putExtra("purpose",purpose);
-        intent.putExtra("response",response);
-        intent.putExtra("type",type);
-        intent.putExtra("org",org);
-        intent.putExtra("nid",mNotificationID);
+        intent.putExtra("visitorName",visitorName);
+        intent.putExtra("status",status);
+        intent.putExtra("visitorAddress",visitorAddress);
+        intent.putExtra("visitorImage",visitorImage);
+        intent.putExtra("id",id);
+        intent.putExtra("visitorContact",visitorContact);
+        intent.putExtra("notificationType",notificationType);
+        intent.putExtra("flatName",flatName);
 
 
         String notificationString= "";
-        if(type!=null && type.equals("gone")){
-            notificationString= "A visitor exited!";
+        if(status!=null && status.equals("INSIDE_COMPOUND")){
+            notificationString="Visitor Accepted";
         }
         else {
-            notificationString="New visitor arrived";
+            notificationString= "Visitor Cancel";
         }
 
         final NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this, getString(R.string.default_notification_channel_id))
                 .setSmallIcon(R.drawable.logotext)
                 .setContentTitle(notificationString)
-                .setContentText(name)
+                .setContentText(visitorName)
                 .setAutoCancel(true)
                 .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
                 .setDefaults(Notification.DEFAULT_SOUND)
                 .setStyle(new NotificationCompat.BigTextStyle()
-                        .bigText(name))
+                        .bigText(visitorContact))
 
                 .setLights(Color.WHITE, 3000, 3000)
                 .setPriority(NotificationCompat.PRIORITY_MAX);
-
-
 
             startActivity(intent);
 

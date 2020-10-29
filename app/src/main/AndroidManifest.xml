@@ -12,7 +12,8 @@
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.CALL_PHONE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+    <uses-permission
+        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
         tools:ignore="ScopedStorage" />
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
@@ -30,24 +31,22 @@
         tools:ignore="ProtectedPermissions" />
 
     <application
-        android:requestLegacyExternalStorage="true"
-
         android:allowBackup="false"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
+        android:requestLegacyExternalStorage="true"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:ignore="GoogleAppIndexingWarning">
-
+        <activity android:name=".Activity.VisitorAcceptedActivity"></activity>
         <activity android:name=".Activity.WaitingVisitorActivity">
-
             <intent-filter>
                 <action android:name="com.rokkhi.rokkhiguard.Activity.WaitingVisitorActivity" />
+
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
-
         </activity>
         <activity android:name=".Activity.GuardListActivity">
             <intent-filter>
@@ -62,8 +61,7 @@
             android:name=".Activity.DaroanPassActivity"
             android:label="Rokkhi"
             android:theme="@style/AppTheme.NoActionBar"
-            android:windowSoftInputMode="stateAlwaysHidden"/>
-
+            android:windowSoftInputMode="stateAlwaysHidden" />
         <activity android:name=".Activity.MainPageActivity" />
         <activity android:name=".Activity.AddVisitorActivity" />
         <activity android:name=".Activity.VisitorsListActivity" />
