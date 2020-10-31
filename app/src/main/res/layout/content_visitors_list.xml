@@ -24,6 +24,8 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/search"
                 android:layout_width="match_parent"
+                android:textCursorDrawable="@drawable/color_cursor"
+                android:textColor="@color/black"
                 android:layout_height="@dimen/_50sdp"
                 android:drawableEnd="@drawable/ic_search"
                 android:paddingEnd="20dp"

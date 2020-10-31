@@ -24,6 +24,8 @@
             android:id="@+id/sear"
             android:layout_width="match_parent"
             android:layout_height="@dimen/_45sdp"
+            android:textCursorDrawable="@drawable/color_cursor"
+            android:textColor="@color/black"
             android:layout_below="@+id/selected"
             android:background="@drawable/round_edittext2"
             android:drawableEnd="@drawable/ic_search"

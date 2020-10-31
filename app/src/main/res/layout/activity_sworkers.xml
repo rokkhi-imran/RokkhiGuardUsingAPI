@@ -72,6 +72,8 @@
             android:id="@+id/search"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:textCursorDrawable="@drawable/color_cursor"
+            android:textColor="@color/black"
             android:drawableEnd="@drawable/ic_search"
             android:hint="নাম দিয়ে খুজুন " />
 

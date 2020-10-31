@@ -66,6 +66,8 @@
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/companyNameET"
                     android:layout_width="match_parent"
+                    android:textCursorDrawable="@drawable/color_cursor"
+                    android:textColor="@color/black"
                     android:layout_height="@dimen/_52sdp"
                     android:inputType="textNoSuggestions"
                     android:paddingStart="10dp"
@@ -95,6 +97,8 @@
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/flatNumberET"
                     android:layout_width="match_parent"
+                    android:textCursorDrawable="@drawable/color_cursor"
+                    android:textColor="@color/black"
                     android:layout_height="@dimen/_52sdp"
                     android:focusable="false"
                     android:inputType="textNoSuggestions"
@@ -122,6 +126,8 @@
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/parcelTypeET"
                     android:layout_width="match_parent"
+                    android:textCursorDrawable="@drawable/color_cursor"
+                    android:textColor="@color/black"
                     android:layout_height="@dimen/_52sdp"
                     android:focusable="false"
                     android:inputType="textNoSuggestions"

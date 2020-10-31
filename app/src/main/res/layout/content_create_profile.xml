@@ -63,6 +63,8 @@
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/user_nameET"
                     android:layout_width="match_parent"
+                    android:textCursorDrawable="@drawable/color_cursor"
+                    android:textColor="@color/black"
                     android:layout_height="@dimen/_52sdp"
                     android:inputType="textNoSuggestions"
                     android:paddingStart="10dp"
@@ -91,6 +93,8 @@
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/user_Phone_ET"
                     android:layout_width="match_parent"
+                    android:textCursorDrawable="@drawable/color_cursor"
+                    android:textColor="@color/black"
                     android:layout_height="@dimen/_52sdp"
                     android:inputType="numberDecimal"
                     android:paddingStart="10dp"
@@ -119,6 +123,8 @@
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/user_wtype"
+                    android:textCursorDrawable="@drawable/color_cursor"
+                    android:textColor="@color/black"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/_52sdp"
                     android:focusable="false"
@@ -150,6 +156,8 @@
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/user_flat"
                     android:layout_width="match_parent"
+                    android:textCursorDrawable="@drawable/color_cursor"
+                    android:textColor="@color/black"
                     android:layout_height="@dimen/_52sdp"
                     android:focusable="false"
                     android:inputType="numberDecimal"
