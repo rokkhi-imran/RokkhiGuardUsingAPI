@@ -86,6 +86,9 @@ public class StaticData {
     public static final String getRecordedUserByPhoneNumber = "/api/v1/entrance/getRecordedUserByPhoneNumber";
 
 
+    public static final String getVisitorById = "/api/v1/entrance/getVisitorById";
+
+
 
     //user role
     public static final Integer SUPER_ADMIN = 1001;

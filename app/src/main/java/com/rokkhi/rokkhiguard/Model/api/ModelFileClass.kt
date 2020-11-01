@@ -564,3 +564,46 @@ data class Data(
     val totalWashRoom: Int,
     val updatedDate: String
 )
+
+
+
+data class VisitorResponseByID(val data: VisitorResponseByIDData, val errors: List<Any>, val status: String, val statusCode: Int)
+
+data class VisitorResponseByIDData(
+        val address: String,
+        val community: VisitorResponseByIDCommunity,
+        val company: String,
+        val contact: String,
+        val createdDate: String,
+        val deletedDate: Any,
+        val email: String,
+        val exitTime: Any,
+        val id: Int,
+        val image: String,
+        val inTime: String,
+        val name: String,
+        val permissionStatus: String,
+        val purpose: String,
+        val status: String,
+        val thumbImage: String,
+        val type: String,
+        val updatedDate: String
+)
+
+data class VisitorResponseByIDCommunity(
+        val address: String,
+        val contactInfo: String,
+        val contactPerson: String,
+        val createdDate: String,
+        val deletedDate: Any,
+        val email: String,
+        val firebaseId: String,
+        val id: Int,
+        val isActive: Boolean,
+        val latitude: Any,
+        val longitude: Any,
+        val name: String,
+        val password: String,
+        val type: String,
+        val updatedDate: String
+)

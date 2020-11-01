@@ -29,20 +29,9 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
         Log.e(TAG, "From: " + remoteMessage.getFrom());
 
-        // Check if message contains a data payload.
-        if (remoteMessage.getData().size() > 0) {
-
-            Log.e(TAG, "Message data payload: " + remoteMessage.getData());
+        if (remoteMessage.getData().get("notificationType").equals("VISITOR_UPDATE_ALERT_FOR_GUARD")){
 
             handleNowDataForVisitor(remoteMessage);
-
-
-        }
-
-        // Check if message contains a notification payload.
-        if (remoteMessage.getNotification() != null) {
-
-            Log.e(TAG, "Message Notification Body: " + remoteMessage.getNotification().getBody());
         }
 
 
@@ -58,46 +47,31 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     // Visitor FullScreen Notification
     private void handleNowDataForVisitor(final RemoteMessage remoteMessage) {
 
-        String visitorName = remoteMessage.getData().get("visitorName");
-        String status = remoteMessage.getData().get("status");
-        String visitorAddress = remoteMessage.getData().get("visitorAddress");
-        String visitorImage= remoteMessage.getData().get("visitorImage");
+
         String id= remoteMessage.getData().get("id");
-        String visitorContact= remoteMessage.getData().get("visitorContact");
+
         String notificationType= remoteMessage.getData().get("notificationType");
-        String flatName= remoteMessage.getData().get("flatName");
+
 
         int mNotificationID = (int) System.currentTimeMillis();
         Intent intent = new Intent(getApplicationContext(), VisitorAcceptedActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NO_USER_ACTION | Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        intent.putExtra("visitorName",visitorName);
-        intent.putExtra("status",status);
-        intent.putExtra("visitorAddress",visitorAddress);
-        intent.putExtra("visitorImage",visitorImage);
+
         intent.putExtra("id",id);
-        intent.putExtra("visitorContact",visitorContact);
         intent.putExtra("notificationType",notificationType);
-        intent.putExtra("flatName",flatName);
 
 
-        String notificationString= "";
-        if(status!=null && status.equals("INSIDE_COMPOUND")){
-            notificationString="Visitor Accepted";
-        }
-        else {
-            notificationString= "Visitor Cancel";
-        }
+        String  notificationString= "Visitor Notification";
+
 
         final NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this, getString(R.string.default_notification_channel_id))
                 .setSmallIcon(R.drawable.logotext)
                 .setContentTitle(notificationString)
-                .setContentText(visitorName)
+                .setContentText("visitor notification")
                 .setAutoCancel(true)
                 .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
                 .setDefaults(Notification.DEFAULT_SOUND)
-                .setStyle(new NotificationCompat.BigTextStyle()
-                        .bigText(visitorContact))
 
                 .setLights(Color.WHITE, 3000, 3000)
                 .setPriority(NotificationCompat.PRIORITY_MAX);

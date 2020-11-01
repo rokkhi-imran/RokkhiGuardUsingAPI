@@ -10,9 +10,18 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.androidnetworking.AndroidNetworking;
+import com.androidnetworking.common.Priority;
+import com.androidnetworking.error.ANError;
+import com.androidnetworking.interfaces.JSONObjectRequestListener;
+import com.google.gson.Gson;
+import com.rokkhi.rokkhiguard.Model.api.VisitorResponseByID;
 import com.rokkhi.rokkhiguard.R;
 import com.rokkhi.rokkhiguard.StaticData;
+import com.rokkhi.rokkhiguard.Utils.FullScreenAlertDialog;
 import com.squareup.picasso.Picasso;
+
+import org.json.JSONObject;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -29,14 +38,12 @@ public class VisitorAcceptedActivity extends AppCompatActivity {
     Button backBtn;
     Context context;
 
-    String visitorName;
-    String status;
-    String visitorAddress;
-    String visitorImage;
     String id;
-    String visitorContact;
-    String notificationType;
-    String flatName;
+
+    VisitorResponseByID visitorResponseByID;
+
+    FullScreenAlertDialog fullScreenAlertDialog;
+
 
 
     @Override
@@ -53,38 +60,12 @@ public class VisitorAcceptedActivity extends AppCompatActivity {
         insideBtn = findViewById(R.id.insideBtn);
         outsideBtn = findViewById(R.id.cancelUserInfoBtn);
         backBtn = findViewById(R.id.backbuttonInfoBtn);
-        Log.e("TAG", "onCreate: status "+status);
+        fullScreenAlertDialog=new FullScreenAlertDialog(this);
+
         Intent intent = getIntent();
 
-        visitorName = intent.getStringExtra("visitorName")+"";
-        status = intent.getStringExtra("status")+"";
-        visitorAddress = intent.getStringExtra("visitorAddress")+"";
-        visitorImage = intent.getStringExtra("visitorImage")+"";
         id = intent.getStringExtra("id")+"";
-        visitorContact = intent.getStringExtra("visitorContact")+"";
-        notificationType = intent.getStringExtra("notificationType")+"";
-        flatName = intent.getStringExtra("flatName")+"";
-
-
-
-        if (status.equals(StaticData.INSIDE_COMPOUND)) {
-            outsideBtn.setVisibility(View.GONE);
-            insideBtn.setVisibility(View.VISIBLE);
-        }else  {
-            outsideBtn.setVisibility(View.VISIBLE);
-            insideBtn.setVisibility(View.GONE);
-        }
-
-
-        nameTV.setText(visitorName);
-        phoneTV.setText(visitorContact);
-        flatTV.setText(flatName);
-        purposeTV.setText(notificationType);
-
-        if (!visitorImage.isEmpty()) {
-
-            Picasso.get().load(visitorImage).placeholder(R.drawable.progress_animation).error(R.drawable.male1).into(circleImageView);
-        }
+        getVisitorDataByID(id);
 
         backBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -94,6 +75,65 @@ public class VisitorAcceptedActivity extends AppCompatActivity {
         });
 
     }
+
+
+    private void getVisitorDataByID(String visitorID) {
+
+        fullScreenAlertDialog.showdialog();
+
+
+        String url = StaticData.baseURL+StaticData.getVisitorById;
+
+        AndroidNetworking.post(url)
+                .addBodyParameter("visitorId", visitorID)
+                .setPriority(Priority.MEDIUM)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+
+                        fullScreenAlertDialog.dismissdialog();
+
+                        Log.e("TAG", "onResponse: =   " + response);
+
+                        Gson gson = new Gson();
+                        visitorResponseByID = gson.fromJson(String.valueOf(response), VisitorResponseByID.class);
+
+                        Log.e("TAG", "onResponse: GetID "+visitorResponseByID.getData().getCommunity().getId() );
+
+
+
+
+                        if (visitorResponseByID.getData().getStatus().equals(StaticData.INSIDE_COMPOUND)) {
+                            outsideBtn.setVisibility(View.GONE);
+                            insideBtn.setVisibility(View.VISIBLE);
+                        }else  {
+                            outsideBtn.setVisibility(View.VISIBLE);
+                            insideBtn.setVisibility(View.GONE);
+                        }
+
+
+                        nameTV.setText(visitorResponseByID.getData().getName());
+                        phoneTV.setText(visitorResponseByID.getData().getContact());
+//                        flatTV.setText(visitorResponseByID.getData().);
+//                        purposeTV.setText(visitorResponseByID.getData().no);
+
+                        if (!visitorResponseByID.getData().getImage().isEmpty()) {
+
+                            Picasso.get().load(visitorResponseByID.getData().getImage()).placeholder(R.drawable.progress_animation).error(R.drawable.male1).into(circleImageView);
+                        }
+
+                    }
+
+                    @Override
+                    public void onError(ANError error) {
+                        // handle error
+                        fullScreenAlertDialog.dismissdialog();
+                    }
+                });
+
+    }
+
 
     @Override
     protected void onStart() {
