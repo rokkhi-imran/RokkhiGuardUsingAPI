@@ -29,6 +29,7 @@ public class StaticData {
     public static final String ALL_FLATS = "ALL_FLATS";
     public static final String BUILD_NAME = "BUILD_NAME";
     public static final String BUILD_ADDRESS = "BUILD_ADDRESS";
+    public static final int REQUEST_FOR_APPEAR_ON_TOP_CODE = 565;
 
     public static final void getIdToken(final Context context) {
         FirebaseAuth.getInstance().getCurrentUser().getIdToken(true).addOnSuccessListener(new OnSuccessListener<GetTokenResult>() {

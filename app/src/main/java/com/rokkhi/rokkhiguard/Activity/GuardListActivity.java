@@ -3,11 +3,13 @@ package com.rokkhi.rokkhiguard.Activity;
 import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -94,11 +96,20 @@ public class GuardListActivity extends AppCompatActivity {
                 String token = instanceIdResult.getToken();
                 Log.e("TAG", "token ID onSuccess : =  "+token);
 
-                // send it to server
             }
         });
 
 
+
+        //get system alert window permission
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (!Settings.canDrawOverlays(context)) {
+
+                appearOnTheTopAlert();
+
+            } else {
+            }
+        }
 
 
         //check Stroage permission Start
@@ -152,6 +163,28 @@ public class GuardListActivity extends AppCompatActivity {
                 }
             }
         };
+
+
+    }
+    private void appearOnTheTopAlert() {
+
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
+        alertDialogBuilder.setCancelable(false);
+        alertDialogBuilder.setTitle("Alert !");
+        alertDialogBuilder.setCancelable(false);
+        alertDialogBuilder.setMessage("Allow display overlay to run over other apps");
+
+        alertDialogBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+                StroagePermission.checkDrawOverlayPermission(GuardListActivity.this, StaticData.REQUEST_FOR_APPEAR_ON_TOP_CODE);
+
+            }
+        });
+
+        AlertDialog alertDialog = alertDialogBuilder.create();
+        alertDialog.show();
 
 
     }
@@ -278,7 +311,19 @@ public class GuardListActivity extends AppCompatActivity {
 
         if (requestCode == RC_SIGN_IN) {
             handleSignInResponse(resultCode, data);
+        }
 
+        if (requestCode == StaticData.REQUEST_FOR_APPEAR_ON_TOP_CODE) {
+            // ** if so check once again if we have permission */
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                if (!Settings.canDrawOverlays(this)) {
+                    // continue here - permission was granted
+                    // goYourActivity();
+                    appearOnTheTopAlert();
+                } else {
+
+                }
+            }
         }
     }
 
