@@ -40,7 +40,7 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".Activity.VisitorAcceptedActivity"></activity>
+        <activity android:name=".Activity.VisitorAcceptedActivity"/>
         <activity android:name=".Activity.WaitingVisitorActivity">
             <intent-filter>
                 <action android:name="com.rokkhi.rokkhiguard.Activity.WaitingVisitorActivity" />

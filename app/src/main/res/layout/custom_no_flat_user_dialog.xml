@@ -13,7 +13,7 @@
         android:src="@drawable/cross"/>
 
     <TextView
-        android:text="এই লোকটি কে ভিতরে যেতে দিবেন না . এই ফ্লাটে কোন লোক নাই । "
+        android:text=" এই ফ্ল্যাট কোন অ্যাপ ব্যাবহারকারী পাওয়া যায় নাই । "
         android:layout_width="match_parent"
         android:layout_height="@dimen/_150sdp"
         android:gravity="center"

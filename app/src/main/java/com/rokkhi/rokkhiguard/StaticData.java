@@ -96,6 +96,7 @@ public class StaticData {
     public static final Integer CARETAKER = 1006;
     public static final Integer COMMITTEE_MEMBER = 1007;
     public static final Integer GUARD = 1008;
+    public static final Integer GUARD_PHONE = 1009;
 
 
     public static final String PARCEL_RECEIVED = "PARCEL_RECEIVED";

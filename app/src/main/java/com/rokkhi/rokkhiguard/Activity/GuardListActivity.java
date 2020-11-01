@@ -15,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -39,9 +40,9 @@ import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
 import com.google.gson.Gson;
 import com.rokkhi.rokkhiguard.Adapter.GuardListAdapter;
-import com.rokkhi.rokkhiguard.Model.api.GetUserByPhoneNumberModelClass;
 import com.rokkhi.rokkhiguard.Model.api.GuardListData;
 import com.rokkhi.rokkhiguard.Model.api.GuardListModelClass;
+import com.rokkhi.rokkhiguard.Model.api.UserDetailsModelClass;
 import com.rokkhi.rokkhiguard.R;
 import com.rokkhi.rokkhiguard.StaticData;
 import com.rokkhi.rokkhiguard.Utils.Normalfunc;
@@ -58,8 +59,8 @@ import java.util.Map;
 public class GuardListActivity extends AppCompatActivity {
 
     Context context;
-     ProgressBar mProgressbar;
-     RecyclerView mGuardListRecyclerView;
+    ProgressBar mProgressbar;
+    RecyclerView mGuardListRecyclerView;
     SharedPrefHelper sharedPrefHelper;
 
     GuardListModelClass guardListModelClass;
@@ -77,29 +78,15 @@ public class GuardListActivity extends AppCompatActivity {
     Normalfunc normalfunc;
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_guard_list);
         context = this;
-        sharedPrefHelper=new SharedPrefHelper(context);
-        mProgressbar=findViewById(R.id.progressbar);
-        mGuardListRecyclerView=findViewById(R.id.guardListRecyclerView);
-        normalfunc=new Normalfunc();
-
-        //print token
-
-        FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener(new OnSuccessListener<InstanceIdResult>() {
-            @Override
-            public void onSuccess(InstanceIdResult instanceIdResult) {
-                String token = instanceIdResult.getToken();
-                Log.e("TAG", "token ID onSuccess : =  "+token);
-
-            }
-        });
-
-
+        sharedPrefHelper = new SharedPrefHelper(context);
+        mProgressbar = findViewById(R.id.progressbar);
+        mGuardListRecyclerView = findViewById(R.id.guardListRecyclerView);
+        normalfunc = new Normalfunc();
 
         //get system alert window permission
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -112,7 +99,7 @@ public class GuardListActivity extends AppCompatActivity {
         }
 
 
-        //check Stroage permission Start
+        //check Storage permission Start
         if (!checkPermissionForWriteExtertalStorage(this)) {
             try {
                 requestPermissionForWriteExtertalStorage(this);
@@ -151,10 +138,7 @@ public class GuardListActivity extends AppCompatActivity {
                             SharedPrefHelper sharedPrefHelper = new SharedPrefHelper(context);
                             sharedPrefHelper.putString(StaticData.KEY_FIREBASE_ID_TOKEN, getTokenResult.getToken());
                             Log.e("TAG", "onSuccess: " + getTokenResult.getToken());
-
-
-
-                            getCommonInformation(context);
+                            callUserDetails();
 
                         }
                     });
@@ -166,6 +150,7 @@ public class GuardListActivity extends AppCompatActivity {
 
 
     }
+
     private void appearOnTheTopAlert() {
 
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
@@ -220,18 +205,17 @@ public class GuardListActivity extends AppCompatActivity {
 
                         mProgressbar.setVisibility(View.GONE);
 
-                        Log.e("TAG ","onResponse: =   " + response);
+                        Log.e("TAG ", "onResponse: =   " + response);
 
                         Gson gson = new Gson();
                         guardListModelClass = gson.fromJson(String.valueOf(response), GuardListModelClass.class);
 
 
-                        guardListAdapter=new GuardListAdapter((ArrayList<GuardListData>) guardListModelClass.getData(),context);
+                        guardListAdapter = new GuardListAdapter((ArrayList<GuardListData>) guardListModelClass.getData(), context);
 
                         mGuardListRecyclerView.setLayoutManager(new GridLayoutManager(context, 2));
-
-
                         mGuardListRecyclerView.setAdapter(guardListAdapter);
+
                     }
 
                     @Override
@@ -281,6 +265,7 @@ public class GuardListActivity extends AppCompatActivity {
             throw e;
         }
     }
+
     public void requestPermissionForReadeExtertalStorage(Context context) throws Exception {
         try {
             ActivityCompat.requestPermissions((Activity) context, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
@@ -330,6 +315,8 @@ public class GuardListActivity extends AppCompatActivity {
 
     private void handleSignInResponse(int resultCode, Intent data) {
         IdpResponse response = IdpResponse.fromResultIntent(data);
+        //call User details only for device token and notification
+
 
         if (resultCode == RESULT_OK) {
 
@@ -351,77 +338,82 @@ public class GuardListActivity extends AppCompatActivity {
 
     }
 
-    private void getCommonInformation(Context context) {
+    private void callUserDetails() {
 
-        Map<String, String> dataPost = new HashMap<>();
-        dataPost.put("phoneNumber",normalfunc.makephone11(FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber()));
+        Log.e("TAG", "onSuccess: first time call Function: ");
 
-        JSONObject jsonDataPost = new JSONObject(dataPost);
+        mProgressbar.setVisibility(View.VISIBLE);
 
-        String url = StaticData.baseURL + "" + StaticData.getByPhoneNumber;
-        String token = sharedPrefHelper.getString(StaticData.KEY_FIREBASE_ID_TOKEN);
-
-        Log.e("TAG", "onCreate: " + jsonDataPost);
-        Log.e("TAG", "onCreate: " + url);
-        Log.e("TAG", "onCreate: " + token);
-        Log.e("TAG", "onCreate: " + FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber());
-        Log.e("TAG", "onCreate: ---------------------- ");
-
-
-        AndroidNetworking.post(url)
-                .addHeaders("authtoken", token)
-                .setContentType("application/json")
-                .addJSONObjectBody(jsonDataPost)
-                .setPriority(Priority.MEDIUM)
-                .build()
-                .getAsJSONObject(new JSONObjectRequestListener() {
+                FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener(new OnSuccessListener<InstanceIdResult>() {
                     @Override
-                    public void onResponse(JSONObject response) {
+                    public void onSuccess(InstanceIdResult instanceIdResult) {
 
-                        mProgressbar.setVisibility(View.GONE);
+                        String deviceToken = instanceIdResult.getToken();
+                        Log.e("TAG", "token ID onSuccess first time : Device Token =  " + deviceToken);
+                        Log.e("TAG", "token ID onSuccess first time : auth Token  =  " + sharedPrefHelper.getString(StaticData.KEY_FIREBASE_ID_TOKEN));
+
+                        Map<String, String> dataPost = new HashMap<>();
+                        dataPost.put("requesterFirebaseId", FirebaseAuth.getInstance().getCurrentUser().getUid());
+                        dataPost.put("requesterProfileId", "");
+                        dataPost.put("limit", "");
+                        dataPost.put("pageId", "");
+                        dataPost.put("communityId", "");
+                        dataPost.put("deviceToken", deviceToken);
+                        dataPost.put("deviceType", "Android");
+
+                        JSONObject jsonDataPost = new JSONObject(dataPost);
+
+                        String url = StaticData.baseURL + "" + StaticData.getUserDetails;
+
+                        Log.e("TAG", "onCreate: Call User List Json Data : " + jsonDataPost);
+                        Log.e("TAG", "onCreate: Call user List Url " + url);
+                        Log.e("TAG", "onCreate: ---------------------- ");
+
+                        AndroidNetworking.post(url)
+                                .addHeaders("authtoken", sharedPrefHelper.getString(StaticData.KEY_FIREBASE_ID_TOKEN))
+                                .setContentType("application/json")
+                                .addJSONObjectBody(jsonDataPost)
+                                .setPriority(Priority.MEDIUM)
+                                .build()
+                                .getAsJSONObject(new JSONObjectRequestListener() {
+                                    @Override
+                                    public void onResponse(JSONObject response) {
+
+                                        Toast.makeText(context, "Token Saved Done", Toast.LENGTH_SHORT).show();
+                                        Log.e("TAG", "token ID onSuccess first time : response =  " + response);
+
+                                        Gson gson = new Gson();
+                                        UserDetailsModelClass userDetailsModelClass = gson.fromJson(String.valueOf(response), UserDetailsModelClass.class);
+
+                                        mProgressbar.setVisibility(View.GONE);
+
+                                        if (!userDetailsModelClass.getData().getPrimaryRoleCode().equals(StaticData.GUARD_PHONE.toString())){
+                                            showAlertDialog(context);
+                                        }else {
+
+                                            sharedPrefHelper.putString(StaticData.BUILD_ID, String.valueOf(userDetailsModelClass.getData().getBuildingId()));
+                                            sharedPrefHelper.putString(StaticData.COMM_ID, String.valueOf(userDetailsModelClass.getData().getCommunityId()));
+
+                                            callGuardList();
+                                        }
 
 
-                        Log.e("TAG ","onResponse: =   " + response);
+                                    }
 
-                        Gson gson = new Gson();
-                       GetUserByPhoneNumberModelClass  userDetailsModelClassUserByPhoneNumberModelClass = gson.fromJson(String.valueOf(response), GetUserByPhoneNumberModelClass.class);
-
-                       if (userDetailsModelClassUserByPhoneNumberModelClass.getData().getBuilding()!=null){
-                           if (String.valueOf(userDetailsModelClassUserByPhoneNumberModelClass.getData().getBuilding().getId())!=null){
-
-                               sharedPrefHelper.putString(StaticData.BUILD_ID,String.valueOf(userDetailsModelClassUserByPhoneNumberModelClass.getData().getBuilding().getId()));
-                           }
-                           if (String.valueOf(userDetailsModelClassUserByPhoneNumberModelClass.getData().getCommunity().getId())!=null){
-
-                               sharedPrefHelper.putString(StaticData.COMM_ID,String.valueOf(userDetailsModelClassUserByPhoneNumberModelClass.getData().getCommunity().getId()));
-                           }
-                       }
+                                    @Override
+                                    public void onError(ANError anError) {
+                                        mProgressbar.setVisibility(View.GONE);
 
 
-                        Log.e("TAG", "onResponse: getPrimaryRoleCode  = ==  "+userDetailsModelClassUserByPhoneNumberModelClass.getData().getPrimaryRoleCode());
+                                        StaticData.showErrorAlertDialog(context, "Alert !", "আবার চেষ্টা করুন ।");
 
-                        if (!userDetailsModelClassUserByPhoneNumberModelClass.getData().getPrimaryRoleCode().equals(StaticData.GUARD.toString())){
+                                        Log.e("TAG", "onResponse: error message =  " + anError.getMessage());
+                                        Log.e("TAG", "onResponse: error code =  " + anError.getErrorCode());
+                                        Log.e("TAG", "onResponse: error body =  " + anError.getErrorBody());
+                                        Log.e("TAG", "onResponse: error  getErrorDetail =  " + anError.getErrorDetail());
+                                    }
+                                });
 
-                            showAlertDialog(context);
-
-                        }else {
-                            callGuardList();
-
-                        }
-
-                    }
-
-                    @Override
-                    public void onError(ANError anError) {
-
-                        mProgressbar.setVisibility(View.GONE);
-
-                        StaticData.showErrorAlertDialog(context, "Alert !", "আবার চেষ্টা করুন ।");
-
-                        Log.e("TAG", "onResponse: error message =  " + anError.getMessage());
-                        Log.e("TAG", "onResponse: error code =  " + anError.getErrorCode());
-                        Log.e("TAG", "onResponse: error body =  " + anError.getErrorBody());
-                        Log.e("TAG", "onResponse: error  getErrorDetail =  " + anError.getErrorDetail());
                     }
                 });
 
@@ -430,6 +422,8 @@ public class GuardListActivity extends AppCompatActivity {
 
     }
 
+
+
     private void showAlertDialog(Context context) {
         final AlertDialog alertDialog = new AlertDialog.Builder(context).create();
         LayoutInflater inflater = getLayoutInflater();
@@ -437,10 +431,10 @@ public class GuardListActivity extends AppCompatActivity {
         alertDialog.setView(convertView);
         alertDialog.setTitle("Alert !");
         alertDialog.setCancelable(false);
-        Button logoutBtn=convertView.findViewById(R.id.logoutBtn);
-        Button knowMoreBtn=convertView.findViewById(R.id.knowMore);
+        Button logoutBtn = convertView.findViewById(R.id.logoutBtn);
+        Button knowMoreBtn = convertView.findViewById(R.id.knowMore);
 
-        logoutBtn.setOnClickListener(v->{
+        logoutBtn.setOnClickListener(v -> {
 
             alertDialog.dismiss();
             FirebaseAuth.getInstance().signOut();
@@ -451,7 +445,7 @@ public class GuardListActivity extends AppCompatActivity {
 
         });
 
-        knowMoreBtn.setOnClickListener(view->{
+        knowMoreBtn.setOnClickListener(view -> {
 
             alertDialog.dismiss();
             Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.rokkhi.com/"));
@@ -459,7 +453,6 @@ public class GuardListActivity extends AppCompatActivity {
         });
 
         alertDialog.show();
-
 
 
     }
@@ -487,7 +480,6 @@ public class GuardListActivity extends AppCompatActivity {
     }
 
 
-
     @Override
     public void onStart() {
         super.onStart();
@@ -509,7 +501,6 @@ public class GuardListActivity extends AppCompatActivity {
     private void showSnackbar(int errorMessageRes) {
         Snackbar.make(mRootView, errorMessageRes, Snackbar.LENGTH_LONG).show();
     }
-
 
 
 }

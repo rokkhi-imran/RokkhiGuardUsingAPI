@@ -156,7 +156,7 @@ public class DaroanPassActivity extends AppCompatActivity implements View.OnClic
             public void onSuccess(GetTokenResult getTokenResult) {
                 Log.e("TAG", "onSuccess: " + getTokenResult.getToken());
 
-                SharedPrefHelper sharedPrefHelper = new SharedPrefHelper(context);
+//                SharedPrefHelper sharedPrefHelper = new SharedPrefHelper(context);
                 sharedPrefHelper.putString(StaticData.KEY_FIREBASE_ID_TOKEN, getTokenResult.getToken());
 
                 callUserInformation(fullScreenAlertDialog);
@@ -229,6 +229,8 @@ public class DaroanPassActivity extends AppCompatActivity implements View.OnClic
                     }
                 });
 
+
+
     }
 
 
@@ -271,7 +273,7 @@ public class DaroanPassActivity extends AppCompatActivity implements View.OnClic
             throw e;
         }
     }
-    //check stroage Permission End
+    //check storage Permission End
 
     @Override
     public void onClick(View view) {
