@@ -206,7 +206,6 @@ public class CreateProfileActivity extends AppCompatActivity implements IPickRes
         final Button unselectbutton = convertView.findViewById(R.id.deselect);
         final TextView tt = convertView.findViewById(R.id.selected);
         tt.setMovementMethod(new ScrollingMovementMethod());
-        tt.setVisibility(View.VISIBLE);
         totaltext = "";
 
 
@@ -290,6 +289,7 @@ public class CreateProfileActivity extends AppCompatActivity implements IPickRes
 
 
                 ActiveFlatData ss = (ActiveFlatData) lv.getItemAtPosition(position);
+                historyFlats.clear();
                 historyFlats.add(ss);
                 totaltext = totaltext + "  " + ss.getNumber();
 
@@ -337,8 +337,9 @@ public class CreateProfileActivity extends AppCompatActivity implements IPickRes
         ArrayList<String> parcelTypes=new ArrayList<>();
 
         parcelTypes.add("গার্ড");
-        parcelTypes.add("হোম");
-        parcelTypes.add("অন্যন্য");
+        parcelTypes.add("শিক্ষক");
+        parcelTypes.add("সার্ভিস ওয়ার্কার ");
+        parcelTypes.add("অন্যান্য ");
 
 
         final TypesAdapter valueAdapter = new TypesAdapter(parcelTypes, context);

@@ -197,7 +197,7 @@ public class AddVisitorActivity extends AppCompatActivity implements View.OnClic
 
     private void showUserInformationDialog(GetRecordedUserByPhoneNumber getUserByPhoneNumberModelClass, Context context) {
 
-        final AlertDialog alertcompany = new AlertDialog.Builder(context).create();
+        final AlertDialog alertCompany = new AlertDialog.Builder(context).create();
         LayoutInflater inflater = getLayoutInflater();
         View convertView = (View) inflater.inflate(R.layout.custom_dialo_user_information, null);
 
@@ -209,10 +209,10 @@ public class AddVisitorActivity extends AppCompatActivity implements View.OnClic
         Button cancelBtn = convertView.findViewById(R.id.cancelBtn);
         Button addedBtn = convertView.findViewById(R.id.addedBtn);
 
-        alertcompany.setView(convertView);
+        alertCompany.setView(convertView);
 
         cancelBtn.setOnClickListener(v -> {
-            alertcompany.dismiss();
+            alertCompany.dismiss();
         });
 
         if (getUserByPhoneNumberModelClass.getData().getImage() != null && !getUserByPhoneNumberModelClass.getData().getImage().isEmpty()) {
@@ -225,7 +225,7 @@ public class AddVisitorActivity extends AppCompatActivity implements View.OnClic
         address.setText(getUserByPhoneNumberModelClass.getData().getAddress());
 
         addedBtn.setOnClickListener(v -> {
-            alertcompany.dismiss();
+            alertCompany.dismiss();
 
             mUserNameET.setText(getUserByPhoneNumberModelClass.getData().getName());
             mAddressET.setText(getUserByPhoneNumberModelClass.getData().getAddress());
@@ -240,7 +240,7 @@ public class AddVisitorActivity extends AppCompatActivity implements View.OnClic
 
         });
 
-        alertcompany.show();
+        alertCompany.show();
 
     }
 
@@ -729,7 +729,6 @@ public class AddVisitorActivity extends AppCompatActivity implements View.OnClic
             final Button unselectbutton = convertView.findViewById(R.id.deselect);
             final TextView tt = convertView.findViewById(R.id.selected);
             tt.setMovementMethod(new ScrollingMovementMethod());
-            tt.setVisibility(View.VISIBLE);
             totaltext = "";
 
 
@@ -837,6 +836,7 @@ public class AddVisitorActivity extends AppCompatActivity implements View.OnClic
 
                     }*/
 
+                    historyFlats.clear();
                     historyFlats.add(ss);
                     totaltext = totaltext + "  " + ss.getNumber();
                     mFlatNumberET.setText(totaltext);

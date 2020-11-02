@@ -15,7 +15,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -128,6 +127,7 @@ public class GuardListActivity extends AppCompatActivity {
                     sharedPrefHelper.clearAllData();
                     gosignpage();
                 } else {
+                    mProgressbar.setVisibility(View.VISIBLE);
                     FirebaseAuth.getInstance().getCurrentUser().getIdToken(true).addOnSuccessListener(new OnSuccessListener<GetTokenResult>() {
                         @Override
                         public void onSuccess(GetTokenResult getTokenResult) {
@@ -277,7 +277,6 @@ public class GuardListActivity extends AppCompatActivity {
     }
     //check stroage Permission End
 
-
     private void gosignpage() {
         List<String> whitelistedCountries = new ArrayList<String>();
         whitelistedCountries.add("in");
@@ -315,11 +314,8 @@ public class GuardListActivity extends AppCompatActivity {
 
     private void handleSignInResponse(int resultCode, Intent data) {
         IdpResponse response = IdpResponse.fromResultIntent(data);
-        //call User details only for device token and notification
-
 
         if (resultCode == RESULT_OK) {
-
 
         } else {
             if (response == null) {
@@ -341,8 +337,6 @@ public class GuardListActivity extends AppCompatActivity {
     private void callUserDetails() {
 
         Log.e("TAG", "onSuccess: first time call Function: ");
-
-        mProgressbar.setVisibility(View.VISIBLE);
 
                 FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener(new OnSuccessListener<InstanceIdResult>() {
                     @Override
@@ -379,13 +373,10 @@ public class GuardListActivity extends AppCompatActivity {
                                     @Override
                                     public void onResponse(JSONObject response) {
 
-                                        Toast.makeText(context, "Token Saved Done", Toast.LENGTH_SHORT).show();
                                         Log.e("TAG", "token ID onSuccess first time : response =  " + response);
 
                                         Gson gson = new Gson();
                                         UserDetailsModelClass userDetailsModelClass = gson.fromJson(String.valueOf(response), UserDetailsModelClass.class);
-
-                                        mProgressbar.setVisibility(View.GONE);
 
                                         if (!userDetailsModelClass.getData().getPrimaryRoleCode().equals(StaticData.GUARD_PHONE.toString())){
                                             showAlertDialog(context);

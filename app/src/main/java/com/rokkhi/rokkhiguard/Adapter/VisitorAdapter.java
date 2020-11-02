@@ -136,7 +136,7 @@ public class VisitorAdapter extends RecyclerView.Adapter<VisitorAdapter.VisitorV
         });
 
 
-        holder.flat.setText("To: NO FLAT FROM API");
+        holder.visitorContactNumberTV.setText(visitor.getContact());
 
     }
 
@@ -213,7 +213,7 @@ public class VisitorAdapter extends RecyclerView.Adapter<VisitorAdapter.VisitorV
     public class VisitorViewHolder extends RecyclerView.ViewHolder {
         public View view;
         TextView name;
-        TextView intime, outtime, flat;
+        TextView intime, outtime, visitorContactNumberTV;
         CircleImageView propic;
         ImageView out;
 
@@ -225,7 +225,7 @@ public class VisitorAdapter extends RecyclerView.Adapter<VisitorAdapter.VisitorV
             intime = view.findViewById(R.id.starttime);
             outtime = view.findViewById(R.id.endtime);
             out = view.findViewById(R.id.outItems);
-            flat = view.findViewById(R.id.towhom);
+            visitorContactNumberTV = view.findViewById(R.id.visitorContactNumberTV);
         }
     }
 

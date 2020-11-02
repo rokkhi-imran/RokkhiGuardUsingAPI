@@ -63,7 +63,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/_2sdp"
-                android:hint=" ফ্ল্যাট নাম্বার দিয়ে খুঁজতে পারেন"
+                android:hint=" গাড়ির নাম অথবা নাম্বার দিয়ে খুজুন "
                 style="@style/LoginTextInputLayoutStyle">
 
                 <EditText

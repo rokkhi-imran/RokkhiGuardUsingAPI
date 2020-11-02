@@ -296,9 +296,9 @@ public class ParcelActivity extends AppCompatActivity implements IPickResult {
 
         ArrayList<String> parcelTypes = new ArrayList<>();
 
+        parcelTypes.add("পার্সেল");
         parcelTypes.add("খাবার");
-        parcelTypes.add("চিঠি");
-        parcelTypes.add("অন্যন্য");
+        parcelTypes.add("অন্যান্য");
 
 
         final TypesAdapter valueAdapter = new TypesAdapter(parcelTypes, context);
@@ -371,7 +371,6 @@ public class ParcelActivity extends AppCompatActivity implements IPickResult {
         final Button unselectbutton = convertView.findViewById(R.id.deselect);
         final TextView tt = convertView.findViewById(R.id.selected);
         tt.setMovementMethod(new ScrollingMovementMethod());
-        tt.setVisibility(View.VISIBLE);
         totaltext = "";
 
 
@@ -461,6 +460,7 @@ public class ParcelActivity extends AppCompatActivity implements IPickResult {
 
                 //selected na hoile selected er moto kaj korbe.. selection er subidhar jnno
 
+                historyFlats.clear();
                 historyFlats.add(ss);
                 totaltext = totaltext + "  " + ss.getNumber();
                 flatNumberET.setText(totaltext);

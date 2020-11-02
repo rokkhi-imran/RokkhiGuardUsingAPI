@@ -139,7 +139,8 @@ public class StaticData {
 
     public static void showSuccessDialog(FragmentActivity context, String title, String body) {
         new AlertDialog.Builder(context)
-                .setTitle(title)
+                .setIcon(R.drawable.tik)
+                .setTitle("\n\n"+title)
                 .setMessage(body)
                 .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
@@ -147,7 +148,6 @@ public class StaticData {
                         context.finish();
                     }
                 })
-                .setIcon(android.R.drawable.ic_dialog_alert)
                 .show();
 
         final Handler handler = new Handler(Looper.getMainLooper());

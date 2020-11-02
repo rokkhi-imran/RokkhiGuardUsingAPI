@@ -201,6 +201,7 @@ public class SWorkerAdapter extends RecyclerView.Adapter<SWorkerAdapter.SWorkerV
         SharedPrefHelper sharedPrefHelper = new SharedPrefHelper(context);
 
         FullScreenAlertDialog fullScreenAlertDialog = new FullScreenAlertDialog(context);
+        fullScreenAlertDialog.showdialog();
 
         Map<String, String> dataPost = new HashMap<>();
         dataPost.put("limit", "");

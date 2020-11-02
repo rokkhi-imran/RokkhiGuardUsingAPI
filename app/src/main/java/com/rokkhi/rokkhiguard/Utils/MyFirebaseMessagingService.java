@@ -24,14 +24,18 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
 
-        Log.e(TAG, "onMessageReceived: llll " + remoteMessage);
+        Log.e(TAG, "onMessageReceived: llll " + remoteMessage.getData());
 
 
         Log.e(TAG, "From: " + remoteMessage.getFrom());
 
-        if (remoteMessage.getData().get("notificationType").equals("VISITOR_UPDATE_ALERT_FOR_GUARD")){
+        try {
+            if (remoteMessage.getData().get("notificationType").equals("VISITOR_UPDATE_ALERT_FOR_GUARD")){
 
-            handleNowDataForVisitor(remoteMessage);
+                handleNowDataForVisitor(remoteMessage);
+            }
+        }catch (Exception e){
+
         }
 
 

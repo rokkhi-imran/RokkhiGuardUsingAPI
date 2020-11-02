@@ -54,7 +54,7 @@
             android:textColor="@color/green"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@+id/one"
-            app:layout_constraintTop_toBottomOf="@+id/towhom" />
+            app:layout_constraintTop_toBottomOf="@+id/visitorContactNumberTV" />
 
 
         <TextView
@@ -68,10 +68,10 @@
             android:textColor="@color/grey_1000"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@+id/starttime"
-            app:layout_constraintTop_toBottomOf="@+id/towhom" />
+            app:layout_constraintTop_toBottomOf="@+id/visitorContactNumberTV" />
 
         <TextView
-            android:id="@+id/towhom"
+            android:id="@+id/visitorContactNumberTV"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="32dp"

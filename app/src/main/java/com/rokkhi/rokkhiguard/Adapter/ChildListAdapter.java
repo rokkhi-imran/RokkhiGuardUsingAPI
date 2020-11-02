@@ -91,7 +91,7 @@ public class ChildListAdapter extends RecyclerView.Adapter<ChildListAdapter.Visi
 
         holder.name.setText(childList.get(position).getName());
 
-        holder.flat.setText("Flat:  Data Not Found From api");
+        holder.flat.setText(childList.get(position).getFlat().getNumber());
 
         if (childList.get(position).getImage().isEmpty()) {
 

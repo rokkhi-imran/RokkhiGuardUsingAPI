@@ -124,7 +124,7 @@ data class ActiveFlatData(
     val totalWashRoom: Int,
     val updatedDate: String
 )
-
+/*
 data class ChildModelClass(
     val `data`: List<ChildData>,
     val errors: List<Any>,
@@ -152,6 +152,57 @@ data class ChildData(
     val phone: String,
     val primaryRoleCode: String,
     val thumbImage: String,
+    val updatedDate: String
+)*/
+
+
+data class ChildModelClass(
+    val `data`: List<ChildData>,
+    val errors: List<Any>,
+    val status: String,
+    val statusCode: Int
+)
+
+data class ChildData(
+    val address: String,
+    val age: Int,
+    val contactPersonName: String,
+    val contactPersonPhone: String,
+    val createdDate: String,
+    val deletedDate: Any,
+    val email: String,
+    val firebaseId: String,
+    val flat: ChildFlat,
+    val gender: String,
+    val id: Int,
+    val image: String,
+    val isActive: Boolean,
+    val name: String,
+    val nid: String,
+    val organization: String,
+    val password: String,
+    val phone: String,
+    val primaryRoleCode: String,
+    val thumbImage: String,
+    val updatedDate: String
+)
+
+data class ChildFlat(
+    val contact: String,
+    val contactInfo: String,
+    val contactPerson: String,
+    val createdDate: String,
+    val deletedDate: Any,
+    val description: String,
+    val id: Int,
+    val isRented: Boolean,
+    val isVacant: Boolean,
+    val name: String,
+    val number: String,
+    val size: Int,
+    val totalBalcony: Int,
+    val totalRoom: Int,
+    val totalWashRoom: Int,
     val updatedDate: String
 )
 

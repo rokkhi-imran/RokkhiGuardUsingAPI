@@ -9,6 +9,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NotificationManagerCompat;
 
 import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.Priority;
@@ -33,8 +34,8 @@ public class VisitorAcceptedActivity extends AppCompatActivity {
     TextView flatTV;
     TextView purposeTV;
 
-    Button insideBtn;
-    Button outsideBtn;
+    TextView insideBtn;
+    TextView outsideBtn;
     Button backBtn;
     Context context;
 
@@ -51,6 +52,9 @@ public class VisitorAcceptedActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_visitor_accepted);
         context = VisitorAcceptedActivity.this;
+
+        //cancel all notification
+        NotificationManagerCompat.from(context).cancelAll();
 
         nameTV = findViewById(R.id.nameET);
         circleImageView = findViewById(R.id.imageView_id);
@@ -107,9 +111,10 @@ public class VisitorAcceptedActivity extends AppCompatActivity {
                         if (visitorResponseByID.getData().getStatus().equals(StaticData.INSIDE_COMPOUND)) {
                             outsideBtn.setVisibility(View.GONE);
                             insideBtn.setVisibility(View.VISIBLE);
+                            insideBtn.setText("অনুমতি দেয়া হয়েছে");
                         }else  {
                             outsideBtn.setVisibility(View.VISIBLE);
-                            insideBtn.setVisibility(View.GONE);
+                            insideBtn.setText("অনুমতি দেয়া হয়নি");
                         }
 
 
