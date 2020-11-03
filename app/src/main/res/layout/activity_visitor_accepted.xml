@@ -124,48 +124,6 @@
                     android:layout_height="match_parent"
                     android:orientation="vertical">
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_marginTop="@dimen/_15sdp"
-                        android:gravity="center"
-                        android:orientation="horizontal"
-                        android:visibility="gone">
-
-                        <TextView
-                            android:id="@+id/flatNumberET"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:layout_weight="1"
-                            android:focusable="false"
-                            android:gravity="right|center"
-                            android:inputType="textNoSuggestions"
-                            android:text="Flat-3"
-                            android:textColor="#FF3300"
-                            android:textSize="24sp" />
-
-                        <TextView
-                            android:layout_width="@dimen/_2sdp"
-                            android:layout_height="@dimen/_15sdp"
-                            android:layout_marginLeft="@dimen/_5sdp"
-                            android:layout_marginRight="@dimen/_5sdp"
-                            android:background="@color/grey" />
-
-                        <TextView
-                            android:id="@+id/visitET_ID"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:layout_weight="1"
-                            android:focusable="false"
-                            android:gravity="center|left"
-                            android:inputType="textNoSuggestions"
-                            android:text="Visit"
-                            android:textColor="#FF3300"
-                            android:textSize="24sp" />
-                    </LinearLayout>
 
                     <LinearLayout
 
@@ -184,26 +142,11 @@
                             android:layout_gravity="center"
                             android:gravity="center"
                             android:textSize="@dimen/_20sdp"
-                            android:visibility="gone"
+                            android:visibility="visible"
                             android:padding="@dimen/_15sdp"
                             android:text="অনুমতি দেওয়া হয়েছে"
                             android:textAllCaps="false"
                             android:textColor="@color/black" />
-
-
-                        <TextView
-                            android:id="@+id/cancelUserInfoBtn"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:gravity="center"
-                            android:visibility="gone"
-                            android:padding="@dimen/_20sdp"
-                            android:textSize="@dimen/_15sdp"
-                            android:text="অনুমতি দেওয়া হয়নি"
-                            android:textAllCaps="false"
-                            android:textColor="@color/black" />
-
 
                     </LinearLayout>
 

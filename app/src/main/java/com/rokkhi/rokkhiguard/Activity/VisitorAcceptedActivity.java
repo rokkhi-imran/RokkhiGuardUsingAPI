@@ -104,16 +104,13 @@ public class VisitorAcceptedActivity extends AppCompatActivity {
                         visitorResponseByID = gson.fromJson(String.valueOf(response), VisitorResponseByID.class);
 
                         Log.e("TAG", "onResponse: GetID "+visitorResponseByID.getData().getCommunity().getId() );
-
-
-
+                        Log.e("TAG", "onResponse: get Status "+visitorResponseByID.getData().getStatus() );
 
                         if (visitorResponseByID.getData().getStatus().equals(StaticData.INSIDE_COMPOUND)) {
-                            outsideBtn.setVisibility(View.GONE);
-                            insideBtn.setVisibility(View.VISIBLE);
                             insideBtn.setText("অনুমতি দেয়া হয়েছে");
+                        }else if (visitorResponseByID.getData().getStatus().equals(StaticData.OUTSIDE_COMPOUND)) {
+                            insideBtn.setText("ভিজিটর বের হয়ে গেছে ");
                         }else  {
-                            outsideBtn.setVisibility(View.VISIBLE);
                             insideBtn.setText("অনুমতি দেয়া হয়নি");
                         }
 

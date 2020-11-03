@@ -77,10 +77,10 @@ public class SWorkerAdapter extends RecyclerView.Adapter<SWorkerAdapter.SWorkerV
         try {
             if (sworkerDataFilterList.get(position).getFlat().getName().isEmpty()){
 
-                holder.flatNumber.setText(sworkerDataFilterList.get(position).getFlat().getNumber());
+                holder.flatNumber.setText(sworkerDataList.get(position).getFlat().getNumber());
             }else {
 
-                holder.flatNumber.setText(sworkerDataFilterList.get(position).getFlat().getName());
+                holder.flatNumber.setText(sworkerDataList.get(position).getFlat().getName());
             }
             holder.name.setText(sworkerDataList.get(position).getName());
             holder.lastcome.setText(sworkerDataList.get(position).getPhone());
