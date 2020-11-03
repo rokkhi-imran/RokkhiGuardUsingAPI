@@ -19,6 +19,9 @@ import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONObjectRequestListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.GetTokenResult;
 import com.google.gson.Gson;
 import com.rokkhi.rokkhiguard.Adapter.VisitorAdapter;
 import com.rokkhi.rokkhiguard.Model.api.GetInsideVisitorData;
@@ -84,8 +87,6 @@ public class VisitorsListActivity extends AppCompatActivity  {
         });
 
 
-
-
         Map<String, String> dataPost = new HashMap<>();
         dataPost.put("buildingId", sharedPrefHelper.getString(StaticData.BUILD_ID));
         dataPost.put("communityId", sharedPrefHelper.getString(StaticData.COMM_ID));
@@ -97,53 +98,64 @@ public class VisitorsListActivity extends AppCompatActivity  {
         JSONObject jsonDataPost = new JSONObject(dataPost);
 
         String url = StaticData.baseURL + "" + StaticData.getVisitors;
-        String token = sharedPrefHelper.getString(StaticData.KEY_FIREBASE_ID_TOKEN);
 
         Log.e("TAG", "onCreate: " + jsonDataPost);
         Log.e("TAG", "onCreate: " + url);
-        Log.e("TAG", "onCreate: " + token);
         Log.e("TAG", "onCreate: ---------------------- ");
 
+        FirebaseAuth.getInstance().getCurrentUser().getIdToken(true).addOnSuccessListener(new OnSuccessListener<GetTokenResult>() {
+            @Override
+            public void onSuccess(GetTokenResult getTokenResult) {
 
-        AndroidNetworking.post(url)
-                .addHeaders("authtoken", token)
-                .setContentType("application/json")
-                .addJSONObjectBody(jsonDataPost)
-                .setPriority(Priority.MEDIUM)
-                .build()
-                .getAsJSONObject(new JSONObjectRequestListener() {
-                    @Override
-                    public void onResponse(JSONObject response) {
+                Log.e("TAG", "onSuccess: " + getTokenResult.getToken());
 
-                        progressBar.setVisibility(View.GONE);
 
-                        Log.e("TAG ","onResponse: =   " + response);
 
-                        Gson gson = new Gson();
-                        getVisitorInsideModelClass = gson.fromJson(String.valueOf(response), GetVisitorInsideModelClass.class);
 
-                        visitorAdapter=new VisitorAdapter((ArrayList<GetInsideVisitorData>) getVisitorInsideModelClass.getData(),context);
+                AndroidNetworking.post(url)
+                        .addHeaders("authtoken", getTokenResult.getToken())
+                        .setContentType("application/json")
+                        .addJSONObjectBody(jsonDataPost)
+                        .setPriority(Priority.MEDIUM)
+                        .build()
+                        .getAsJSONObject(new JSONObjectRequestListener() {
+                            @Override
+                            public void onResponse(JSONObject response) {
+
+                                progressBar.setVisibility(View.GONE);
+
+                                Log.e("TAG ","onResponse: =   " + response);
+
+                                Gson gson = new Gson();
+                                getVisitorInsideModelClass = gson.fromJson(String.valueOf(response), GetVisitorInsideModelClass.class);
+
+                                visitorAdapter=new VisitorAdapter((ArrayList<GetInsideVisitorData>) getVisitorInsideModelClass.getData(),context);
 //
-                        recyclerView.setAdapter(visitorAdapter);
+                                recyclerView.setAdapter(visitorAdapter);
 
-                    }
+                            }
 
-                    @Override
-                    public void onError(ANError anError) {
+                            @Override
+                            public void onError(ANError anError) {
 
-                        progressBar.setVisibility(View.GONE);
+                                progressBar.setVisibility(View.GONE);
 
-                        StaticData.showErrorAlertDialog(context, "Alert !", "আবার চেষ্টা করুন ।");
+                                StaticData.showErrorAlertDialog(context, "Alert !", "আবার চেষ্টা করুন ।");
 
-                        Log.e("TAG", "onResponse: error message =  " + anError.getMessage());
-                        Log.e("TAG", "onResponse: error code =  " + anError.getErrorCode());
-                        Log.e("TAG", "onResponse: error body =  " + anError.getErrorBody());
-                        Log.e("TAG", "onResponse: error  getErrorDetail =  " + anError.getErrorDetail());
-                    }
-                });
+                                Log.e("TAG", "onResponse: error message =  " + anError.getMessage());
+                                Log.e("TAG", "onResponse: error code =  " + anError.getErrorCode());
+                                Log.e("TAG", "onResponse: error body =  " + anError.getErrorBody());
+                                Log.e("TAG", "onResponse: error  getErrorDetail =  " + anError.getErrorDetail());
+                            }
+                        });
 
 
 
+
+
+
+            }
+        });
 
 
 

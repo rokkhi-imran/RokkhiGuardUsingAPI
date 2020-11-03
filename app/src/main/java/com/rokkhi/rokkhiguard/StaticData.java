@@ -5,23 +5,17 @@ import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Handler;
 import android.os.Looper;
-import android.util.Log;
 import android.widget.LinearLayout;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.FragmentActivity;
 
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.GetTokenResult;
-import com.rokkhi.rokkhiguard.helper.SharedPrefHelper;
 import com.vansuita.pickimage.bundle.PickSetup;
 import com.vansuita.pickimage.dialog.PickImageDialog;
 
 
 public class StaticData {
 
-    public static final String KEY_FIREBASE_ID_TOKEN = "FIREBASE_ID_TOKEN";
     public static final String FLAT_ID = "FLAT_ID";
     public static final String BUILD_ID = "BUILDING_ID";
     public static final String COMM_ID = "COMM_ID";
@@ -30,21 +24,6 @@ public class StaticData {
     public static final String BUILD_NAME = "BUILD_NAME";
     public static final String BUILD_ADDRESS = "BUILD_ADDRESS";
     public static final int REQUEST_FOR_APPEAR_ON_TOP_CODE = 565;
-
-    public static final void getIdToken(final Context context) {
-        FirebaseAuth.getInstance().getCurrentUser().getIdToken(true).addOnSuccessListener(new OnSuccessListener<GetTokenResult>() {
-            @Override
-            public void onSuccess(GetTokenResult getTokenResult) {
-                Log.e("TAG", "onSuccess: " + getTokenResult.getToken());
-
-                SharedPrefHelper sharedPrefHelper = new SharedPrefHelper(context);
-                sharedPrefHelper.putString(StaticData.KEY_FIREBASE_ID_TOKEN, getTokenResult.getToken());
-                Log.e("TAG", "onSuccess: " + getTokenResult.getToken());
-
-            }
-        });
-
-    }
 
     public static final void showErrorAlertDialog(Context context, String alertTitle, String alertBody) {
 
@@ -60,8 +39,6 @@ public class StaticData {
                 .show();
 
     }
-
-
 
     public static final String baseURL = "https://home.api.rokkhi.com";
     public static String imageUploadURL = "/api/v1/image/uploadSingle";

@@ -34,7 +34,10 @@ import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONObjectRequestListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.GetTokenResult;
 import com.google.gson.Gson;
 import com.rokkhi.rokkhiguard.Adapter.ActiveFlatAdapter;
 import com.rokkhi.rokkhiguard.Adapter.TypesAdapter;
@@ -150,49 +153,60 @@ public class AddVisitorActivity extends AppCompatActivity implements View.OnClic
         JSONObject jsonDataPost = new JSONObject(dataPost);
 
         String url = StaticData.baseURL + "" + StaticData.getRecordedUserByPhoneNumber;
-        String token = sharedPrefHelper.getString(StaticData.KEY_FIREBASE_ID_TOKEN);
 
         Log.e("TAG", "onCreate: " + jsonDataPost);
         Log.e("TAG", "onCreate: " + url);
-        Log.e("TAG", "onCreate: " + token);
+//        Log.e("TAG", "onCreate: " + token);
         Log.e("TAG", "onCreate: ---------------------- ");
+        FirebaseAuth.getInstance().getCurrentUser().getIdToken(true).addOnSuccessListener(new OnSuccessListener<GetTokenResult>() {
+            @Override
+            public void onSuccess(GetTokenResult getTokenResult) {
+
+                Log.e("TAG", "onSuccess: " + getTokenResult.getToken());
+
+                SharedPrefHelper sharedPrefHelper = new SharedPrefHelper(context);
 
 
-        AndroidNetworking.post(url)
-                .addHeaders("authtoken", token)
-                .setContentType("application/json")
-                .addJSONObjectBody(jsonDataPost)
-                .setPriority(Priority.MEDIUM)
-                .build()
-                .getAsJSONObject(new JSONObjectRequestListener() {
-                    @Override
-                    public void onResponse(JSONObject response) {
 
-                        Log.e(TAG, "onResponse: =   " + response);
+                AndroidNetworking.post(url)
+                        .addHeaders("authtoken", getTokenResult.getToken())
+                        .setContentType("application/json")
+                        .addJSONObjectBody(jsonDataPost)
+                        .setPriority(Priority.MEDIUM)
+                        .build()
+                        .getAsJSONObject(new JSONObjectRequestListener() {
+                            @Override
+                            public void onResponse(JSONObject response) {
 
-                        Gson gson = new Gson();
-                        GetRecordedUserByPhoneNumber getRecordedUserByPhoneNumber = gson.fromJson(String.valueOf(response), GetRecordedUserByPhoneNumber.class);
+                                Log.e(TAG, "onResponse: =   " + response);
 
-                        if (!getRecordedUserByPhoneNumber.getData().getType().equals("NOT_FOUND")) {
-                            showUserInformationDialog(getRecordedUserByPhoneNumber, context);
-                        }
+                                Gson gson = new Gson();
+                                GetRecordedUserByPhoneNumber getRecordedUserByPhoneNumber = gson.fromJson(String.valueOf(response), GetRecordedUserByPhoneNumber.class);
 
-                    }
+                                if (!getRecordedUserByPhoneNumber.getData().getType().equals("NOT_FOUND")) {
+                                    showUserInformationDialog(getRecordedUserByPhoneNumber, context);
+                                }
 
-                    @Override
-                    public void onError(ANError anError) {
+                            }
+
+                            @Override
+                            public void onError(ANError anError) {
 
 
 //                        StaticData.showErrorAlertDialog(context, "Alert !", "আবার চেষ্টা করুন ।");
 
-                        Log.e("TAG", "onResponse: error message =  " + anError.getMessage());
-                        Log.e("TAG", "onResponse: error code =  " + anError.getErrorCode());
-                        Log.e("TAG", "onResponse: error body =  " + anError.getErrorBody());
-                        Log.e("TAG", "onResponse: error  getErrorDetail =  " + anError.getErrorDetail());
-                    }
-                });
+                                Log.e("TAG", "onResponse: error message =  " + anError.getMessage());
+                                Log.e("TAG", "onResponse: error code =  " + anError.getErrorCode());
+                                Log.e("TAG", "onResponse: error body =  " + anError.getErrorBody());
+                                Log.e("TAG", "onResponse: error  getErrorDetail =  " + anError.getErrorDetail());
+                            }
+                        });
 
 
+
+
+            }
+        });
     }
 
     private void showUserInformationDialog(GetRecordedUserByPhoneNumber getUserByPhoneNumberModelClass, Context context) {
@@ -270,56 +284,66 @@ public class AddVisitorActivity extends AppCompatActivity implements View.OnClic
         JSONObject jsonDataPost = new JSONObject(dataPost);
 
         String url = StaticData.baseURL + "" + StaticData.getVisitors;
-        String token = sharedPrefHelper.getString(StaticData.KEY_FIREBASE_ID_TOKEN);
 
         Log.e("TAG", "onCreate: " + jsonDataPost);
         Log.e("TAG", "onCreate: " + url);
-        Log.e("TAG", "onCreate: " + token);
+//        Log.e("TAG", "onCreate: " + token);
         Log.e("TAG", "onCreate: ---------------------- ");
 
 
-        AndroidNetworking.post(url)
-                .addHeaders("authtoken", token)
-                .setContentType("application/json")
-                .addJSONObjectBody(jsonDataPost)
-                .setPriority(Priority.MEDIUM)
-                .build()
-                .getAsJSONObject(new JSONObjectRequestListener() {
-                    @Override
-                    public void onResponse(JSONObject response) {
+        FirebaseAuth.getInstance().getCurrentUser().getIdToken(true).addOnSuccessListener(new OnSuccessListener<GetTokenResult>() {
+            @Override
+            public void onSuccess(GetTokenResult getTokenResult) {
 
-                        Log.e(TAG, "onResponse: =   " + response);
-
-                        Gson gson = new Gson();
-                        GetVisitorInsideModelClass getVisitorInsideModelClass = gson.fromJson(String.valueOf(response), GetVisitorInsideModelClass.class);
-
-                        VisitorWaitingListAdapter visitorWaitingListAdapter = new VisitorWaitingListAdapter((ArrayList<GetInsideVisitorData>) getVisitorInsideModelClass.getData(), context);
-                        visitorWaitingListAdapter.setHasStableIds(true);
-
-                            LinearLayoutManager layoutManager
-                                    = new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false);
-
-                            mVisitorPendingListRecycelrViewID.setLayoutManager(layoutManager);
-
-                            mVisitorPendingListRecycelrViewID.setVisibility(View.VISIBLE);
-                            mVisitorPendingListRecycelrViewID.setAdapter(visitorWaitingListAdapter);
+                Log.e("TAG", "onSuccess: " + getTokenResult.getToken());
 
 
-                    }
 
-                    @Override
-                    public void onError(ANError anError) {
+                AndroidNetworking.post(url)
+                        .addHeaders("authtoken", getTokenResult.getToken())
+                        .setContentType("application/json")
+                        .addJSONObjectBody(jsonDataPost)
+                        .setPriority(Priority.MEDIUM)
+                        .build()
+                        .getAsJSONObject(new JSONObjectRequestListener() {
+                            @Override
+                            public void onResponse(JSONObject response) {
+
+                                Log.e(TAG, "onResponse: =   " + response);
+
+                                Gson gson = new Gson();
+                                GetVisitorInsideModelClass getVisitorInsideModelClass = gson.fromJson(String.valueOf(response), GetVisitorInsideModelClass.class);
+
+                                VisitorWaitingListAdapter visitorWaitingListAdapter = new VisitorWaitingListAdapter((ArrayList<GetInsideVisitorData>) getVisitorInsideModelClass.getData(), context);
+                                visitorWaitingListAdapter.setHasStableIds(true);
+
+                                LinearLayoutManager layoutManager
+                                        = new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false);
+
+                                mVisitorPendingListRecycelrViewID.setLayoutManager(layoutManager);
+
+                                mVisitorPendingListRecycelrViewID.setVisibility(View.VISIBLE);
+                                mVisitorPendingListRecycelrViewID.setAdapter(visitorWaitingListAdapter);
 
 
-                        StaticData.showErrorAlertDialog(context, "Alert !", "আবার চেষ্টা করুন ।");
+                            }
 
-                        Log.e("TAG", "onResponse: error message =  " + anError.getMessage());
-                        Log.e("TAG", "onResponse: error code =  " + anError.getErrorCode());
-                        Log.e("TAG", "onResponse: error body =  " + anError.getErrorBody());
-                        Log.e("TAG", "onResponse: error  getErrorDetail =  " + anError.getErrorDetail());
-                    }
-                });
+                            @Override
+                            public void onError(ANError anError) {
 
+
+                                StaticData.showErrorAlertDialog(context, "Alert !", "আবার চেষ্টা করুন ।");
+
+                                Log.e("TAG", "onResponse: error message =  " + anError.getMessage());
+                                Log.e("TAG", "onResponse: error code =  " + anError.getErrorCode());
+                                Log.e("TAG", "onResponse: error body =  " + anError.getErrorBody());
+                                Log.e("TAG", "onResponse: error  getErrorDetail =  " + anError.getErrorDetail());
+                            }
+                        });
+
+
+            }
+        });
     }
 
 
@@ -504,66 +528,73 @@ public class AddVisitorActivity extends AppCompatActivity implements View.OnClic
             dataPost.put("responderId", 0);
 
             String url = StaticData.baseURL + "" + StaticData.addVisitor;
-            String token = sharedPrefHelper.getString(StaticData.KEY_FIREBASE_ID_TOKEN);
 
             Log.e("TAG", "onCreate: " + dataPost);
             Log.e("TAG", "onCreate: " + url);
-            Log.e("TAG", "onCreate: " + token);
             Log.e("TAG", "onCreate: ---------------------- ");
 
+            FirebaseAuth.getInstance().getCurrentUser().getIdToken(true).addOnSuccessListener(new OnSuccessListener<GetTokenResult>() {
+                @Override
+                public void onSuccess(GetTokenResult getTokenResult) {
 
-            AndroidNetworking.post(url)
-                    .addHeaders("authtoken", token)
-                    .setContentType("application/json")
-                    .addJSONObjectBody(dataPost)
-                    .setPriority(Priority.MEDIUM)
-                    .build()
-                    .getAsJSONObject(new JSONObjectRequestListener() {
-                        @Override
-                        public void onResponse(JSONObject response) {
-
-                            fullScreenAlertDialog.dismissdialog();
-
-                            Log.e(TAG, "onResponse: =  =----------- " + response);
-
-                            Gson gson = new Gson();
-                            AddVisitorResponse addVisitorResponse = gson.fromJson(String.valueOf(response), AddVisitorResponse.class);
-
-                            if (addVisitorResponse.getData().getMessage().equals(StaticData.WHITE_LISTED)){
-
-                                showAlertDialog(StaticData.WHITE_LISTED,context,addVisitorResponse);
-
-                            }else if (addVisitorResponse.getData().getMessage().equals(StaticData.BLACK_LISTED)){
-                                showAlertDialog(StaticData.BLACK_LISTED,context,addVisitorResponse);
+                    Log.e("TAG", "onSuccess: " + getTokenResult.getToken());
 
 
-                            }else if (addVisitorResponse.getData().getMessage().equals(StaticData.NO_SPECIALITY)){
+                    AndroidNetworking.post(url)
+                            .addHeaders("authtoken", getTokenResult.getToken())
+                            .setContentType("application/json")
+                            .addJSONObjectBody(dataPost)
+                            .setPriority(Priority.MEDIUM)
+                            .build()
+                            .getAsJSONObject(new JSONObjectRequestListener() {
+                                @Override
+                                public void onResponse(JSONObject response) {
 
-                                StaticData.showSuccessDialog((FragmentActivity) context, "Alert !", "অতিথি কে অ্যাড করা হয়েছে । নিশ্চিত হওয়ার জন্য অপেক্ষা করুন ");
-                            }else {
-                                //No FLat User Found
-                                showAlertDialog(StaticData.NO_FLAT_MEMBER,context,addVisitorResponse);
+                                    fullScreenAlertDialog.dismissdialog();
+
+                                    Log.e(TAG, "onResponse: =  =----------- " + response);
+
+                                    Gson gson = new Gson();
+                                    AddVisitorResponse addVisitorResponse = gson.fromJson(String.valueOf(response), AddVisitorResponse.class);
+
+                                    if (addVisitorResponse.getData().getMessage().equals(StaticData.WHITE_LISTED)){
+
+                                        showAlertDialog(StaticData.WHITE_LISTED,context,addVisitorResponse);
+
+                                    }else if (addVisitorResponse.getData().getMessage().equals(StaticData.BLACK_LISTED)){
+                                        showAlertDialog(StaticData.BLACK_LISTED,context,addVisitorResponse);
 
 
-                            }
+                                    }else if (addVisitorResponse.getData().getMessage().equals(StaticData.NO_SPECIALITY)){
+
+                                        StaticData.showSuccessDialog((FragmentActivity) context, "Alert !", "অতিথি কে অ্যাড করা হয়েছে । নিশ্চিত হওয়ার জন্য অপেক্ষা করুন ");
+                                    }else {
+                                        //No FLat User Found
+                                        showAlertDialog(StaticData.NO_FLAT_MEMBER,context,addVisitorResponse);
+
+
+                                    }
 
 
 
-                        }
+                                }
 
-                        @Override
-                        public void onError(ANError anError) {
+                                @Override
+                                public void onError(ANError anError) {
 
-                            fullScreenAlertDialog.dismissdialog();
+                                    fullScreenAlertDialog.dismissdialog();
 
-                            StaticData.showErrorAlertDialog(context, "Alert !", "আবার চেষ্টা করুন ।");
+                                    StaticData.showErrorAlertDialog(context, "Alert !", "আবার চেষ্টা করুন ।");
 
-                            Log.e(TAG, "onResponse: error message =  " + anError.getMessage());
-                            Log.e(TAG, "onResponse: error code =  " + anError.getErrorCode());
-                            Log.e(TAG, "onResponse: error body =  " + anError.getErrorBody());
-                            Log.e(TAG, "onResponse: error  getErrorDetail =  " + anError.getErrorDetail());
-                        }
-                    });
+                                    Log.e(TAG, "onResponse: error message =  " + anError.getMessage());
+                                    Log.e(TAG, "onResponse: error code =  " + anError.getErrorCode());
+                                    Log.e(TAG, "onResponse: error body =  " + anError.getErrorBody());
+                                    Log.e(TAG, "onResponse: error  getErrorDetail =  " + anError.getErrorDetail());
+                                }
+                            });
+
+                }
+            });
 
         } catch (Exception e) {
 

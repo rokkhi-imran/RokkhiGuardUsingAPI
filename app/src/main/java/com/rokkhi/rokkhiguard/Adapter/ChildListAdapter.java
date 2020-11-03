@@ -25,6 +25,9 @@ import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONObjectRequestListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.GetTokenResult;
 import com.rokkhi.rokkhiguard.Model.api.ChildData;
 import com.rokkhi.rokkhiguard.R;
 import com.rokkhi.rokkhiguard.StaticData;
@@ -210,44 +213,51 @@ public class ChildListAdapter extends RecyclerView.Adapter<ChildListAdapter.Visi
         JSONObject jsonDataPost = new JSONObject(dataPost);
 
         String url = StaticData.baseURL + "" + StaticData.recordChildrenExitFromCompound;
-        String token = sharedPrefHelper.getString(StaticData.KEY_FIREBASE_ID_TOKEN);
 
         Log.e("TAG", "onCreate: " + jsonDataPost);
         Log.e("TAG", "onCreate: " + url);
-        Log.e("TAG", "onCreate: " + token);
         Log.e("TAG", "onCreate: ---------------------- ");
 
+        FirebaseAuth.getInstance().getCurrentUser().getIdToken(true).addOnSuccessListener(new OnSuccessListener<GetTokenResult>() {
+            @Override
+            public void onSuccess(GetTokenResult getTokenResult) {
 
-        AndroidNetworking.post(url)
-                .addHeaders("authtoken", token)
-                .setContentType("application/json")
-                .addJSONObjectBody(jsonDataPost)
-                .setPriority(Priority.MEDIUM)
-                .build()
-                .getAsJSONObject(new JSONObjectRequestListener() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-
-                        fullScreenAlertDialog.dismissdialog();
-
-                        StaticData.showSuccessDialog((FragmentActivity) context,"Alert !","রেকর্ড করা হয়েছে । ");
-
-                    }
-
-                    @Override
-                    public void onError(ANError anError) {
-                        fullScreenAlertDialog.dismissdialog();
-
-                        StaticData.showErrorAlertDialog(context,"Alert !","আবার চেষ্টা করুন ।");
-
-                        Log.e("TAG", "onResponse: error message =  " + anError.getMessage());
-                        Log.e("TAG", "onResponse: error code =  " + anError.getErrorCode());
-                        Log.e("TAG", "onResponse: error body =  " + anError.getErrorBody());
-                        Log.e("TAG", "onResponse: error  getErrorDetail =  " + anError.getErrorDetail());
-                    }
-                });
+                Log.e("TAG", "onSuccess: " + getTokenResult.getToken());
 
 
+
+                AndroidNetworking.post(url)
+                        .addHeaders("authtoken", getTokenResult.getToken())
+                        .setContentType("application/json")
+                        .addJSONObjectBody(jsonDataPost)
+                        .setPriority(Priority.MEDIUM)
+                        .build()
+                        .getAsJSONObject(new JSONObjectRequestListener() {
+                            @Override
+                            public void onResponse(JSONObject response) {
+
+                                fullScreenAlertDialog.dismissdialog();
+
+                                StaticData.showSuccessDialog((FragmentActivity) context,"Alert !","রেকর্ড করা হয়েছে । ");
+
+                            }
+
+                            @Override
+                            public void onError(ANError anError) {
+                                fullScreenAlertDialog.dismissdialog();
+
+                                StaticData.showErrorAlertDialog(context,"Alert !","আবার চেষ্টা করুন ।");
+
+                                Log.e("TAG", "onResponse: error message =  " + anError.getMessage());
+                                Log.e("TAG", "onResponse: error code =  " + anError.getErrorCode());
+                                Log.e("TAG", "onResponse: error body =  " + anError.getErrorBody());
+                                Log.e("TAG", "onResponse: error  getErrorDetail =  " + anError.getErrorDetail());
+                            }
+                        });
+
+
+            }
+        });
 
     }
 

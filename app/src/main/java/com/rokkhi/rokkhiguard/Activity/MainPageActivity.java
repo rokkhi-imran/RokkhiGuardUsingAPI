@@ -2,8 +2,6 @@ package com.rokkhi.rokkhiguard.Activity;
 
 
 import android.Manifest;
-import android.app.Activity;
-import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
@@ -11,13 +9,8 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Environment;
 import android.telecom.TelecomManager;
-import android.util.DisplayMetrics;
 import android.util.Log;
-import android.view.Display;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.WindowManager;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
@@ -29,8 +22,10 @@ import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONObjectRequestListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.GetTokenResult;
 import com.google.gson.Gson;
 import com.rokkhi.rokkhiguard.Model.Visitors;
 import com.rokkhi.rokkhiguard.Model.api.AllFlatsModelClass;
@@ -47,7 +42,6 @@ import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-import static com.rokkhi.rokkhiguard.StaticData.getIdToken;
 
 public class MainPageActivity extends AppCompatActivity {
 
@@ -100,10 +94,6 @@ public class MainPageActivity extends AppCompatActivity {
 
         linearLayoutManager.setOrientation(RecyclerView.HORIZONTAL);
 
-
-
-        //get Token And Save
-        getIdToken(context);
 
         //set default caller
 
@@ -228,105 +218,65 @@ public class MainPageActivity extends AppCompatActivity {
         JSONObject jsonDataPost = new JSONObject(dataPost);
 
         String url = StaticData.baseURL + "" + StaticData.getFlats;
-        String token = sharedPrefHelper.getString(StaticData.KEY_FIREBASE_ID_TOKEN);
 
         Log.e("TAG", "onCreate: " + jsonDataPost);
         Log.e("TAG", "onCreate: " + url);
-        Log.e("TAG", "onCreate: " + token);
+//        Log.e("TAG", "onCreate: " + token);
         Log.e("TAG", "onCreate: " + FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber());
         Log.e("TAG", "onCreate: ---------------------- ");
 
-
-        AndroidNetworking.post(url)
-                .addHeaders("authtoken", token)
-                .setContentType("application/json")
-                .addJSONObjectBody(jsonDataPost)
-                .setPriority(Priority.MEDIUM)
-                .build()
-                .getAsJSONObject(new JSONObjectRequestListener() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-
-                        fullScreenAlertDialog.dismissdialog();
-
-                        Log.e("TAG ", "onResponse: =   " + response);
-
-                        Gson gson = new Gson();
-                        AllFlatsModelClass allFlatsModelClass = gson.fromJson(String.valueOf(response), AllFlatsModelClass.class);
-
-                        String jsonFlats = gson.toJson(allFlatsModelClass);
-
-                        sharedPrefHelper.putString(StaticData.ALL_FLATS, jsonFlats);
-
-                    }
-
-                    @Override
-                    public void onError(ANError anError) {
-                        fullScreenAlertDialog.dismissdialog();
-
-                        StaticData.showErrorAlertDialog(context, "Alert !", "আবার চেষ্টা করুন ।");
-
-                        Log.e("TAG", "onResponse: error message =  " + anError.getMessage());
-                        Log.e("TAG", "onResponse: error code =  " + anError.getErrorCode());
-                        Log.e("TAG", "onResponse: error body =  " + anError.getErrorBody());
-                        Log.e("TAG", "onResponse: error  getErrorDetail =  " + anError.getErrorDetail());
-                    }
-                });
-
-    }
-
-
-    public void showDialog(final Activity activity, String msg) {
-        final Dialog dialog = new Dialog(activity);
-
-
-        dialog.getWindow().getAttributes().height =
-                (int) (getDeviceMetrics(context).heightPixels * 0.8);
-
-        dialog.setCancelable(false);
-        dialog.setContentView(R.layout.dialog_emergency);
-
-        final TextView text = (TextView) dialog.findViewById(R.id.alertDetailsTV);
-        text.setText(msg);
-
-        Button dialogButton = (Button) dialog.findViewById(R.id.okButtonAlert);
-
-        text.setOnTouchListener(new View.OnTouchListener() {
-            public boolean onTouch(View v, MotionEvent event) {
-                if (text.hasFocus()) {
-                    v.getParent().requestDisallowInterceptTouchEvent(true);
-                    switch (event.getAction() & MotionEvent.ACTION_MASK) {
-                        case MotionEvent.ACTION_SCROLL:
-                            v.getParent().requestDisallowInterceptTouchEvent(false);
-                            return true;
-                    }
-                }
-                return false;
-            }
-        });
-
-
-        dialogButton.setOnClickListener(new View.OnClickListener() {
+        FirebaseAuth.getInstance().getCurrentUser().getIdToken(true).addOnSuccessListener(new OnSuccessListener<GetTokenResult>() {
             @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-                startActivity(new Intent(activity, DaroanPassActivity.class));
-                finish();
+            public void onSuccess(GetTokenResult getTokenResult) {
+
+                Log.e("TAG", "onSuccess: " + getTokenResult.getToken());
+
+
+
+                AndroidNetworking.post(url)
+                        .addHeaders("authtoken", getTokenResult.getToken())
+                        .setContentType("application/json")
+                        .addJSONObjectBody(jsonDataPost)
+                        .setPriority(Priority.MEDIUM)
+                        .build()
+                        .getAsJSONObject(new JSONObjectRequestListener() {
+                            @Override
+                            public void onResponse(JSONObject response) {
+
+                                fullScreenAlertDialog.dismissdialog();
+
+                                Log.e("TAG ", "onResponse: =   " + response);
+
+                                Gson gson = new Gson();
+                                AllFlatsModelClass allFlatsModelClass = gson.fromJson(String.valueOf(response), AllFlatsModelClass.class);
+
+                                String jsonFlats = gson.toJson(allFlatsModelClass);
+
+                                sharedPrefHelper.putString(StaticData.ALL_FLATS, jsonFlats);
+
+                            }
+
+                            @Override
+                            public void onError(ANError anError) {
+                                fullScreenAlertDialog.dismissdialog();
+
+                                StaticData.showErrorAlertDialog(context, "Alert !", "আবার চেষ্টা করুন ।");
+
+                                Log.e("TAG", "onResponse: error message =  " + anError.getMessage());
+                                Log.e("TAG", "onResponse: error code =  " + anError.getErrorCode());
+                                Log.e("TAG", "onResponse: error body =  " + anError.getErrorBody());
+                                Log.e("TAG", "onResponse: error  getErrorDetail =  " + anError.getErrorDetail());
+                            }
+                        });
+
+
+
+
             }
         });
-
-        dialog.show();
-
-
     }
 
-    public static DisplayMetrics getDeviceMetrics(Context context) {
-        DisplayMetrics metrics = new DisplayMetrics();
-        WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
-        Display display = wm.getDefaultDisplay();
-        display.getMetrics(metrics);
-        return metrics;
-    }
+
 
 
     private void offerReplacingDefaultDialer(Context context) {

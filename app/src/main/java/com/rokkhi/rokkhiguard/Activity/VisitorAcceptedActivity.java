@@ -15,6 +15,9 @@ import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONObjectRequestListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.GetTokenResult;
 import com.google.gson.Gson;
 import com.rokkhi.rokkhiguard.Model.api.VisitorResponseByID;
 import com.rokkhi.rokkhiguard.R;
@@ -88,51 +91,62 @@ public class VisitorAcceptedActivity extends AppCompatActivity {
 
         String url = StaticData.baseURL+StaticData.getVisitorById;
 
-        AndroidNetworking.post(url)
-                .addBodyParameter("visitorId", visitorID)
-                .setPriority(Priority.MEDIUM)
-                .build()
-                .getAsJSONObject(new JSONObjectRequestListener() {
-                    @Override
-                    public void onResponse(JSONObject response) {
+        FirebaseAuth.getInstance().getCurrentUser().getIdToken(true).addOnSuccessListener(new OnSuccessListener<GetTokenResult>() {
+            @Override
+            public void onSuccess(GetTokenResult getTokenResult) {
 
-                        fullScreenAlertDialog.dismissdialog();
+                AndroidNetworking.post(url)
+                        .addHeaders("authtoken", getTokenResult.getToken())
+                        .setContentType("application/json")
+                        .addBodyParameter("visitorId", visitorID)
+                        .setPriority(Priority.MEDIUM)
+                        .build()
+                        .getAsJSONObject(new JSONObjectRequestListener() {
+                            @Override
+                            public void onResponse(JSONObject response) {
 
-                        Log.e("TAG", "onResponse: =   " + response);
+                                fullScreenAlertDialog.dismissdialog();
 
-                        Gson gson = new Gson();
-                        visitorResponseByID = gson.fromJson(String.valueOf(response), VisitorResponseByID.class);
+                                Log.e("TAG", "onResponse: =   " + response);
 
-                        Log.e("TAG", "onResponse: GetID "+visitorResponseByID.getData().getCommunity().getId() );
-                        Log.e("TAG", "onResponse: get Status "+visitorResponseByID.getData().getStatus() );
+                                Gson gson = new Gson();
+                                visitorResponseByID = gson.fromJson(String.valueOf(response), VisitorResponseByID.class);
 
-                        if (visitorResponseByID.getData().getStatus().equals(StaticData.INSIDE_COMPOUND)) {
-                            insideBtn.setText("অনুমতি দেয়া হয়েছে");
-                        }else if (visitorResponseByID.getData().getStatus().equals(StaticData.OUTSIDE_COMPOUND)) {
-                            insideBtn.setText("ভিজিটর বের হয়ে গেছে ");
-                        }else  {
-                            insideBtn.setText("অনুমতি দেয়া হয়নি");
-                        }
+                                Log.e("TAG", "onResponse: GetID "+visitorResponseByID.getData().getCommunity().getId() );
+                                Log.e("TAG", "onResponse: get Status "+visitorResponseByID.getData().getStatus() );
+
+                                if (visitorResponseByID.getData().getStatus().equals(StaticData.INSIDE_COMPOUND)) {
+                                    insideBtn.setText("অনুমতি দেয়া হয়েছে");
+                                }else if (visitorResponseByID.getData().getStatus().equals(StaticData.OUTSIDE_COMPOUND)) {
+                                    insideBtn.setText("ভিজিটর বের হয়ে গেছে ");
+                                }else  {
+                                    insideBtn.setText("অনুমতি দেয়া হয়নি");
+                                }
 
 
-                        nameTV.setText(visitorResponseByID.getData().getName());
-                        phoneTV.setText(visitorResponseByID.getData().getContact());
+                                nameTV.setText(visitorResponseByID.getData().getName());
+                                phoneTV.setText(visitorResponseByID.getData().getContact());
 //                        flatTV.setText(visitorResponseByID.getData().);
 //                        purposeTV.setText(visitorResponseByID.getData().no);
 
-                        if (!visitorResponseByID.getData().getImage().isEmpty()) {
+                                if (!visitorResponseByID.getData().getImage().isEmpty()) {
 
-                            Picasso.get().load(visitorResponseByID.getData().getImage()).placeholder(R.drawable.progress_animation).error(R.drawable.male1).into(circleImageView);
-                        }
+                                    Picasso.get().load(visitorResponseByID.getData().getImage()).placeholder(R.drawable.progress_animation).error(R.drawable.male1).into(circleImageView);
+                                }
 
-                    }
+                            }
 
-                    @Override
-                    public void onError(ANError error) {
-                        // handle error
-                        fullScreenAlertDialog.dismissdialog();
-                    }
-                });
+                            @Override
+                            public void onError(ANError error) {
+                                // handle error
+                                fullScreenAlertDialog.dismissdialog();
+                            }
+                        });
+
+
+
+            }
+        });
 
     }
 

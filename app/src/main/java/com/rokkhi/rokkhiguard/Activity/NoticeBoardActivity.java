@@ -15,6 +15,9 @@ import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONObjectRequestListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.GetTokenResult;
 import com.google.gson.Gson;
 import com.rokkhi.rokkhiguard.Adapter.NoticeAdapter;
 import com.rokkhi.rokkhiguard.Model.api.NoticeModelClass;
@@ -65,50 +68,60 @@ public class NoticeBoardActivity extends AppCompatActivity {
 
 
         String url = StaticData.baseURL + "" + StaticData.getNotice;
-        String token = sharedPrefHelper.getString(StaticData.KEY_FIREBASE_ID_TOKEN);
 
         Log.e("TAG", "onCreate: " + jsonDataPost);
         Log.e("TAG", "onCreate: " + url);
-        Log.e("TAG", "onCreate: " + token);
+//        Log.e("TAG", "onCreate: " + token);
         Log.e("TAG", "onCreate: ---------------------- ");
 
+        FirebaseAuth.getInstance().getCurrentUser().getIdToken(true).addOnSuccessListener(new OnSuccessListener<GetTokenResult>() {
+            @Override
+            public void onSuccess(GetTokenResult getTokenResult) {
 
-        AndroidNetworking.post(url)
-                .addHeaders("authtoken", token)
-                .setContentType("application/json")
-                .addJSONObjectBody(jsonDataPost)
-                .setPriority(Priority.MEDIUM)
-                .build()
-                .getAsJSONObject(new JSONObjectRequestListener() {
-                    @Override
-                    public void onResponse(JSONObject response) {
+                Log.e("TAG", "onSuccess: " + getTokenResult.getToken());
 
-                        mProgressBar.setVisibility(View.GONE);
 
-                        Timber.e("onResponse: =   " + response);
 
-                        Gson gson = new Gson();
-                        noticeModelClass = gson.fromJson(String.valueOf(response), NoticeModelClass.class);
+                AndroidNetworking.post(url)
+                        .addHeaders("authtoken", getTokenResult.getToken())
+                        .setContentType("application/json")
+                        .addJSONObjectBody(jsonDataPost)
+                        .setPriority(Priority.MEDIUM)
+                        .build()
+                        .getAsJSONObject(new JSONObjectRequestListener() {
+                            @Override
+                            public void onResponse(JSONObject response) {
 
-                        NoticeAdapter noticeAdapter =new NoticeAdapter(noticeModelClass,context);
+                                mProgressBar.setVisibility(View.GONE);
 
-                        mRecyclerview.setAdapter(noticeAdapter);
+                                Timber.e("onResponse: =   " + response);
 
-                    }
+                                Gson gson = new Gson();
+                                noticeModelClass = gson.fromJson(String.valueOf(response), NoticeModelClass.class);
 
-                    @Override
-                    public void onError(ANError anError) {
+                                NoticeAdapter noticeAdapter =new NoticeAdapter(noticeModelClass,context);
 
-                        mProgressBar.setVisibility(View.GONE);
+                                mRecyclerview.setAdapter(noticeAdapter);
 
-                        StaticData.showErrorAlertDialog(context,"Alert !","আবার চেষ্টা করুন ।");
+                            }
 
-                        Log.e("TAG", "onResponse: error message =  " + anError.getMessage());
-                        Log.e("TAG", "onResponse: error code =  " + anError.getErrorCode());
-                        Log.e("TAG", "onResponse: error body =  " + anError.getErrorBody());
-                        Log.e("TAG", "onResponse: error  getErrorDetail =  " + anError.getErrorDetail());
-                    }
-                });
+                            @Override
+                            public void onError(ANError anError) {
+
+                                mProgressBar.setVisibility(View.GONE);
+
+                                StaticData.showErrorAlertDialog(context,"Alert !","আবার চেষ্টা করুন ।");
+
+                                Log.e("TAG", "onResponse: error message =  " + anError.getMessage());
+                                Log.e("TAG", "onResponse: error code =  " + anError.getErrorCode());
+                                Log.e("TAG", "onResponse: error body =  " + anError.getErrorBody());
+                                Log.e("TAG", "onResponse: error  getErrorDetail =  " + anError.getErrorDetail());
+                            }
+                        });
+
+
+            }
+        });
 
     }
 

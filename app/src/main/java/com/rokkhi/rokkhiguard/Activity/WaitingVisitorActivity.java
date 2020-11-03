@@ -14,7 +14,9 @@ import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONObjectRequestListener;
-import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.GetTokenResult;
 import com.google.gson.Gson;
 import com.rokkhi.rokkhiguard.Model.api.VisitorOutModelClass;
 import com.rokkhi.rokkhiguard.R;
@@ -24,7 +26,6 @@ import com.rokkhi.rokkhiguard.helper.SharedPrefHelper;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONObject;
-import org.w3c.dom.Text;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -127,50 +128,57 @@ public class WaitingVisitorActivity extends AppCompatActivity implements View.On
         JSONObject jsonDataPost = new JSONObject(dataPost);
 
         String url = StaticData.baseURL + "" + StaticData.changeVisitorStatus;
-        String token = sharedPrefHelper.getString(StaticData.KEY_FIREBASE_ID_TOKEN);
+        FirebaseAuth.getInstance().getCurrentUser().getIdToken(true).addOnSuccessListener(new OnSuccessListener<GetTokenResult>() {
+            @Override
+            public void onSuccess(GetTokenResult getTokenResult) {
+
+                Log.e("TAG", "onSuccess: " + getTokenResult.getToken());
 
 
-        AndroidNetworking.post(url)
-                .addHeaders("authtoken", token)
-                .setContentType("application/json")
-                .addJSONObjectBody(jsonDataPost)
-                .setPriority(Priority.MEDIUM)
-                .build()
-                .getAsJSONObject(new JSONObjectRequestListener() {
-                    @Override
-                    public void onResponse(JSONObject response) {
+                AndroidNetworking.post(url)
+                        .addHeaders("authtoken",getTokenResult.getToken())
+                        .setContentType("application/json")
+                        .addJSONObjectBody(jsonDataPost)
+                        .setPriority(Priority.MEDIUM)
+                        .build()
+                        .getAsJSONObject(new JSONObjectRequestListener() {
+                            @Override
+                            public void onResponse(JSONObject response) {
 
-                        fullScreenAlertDialog.dismissdialog();
+                                fullScreenAlertDialog.dismissdialog();
 
 
-                        Log.e("TAG", "onResponse: =  =----------- " + response);
+                                Log.e("TAG", "onResponse: =  =----------- " + response);
 
-                        Gson gson = new Gson();
-                        VisitorOutModelClass visitorOutModelClass = gson.fromJson(String.valueOf(response), VisitorOutModelClass.class);
-                        if (status.equals(StaticData.INSIDE_COMPOUND)){
+                                Gson gson = new Gson();
+                                VisitorOutModelClass visitorOutModelClass = gson.fromJson(String.valueOf(response), VisitorOutModelClass.class);
+                                if (status.equals(StaticData.INSIDE_COMPOUND)){
 
-                            StaticData.showSuccessDialog((FragmentActivity) context, "Entry Alert !", "Entry Successfully Done ");
-                        }else if (status.equals(StaticData.CANCEL_COMPOUND)){
-                            StaticData.showSuccessDialog((FragmentActivity) context, "Cancel Alert !", "Cancel Successfully Done ");
+                                    StaticData.showSuccessDialog((FragmentActivity) context, "Entry Alert !", "Entry Successfully Done ");
+                                }else if (status.equals(StaticData.CANCEL_COMPOUND)){
+                                    StaticData.showSuccessDialog((FragmentActivity) context, "Cancel Alert !", "Cancel Successfully Done ");
 
-                        }
+                                }
 
-                    }
+                            }
 
-                    @Override
-                    public void onError(ANError anError) {
+                            @Override
+                            public void onError(ANError anError) {
 
-                        fullScreenAlertDialog.dismissdialog();
+                                fullScreenAlertDialog.dismissdialog();
 
-                        StaticData.showErrorAlertDialog(context, "Alert !", "আবার চেষ্টা করুন ।");
+                                StaticData.showErrorAlertDialog(context, "Alert !", "আবার চেষ্টা করুন ।");
 
-                        Log.e("TAG", "onResponse: error message =  " + anError.getMessage());
-                        Log.e("TAG", "onResponse: error code =  " + anError.getErrorCode());
-                        Log.e("TAG", "onResponse: error body =  " + anError.getErrorBody());
-                        Log.e("TAG", "onResponse: error  getErrorDetail =  " + anError.getErrorDetail());
-                    }
-                });
+                                Log.e("TAG", "onResponse: error message =  " + anError.getMessage());
+                                Log.e("TAG", "onResponse: error code =  " + anError.getErrorCode());
+                                Log.e("TAG", "onResponse: error body =  " + anError.getErrorBody());
+                                Log.e("TAG", "onResponse: error  getErrorDetail =  " + anError.getErrorDetail());
+                            }
+                        });
 
+
+            }
+        });
     }
 
 }

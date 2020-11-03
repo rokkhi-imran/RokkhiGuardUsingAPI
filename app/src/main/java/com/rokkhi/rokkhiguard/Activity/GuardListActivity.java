@@ -1,13 +1,9 @@
 package com.rokkhi.rokkhiguard.Activity;
 
-import android.Manifest;
-import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.util.Log;
@@ -19,7 +15,6 @@ import android.widget.ProgressBar;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -82,40 +77,19 @@ public class GuardListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_guard_list);
         context = this;
+        mRootView = findViewById(R.id.root);
         sharedPrefHelper = new SharedPrefHelper(context);
         mProgressbar = findViewById(R.id.progressbar);
         mGuardListRecyclerView = findViewById(R.id.guardListRecyclerView);
         normalfunc = new Normalfunc();
 
         //get system alert window permission
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (!Settings.canDrawOverlays(context)) {
+        if (!Settings.canDrawOverlays(context)) {
 
-                appearOnTheTopAlert();
+            appearOnTheTopAlert();
 
-            } else {
-            }
+        } else {
         }
-
-
-        //check Storage permission Start
-        if (!checkPermissionForWriteExtertalStorage(this)) {
-            try {
-                requestPermissionForWriteExtertalStorage(this);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-
-        if (!checkPermissionForReadExtertalStorage(this)) {
-            try {
-                requestPermissionForReadeExtertalStorage(this);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-
-        mRootView = findViewById(R.id.root);
 
         mAuth = FirebaseAuth.getInstance();
         mAuthListener = new FirebaseAuth.AuthStateListener() {
@@ -125,20 +99,18 @@ public class GuardListActivity extends AppCompatActivity {
                 if (firebaseUser == null) {
 
                     sharedPrefHelper.clearAllData();
-                    gosignpage();
+                    goSignInPage();
                 } else {
                     mProgressbar.setVisibility(View.VISIBLE);
                     FirebaseAuth.getInstance().getCurrentUser().getIdToken(true).addOnSuccessListener(new OnSuccessListener<GetTokenResult>() {
                         @Override
                         public void onSuccess(GetTokenResult getTokenResult) {
-                            sharedPrefHelper.clearAllData();
 
                             Log.e("TAG", "onSuccess: " + getTokenResult.getToken());
 
-                            SharedPrefHelper sharedPrefHelper = new SharedPrefHelper(context);
-                            sharedPrefHelper.putString(StaticData.KEY_FIREBASE_ID_TOKEN, getTokenResult.getToken());
-                            Log.e("TAG", "onSuccess: " + getTokenResult.getToken());
-                            callUserDetails();
+
+
+                            callUserDetails(getTokenResult.getToken());
 
                         }
                     });
@@ -174,7 +146,7 @@ public class GuardListActivity extends AppCompatActivity {
 
     }
 
-    private void callGuardList() {
+    private void callGuardList(String token) {
 
         Map<String, String> dataPost = new HashMap<>();
         dataPost.put("buildingId", sharedPrefHelper.getString(StaticData.BUILD_ID));
@@ -185,7 +157,6 @@ public class GuardListActivity extends AppCompatActivity {
         JSONObject jsonDataPost = new JSONObject(dataPost);
 
         String url = StaticData.baseURL + "" + StaticData.getUsersList;
-        String token = sharedPrefHelper.getString(StaticData.KEY_FIREBASE_ID_TOKEN);
 
         Log.e("TAG", "onCreate: Guard List " + jsonDataPost);
         Log.e("TAG", "onCreate: Guard List " + url);
@@ -236,48 +207,8 @@ public class GuardListActivity extends AppCompatActivity {
     }
 
 
-    //check stroage Permission Start
 
-    public boolean checkPermissionForReadExtertalStorage(Context context) {
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            int result = context.checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE);
-            return result == PackageManager.PERMISSION_GRANTED;
-        }
-        return false;
-    }
-
-    public boolean checkPermissionForWriteExtertalStorage(Context context) {
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            int result = context.checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE);
-            return result == PackageManager.PERMISSION_GRANTED;
-        }
-        return false;
-    }
-
-    public void requestPermissionForWriteExtertalStorage(Context context) throws Exception {
-        try {
-            ActivityCompat.requestPermissions((Activity) context, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                    1);
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw e;
-        }
-    }
-
-    public void requestPermissionForReadeExtertalStorage(Context context) throws Exception {
-        try {
-            ActivityCompat.requestPermissions((Activity) context, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
-                    1);
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw e;
-        }
-    }
-    //check stroage Permission End
-
-    private void gosignpage() {
+    private void goSignInPage() {
         List<String> whitelistedCountries = new ArrayList<String>();
         whitelistedCountries.add("in");
         whitelistedCountries.add("bd");
@@ -298,16 +229,14 @@ public class GuardListActivity extends AppCompatActivity {
         }
 
         if (requestCode == StaticData.REQUEST_FOR_APPEAR_ON_TOP_CODE) {
-            // ** if so check once again if we have permission */
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                if (!Settings.canDrawOverlays(this)) {
-                    // continue here - permission was granted
-                    // goYourActivity();
+
+            if (!Settings.canDrawOverlays(this)) {
+
                     appearOnTheTopAlert();
                 } else {
 
                 }
-            }
+
         }
     }
 
@@ -334,7 +263,7 @@ public class GuardListActivity extends AppCompatActivity {
 
     }
 
-    private void callUserDetails() {
+    private void callUserDetails(String token) {
 
         Log.e("TAG", "onSuccess: first time call Function: ");
 
@@ -344,7 +273,7 @@ public class GuardListActivity extends AppCompatActivity {
 
                         String deviceToken = instanceIdResult.getToken();
                         Log.e("TAG", "token ID onSuccess first time : Device Token =  " + deviceToken);
-                        Log.e("TAG", "token ID onSuccess first time : auth Token  =  " + sharedPrefHelper.getString(StaticData.KEY_FIREBASE_ID_TOKEN));
+                        Log.e("TAG", "token ID onSuccess first time : auth Token  =  " + token);
 
                         Map<String, String> dataPost = new HashMap<>();
                         dataPost.put("requesterFirebaseId", FirebaseAuth.getInstance().getCurrentUser().getUid());
@@ -364,7 +293,7 @@ public class GuardListActivity extends AppCompatActivity {
                         Log.e("TAG", "onCreate: ---------------------- ");
 
                         AndroidNetworking.post(url)
-                                .addHeaders("authtoken", sharedPrefHelper.getString(StaticData.KEY_FIREBASE_ID_TOKEN))
+                                .addHeaders("authtoken", token)
                                 .setContentType("application/json")
                                 .addJSONObjectBody(jsonDataPost)
                                 .setPriority(Priority.MEDIUM)
@@ -385,7 +314,7 @@ public class GuardListActivity extends AppCompatActivity {
                                             sharedPrefHelper.putString(StaticData.BUILD_ID, String.valueOf(userDetailsModelClass.getData().getBuildingId()));
                                             sharedPrefHelper.putString(StaticData.COMM_ID, String.valueOf(userDetailsModelClass.getData().getCommunityId()));
 
-                                            callGuardList();
+                                            callGuardList(token);
                                         }
 
 
