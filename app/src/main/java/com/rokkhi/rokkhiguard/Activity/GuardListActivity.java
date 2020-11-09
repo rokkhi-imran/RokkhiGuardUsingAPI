@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 
 import androidx.annotation.NonNull;
@@ -70,6 +71,7 @@ public class GuardListActivity extends AppCompatActivity {
     private FirebaseAuth.AuthStateListener mAuthListener;
 
     Normalfunc normalfunc;
+    LinearLayout noDataImageLayout;
 
 
     @Override
@@ -81,6 +83,7 @@ public class GuardListActivity extends AppCompatActivity {
         sharedPrefHelper = new SharedPrefHelper(context);
         mProgressbar = findViewById(R.id.progressbar);
         mGuardListRecyclerView = findViewById(R.id.guardListRecyclerView);
+        noDataImageLayout = findViewById(R.id.noDataImageLayout);
         normalfunc = new Normalfunc();
 
         //get system alert window permission
@@ -107,7 +110,6 @@ public class GuardListActivity extends AppCompatActivity {
                         public void onSuccess(GetTokenResult getTokenResult) {
 
                             Log.e("TAG", "onSuccess: " + getTokenResult.getToken());
-
 
 
                             callUserDetails(getTokenResult.getToken());
@@ -176,7 +178,7 @@ public class GuardListActivity extends AppCompatActivity {
 
                         mProgressbar.setVisibility(View.GONE);
 
-                        Log.e("TAG ", "onResponse: =   " + response);
+                        Log.e("TAG ", "onResponse: Guard List =   " + response);
 
                         Gson gson = new Gson();
                         guardListModelClass = gson.fromJson(String.valueOf(response), GuardListModelClass.class);
@@ -186,6 +188,12 @@ public class GuardListActivity extends AppCompatActivity {
 
                         mGuardListRecyclerView.setLayoutManager(new GridLayoutManager(context, 2));
                         mGuardListRecyclerView.setAdapter(guardListAdapter);
+
+                        if (guardListModelClass.getData().size() < 1) {
+                            mGuardListRecyclerView.setVisibility(View.GONE);
+                            noDataImageLayout.setVisibility(View.VISIBLE);
+
+                        }
 
                     }
 
@@ -205,7 +213,6 @@ public class GuardListActivity extends AppCompatActivity {
 
 
     }
-
 
 
     private void goSignInPage() {
@@ -232,10 +239,10 @@ public class GuardListActivity extends AppCompatActivity {
 
             if (!Settings.canDrawOverlays(this)) {
 
-                    appearOnTheTopAlert();
-                } else {
+                appearOnTheTopAlert();
+            } else {
 
-                }
+            }
 
         }
     }
@@ -267,81 +274,78 @@ public class GuardListActivity extends AppCompatActivity {
 
         Log.e("TAG", "onSuccess: first time call Function: ");
 
-                FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener(new OnSuccessListener<InstanceIdResult>() {
-                    @Override
-                    public void onSuccess(InstanceIdResult instanceIdResult) {
+        FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener(new OnSuccessListener<InstanceIdResult>() {
+            @Override
+            public void onSuccess(InstanceIdResult instanceIdResult) {
 
-                        String deviceToken = instanceIdResult.getToken();
-                        Log.e("TAG", "token ID onSuccess first time : Device Token =  " + deviceToken);
-                        Log.e("TAG", "token ID onSuccess first time : auth Token  =  " + token);
+                String deviceToken = instanceIdResult.getToken();
+                Log.e("TAG", "token ID onSuccess first time : Device Token =  " + deviceToken);
+                Log.e("TAG", "token ID onSuccess first time : auth Token  =  " + token);
 
-                        Map<String, String> dataPost = new HashMap<>();
-                        dataPost.put("requesterFirebaseId", FirebaseAuth.getInstance().getCurrentUser().getUid());
-                        dataPost.put("requesterProfileId", "");
-                        dataPost.put("limit", "");
-                        dataPost.put("pageId", "");
-                        dataPost.put("communityId", "");
-                        dataPost.put("deviceToken", deviceToken);
-                        dataPost.put("deviceType", "Android");
+                Map<String, String> dataPost = new HashMap<>();
+                dataPost.put("requesterFirebaseId", FirebaseAuth.getInstance().getCurrentUser().getUid());
+                dataPost.put("requesterProfileId", "");
+                dataPost.put("limit", "");
+                dataPost.put("pageId", "");
+                dataPost.put("communityId", "");
+                dataPost.put("deviceToken", deviceToken);
+                dataPost.put("deviceType", "Android");
 
-                        JSONObject jsonDataPost = new JSONObject(dataPost);
+                JSONObject jsonDataPost = new JSONObject(dataPost);
 
-                        String url = StaticData.baseURL + "" + StaticData.getUserDetails;
+                String url = StaticData.baseURL + "" + StaticData.getUserDetails;
 
-                        Log.e("TAG", "onCreate: Call User List Json Data : " + jsonDataPost);
-                        Log.e("TAG", "onCreate: Call user List Url " + url);
-                        Log.e("TAG", "onCreate: ---------------------- ");
+                Log.e("TAG", "onCreate: Call User List Json Data : " + jsonDataPost);
+                Log.e("TAG", "onCreate: Call user List Url " + url);
+                Log.e("TAG", "onCreate: ---------------------- ");
 
-                        AndroidNetworking.post(url)
-                                .addHeaders("authtoken", token)
-                                .setContentType("application/json")
-                                .addJSONObjectBody(jsonDataPost)
-                                .setPriority(Priority.MEDIUM)
-                                .build()
-                                .getAsJSONObject(new JSONObjectRequestListener() {
-                                    @Override
-                                    public void onResponse(JSONObject response) {
+                AndroidNetworking.post(url)
+                        .addHeaders("authtoken", token)
+                        .setContentType("application/json")
+                        .addJSONObjectBody(jsonDataPost)
+                        .setPriority(Priority.MEDIUM)
+                        .build()
+                        .getAsJSONObject(new JSONObjectRequestListener() {
+                            @Override
+                            public void onResponse(JSONObject response) {
 
-                                        Log.e("TAG", "token ID onSuccess first time : response =  " + response);
+                                Log.e("TAG", "token ID onSuccess first time : response =  " + response);
 
-                                        Gson gson = new Gson();
-                                        UserDetailsModelClass userDetailsModelClass = gson.fromJson(String.valueOf(response), UserDetailsModelClass.class);
+                                Gson gson = new Gson();
+                                UserDetailsModelClass userDetailsModelClass = gson.fromJson(String.valueOf(response), UserDetailsModelClass.class);
 
-                                        if (!userDetailsModelClass.getData().getPrimaryRoleCode().equals(StaticData.GUARD_PHONE.toString())){
-                                            showAlertDialog(context);
-                                        }else {
+                                if (!userDetailsModelClass.getData().getPrimaryRoleCode().equals(StaticData.GUARD_PHONE.toString())) {
+                                    showAlertDialog(context);
+                                } else {
 
-                                            sharedPrefHelper.putString(StaticData.BUILD_ID, String.valueOf(userDetailsModelClass.getData().getBuildingId()));
-                                            sharedPrefHelper.putString(StaticData.COMM_ID, String.valueOf(userDetailsModelClass.getData().getCommunityId()));
+                                    sharedPrefHelper.putString(StaticData.BUILD_ID, String.valueOf(userDetailsModelClass.getData().getBuildingId()));
+                                    sharedPrefHelper.putString(StaticData.COMM_ID, String.valueOf(userDetailsModelClass.getData().getCommunityId()));
 
-                                            callGuardList(token);
-                                        }
-
-
-                                    }
-
-                                    @Override
-                                    public void onError(ANError anError) {
-                                        mProgressbar.setVisibility(View.GONE);
+                                    callGuardList(token);
+                                }
 
 
-                                        StaticData.showErrorAlertDialog(context, "Alert !", "আবার চেষ্টা করুন ।");
+                            }
 
-                                        Log.e("TAG", "onResponse: error message =  " + anError.getMessage());
-                                        Log.e("TAG", "onResponse: error code =  " + anError.getErrorCode());
-                                        Log.e("TAG", "onResponse: error body =  " + anError.getErrorBody());
-                                        Log.e("TAG", "onResponse: error  getErrorDetail =  " + anError.getErrorDetail());
-                                    }
-                                });
-
-                    }
-                });
+                            @Override
+                            public void onError(ANError anError) {
+                                mProgressbar.setVisibility(View.GONE);
 
 
+                                StaticData.showErrorAlertDialog(context, "Alert !", "আবার চেষ্টা করুন ।");
+
+                                Log.e("TAG", "onResponse: error message =  " + anError.getMessage());
+                                Log.e("TAG", "onResponse: error code =  " + anError.getErrorCode());
+                                Log.e("TAG", "onResponse: error body =  " + anError.getErrorBody());
+                                Log.e("TAG", "onResponse: error  getErrorDetail =  " + anError.getErrorDetail());
+                            }
+                        });
+
+            }
+        });
 
 
     }
-
 
 
     private void showAlertDialog(Context context) {

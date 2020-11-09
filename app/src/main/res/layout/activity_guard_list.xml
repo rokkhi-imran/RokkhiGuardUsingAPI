@@ -62,5 +62,27 @@
         android:layout_width="match_parent"
         tools:listitem="@layout/item_guard_list"
         android:layout_height="match_parent" />
+    <LinearLayout
+        android:id="@+id/noDataImageLayout"
+        android:orientation="vertical"
+        android:visibility="gone"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <ImageView
+            android:id="@+id/noDataImage"
+            android:layout_width="match_parent"
+            android:src="@drawable/no_guard_found"
+            android:layout_height="@dimen/_250sdp" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_50sdp"
+            android:textSize="@dimen/_25sdp"
+            android:text="কোনো গার্ড পাওয়া যায় নাই । "
+            android:textColor="@color/red_light"
+            android:gravity="center"/>
+
+    </LinearLayout>
 
 </LinearLayout>

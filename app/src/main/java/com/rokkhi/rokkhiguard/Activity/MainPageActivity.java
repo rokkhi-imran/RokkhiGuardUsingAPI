@@ -4,7 +4,6 @@ package com.rokkhi.rokkhiguard.Activity;
 import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Environment;
@@ -97,7 +96,7 @@ public class MainPageActivity extends AppCompatActivity {
 
         //set default caller
 
-        offerReplacingDefaultDialer(context);
+//        offerReplacingDefaultDialer(context);
 
         //check the call permission
         if (context.checkSelfPermission(Manifest.permission.READ_PHONE_STATE) == PackageManager.PERMISSION_DENIED || context.checkSelfPermission(Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_DENIED) {
@@ -106,16 +105,7 @@ public class MainPageActivity extends AppCompatActivity {
         }
 
 
-//check new app start
 
-        try {
-            PackageInfo pInfo = context.getPackageManager().getPackageInfo(getPackageName(), 0);
-            appVersion = pInfo.versionName;
-        } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
-        }
-
-//check new app End
 
         callFlatList();
 
