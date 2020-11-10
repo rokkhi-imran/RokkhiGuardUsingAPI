@@ -5,7 +5,6 @@ import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Handler;
 import android.os.Looper;
-import android.widget.LinearLayout;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.FragmentActivity;
@@ -101,13 +100,19 @@ public class StaticData {
     public static void selectImage(FragmentActivity createProfileActivity) {
         PickSetup setup = new PickSetup()
                 .setTitle("Choose Photo")
+                .setCameraIcon(R.mipmap.camera_colored)
+                .setBackgroundColor(Color.RED)
+                .setCancelTextColor(Color.RED)
+                .setSystemDialog(true);
+
+        /*
                 .setBackgroundColor(Color.WHITE)
                 .setButtonOrientation(LinearLayout.HORIZONTAL)
                 .setGalleryButtonText("Gallery")
                 .setCameraIcon(R.mipmap.camera_colored)
                 .setGalleryIcon(R.mipmap.gallery_colored)
-                .setCameraToPictures(false)
-                .setMaxSize(300);
+                .setCameraToPictures(false)*/
+//                .setMaxSize(300);
 
         PickImageDialog.build(setup)
                 //.setOnClick(this)

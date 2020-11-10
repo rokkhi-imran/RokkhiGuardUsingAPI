@@ -99,6 +99,7 @@
             android:name="firebase_analytics_collection_enabled"
             android:value="false" />
 
+
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.com.vansuita.pickimage.provider"
@@ -109,7 +110,9 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/paths"
                 tools:replace="android:resource" />
-        </provider> <!-- phone call -->
+        </provider>
+
+        <!-- phone call -->
         <activity android:name="com.rokkhi.callerapp.CallActivity" />
         <activity android:name=".CallerApp.MainActivity">
 
