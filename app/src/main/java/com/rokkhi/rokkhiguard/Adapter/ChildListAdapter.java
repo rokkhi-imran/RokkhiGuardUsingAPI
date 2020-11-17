@@ -204,9 +204,22 @@ public class ChildListAdapter extends RecyclerView.Adapter<ChildListAdapter.Visi
         SharedPrefHelper sharedPrefHelper=new SharedPrefHelper(context);
         FullScreenAlertDialog fullScreenAlertDialog=new FullScreenAlertDialog(context);
         fullScreenAlertDialog.showdialog();
+/*
+        "requesterFirebaseId": "string",
+                "requesterProfileId": 0,
+                "limit": "string",
+                "pageId": "string",
+                "communityId": 0,
+                "childrenId": 0,
+                "guardId": 0*/
 
         Map<String, String> dataPost = new HashMap<>();
 
+        dataPost.put("requesterFirebaseId",FirebaseAuth.getInstance().getCurrentUser().getUid());
+        dataPost.put("requesterProfileId", sharedPrefHelper.getString(StaticData.USER_ID));
+        dataPost.put("limit", "");
+        dataPost.put("pageId", "");
+        dataPost.put("communityId",sharedPrefHelper.getString(StaticData.COMM_ID));
         dataPost.put("childrenId",String.valueOf(childList.get(adapterPosition).getId()));
         dataPost.put("guardId", sharedPrefHelper.getString(StaticData.USER_ID));
 
