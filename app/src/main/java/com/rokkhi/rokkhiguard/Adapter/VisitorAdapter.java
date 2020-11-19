@@ -130,7 +130,7 @@ public class VisitorAdapter extends RecyclerView.Adapter<VisitorAdapter.VisitorV
                 confirm.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        callVisitorOutFunction(context, visitor.getId());
+                        callVisitorOutFunction(context, visitor.getId(),visitor.getFlat().getId());
                     }
                 });
 
@@ -143,7 +143,7 @@ public class VisitorAdapter extends RecyclerView.Adapter<VisitorAdapter.VisitorV
 
     }
 
-    private void callVisitorOutFunction(Context context, int id) {
+    private void callVisitorOutFunction(Context context, int id, int visitorFlatID) {
 
 
         SharedPrefHelper sharedPrefHelper = new SharedPrefHelper(context);

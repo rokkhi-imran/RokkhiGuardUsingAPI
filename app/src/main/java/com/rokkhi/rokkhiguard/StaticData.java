@@ -82,7 +82,7 @@ public class StaticData {
     public static final String PARCEL_DELIVERED = "PARCEL_DELIVERED";
     public static final String INSIDE_COMPOUND = "INSIDE_COMPOUND";
     public static final String OUTSIDE_COMPOUND = "OUTSIDE_COMPOUND";
-    public static final String CANCEL_COMPOUND = "CANCEL_BY_GUARD_COMPOUND";
+    public static final String CANCEL_COMPOUND = "CANCEL";
     public static final String PENDING_PERMISSION = "PENDING_PERMISSION";
 
     public static final String  WHITE_LISTED = "WHITE_LISTED";
