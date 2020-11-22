@@ -130,7 +130,7 @@ public class VisitorAdapter extends RecyclerView.Adapter<VisitorAdapter.VisitorV
                 confirm.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        callVisitorOutFunction(context, visitor.getId(),visitor.getFlat().getId());
+                        callVisitorOutFunction(context, visitor.getId(),visitor.getFlat().getId(),visitor.getName());
                     }
                 });
 
@@ -143,17 +143,20 @@ public class VisitorAdapter extends RecyclerView.Adapter<VisitorAdapter.VisitorV
 
     }
 
-    private void callVisitorOutFunction(Context context, int id, int visitorFlatID) {
+    private void callVisitorOutFunction(Context context, int id, int visitorFlatID, String name) {
 
 
         SharedPrefHelper sharedPrefHelper = new SharedPrefHelper(context);
 
         FullScreenAlertDialog fullScreenAlertDialog = new FullScreenAlertDialog(context);
 
+
         Map<String, String> dataPost = new HashMap<>();
         dataPost.put("visitorId", String.valueOf(id));
         dataPost.put("communityId", sharedPrefHelper.getString(StaticData.COMM_ID));
         dataPost.put("newStatus", StaticData.OUTSIDE_COMPOUND);
+        dataPost.put("visitorName", name);
+        dataPost.put("flatId", String.valueOf(visitorFlatID));
 
         JSONObject jsonDataPost = new JSONObject(dataPost);
         String url = StaticData.baseURL + "" + StaticData.changeVisitorStatus;
