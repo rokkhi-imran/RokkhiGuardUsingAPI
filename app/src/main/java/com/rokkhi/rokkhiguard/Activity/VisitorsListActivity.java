@@ -110,8 +110,6 @@ public class VisitorsListActivity extends AppCompatActivity  {
                 Log.e("TAG", "onSuccess: " + getTokenResult.getToken());
 
 
-
-
                 AndroidNetworking.post(url)
                         .addHeaders("authtoken", getTokenResult.getToken())
                         .setContentType("application/json")

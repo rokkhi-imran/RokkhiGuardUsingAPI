@@ -159,6 +159,7 @@ public class VisitorAdapter extends RecyclerView.Adapter<VisitorAdapter.VisitorV
         dataPost.put("flatId", String.valueOf(visitorFlatID));
 
         JSONObject jsonDataPost = new JSONObject(dataPost);
+        Log.e(TAG, "callVisitorOutFunction: visitor status change =  "+jsonDataPost);
         String url = StaticData.baseURL + "" + StaticData.changeVisitorStatus;
 
         FirebaseAuth.getInstance().getCurrentUser().getIdToken(true).addOnSuccessListener(new OnSuccessListener<GetTokenResult>() {
@@ -166,7 +167,6 @@ public class VisitorAdapter extends RecyclerView.Adapter<VisitorAdapter.VisitorV
             public void onSuccess(GetTokenResult getTokenResult) {
 
                 Log.e("TAG", "onSuccess: " + getTokenResult.getToken());
-
 
 
                 AndroidNetworking.post(url)
