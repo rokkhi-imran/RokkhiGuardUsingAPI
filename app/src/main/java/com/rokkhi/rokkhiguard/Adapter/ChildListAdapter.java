@@ -3,9 +3,7 @@ package com.rokkhi.rokkhiguard.Adapter;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.net.Uri;
-import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -48,12 +46,9 @@ public class ChildListAdapter extends RecyclerView.Adapter<ChildListAdapter.Visi
 
 
     private ArrayList<ChildData> mvisitorFilterList;
-    private LayoutInflater mInflater;
     private ValueFilter valueFilter;
 
     public ArrayList<ChildData> childList;
-    private static final String TAG = "VisitorAdapter";
-    SharedPreferences sharedPref;
 
     private Context context;
 
@@ -61,7 +56,6 @@ public class ChildListAdapter extends RecyclerView.Adapter<ChildListAdapter.Visi
         this.childList = childList;
         mvisitorFilterList = childList;
         this.context = context;
-        mInflater = LayoutInflater.from(context);
 
         getFilter();
 
@@ -83,7 +77,9 @@ public class ChildListAdapter extends RecyclerView.Adapter<ChildListAdapter.Visi
     public VisitorViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_child, parent, false);
         VisitorViewHolder visitorViewHolder = new VisitorViewHolder(view);
-        sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
+
+
+        visitorViewHolder.setIsRecyclable(false);
 
         return visitorViewHolder;
     }
@@ -286,9 +282,10 @@ public class ChildListAdapter extends RecyclerView.Adapter<ChildListAdapter.Visi
             if (constraint != null && constraint.length() > 0) {
 
                 ArrayList<ChildData> filterList = new ArrayList<>();
+                filterList.clear();
 
                 for (int i = 0; i < mvisitorFilterList.size(); i++) {
-                    if (mvisitorFilterList.get(i).getName().toLowerCase().contains(constraint.toString().toLowerCase())) {
+                    if (mvisitorFilterList.get(i).getName().toLowerCase().contains(constraint.toString().toLowerCase()) || mvisitorFilterList.get(i).getFlat().getName().toLowerCase().contains(constraint.toString().toLowerCase()) || mvisitorFilterList.get(i).getFlat().getNumber().toLowerCase().contains(constraint.toString().toLowerCase()) ) {
                         filterList.add(mvisitorFilterList.get(i));
                     }
                 }
@@ -299,6 +296,7 @@ public class ChildListAdapter extends RecyclerView.Adapter<ChildListAdapter.Visi
                 results.values = filterList;
 
             } else {
+
 
                 results.count = mvisitorFilterList.size();
 

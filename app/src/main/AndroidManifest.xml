@@ -139,7 +139,7 @@
             <!-- call app End -->
         </activity>
 
-        <service
+<!--        <service
             android:name="com.rokkhi.callerapp.CallService"
             android:permission="android.permission.BIND_INCALL_SERVICE">
             <meta-data
@@ -149,7 +149,7 @@
             <intent-filter>
                 <action android:name="android.telecom.InCallService" />
             </intent-filter>
-        </service>
+        </service>-->
     </application>
 
 </manifest>

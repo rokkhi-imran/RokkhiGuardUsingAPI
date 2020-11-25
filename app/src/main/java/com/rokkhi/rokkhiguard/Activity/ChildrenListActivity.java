@@ -53,14 +53,19 @@ public class ChildrenListActivity extends AppCompatActivity  {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_visitors_list);
+        setContentView(R.layout.activity_child_list);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         context=this;
         recyclerView = findViewById(R.id.recyclerview);
-        mProgressBar=findViewById(R.id.progressBar2);
+
         recyclerView.setNestedScrollingEnabled(false);
+
+        mProgressBar=findViewById(R.id.progressBar2);
+
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+
         sharedPrefHelper=new SharedPrefHelper(getApplicationContext());
         searchET=findViewById(R.id.search);
 
