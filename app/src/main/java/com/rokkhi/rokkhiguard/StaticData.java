@@ -120,18 +120,24 @@ public class StaticData {
     }
 
     public static void showSuccessDialog(FragmentActivity context, String title, String body) {
-        new AlertDialog.Builder(context)
-                .setIcon(R.drawable.tik)
-                .setTitle("\n\n"+title)
-                .setMessage(body)
-                .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                        context.finish();
-                    }
-                })
-                .show();
 
+        try {
+
+            new AlertDialog.Builder(context)
+                    .setIcon(R.drawable.tik)
+                    .setTitle("\n\n"+title)
+                    .setMessage(body)
+                    .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                            context.finish();
+                        }
+                    })
+                    .show();
+
+        }catch (Exception e){
+
+        }
         final Handler handler = new Handler(Looper.getMainLooper());
         handler.postDelayed(new Runnable() {
             @Override
