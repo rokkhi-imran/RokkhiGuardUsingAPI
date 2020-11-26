@@ -20,12 +20,6 @@
         android:layout_centerHorizontal="true"
         android:layout_height="wrap_content">
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/mobileNumberTextField"
-            style="@style/LoginTextInputLayoutStyle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint=" মোবাইল নাম্বার">
 
 
             <com.google.android.material.textfield.TextInputEditText
@@ -36,7 +30,6 @@
                 android:textColor="@color/black"
                 android:maxLines="1"
                 android:layout_below="@+id/selected"
-                android:background="@drawable/round_edittext2"
                 android:drawableEnd="@drawable/ic_search"
                 android:paddingStart="10dp"
                 android:paddingEnd="20dp" />
@@ -44,7 +37,6 @@
         </com.google.android.material.textfield.TextInputLayout>
 
 
-    </com.google.android.material.textfield.TextInputLayout>
 
     <ListView
         android:id="@+id/listView1"
