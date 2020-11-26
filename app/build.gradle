@@ -72,5 +72,9 @@ dependencies {
 
     implementation 'com.intuit.sdp:sdp-android:1.0.6'
 
+    //shimmar
+    implementation 'com.facebook.shimmer:shimmer:0.5.0'
+
+
 
 }

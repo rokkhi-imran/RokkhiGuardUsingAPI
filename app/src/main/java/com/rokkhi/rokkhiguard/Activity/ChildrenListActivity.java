@@ -18,6 +18,7 @@ import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONObjectRequestListener;
+import com.facebook.shimmer.ShimmerFrameLayout;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.GetTokenResult;
@@ -49,12 +50,17 @@ public class ChildrenListActivity extends AppCompatActivity  {
     ProgressBar mProgressBar;
     EditText searchET;
 
+    ShimmerFrameLayout shimmerFrameLayout;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_child_list);
         Toolbar toolbar = findViewById(R.id.toolbar);
+        shimmerFrameLayout=findViewById(R.id.shimmer_view_container);
+        shimmerFrameLayout.startShimmer();
+        shimmerFrameLayout.setVisibility(View.VISIBLE);
         setSupportActionBar(toolbar);
         context=this;
         recyclerView = findViewById(R.id.recyclerview);
@@ -123,6 +129,8 @@ public class ChildrenListActivity extends AppCompatActivity  {
                             public void onResponse(JSONObject response) {
 
                                 mProgressBar.setVisibility(View.GONE);
+                                shimmerFrameLayout.stopShimmer();
+                                shimmerFrameLayout.setVisibility(View.GONE);
 
                                 Log.e(TAG, "onResponse: =   " + response);
 
@@ -139,6 +147,9 @@ public class ChildrenListActivity extends AppCompatActivity  {
 
                             @Override
                             public void onError(ANError anError) {
+
+                                shimmerFrameLayout.setVisibility(View.GONE);
+                                shimmerFrameLayout.stopShimmer();
 
                                 mProgressBar.setVisibility(View.GONE);
 

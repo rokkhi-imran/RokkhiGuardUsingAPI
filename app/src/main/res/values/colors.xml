@@ -53,6 +53,9 @@
     <color name="pressed_color">#4d90fe</color>
     <color name="lightorange">#E76A45</color>
 
+    <color name="background">#dddddd</color>
+
+
 
     <color name="mtrl_textinput_default_box_stroke_color" tools:override="true">#bfbfbf</color>
 

@@ -48,28 +48,66 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/searchlayout"
-        style="@style/LoginTextInputLayoutStyle"
+    <com.facebook.shimmer.ShimmerFrameLayout
+        android:id="@+id/shimmer_view_container"
         android:layout_width="match_parent"
-        android:layout_marginStart="@dimen/_10sdp"
-        android:layout_marginEnd="@dimen/_10sdp"
-        android:layout_height="wrap_content"
-        android:hint=" নাম অথবা ফ্লাট নাম্বার দিয়ে খুঁজুন  ">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/search"
+        android:visibility="gone"
+        android:layout_height="match_parent">
+        <!-- Adding 7 rows of placeholders -->
+        <LinearLayout
             android:layout_width="match_parent"
-            android:textCursorDrawable="@drawable/color_cursor"
-            android:textColor="@color/black"
-            android:layout_height="@dimen/_50sdp"
-            android:drawableEnd="@drawable/ic_search"
-            android:paddingEnd="20dp"
-            android:visibility="visible" />
-    </com.google.android.material.textfield.TextInputLayout>
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <include layout="@layout/data_placeholder_layout" />
+            <include layout="@layout/data_placeholder_layout" />
+            <include layout="@layout/data_placeholder_layout" />
+            <include layout="@layout/data_placeholder_layout" />
+            <include layout="@layout/data_placeholder_layout" />
+            <include layout="@layout/data_placeholder_layout" />
+            <include layout="@layout/data_placeholder_layout" />
+            <include layout="@layout/data_placeholder_layout" />
+            <include layout="@layout/data_placeholder_layout" />
+            <include layout="@layout/data_placeholder_layout" />
+            <include layout="@layout/data_placeholder_layout" />
+            <include layout="@layout/data_placeholder_layout" />
+            <include layout="@layout/data_placeholder_layout" />
+            <include layout="@layout/data_placeholder_layout" />
+        </LinearLayout>
+
+    </com.facebook.shimmer.ShimmerFrameLayout>
 
 
-    <include layout="@layout/content_child_list" />
+    <LinearLayout
+        android:id="@+id/viewDataLayout"
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:layout_height="match_parent">
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/searchlayout"
+            style="@style/LoginTextInputLayoutStyle"
+            android:layout_width="match_parent"
+            android:layout_marginStart="@dimen/_10sdp"
+            android:layout_marginEnd="@dimen/_10sdp"
+            android:layout_height="wrap_content"
+            android:hint=" নাম অথবা ফ্লাট নাম্বার দিয়ে খুঁজুন  ">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/search"
+                android:layout_width="match_parent"
+                android:textCursorDrawable="@drawable/color_cursor"
+                android:textColor="@color/black"
+                android:layout_height="@dimen/_50sdp"
+                android:drawableEnd="@drawable/ic_search"
+                android:paddingEnd="20dp"
+                android:visibility="visible" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+
+        <include layout="@layout/content_child_list" />
+
+
+    </LinearLayout>
 
 
 

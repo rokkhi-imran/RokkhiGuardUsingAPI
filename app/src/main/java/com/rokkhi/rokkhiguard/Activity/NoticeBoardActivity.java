@@ -4,7 +4,6 @@ import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.ProgressBar;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -15,6 +14,7 @@ import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONObjectRequestListener;
+import com.facebook.shimmer.ShimmerFrameLayout;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.GetTokenResult;
@@ -41,7 +41,7 @@ public class NoticeBoardActivity extends AppCompatActivity {
 
     SharedPrefHelper sharedPrefHelper;
     private RecyclerView mRecyclerview;
-    private ProgressBar mProgressBar;
+    ShimmerFrameLayout shimmerFrameLayout;
 
 
     @Override
@@ -50,6 +50,7 @@ public class NoticeBoardActivity extends AppCompatActivity {
         setContentView(R.layout.activity_notice_board);
         initView();
         Toolbar toolbar = findViewById(R.id.toolbar);
+
         setSupportActionBar(toolbar);
         context = this;
         sharedPrefHelper = new SharedPrefHelper(context);
@@ -63,15 +64,11 @@ public class NoticeBoardActivity extends AppCompatActivity {
 
         JSONObject jsonDataPost = new JSONObject(dataPost);
 
-//        JSONArray jsonDataPost=new JSONArray();
-//        jsonDataPost.put(dataPost);
-
-
         String url = StaticData.baseURL + "" + StaticData.getNotice;
 
         Log.e("TAG", "onCreate: " + jsonDataPost);
         Log.e("TAG", "onCreate: " + url);
-//        Log.e("TAG", "onCreate: " + token);
+
         Log.e("TAG", "onCreate: ---------------------- ");
 
         FirebaseAuth.getInstance().getCurrentUser().getIdToken(true).addOnSuccessListener(new OnSuccessListener<GetTokenResult>() {
@@ -92,7 +89,9 @@ public class NoticeBoardActivity extends AppCompatActivity {
                             @Override
                             public void onResponse(JSONObject response) {
 
-                                mProgressBar.setVisibility(View.GONE);
+                                shimmerFrameLayout.stopShimmer();
+                                shimmerFrameLayout.setVisibility(View.GONE);
+
 
                                 Timber.e("onResponse: =   " + response);
 
@@ -107,8 +106,9 @@ public class NoticeBoardActivity extends AppCompatActivity {
 
                             @Override
                             public void onError(ANError anError) {
+                                shimmerFrameLayout.stopShimmer();
+                                shimmerFrameLayout.setVisibility(View.GONE);
 
-                                mProgressBar.setVisibility(View.GONE);
 
                                 StaticData.showErrorAlertDialog(context,"Alert !","আবার চেষ্টা করুন ।");
 
@@ -128,8 +128,10 @@ public class NoticeBoardActivity extends AppCompatActivity {
 
     private void initView() {
         mRecyclerview = (RecyclerView) findViewById(R.id.recyclerview);
-        mProgressBar = (ProgressBar) findViewById(R.id.progressBar2);
         mRecyclerview.setLayoutManager(new LinearLayoutManager(this));
+        shimmerFrameLayout = findViewById(R.id.shimmer_view_container_notice);
+        shimmerFrameLayout.setVisibility(View.VISIBLE);
+        shimmerFrameLayout.startShimmer();
 
     }
 }

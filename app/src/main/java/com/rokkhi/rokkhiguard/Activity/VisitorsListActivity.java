@@ -19,6 +19,7 @@ import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONObjectRequestListener;
+import com.facebook.shimmer.ShimmerFrameLayout;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.GetTokenResult;
@@ -55,6 +56,8 @@ public class VisitorsListActivity extends AppCompatActivity  {
     SharedPrefHelper sharedPrefHelper;
     GetVisitorInsideModelClass getVisitorInsideModelClass;
 
+    ShimmerFrameLayout shimmerFrameLayout;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,6 +69,9 @@ public class VisitorsListActivity extends AppCompatActivity  {
         context= VisitorsListActivity.this;
         myNestedScroll= (NestedScrollView) findViewById(R.id.nested);
         progressBar= findViewById(R.id.progressBar2);
+        shimmerFrameLayout= findViewById(R.id.shimmer_view_container);
+        shimmerFrameLayout.setVisibility(View.VISIBLE);
+        shimmerFrameLayout.startShimmer();
         recyclerView=findViewById(R.id.recyclerview);
         recyclerView.setNestedScrollingEnabled(false);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -120,6 +126,9 @@ public class VisitorsListActivity extends AppCompatActivity  {
                             @Override
                             public void onResponse(JSONObject response) {
 
+                                shimmerFrameLayout.setVisibility(View.GONE);
+                                shimmerFrameLayout.stopShimmer();
+
                                 progressBar.setVisibility(View.GONE);
 
                                 Log.e("TAG ","onResponse: =   " + response);
@@ -135,6 +144,9 @@ public class VisitorsListActivity extends AppCompatActivity  {
 
                             @Override
                             public void onError(ANError anError) {
+
+                                shimmerFrameLayout.setVisibility(View.GONE);
+                                shimmerFrameLayout.stopShimmer();
 
                                 progressBar.setVisibility(View.GONE);
 

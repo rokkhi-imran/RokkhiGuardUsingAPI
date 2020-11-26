@@ -15,4 +15,10 @@
     <dimen name="button_text">18sp</dimen>
     <dimen name="ob_header_text_size">22sp</dimen>
     <dimen name="ob_desc_text_size">18sp</dimen>
+
+    <dimen name="activityPadding">16dp</dimen>
+    <dimen name="placeholderImage">60dp</dimen>
+    <dimen name="placeholderTextHeight">8dp</dimen>
+    <dimen name="padding_10">10dp</dimen>
+
 </resources>

@@ -20,6 +20,7 @@ import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONObjectRequestListener;
+import com.facebook.shimmer.ShimmerFrameLayout;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.GetTokenResult;
@@ -51,6 +52,7 @@ public class SWorkersActivity extends AppCompatActivity  {
 
     SWorkerModelClass sWorkerModelClass;
     SWorkerAdapter sWorkerAdapter;
+    ShimmerFrameLayout shimmerFrameLayout;
 
 
     @Override
@@ -70,6 +72,8 @@ public class SWorkersActivity extends AppCompatActivity  {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         mCreateprofile = findViewById(R.id.createprofile);
+        shimmerFrameLayout = findViewById(R.id.shimmer_view_container_service_Worker);
+        shimmerFrameLayout.setVisibility(View.VISIBLE);
 
 
 
@@ -136,6 +140,9 @@ public class SWorkersActivity extends AppCompatActivity  {
                             @Override
                             public void onResponse(JSONObject response) {
 
+                                shimmerFrameLayout.setVisibility(View.GONE);
+                                shimmerFrameLayout.stopShimmer();
+
                                 mProgressBar.setVisibility(View.GONE);
 
                                 Log.e("TAG ","onResponse: =   " + response);
@@ -151,6 +158,10 @@ public class SWorkersActivity extends AppCompatActivity  {
 
                             @Override
                             public void onError(ANError anError) {
+                                shimmerFrameLayout.setVisibility(View.GONE);
+                                shimmerFrameLayout.stopShimmer();
+
+
 
                                 mProgressBar.setVisibility(View.GONE);
 
