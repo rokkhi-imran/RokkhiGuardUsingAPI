@@ -190,6 +190,13 @@ public class SWorkersActivity extends AppCompatActivity  {
 
         mProgressBar = (ProgressBar) findViewById(R.id.progressBar2);
         mCreateprofile = (Button) findViewById(R.id.createprofile);
+
+
+        mSWorkerRecyclerViewID.setHasFixedSize(true);
+        mSWorkerRecyclerViewID.setItemViewCacheSize(20);
+        mSWorkerRecyclerViewID.setDrawingCacheEnabled(true);
+        mSWorkerRecyclerViewID.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_HIGH);
+
     }
 
 }

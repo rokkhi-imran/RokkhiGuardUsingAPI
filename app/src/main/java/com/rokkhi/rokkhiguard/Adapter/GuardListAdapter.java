@@ -60,6 +60,7 @@ public class GuardListAdapter extends RecyclerView.Adapter<GuardListAdapter.SWor
 
                 Picasso.get()
                         .load( guardListDataArrayList.get(position).getImage() )
+                        .fit()
                         .placeholder( R.drawable.progress_animation )
                         .into( holder.propic );
 

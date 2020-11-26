@@ -89,6 +89,7 @@ public class SWorkerAdapter extends RecyclerView.Adapter<SWorkerAdapter.SWorkerV
             holder.lastcome.setText(sworkerDataList.get(position).getPhone());
             Picasso.get()
                     .load(sworkerDataList.get(position).getImage() )
+                    .fit()
                     .placeholder( R.drawable.progress_animation )
                     .into( holder.propic );
 
