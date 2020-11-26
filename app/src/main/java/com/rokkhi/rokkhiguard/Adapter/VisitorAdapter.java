@@ -97,7 +97,7 @@ public class VisitorAdapter extends RecyclerView.Adapter<VisitorAdapter.VisitorV
 
         if (visitor.getImage()!=null && !visitor.getImage().isEmpty()) {
 
-            Picasso.get().load(visitor.getImage()).placeholder( R.drawable.progress_animation ).error(R.drawable.male1).into(holder.propic);
+            Picasso.get().load(visitor.getImage()).fit().placeholder( R.drawable.progress_animation ).error(R.drawable.male1).into(holder.propic);
         }
 
 

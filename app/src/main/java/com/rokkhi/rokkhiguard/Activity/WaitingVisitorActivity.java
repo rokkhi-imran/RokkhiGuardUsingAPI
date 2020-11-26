@@ -84,7 +84,7 @@ public class WaitingVisitorActivity extends AppCompatActivity implements View.On
 
         if (image != null && !image.isEmpty()) {
 
-            Picasso.get().load(image).placeholder(R.drawable.progress_animation).error(R.drawable.male1).into(imageView);
+            Picasso.get().load(image).fit().placeholder(R.drawable.progress_animation).error(R.drawable.male1).into(imageView);
         }
 
 

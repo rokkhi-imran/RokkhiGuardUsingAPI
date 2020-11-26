@@ -165,7 +165,7 @@ public class SWorkerAdapter extends RecyclerView.Adapter<SWorkerAdapter.SWorkerV
 
         if(!sworkerData.get(adapterPosition).getImage().isEmpty()){
 
-            Picasso.get().load(sworkerData.get(adapterPosition).getImage()).placeholder( R.drawable.progress_animation ).into(circleImageView);
+            Picasso.get().load(sworkerData.get(adapterPosition).getImage()).fit().placeholder( R.drawable.progress_animation ).into(circleImageView);
         }
 
 

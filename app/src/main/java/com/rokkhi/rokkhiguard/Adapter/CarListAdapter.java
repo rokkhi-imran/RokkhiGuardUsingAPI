@@ -46,9 +46,6 @@ public class CarListAdapter extends RecyclerView.Adapter<CarListAdapter.GridView
     SharedPreferences sharedPref;
     AlertDialog alertDialog;
 
-
-
-
     private ArrayList<VehicleData> mflatFilterList;
     private ValueFilter valueFilter;
     private LayoutInflater mInflater;
@@ -215,6 +212,11 @@ public class CarListAdapter extends RecyclerView.Adapter<CarListAdapter.GridView
         holder.carNumberTV.setText(parkings.getNumber());
         holder.carModelTV.setText(parkings.getModel());
         holder.carColorTV.setText(parkings.getColor());
+        try {
+            holder.flatTV.setText("Flat: "+parkings.getFlat().getNumber());
+        }catch (Exception e){
+
+        }
 
         holder.view.setOnClickListener(v -> confirmdialog(list.get(position),position));
 
@@ -240,6 +242,7 @@ public class CarListAdapter extends RecyclerView.Adapter<CarListAdapter.GridView
         TextView carNumberTV;
         TextView carModelTV;
         TextView carColorTV;
+        TextView flatTV;
 
         GridViewHolder(View itemView) {
             super(itemView);
@@ -247,6 +250,7 @@ public class CarListAdapter extends RecyclerView.Adapter<CarListAdapter.GridView
             carNumberTV = view.findViewById(R.id.carNumberTV);
             carModelTV = view.findViewById(R.id.carModelTV);
             carColorTV = view.findViewById(R.id.carColorTV);
+            flatTV = view.findViewById(R.id.flatTV);
         }
 
     }
@@ -264,10 +268,12 @@ public class CarListAdapter extends RecyclerView.Adapter<CarListAdapter.GridView
 
                 for (int i = 0; i < mflatFilterList.size(); i++) {
                     if (
-                            mflatFilterList.get(i).getName().toLowerCase().contains(constraint.toString().toLowerCase())
+                                    mflatFilterList.get(i).getName().toLowerCase().contains(constraint.toString().toLowerCase())
                                     || mflatFilterList.get(i).getNumber().toLowerCase().contains(constraint.toString().toLowerCase())
                                     || mflatFilterList.get(i).getModel().toLowerCase().contains(constraint.toString().toLowerCase())
                                     || mflatFilterList.get(i).getColor().toLowerCase().contains(constraint.toString().toLowerCase())
+                                    || mflatFilterList.get(i).getFlat().getNumber().toLowerCase().contains(constraint.toString().toLowerCase())
+                                    || mflatFilterList.get(i).getFlat().getName().toLowerCase().contains(constraint.toString().toLowerCase())
                     ) {
                         filterList.add(mflatFilterList.get(i));
                     }

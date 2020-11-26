@@ -231,7 +231,7 @@ public class AddVisitorActivity extends AppCompatActivity implements View.OnClic
 
         if (getUserByPhoneNumberModelClass.getData().getImage() != null && !getUserByPhoneNumberModelClass.getData().getImage().isEmpty()) {
 
-            Picasso.get().load(getUserByPhoneNumberModelClass.getData().getImage()).placeholder(R.drawable.progress_animation).error(R.drawable.male1).into(imageViewAlert);
+            Picasso.get().load(getUserByPhoneNumberModelClass.getData().getImage()).fit().placeholder(R.drawable.progress_animation).error(R.drawable.male1).into(imageViewAlert);
 
         }
         name.setText(getUserByPhoneNumberModelClass.getData().getName());
@@ -248,7 +248,7 @@ public class AddVisitorActivity extends AppCompatActivity implements View.OnClic
                 imageLinkPre=getUserByPhoneNumberModelClass.getData().getImage();
                 bitmap=null;
 
-                Picasso.get().load(getUserByPhoneNumberModelClass.getData().getImage()).placeholder(R.drawable.progress_animation).error(R.drawable.male1).into(mUserPhotoIV);
+                Picasso.get().load(getUserByPhoneNumberModelClass.getData().getImage()).fit().placeholder(R.drawable.progress_animation).error(R.drawable.male1).into(mUserPhotoIV);
             }
 
 

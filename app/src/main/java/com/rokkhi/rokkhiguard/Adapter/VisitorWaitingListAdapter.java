@@ -59,7 +59,7 @@ public class VisitorWaitingListAdapter extends RecyclerView.Adapter<VisitorWaiti
 
         if (!visitor.getImage().isEmpty()) {
 
-            Picasso.get().load(visitor.getImage()).placeholder(R.drawable.progress_animation).error(R.drawable.male1).into(holder.visitorImageID);
+            Picasso.get().load(visitor.getImage()).fit().placeholder(R.drawable.progress_animation).error(R.drawable.male1).into(holder.visitorImageID);
         }
 
 

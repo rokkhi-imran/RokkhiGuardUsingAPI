@@ -61,6 +61,11 @@ public class ChildrenListActivity extends AppCompatActivity  {
 
         recyclerView.setNestedScrollingEnabled(false);
 
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setItemViewCacheSize(20);
+        recyclerView.setDrawingCacheEnabled(true);
+        recyclerView.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_HIGH);
+
         mProgressBar=findViewById(R.id.progressBar2);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this));

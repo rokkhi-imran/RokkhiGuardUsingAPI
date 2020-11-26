@@ -131,7 +131,7 @@ public class VisitorAcceptedActivity extends AppCompatActivity {
 
                                 if (!visitorResponseByID.getData().getImage().isEmpty()) {
 
-                                    Picasso.get().load(visitorResponseByID.getData().getImage()).placeholder(R.drawable.progress_animation).error(R.drawable.male1).into(circleImageView);
+                                    Picasso.get().load(visitorResponseByID.getData().getImage()).fit().placeholder(R.drawable.progress_animation).error(R.drawable.male1).into(circleImageView);
                                 }
 
                             }

@@ -96,7 +96,7 @@ public class ChildListAdapter extends RecyclerView.Adapter<ChildListAdapter.Visi
 
         } else {
 
-            Picasso.get().load(childList.get(position).getImage()).placeholder( R.drawable.progress_animation ).error(R.drawable.male1).into(holder.propic);
+            Picasso.get().load(childList.get(position).getImage()).fit().placeholder( R.drawable.progress_animation ).error(R.drawable.male1).into(holder.propic);
         }
     }
 
