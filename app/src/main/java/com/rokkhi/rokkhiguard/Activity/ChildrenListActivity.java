@@ -87,6 +87,18 @@ public class ChildrenListActivity extends AppCompatActivity  {
             }
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
+                recyclerView = findViewById(R.id.recyclerview);
+
+                recyclerView.setNestedScrollingEnabled(false);
+
+                recyclerView.setHasFixedSize(true);
+                recyclerView.setItemViewCacheSize(20);
+                recyclerView.setDrawingCacheEnabled(true);
+                recyclerView.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_HIGH);
+
+                recyclerView.setLayoutManager(new LinearLayoutManager(context));
+
+
                 childAdapter.getFilter().filter(s);
             }
             @Override

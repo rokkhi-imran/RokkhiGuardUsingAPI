@@ -200,14 +200,7 @@ public class ChildListAdapter extends RecyclerView.Adapter<ChildListAdapter.Visi
         SharedPrefHelper sharedPrefHelper=new SharedPrefHelper(context);
         FullScreenAlertDialog fullScreenAlertDialog=new FullScreenAlertDialog(context);
         fullScreenAlertDialog.showdialog();
-/*
-        "requesterFirebaseId": "string",
-                "requesterProfileId": 0,
-                "limit": "string",
-                "pageId": "string",
-                "communityId": 0,
-                "childrenId": 0,
-                "guardId": 0*/
+
 
         Map<String, String> dataPost = new HashMap<>();
 
@@ -278,10 +271,11 @@ public class ChildListAdapter extends RecyclerView.Adapter<ChildListAdapter.Visi
         protected FilterResults performFiltering(CharSequence constraint) {
 
             FilterResults results = new FilterResults();
+            results.values=null;
 
+            ArrayList<ChildData> filterList = new ArrayList<>();
             if (constraint != null && constraint.length() > 0) {
 
-                ArrayList<ChildData> filterList = new ArrayList<>();
                 filterList.clear();
 
                 for (int i = 0; i < mvisitorFilterList.size(); i++) {
@@ -296,7 +290,7 @@ public class ChildListAdapter extends RecyclerView.Adapter<ChildListAdapter.Visi
                 results.values = filterList;
 
             } else {
-
+                filterList.clear();
 
                 results.count = mvisitorFilterList.size();
 
