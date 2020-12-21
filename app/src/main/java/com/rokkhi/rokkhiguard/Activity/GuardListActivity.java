@@ -105,17 +105,20 @@ public class GuardListActivity extends AppCompatActivity {
                     goSignInPage();
                 } else {
                     mProgressbar.setVisibility(View.VISIBLE);
+
                     FirebaseAuth.getInstance().getCurrentUser().getIdToken(true).addOnSuccessListener(new OnSuccessListener<GetTokenResult>() {
                         @Override
                         public void onSuccess(GetTokenResult getTokenResult) {
-
-                            Log.e("TAG", "onSuccess: " + getTokenResult.getToken());
 
 
                             callUserDetails(getTokenResult.getToken());
 
                         }
                     });
+
+
+
+
 
 
                 }
@@ -148,7 +151,7 @@ public class GuardListActivity extends AppCompatActivity {
 
     }
 
-    private void callGuardList(String token) {
+    private void callGuardList(String jWTToken) {
 
         Map<String, String> dataPost = new HashMap<>();
         dataPost.put("buildingId", sharedPrefHelper.getString(StaticData.BUILD_ID));
@@ -156,18 +159,19 @@ public class GuardListActivity extends AppCompatActivity {
         dataPost.put("flatId", "");
         dataPost.put("userRoleCode", StaticData.GUARD.toString());
 
+
         JSONObject jsonDataPost = new JSONObject(dataPost);
 
         String url = StaticData.baseURL + "" + StaticData.getUsersList;
 
         Log.e("TAG", "onCreate: Guard List " + jsonDataPost);
         Log.e("TAG", "onCreate: Guard List " + url);
-        Log.e("TAG", "onCreate: Guard List " + token);
+        Log.e("TAG", "onCreate: Guard List " + sharedPrefHelper.getString(StaticData.JWT_TOKEN));
         Log.e("TAG", "onCreate: ---------------------- ");
 
 
         AndroidNetworking.post(url)
-                .addHeaders("authtoken", token)
+                .addHeaders("jwtTokenHeader", jWTToken)
                 .setContentType("application/json")
                 .addJSONObjectBody(jsonDataPost)
                 .setPriority(Priority.MEDIUM)
@@ -270,7 +274,7 @@ public class GuardListActivity extends AppCompatActivity {
 
     }
 
-    private void callUserDetails(String token) {
+    private void callUserDetails(String firebaseToken) {
 
         Log.e("TAG", "onSuccess: first time call Function: ");
 
@@ -279,28 +283,29 @@ public class GuardListActivity extends AppCompatActivity {
             public void onSuccess(InstanceIdResult instanceIdResult) {
 
                 String deviceToken = instanceIdResult.getToken();
+
                 Log.e("TAG", "token ID onSuccess first time : Device Token =  " + deviceToken);
-                Log.e("TAG", "token ID onSuccess first time : auth Token  =  " + token);
+                Log.e("TAG", "token ID onSuccess first time : auth JWT Token  =  " + sharedPrefHelper.getString(StaticData.JWT_TOKEN));
 
                 Map<String, String> dataPost = new HashMap<>();
-                dataPost.put("requesterFirebaseId", FirebaseAuth.getInstance().getCurrentUser().getUid());
-                dataPost.put("requesterProfileId", "");
                 dataPost.put("limit", "");
                 dataPost.put("pageId", "");
                 dataPost.put("communityId", "");
+                dataPost.put("firebaseIdToken", firebaseToken );
                 dataPost.put("deviceToken", deviceToken);
                 dataPost.put("deviceType", "Android");
+
 
                 JSONObject jsonDataPost = new JSONObject(dataPost);
 
                 String url = StaticData.baseURL + "" + StaticData.getUserDetails;
 
-                Log.e("TAG", "onCreate: Call User List Json Data : " + jsonDataPost);
-                Log.e("TAG", "onCreate: Call user List Url " + url);
+                Log.e("TAG", "onCreate: Call User Details Json Data : " + jsonDataPost);
+                Log.e("TAG", "onCreate: Call user Details Url " + url);
                 Log.e("TAG", "onCreate: ---------------------- ");
 
                 AndroidNetworking.post(url)
-                        .addHeaders("authtoken", token)
+                        .addHeaders("jwtTokenHeader", sharedPrefHelper.getString(StaticData.JWT_TOKEN))
                         .setContentType("application/json")
                         .addJSONObjectBody(jsonDataPost)
                         .setPriority(Priority.MEDIUM)
@@ -309,7 +314,7 @@ public class GuardListActivity extends AppCompatActivity {
                             @Override
                             public void onResponse(JSONObject response) {
 
-                                Log.e("TAG", "token ID onSuccess first time : response =  " + response);
+                                Log.e("TAG", "token ID onSuccess first time : User Details response =  " + response);
 
                                 Gson gson = new Gson();
                                 UserDetailsModelClass userDetailsModelClass = gson.fromJson(String.valueOf(response), UserDetailsModelClass.class);
@@ -320,8 +325,9 @@ public class GuardListActivity extends AppCompatActivity {
 
                                     sharedPrefHelper.putString(StaticData.BUILD_ID, String.valueOf(userDetailsModelClass.getData().getBuildingId()));
                                     sharedPrefHelper.putString(StaticData.COMM_ID, String.valueOf(userDetailsModelClass.getData().getCommunityId()));
+                                    sharedPrefHelper.putString(StaticData.JWT_TOKEN, String.valueOf(userDetailsModelClass.getData().getJwtToken()));
 
-                                    callGuardList(token);
+                                    callGuardList(sharedPrefHelper.getString(StaticData.JWT_TOKEN));
                                 }
 
 

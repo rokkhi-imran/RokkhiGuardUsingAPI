@@ -23,6 +23,7 @@ public class StaticData {
     public static final String BUILD_NAME = "BUILD_NAME";
     public static final String BUILD_ADDRESS = "BUILD_ADDRESS";
     public static final int REQUEST_FOR_APPEAR_ON_TOP_CODE = 565;
+    public static final String JWT_TOKEN = "JWT_TOKEN";
 
     public static final void showErrorAlertDialog(Context context, String alertTitle, String alertBody) {
 
@@ -39,7 +40,8 @@ public class StaticData {
 
     }
 
-    public static final String baseURL = "https://home.api.rokkhi.com";
+//    public static final String baseURL = "https://home.api.rokkhi.com";
+    public static final String baseURL = "http://13.76.190.212:3200";
     public static String imageUploadURL = "/api/v1/image/uploadSingle";
 
     public static final String getNotice = "/api/v1/notice/getNotices";
@@ -105,17 +107,9 @@ public class StaticData {
                 .setCancelTextColor(Color.RED)
                 .setSystemDialog(true);
 
-        /*
-                .setBackgroundColor(Color.WHITE)
-                .setButtonOrientation(LinearLayout.HORIZONTAL)
-                .setGalleryButtonText("Gallery")
-                .setCameraIcon(R.mipmap.camera_colored)
-                .setGalleryIcon(R.mipmap.gallery_colored)
-                .setCameraToPictures(false)*/
-//                .setMaxSize(300);
+
 
         PickImageDialog.build(setup)
-                //.setOnClick(this)
                 .show(createProfileActivity);
     }
 

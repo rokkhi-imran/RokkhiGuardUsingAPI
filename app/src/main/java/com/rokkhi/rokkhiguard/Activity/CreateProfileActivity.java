@@ -30,10 +30,7 @@ import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONObjectRequestListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.textfield.TextInputEditText;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.GetTokenResult;
 import com.google.gson.Gson;
 import com.rokkhi.rokkhiguard.Adapter.ActiveFlatAdapter;
 import com.rokkhi.rokkhiguard.Adapter.TypesAdapter;
@@ -444,6 +441,7 @@ public class CreateProfileActivity extends AppCompatActivity implements IPickRes
             String imageUploadUrl = StaticData.baseURL+StaticData.imageUploadURL;
 
             AndroidNetworking.upload(imageUploadUrl)
+                    .addHeaders("jwtTokenHeader",sharedPrefHelper.getString(StaticData.JWT_TOKEN))
                     .addMultipartFile("image", file)// posting any type of file
                     .addMultipartParameter("folderName", "visitors")
                     .addMultipartParameter("subFolderName", sharedPrefHelper.getString(StaticData.BUILD_ID))
@@ -515,51 +513,44 @@ public class CreateProfileActivity extends AppCompatActivity implements IPickRes
 //        Log.e("TAG", "onCreate: " + token);
         Log.e("TAG", "onCreate: ---------------------- ");
 
-        FirebaseAuth.getInstance().getCurrentUser().getIdToken(true).addOnSuccessListener(new OnSuccessListener<GetTokenResult>() {
-            @Override
-            public void onSuccess(GetTokenResult getTokenResult) {
 
-                Log.e("TAG", "onSuccess: " + getTokenResult.getToken());
+        AndroidNetworking.post(url)
+                .addHeaders("jwtTokenHeader", sharedPrefHelper.getString(StaticData.JWT_TOKEN))
+                .setContentType("application/json")
+                .addJSONObjectBody(jsonDataPost)
+                .setPriority(Priority.MEDIUM)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
 
-                AndroidNetworking.post(url)
-                        .addHeaders("authtoken", getTokenResult.getToken())
-                        .setContentType("application/json")
-                        .addJSONObjectBody(jsonDataPost)
-                        .setPriority(Priority.MEDIUM)
-                        .build()
-                        .getAsJSONObject(new JSONObjectRequestListener() {
-                            @Override
-                            public void onResponse(JSONObject response) {
-
-                                fullScreenAlertDialog.dismissdialog();
+                        fullScreenAlertDialog.dismissdialog();
 
 
-                                Log.e("TAG", "onResponse: =  =----------- " + response);
+                        Log.e("TAG", "onResponse: =  =----------- " + response);
 
-                                Gson gson = new Gson();
-                                registerUserModelClass = gson.fromJson(String.valueOf(response), RegisterUserModelClass.class);
+                        Gson gson = new Gson();
+                        registerUserModelClass = gson.fromJson(String.valueOf(response), RegisterUserModelClass.class);
 
-                                StaticData.showSuccessDialog(CreateProfileActivity.this, "ইনফর্মেশন !", "প্রোফাইলটি তৈরি করা সম্পূর্ণ হয়েছে । ");
+                        StaticData.showSuccessDialog(CreateProfileActivity.this, "ইনফর্মেশন !", "প্রোফাইলটি তৈরি করা সম্পূর্ণ হয়েছে । ");
 
-                            }
+                    }
 
-                            @Override
-                            public void onError(ANError anError) {
+                    @Override
+                    public void onError(ANError anError) {
 
-                                fullScreenAlertDialog.dismissdialog();
+                        fullScreenAlertDialog.dismissdialog();
 
-                                StaticData.showErrorAlertDialog(context, "Alert !", "আবার চেষ্টা করুন ।");
+                        StaticData.showErrorAlertDialog(context, "Alert !", "আবার চেষ্টা করুন ।");
 
-                                Log.e("TAG", "onResponse: error message =  " + anError.getMessage());
-                                Log.e("TAG", "onResponse: error code =  " + anError.getErrorCode());
-                                Log.e("TAG", "onResponse: error body =  " + anError.getErrorBody());
-                                Log.e("TAG", "onResponse: error  getErrorDetail =  " + anError.getErrorDetail());
-                            }
-                        });
+                        Log.e("TAG", "onResponse: error message =  " + anError.getMessage());
+                        Log.e("TAG", "onResponse: error code =  " + anError.getErrorCode());
+                        Log.e("TAG", "onResponse: error body =  " + anError.getErrorBody());
+                        Log.e("TAG", "onResponse: error  getErrorDetail =  " + anError.getErrorDetail());
+                    }
+                });
 
 
-            }
-        });
     }
 
 

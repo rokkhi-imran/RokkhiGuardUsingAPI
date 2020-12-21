@@ -18,9 +18,6 @@ import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONObjectRequestListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.GetTokenResult;
 import com.google.gson.Gson;
 import com.rokkhi.rokkhiguard.Adapter.CarListAdapter;
 import com.rokkhi.rokkhiguard.Model.api.VehicleData;
@@ -90,61 +87,51 @@ public class ParkingActivity extends AppCompatActivity implements View.OnClickLi
 //        Log.e("TAG", "onCreate: " + token);
         Log.e("TAG", "onCreate: ---------------------- ");
 
-        FirebaseAuth.getInstance().getCurrentUser().getIdToken(true).addOnSuccessListener(new OnSuccessListener<GetTokenResult>() {
-            @Override
-            public void onSuccess(GetTokenResult getTokenResult) {
 
-                Log.e("TAG", "onSuccess: " + getTokenResult.getToken());
-
-
-
-                AndroidNetworking.post(url)
-                        .addHeaders("authtoken", getTokenResult.getToken())
-                        .setContentType("application/json")
-                        .addJSONObjectBody(jsonDataPost)
-                        .setPriority(Priority.MEDIUM)
-                        .build()
-                        .getAsJSONObject(new JSONObjectRequestListener() {
-                            @Override
-                            public void onResponse(JSONObject response) {
+        AndroidNetworking.post(url)
+                .addHeaders("jwtTokenHeader", sharedPrefHelper.getString(StaticData.JWT_TOKEN))
+                .setContentType("application/json")
+                .addJSONObjectBody(jsonDataPost)
+                .setPriority(Priority.MEDIUM)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
 
 
-                                Log.e(TAG, "onResponse: =  =----------- " + response);
+                        Log.e(TAG, "onResponse: =  =----------- " + response);
 
-                                Gson gson = new Gson();
-                                vehicleListModelClass = gson.fromJson(String.valueOf(response), VehicleListModelClass.class);
+                        Gson gson = new Gson();
+                        vehicleListModelClass = gson.fromJson(String.valueOf(response), VehicleListModelClass.class);
 
-                                mProgressBar1.setVisibility(View.GONE);
-
-
-                                GridLayoutManager layoutManager = new GridLayoutManager(context, 2);
-
-                                mRecyclerview.setLayoutManager(layoutManager);
+                        mProgressBar1.setVisibility(View.GONE);
 
 
-                                carListAdapter = new CarListAdapter((ArrayList<VehicleData>) vehicleListModelClass.getData(),context);
-                                carListAdapter.setHasStableIds(true);
-                                mRecyclerview.setAdapter(carListAdapter);
+                        GridLayoutManager layoutManager = new GridLayoutManager(context, 2);
 
-                            }
-
-                            @Override
-                            public void onError(ANError anError) {
+                        mRecyclerview.setLayoutManager(layoutManager);
 
 
-                                StaticData.showErrorAlertDialog(context,"Alert !","আবার চেষ্টা করুন ।");
+                        carListAdapter = new CarListAdapter((ArrayList<VehicleData>) vehicleListModelClass.getData(),context);
+                        carListAdapter.setHasStableIds(true);
+                        mRecyclerview.setAdapter(carListAdapter);
 
-                                Log.e(TAG, "onResponse: error message =  " + anError.getMessage());
-                                Log.e(TAG, "onResponse: error code =  " + anError.getErrorCode());
-                                Log.e(TAG, "onResponse: error body =  " + anError.getErrorBody());
-                                Log.e(TAG, "onResponse: error  getErrorDetail =  " + anError.getErrorDetail());
-                            }
-                        });
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
 
 
+                        StaticData.showErrorAlertDialog(context,"Alert !","আবার চেষ্টা করুন ।");
 
-            }
-        });
+                        Log.e(TAG, "onResponse: error message =  " + anError.getMessage());
+                        Log.e(TAG, "onResponse: error code =  " + anError.getErrorCode());
+                        Log.e(TAG, "onResponse: error body =  " + anError.getErrorBody());
+                        Log.e(TAG, "onResponse: error  getErrorDetail =  " + anError.getErrorDetail());
+                    }
+                });
+
+
 
 
     }

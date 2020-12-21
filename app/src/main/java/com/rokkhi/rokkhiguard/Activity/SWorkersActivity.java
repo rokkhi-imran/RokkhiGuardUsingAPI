@@ -21,9 +21,6 @@ import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONObjectRequestListener;
 import com.facebook.shimmer.ShimmerFrameLayout;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.GetTokenResult;
 import com.google.gson.Gson;
 import com.rokkhi.rokkhiguard.Adapter.SWorkerAdapter;
 import com.rokkhi.rokkhiguard.Model.api.SWorkerModelClass;
@@ -122,62 +119,51 @@ public class SWorkersActivity extends AppCompatActivity  {
 //        Log.e("TAG", "onCreate: " + token);
         Log.e("TAG", "onCreate: ---------------------- ");
 
-        FirebaseAuth.getInstance().getCurrentUser().getIdToken(true).addOnSuccessListener(new OnSuccessListener<GetTokenResult>() {
-            @Override
-            public void onSuccess(GetTokenResult getTokenResult) {
-
-                Log.e("TAG", "onSuccess: " + getTokenResult.getToken());
 
 
+        AndroidNetworking.post(url)
+                .addHeaders("jwtTokenHeader", sharedPrefHelper.getString(StaticData.JWT_TOKEN))
+                .setContentType("application/json")
+                .addJSONObjectBody(jsonDataPost)
+                .setPriority(Priority.MEDIUM)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
 
-                AndroidNetworking.post(url)
-                        .addHeaders("authtoken", getTokenResult.getToken())
-                        .setContentType("application/json")
-                        .addJSONObjectBody(jsonDataPost)
-                        .setPriority(Priority.MEDIUM)
-                        .build()
-                        .getAsJSONObject(new JSONObjectRequestListener() {
-                            @Override
-                            public void onResponse(JSONObject response) {
+                        shimmerFrameLayout.setVisibility(View.GONE);
+                        shimmerFrameLayout.stopShimmer();
 
-                                shimmerFrameLayout.setVisibility(View.GONE);
-                                shimmerFrameLayout.stopShimmer();
+                        mProgressBar.setVisibility(View.GONE);
 
-                                mProgressBar.setVisibility(View.GONE);
+                        Log.e("TAG ","onResponse: =   " + response);
 
-                                Log.e("TAG ","onResponse: =   " + response);
+                        Gson gson = new Gson();
+                        sWorkerModelClass = gson.fromJson(String.valueOf(response), SWorkerModelClass.class);
 
-                                Gson gson = new Gson();
-                                sWorkerModelClass = gson.fromJson(String.valueOf(response), SWorkerModelClass.class);
+                        sWorkerAdapter = new SWorkerAdapter((ArrayList<SworkerData>) sWorkerModelClass.getData(), context);
 
-                                sWorkerAdapter = new SWorkerAdapter((ArrayList<SworkerData>) sWorkerModelClass.getData(), context);
+                        mSWorkerRecyclerViewID.setAdapter(sWorkerAdapter);
 
-                                mSWorkerRecyclerViewID.setAdapter(sWorkerAdapter);
+                    }
 
-                            }
-
-                            @Override
-                            public void onError(ANError anError) {
-                                shimmerFrameLayout.setVisibility(View.GONE);
-                                shimmerFrameLayout.stopShimmer();
+                    @Override
+                    public void onError(ANError anError) {
+                        shimmerFrameLayout.setVisibility(View.GONE);
+                        shimmerFrameLayout.stopShimmer();
 
 
 
-                                mProgressBar.setVisibility(View.GONE);
+                        mProgressBar.setVisibility(View.GONE);
 
-                                StaticData.showErrorAlertDialog(context, "Alert !", "আবার চেষ্টা করুন ।");
+                        StaticData.showErrorAlertDialog(context, "Alert !", "আবার চেষ্টা করুন ।");
 
-                                Log.e("TAG", "onResponse: error message =  " + anError.getMessage());
-                                Log.e("TAG", "onResponse: error code =  " + anError.getErrorCode());
-                                Log.e("TAG", "onResponse: error body =  " + anError.getErrorBody());
-                                Log.e("TAG", "onResponse: error  getErrorDetail =  " + anError.getErrorDetail());
-                            }
-                        });
-
-
-
-            }
-        });
+                        Log.e("TAG", "onResponse: error message =  " + anError.getMessage());
+                        Log.e("TAG", "onResponse: error code =  " + anError.getErrorCode());
+                        Log.e("TAG", "onResponse: error body =  " + anError.getErrorBody());
+                        Log.e("TAG", "onResponse: error  getErrorDetail =  " + anError.getErrorDetail());
+                    }
+                });
 
 
     }

@@ -22,9 +22,6 @@ import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONObjectRequestListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.GetTokenResult;
 import com.google.gson.Gson;
 import com.rokkhi.rokkhiguard.Model.api.GetInsideVisitorData;
 import com.rokkhi.rokkhiguard.Model.api.VisitorOutModelClass;
@@ -162,50 +159,43 @@ public class VisitorAdapter extends RecyclerView.Adapter<VisitorAdapter.VisitorV
         Log.e(TAG, "callVisitorOutFunction: visitor status change =  "+jsonDataPost);
         String url = StaticData.baseURL + "" + StaticData.changeVisitorStatus;
 
-        FirebaseAuth.getInstance().getCurrentUser().getIdToken(true).addOnSuccessListener(new OnSuccessListener<GetTokenResult>() {
-            @Override
-            public void onSuccess(GetTokenResult getTokenResult) {
 
-                Log.e("TAG", "onSuccess: " + getTokenResult.getToken());
+        AndroidNetworking.post(url)
+                .addHeaders("authtoken", sharedPrefHelper.getString(StaticData.JWT_TOKEN))
+                .setContentType("application/json")
+                .addJSONObjectBody(jsonDataPost)
+                .setPriority(Priority.MEDIUM)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
 
-
-                AndroidNetworking.post(url)
-                        .addHeaders("authtoken", getTokenResult.getToken())
-                        .setContentType("application/json")
-                        .addJSONObjectBody(jsonDataPost)
-                        .setPriority(Priority.MEDIUM)
-                        .build()
-                        .getAsJSONObject(new JSONObjectRequestListener() {
-                            @Override
-                            public void onResponse(JSONObject response) {
-
-                                fullScreenAlertDialog.dismissdialog();
+                        fullScreenAlertDialog.dismissdialog();
 
 
-                                Log.e(TAG, "onResponse: =  =----------- " + response);
+                        Log.e(TAG, "onResponse: =  =----------- " + response);
 
-                                Gson gson = new Gson();
-                                VisitorOutModelClass visitorOutModelClass = gson.fromJson(String.valueOf(response), VisitorOutModelClass.class);
-                                StaticData.showSuccessDialog((FragmentActivity) context, "OUT Alert !", "Successfully out");
+                        Gson gson = new Gson();
+                        VisitorOutModelClass visitorOutModelClass = gson.fromJson(String.valueOf(response), VisitorOutModelClass.class);
+                        StaticData.showSuccessDialog((FragmentActivity) context, "OUT Alert !", "Successfully out");
 
-                            }
+                    }
 
-                            @Override
-                            public void onError(ANError anError) {
+                    @Override
+                    public void onError(ANError anError) {
 
-                                fullScreenAlertDialog.dismissdialog();
+                        fullScreenAlertDialog.dismissdialog();
 
-                                StaticData.showErrorAlertDialog(context, "Alert !", "আবার চেষ্টা করুন ।");
+                        StaticData.showErrorAlertDialog(context, "Alert !", "আবার চেষ্টা করুন ।");
 
-                                Log.e(TAG, "onResponse: error message =  " + anError.getMessage());
-                                Log.e(TAG, "onResponse: error code =  " + anError.getErrorCode());
-                                Log.e(TAG, "onResponse: error body =  " + anError.getErrorBody());
-                                Log.e(TAG, "onResponse: error  getErrorDetail =  " + anError.getErrorDetail());
-                            }
-                        });
+                        Log.e(TAG, "onResponse: error message =  " + anError.getMessage());
+                        Log.e(TAG, "onResponse: error code =  " + anError.getErrorCode());
+                        Log.e(TAG, "onResponse: error body =  " + anError.getErrorBody());
+                        Log.e(TAG, "onResponse: error  getErrorDetail =  " + anError.getErrorDetail());
+                    }
+                });
 
-            }
-        });
+
     }
 
     @Override

@@ -20,9 +20,7 @@ import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONObjectRequestListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.GetTokenResult;
 import com.google.gson.Gson;
 import com.rokkhi.rokkhiguard.Model.api.GetUserByPhoneData;
 import com.rokkhi.rokkhiguard.Model.api.GetUserByPhoneNumberModelClass;
@@ -138,32 +136,21 @@ public class DaroanPassActivity extends AppCompatActivity implements View.OnClic
         cross.setOnClickListener(this);
         clear.setOnClickListener(this);
 
-        if (FirebaseAuth.getInstance().getCurrentUser()!=null){
+     /*   if (FirebaseAuth.getInstance().getCurrentUser()!=null){
 
             callTokenID();
-        }
+        }*/
 
-
-    }
-
-    private void callTokenID() {
         fullScreenAlertDialog = new FullScreenAlertDialog(context);
 
         fullScreenAlertDialog.showdialog();
-
-        FirebaseAuth.getInstance().getCurrentUser().getIdToken(true).addOnSuccessListener(new OnSuccessListener<GetTokenResult>() {
-            @Override
-            public void onSuccess(GetTokenResult getTokenResult) {
-                Log.e("TAG", "onSuccess: " + getTokenResult.getToken());
+        callUserInformation(fullScreenAlertDialog,sharedPrefHelper.getString(StaticData.JWT_TOKEN));
 
 
-                callUserInformation(fullScreenAlertDialog,getTokenResult.getToken());
 
-            }
-        });
     }
 
-    private void callUserInformation(FullScreenAlertDialog fullScreenAlertDialog, String token) {
+    private void callUserInformation(FullScreenAlertDialog fullScreenAlertDialog, String jWTToken) {
 
 
         Map<String, String> dataPost = new HashMap<>();
@@ -173,19 +160,19 @@ public class DaroanPassActivity extends AppCompatActivity implements View.OnClic
 
         String url = StaticData.baseURL + "" + StaticData.getByPhoneNumber;
 
-        Log.e("TAG", "onCreate: " + jsonDataPost);
-        Log.e("TAG", "onCreate: " + url);
-//        Log.e("TAG", "onCreate: " + token);
-        Log.e("TAG", "onCreate: " + FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber());
+        Log.e("TAG", "onCreate: callUserInformation jsonDataPost 1 = " + jsonDataPost);
+        Log.e("TAG", "onCreate:  callUserInformation 1 = " + url);
+        Log.e("TAG", "onCreate: callUserInformation jWTToken 1 =" + jWTToken);
+        Log.e("TAG", "onCreate: callUserInformation 1 =" + FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber());
         Log.e("TAG", "onCreate: ---------------------- ");
 
-                sharedPrefHelper.clearAllData();
+//                sharedPrefHelper.clearAllData();
 
 
                 SharedPrefHelper sharedPrefHelper = new SharedPrefHelper(context);
 
                 AndroidNetworking.post(url)
-                        .addHeaders("authtoken", token)
+                        .addHeaders("jwtTokenHeader", jWTToken)
                         .setContentType("application/json")
                         .addJSONObjectBody(jsonDataPost)
                         .setPriority(Priority.MEDIUM)
@@ -210,6 +197,9 @@ public class DaroanPassActivity extends AppCompatActivity implements View.OnClic
 
                                 sharedPrefHelper.putString(StaticData.BUILD_NAME,userDetailsModelClassUserByPhoneNumberModelClass.getData().getBuilding().getName());
                                 sharedPrefHelper.putString(StaticData.BUILD_ADDRESS,userDetailsModelClassUserByPhoneNumberModelClass.getData().getBuilding().getAddress());
+
+
+
 
                                 Log.e("TAG", "onResponse: getPrimaryRoleCode  = ==  "+userDetailsModelClassUserByPhoneNumberModelClass.getData().getPrimaryRoleCode());
 

@@ -15,9 +15,6 @@ import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONObjectRequestListener;
 import com.facebook.shimmer.ShimmerFrameLayout;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.GetTokenResult;
 import com.google.gson.Gson;
 import com.rokkhi.rokkhiguard.Adapter.NoticeAdapter;
 import com.rokkhi.rokkhiguard.Model.api.NoticeModelClass;
@@ -71,57 +68,49 @@ public class NoticeBoardActivity extends AppCompatActivity {
 
         Log.e("TAG", "onCreate: ---------------------- ");
 
-        FirebaseAuth.getInstance().getCurrentUser().getIdToken(true).addOnSuccessListener(new OnSuccessListener<GetTokenResult>() {
-            @Override
-            public void onSuccess(GetTokenResult getTokenResult) {
-
-                Log.e("TAG", "onSuccess: " + getTokenResult.getToken());
 
 
 
-                AndroidNetworking.post(url)
-                        .addHeaders("authtoken", getTokenResult.getToken())
-                        .setContentType("application/json")
-                        .addJSONObjectBody(jsonDataPost)
-                        .setPriority(Priority.MEDIUM)
-                        .build()
-                        .getAsJSONObject(new JSONObjectRequestListener() {
-                            @Override
-                            public void onResponse(JSONObject response) {
+        AndroidNetworking.post(url)
+                .addHeaders("jwtTokenHeader", sharedPrefHelper.getString(StaticData.JWT_TOKEN))
+                .setContentType("application/json")
+                .addJSONObjectBody(jsonDataPost)
+                .setPriority(Priority.MEDIUM)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
 
-                                shimmerFrameLayout.stopShimmer();
-                                shimmerFrameLayout.setVisibility(View.GONE);
-
-
-                                Timber.e("onResponse: =   " + response);
-
-                                Gson gson = new Gson();
-                                noticeModelClass = gson.fromJson(String.valueOf(response), NoticeModelClass.class);
-
-                                NoticeAdapter noticeAdapter =new NoticeAdapter(noticeModelClass,context);
-
-                                mRecyclerview.setAdapter(noticeAdapter);
-
-                            }
-
-                            @Override
-                            public void onError(ANError anError) {
-                                shimmerFrameLayout.stopShimmer();
-                                shimmerFrameLayout.setVisibility(View.GONE);
+                        shimmerFrameLayout.stopShimmer();
+                        shimmerFrameLayout.setVisibility(View.GONE);
 
 
-                                StaticData.showErrorAlertDialog(context,"Alert !","আবার চেষ্টা করুন ।");
+                        Timber.e("onResponse: =   " + response);
 
-                                Log.e("TAG", "onResponse: error message =  " + anError.getMessage());
-                                Log.e("TAG", "onResponse: error code =  " + anError.getErrorCode());
-                                Log.e("TAG", "onResponse: error body =  " + anError.getErrorBody());
-                                Log.e("TAG", "onResponse: error  getErrorDetail =  " + anError.getErrorDetail());
-                            }
-                        });
+                        Gson gson = new Gson();
+                        noticeModelClass = gson.fromJson(String.valueOf(response), NoticeModelClass.class);
+
+                        NoticeAdapter noticeAdapter =new NoticeAdapter(noticeModelClass,context);
+
+                        mRecyclerview.setAdapter(noticeAdapter);
+
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+                        shimmerFrameLayout.stopShimmer();
+                        shimmerFrameLayout.setVisibility(View.GONE);
 
 
-            }
-        });
+                        StaticData.showErrorAlertDialog(context,"Alert !","আবার চেষ্টা করুন ।");
+
+                        Log.e("TAG", "onResponse: error message =  " + anError.getMessage());
+                        Log.e("TAG", "onResponse: error code =  " + anError.getErrorCode());
+                        Log.e("TAG", "onResponse: error body =  " + anError.getErrorBody());
+                        Log.e("TAG", "onResponse: error  getErrorDetail =  " + anError.getErrorDetail());
+                    }
+                });
+
 
     }
 

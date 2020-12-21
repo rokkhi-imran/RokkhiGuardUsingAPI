@@ -21,10 +21,8 @@ import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONObjectRequestListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.auth.GetTokenResult;
 import com.google.gson.Gson;
 import com.rokkhi.rokkhiguard.Model.Visitors;
 import com.rokkhi.rokkhiguard.Model.api.AllFlatsModelClass;
@@ -211,59 +209,50 @@ public class MainPageActivity extends AppCompatActivity {
 
         Log.e("TAG", "onCreate: " + jsonDataPost);
         Log.e("TAG", "onCreate: " + url);
-//        Log.e("TAG", "onCreate: " + token);
+        Log.e("TAG", "onCreate: JWT Token =- " + sharedPrefHelper.getString(StaticData.JWT_TOKEN));
+
         Log.e("TAG", "onCreate: " + FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber());
         Log.e("TAG", "onCreate: ---------------------- ");
 
-        FirebaseAuth.getInstance().getCurrentUser().getIdToken(true).addOnSuccessListener(new OnSuccessListener<GetTokenResult>() {
-            @Override
-            public void onSuccess(GetTokenResult getTokenResult) {
-
-                Log.e("TAG", "onSuccess: " + getTokenResult.getToken());
 
 
+        AndroidNetworking.post(url)
+                .addHeaders("jwtTokenHeader", sharedPrefHelper.getString(StaticData.JWT_TOKEN))
+                .setContentType("application/json")
+                .addJSONObjectBody(jsonDataPost)
+                .setPriority(Priority.MEDIUM)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
 
-                AndroidNetworking.post(url)
-                        .addHeaders("authtoken", getTokenResult.getToken())
-                        .setContentType("application/json")
-                        .addJSONObjectBody(jsonDataPost)
-                        .setPriority(Priority.MEDIUM)
-                        .build()
-                        .getAsJSONObject(new JSONObjectRequestListener() {
-                            @Override
-                            public void onResponse(JSONObject response) {
+                        fullScreenAlertDialog.dismissdialog();
 
-                                fullScreenAlertDialog.dismissdialog();
+                        Log.e("TAG ", "onResponse: =   " + response);
 
-                                Log.e("TAG ", "onResponse: =   " + response);
+                        Gson gson = new Gson();
+                        AllFlatsModelClass allFlatsModelClass = gson.fromJson(String.valueOf(response), AllFlatsModelClass.class);
 
-                                Gson gson = new Gson();
-                                AllFlatsModelClass allFlatsModelClass = gson.fromJson(String.valueOf(response), AllFlatsModelClass.class);
+                        String jsonFlats = gson.toJson(allFlatsModelClass);
 
-                                String jsonFlats = gson.toJson(allFlatsModelClass);
+                        sharedPrefHelper.putString(StaticData.ALL_FLATS, jsonFlats);
 
-                                sharedPrefHelper.putString(StaticData.ALL_FLATS, jsonFlats);
+                    }
 
-                            }
+                    @Override
+                    public void onError(ANError anError) {
+                        fullScreenAlertDialog.dismissdialog();
 
-                            @Override
-                            public void onError(ANError anError) {
-                                fullScreenAlertDialog.dismissdialog();
+                        StaticData.showErrorAlertDialog(context, "Alert !", "আবার চেষ্টা করুন ।");
 
-                                StaticData.showErrorAlertDialog(context, "Alert !", "আবার চেষ্টা করুন ।");
-
-                                Log.e("TAG", "onResponse: error message =  " + anError.getMessage());
-                                Log.e("TAG", "onResponse: error code =  " + anError.getErrorCode());
-                                Log.e("TAG", "onResponse: error body =  " + anError.getErrorBody());
-                                Log.e("TAG", "onResponse: error  getErrorDetail =  " + anError.getErrorDetail());
-                            }
-                        });
-
+                        Log.e("TAG", "onResponse: error message =  " + anError.getMessage());
+                        Log.e("TAG", "onResponse: error code =  " + anError.getErrorCode());
+                        Log.e("TAG", "onResponse: error body =  " + anError.getErrorBody());
+                        Log.e("TAG", "onResponse: error  getErrorDetail =  " + anError.getErrorDetail());
+                    }
+                });
 
 
-
-            }
-        });
     }
 
 
