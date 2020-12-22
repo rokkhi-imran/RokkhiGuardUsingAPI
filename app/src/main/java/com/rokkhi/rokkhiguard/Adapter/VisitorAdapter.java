@@ -146,6 +146,7 @@ public class VisitorAdapter extends RecyclerView.Adapter<VisitorAdapter.VisitorV
         SharedPrefHelper sharedPrefHelper = new SharedPrefHelper(context);
 
         FullScreenAlertDialog fullScreenAlertDialog = new FullScreenAlertDialog(context);
+        fullScreenAlertDialog.showdialog();
 
 
         Map<String, String> dataPost = new HashMap<>();
@@ -161,7 +162,7 @@ public class VisitorAdapter extends RecyclerView.Adapter<VisitorAdapter.VisitorV
 
 
         AndroidNetworking.post(url)
-                .addHeaders("authtoken", sharedPrefHelper.getString(StaticData.JWT_TOKEN))
+                .addHeaders("jwtTokenHeader", sharedPrefHelper.getString(StaticData.JWT_TOKEN))
                 .setContentType("application/json")
                 .addJSONObjectBody(jsonDataPost)
                 .setPriority(Priority.MEDIUM)

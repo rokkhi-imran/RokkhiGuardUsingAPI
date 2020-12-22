@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -35,7 +36,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class SWorkersActivity extends AppCompatActivity  {
+public class SWorkersListActivity extends AppCompatActivity  {
 
 
     Context context;
@@ -50,6 +51,8 @@ public class SWorkersActivity extends AppCompatActivity  {
     SWorkerModelClass sWorkerModelClass;
     SWorkerAdapter sWorkerAdapter;
     ShimmerFrameLayout shimmerFrameLayout;
+
+    LinearLayout noDataLinearLayout;
 
 
     @Override
@@ -145,6 +148,10 @@ public class SWorkersActivity extends AppCompatActivity  {
 
                         mSWorkerRecyclerViewID.setAdapter(sWorkerAdapter);
 
+                        if (sWorkerModelClass.getData().size()<1){
+                            noDataLinearLayout.setVisibility(View.VISIBLE);
+                        }
+
                     }
 
                     @Override
@@ -182,6 +189,8 @@ public class SWorkersActivity extends AppCompatActivity  {
         mSWorkerRecyclerViewID.setItemViewCacheSize(20);
         mSWorkerRecyclerViewID.setDrawingCacheEnabled(true);
         mSWorkerRecyclerViewID.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_HIGH);
+
+        noDataLinearLayout=findViewById(R.id.noDataLayout);
 
     }
 

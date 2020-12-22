@@ -104,6 +104,7 @@
         </com.google.android.material.textfield.TextInputLayout>
 
 
+        <include layout="@layout/no_data_found_design"/>
         <include layout="@layout/content_child_list" />
 
 

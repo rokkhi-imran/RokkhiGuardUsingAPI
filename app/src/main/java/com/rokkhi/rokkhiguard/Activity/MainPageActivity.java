@@ -42,13 +42,12 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class MainPageActivity extends AppCompatActivity {
 
-    private static final String TAG = "MainPage";
+    private static final String TAG = "MainPageActivity";
     CircleImageView logout, addvis, vislist, notice, parcel, create, vehicle,
             child;
     Context context;
     ImageButton settings;
 
-    String appVersion;
 
 
     ArrayList<Visitors> visitorsArrayList;
@@ -207,12 +206,12 @@ public class MainPageActivity extends AppCompatActivity {
 
         String url = StaticData.baseURL + "" + StaticData.getFlats;
 
-        Log.e("TAG", "onCreate: " + jsonDataPost);
-        Log.e("TAG", "onCreate: " + url);
-        Log.e("TAG", "onCreate: JWT Token =- " + sharedPrefHelper.getString(StaticData.JWT_TOKEN));
+        Log.e(TAG, "onCreate: " + jsonDataPost);
+        Log.e(TAG, "onCreate: " + url);
+        Log.e(TAG, "onCreate: JWT Token =- " + sharedPrefHelper.getString(StaticData.JWT_TOKEN));
 
-        Log.e("TAG", "onCreate: " + FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber());
-        Log.e("TAG", "onCreate: ---------------------- ");
+        Log.e(TAG, "onCreate: " + FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber());
+        Log.e(TAG, "onCreate: ---------------------- ");
 
 
 
@@ -269,7 +268,7 @@ public class MainPageActivity extends AppCompatActivity {
 
     public void sWorkerListActivity() {
 
-        Intent intent = new Intent(MainPageActivity.this, SWorkersActivity.class);
+        Intent intent = new Intent(MainPageActivity.this, SWorkersListActivity.class);
         startActivity(intent);
 
     }

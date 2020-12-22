@@ -220,7 +220,7 @@ public class ChildListAdapter extends RecyclerView.Adapter<ChildListAdapter.Visi
 
 
         AndroidNetworking.post(url)
-                .addHeaders("authtoken", sharedPrefHelper.getString(StaticData.JWT_TOKEN))
+                .addHeaders("jwtTokenHeader", sharedPrefHelper.getString(StaticData.JWT_TOKEN))
                 .setContentType("application/json")
                 .addJSONObjectBody(jsonDataPost)
                 .setPriority(Priority.MEDIUM)

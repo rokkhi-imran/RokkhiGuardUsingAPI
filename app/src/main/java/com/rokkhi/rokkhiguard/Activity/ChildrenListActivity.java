@@ -7,6 +7,7 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -48,6 +49,7 @@ public class ChildrenListActivity extends AppCompatActivity  {
     EditText searchET;
 
     ShimmerFrameLayout shimmerFrameLayout;
+    LinearLayout noDataLinearLayout;
 
 
     @Override
@@ -55,6 +57,7 @@ public class ChildrenListActivity extends AppCompatActivity  {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_child_list);
         Toolbar toolbar = findViewById(R.id.toolbar);
+        noDataLinearLayout=findViewById(R.id.noDataLayout);
         shimmerFrameLayout=findViewById(R.id.shimmer_view_container);
         shimmerFrameLayout.startShimmer();
         shimmerFrameLayout.setVisibility(View.VISIBLE);
@@ -143,6 +146,10 @@ public class ChildrenListActivity extends AppCompatActivity  {
                         childAdapter = new ChildListAdapter((ArrayList<ChildData>) childModelClass.getData(), context);
                         childAdapter.setHasStableIds(true);
                         recyclerView.setAdapter(childAdapter);
+
+                        if (childModelClass.getData().size()<1){
+                            noDataLinearLayout.setVisibility(View.VISIBLE);
+                        }
 
 
                     }

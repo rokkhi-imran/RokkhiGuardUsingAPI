@@ -57,7 +57,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".Activity.NoticeDetailsActivity" />
-        <activity android:name=".Activity.SWorkersActivity" /> <!-- <activity android:name=".CallChildActivity" /> -->
+        <activity android:name=".Activity.SWorkersListActivity" /> <!-- <activity android:name=".CallChildActivity" /> -->
         <activity
             android:name=".Activity.DaroanPassActivity"
             android:label="Rokkhi"

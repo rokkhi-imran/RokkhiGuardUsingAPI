@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.LinearLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -39,6 +40,7 @@ public class NoticeBoardActivity extends AppCompatActivity {
     SharedPrefHelper sharedPrefHelper;
     private RecyclerView mRecyclerview;
     ShimmerFrameLayout shimmerFrameLayout;
+    LinearLayout noDataLinearLayout;
 
 
     @Override
@@ -85,7 +87,7 @@ public class NoticeBoardActivity extends AppCompatActivity {
                         shimmerFrameLayout.setVisibility(View.GONE);
 
 
-                        Timber.e("onResponse: =   " + response);
+                        Timber.e("onResponse:  get Notice =   " + response);
 
                         Gson gson = new Gson();
                         noticeModelClass = gson.fromJson(String.valueOf(response), NoticeModelClass.class);
@@ -93,6 +95,10 @@ public class NoticeBoardActivity extends AppCompatActivity {
                         NoticeAdapter noticeAdapter =new NoticeAdapter(noticeModelClass,context);
 
                         mRecyclerview.setAdapter(noticeAdapter);
+
+                        if (noticeModelClass.getData().size()<1){
+                            noDataLinearLayout.setVisibility(View.VISIBLE);
+                        }
 
                     }
 
@@ -121,6 +127,7 @@ public class NoticeBoardActivity extends AppCompatActivity {
         shimmerFrameLayout = findViewById(R.id.shimmer_view_container_notice);
         shimmerFrameLayout.setVisibility(View.VISIBLE);
         shimmerFrameLayout.startShimmer();
+        noDataLinearLayout=findViewById(R.id.noDataLayout);
 
     }
 }

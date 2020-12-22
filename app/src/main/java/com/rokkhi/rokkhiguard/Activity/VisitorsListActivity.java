@@ -7,6 +7,7 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -39,7 +40,7 @@ import java.util.Map;
 
 public class VisitorsListActivity extends AppCompatActivity  {
 
-    private static final String TAG = "VisitorsList";
+    private static final String TAG = "VisitorsListActivity";
     RecyclerView recyclerView;
     VisitorAdapter visitorAdapter;
     View mrootView;
@@ -55,6 +56,7 @@ public class VisitorsListActivity extends AppCompatActivity  {
 
     ShimmerFrameLayout shimmerFrameLayout;
 
+    LinearLayout noDataLinearLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,6 +77,7 @@ public class VisitorsListActivity extends AppCompatActivity  {
         mrootView=findViewById(R.id.root);
         search = findViewById(R.id.search);
         sharedPrefHelper=new SharedPrefHelper(context);
+        noDataLinearLayout=findViewById(R.id.noDataLayout);
 
         search.addTextChangedListener(new TextWatcher() {
             @Override
@@ -102,14 +105,15 @@ public class VisitorsListActivity extends AppCompatActivity  {
 
         String url = StaticData.baseURL + "" + StaticData.getVisitors;
 
-        Log.e("TAG", "onCreate: " + jsonDataPost);
-        Log.e("TAG", "onCreate: " + url);
-        Log.e("TAG", "onCreate: ---------------------- ");
+        Log.e(TAG, "onCreate: " + jsonDataPost);
+        Log.e(TAG, "onCreate: " + url);
+        Log.e(TAG, "onCreate: JWT_TOKEN =  " + sharedPrefHelper.getString(StaticData.JWT_TOKEN));
+        Log.e(TAG, "onCreate: ---------------------- ");
 
 
 
         AndroidNetworking.post(url)
-                .addHeaders("authtoken", sharedPrefHelper.getString(StaticData.JWT_TOKEN))
+                .addHeaders("jwtTokenHeader", sharedPrefHelper.getString(StaticData.JWT_TOKEN))
                 .setContentType("application/json")
                 .addJSONObjectBody(jsonDataPost)
                 .setPriority(Priority.MEDIUM)
@@ -127,10 +131,11 @@ public class VisitorsListActivity extends AppCompatActivity  {
 
                         Gson gson = new Gson();
                         getVisitorInsideModelClass = gson.fromJson(String.valueOf(response), GetVisitorInsideModelClass.class);
-
                         visitorAdapter=new VisitorAdapter((ArrayList<GetInsideVisitorData>) getVisitorInsideModelClass.getData(),context);
-//
                         recyclerView.setAdapter(visitorAdapter);
+                        if (getVisitorInsideModelClass.getData().size()<1){
+                            noDataLinearLayout.setVisibility(View.VISIBLE);
+                        }
 
                     }
 

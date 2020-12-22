@@ -7,6 +7,7 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -44,6 +45,7 @@ public class ParkingActivity extends AppCompatActivity implements View.OnClickLi
 
     CarListAdapter carListAdapter;
     Context context;
+    LinearLayout noDataLinearLayout;
 
     VehicleListModelClass vehicleListModelClass;
 
@@ -115,6 +117,9 @@ public class ParkingActivity extends AppCompatActivity implements View.OnClickLi
                         carListAdapter = new CarListAdapter((ArrayList<VehicleData>) vehicleListModelClass.getData(),context);
                         carListAdapter.setHasStableIds(true);
                         mRecyclerview.setAdapter(carListAdapter);
+                        if (vehicleListModelClass.getData().size()<1){
+                            noDataLinearLayout.setVisibility(View.VISIBLE);
+                        }
 
                     }
 
@@ -159,6 +164,7 @@ public class ParkingActivity extends AppCompatActivity implements View.OnClickLi
         sharedPrefHelper=new SharedPrefHelper(getApplicationContext());
 
         context=ParkingActivity.this;
+        noDataLinearLayout=findViewById(R.id.noDataLayout);
     }
 
     @Override

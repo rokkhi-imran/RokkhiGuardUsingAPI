@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/noDataLayout"
+        android:visibility="gone"
+        android:padding="@dimen/_10sdp"
+        android:layout_width="match_parent"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:layout_height="match_parent">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fontFamily="sans-serif-medium"
+        android:gravity="center"
+        android:src="@drawable/no"
+        android:text="কোন তথ্য পাওয়া যায় নাই। "
+        android:textColor="@color/red_light"
+        android:textSize="@dimen/_35sdp" />
+    </LinearLayout>

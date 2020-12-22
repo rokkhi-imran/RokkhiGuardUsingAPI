@@ -7,7 +7,7 @@
     android:layout_marginLeft="@dimen/_5sdp"
     android:layout_marginRight="@dimen/_5sdp"
     android:orientation="vertical"
-    tools:context=".Activity.SWorkersActivity">
+    tools:context=".Activity.SWorkersListActivity">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBarLayout"
@@ -113,6 +113,11 @@
 
         </com.google.android.material.textfield.TextInputLayout>
 
+
+        <include layout="@layout/no_data_found_design"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"/>
+
         <androidx.core.widget.NestedScrollView
             android:id="@+id/nested"
             android:layout_width="match_parent"
@@ -153,6 +158,7 @@
             </RelativeLayout>
 
         </androidx.core.widget.NestedScrollView>
+
     </LinearLayout>
 
     <Button

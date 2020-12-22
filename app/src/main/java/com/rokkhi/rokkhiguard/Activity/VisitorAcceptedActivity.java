@@ -94,7 +94,7 @@ public class VisitorAcceptedActivity extends AppCompatActivity {
 
 
         AndroidNetworking.post(url)
-                .addHeaders("authtoken", sharedPrefHelper.getString(StaticData.JWT_TOKEN))
+                .addHeaders("jwtTokenHeader", sharedPrefHelper.getString(StaticData.JWT_TOKEN))
                 .setContentType("application/json")
                 .addBodyParameter("visitorId", visitorID)
                 .setPriority(Priority.MEDIUM)

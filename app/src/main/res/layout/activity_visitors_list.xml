@@ -69,6 +69,7 @@
     </com.facebook.shimmer.ShimmerFrameLayout>
 
 
+    <include layout="@layout/no_data_found_design"/>
 
     <include layout="@layout/content_visitors_list" />
 
