@@ -97,11 +97,11 @@ public class WaitingVisitorActivity extends AppCompatActivity implements View.On
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.cancelUserInfoBtn:
-                callVisitorInFunction(context,visitorID,StaticData.CANCEL_COMPOUND);
+                callVisitorInFunction(context,visitorID,StaticData.CANCEL_COMPOUND,flatID);
 
                 break;
             case R.id.insideBtn:
-                callVisitorInFunction(context,visitorID,StaticData.INSIDE_COMPOUND);
+                callVisitorInFunction(context,visitorID,StaticData.INSIDE_COMPOUND,flatID);
                 break;
             case R.id.backbuttonInfoBtn:
                 finish();
@@ -110,7 +110,7 @@ public class WaitingVisitorActivity extends AppCompatActivity implements View.On
     }
 
 
-    private void callVisitorInFunction(Context context, int id, String status) {
+    private void callVisitorInFunction(Context context, int id, String status, Integer flatID) {
         SharedPrefHelper sharedPrefHelper = new SharedPrefHelper(context);
 
 
@@ -120,9 +120,11 @@ public class WaitingVisitorActivity extends AppCompatActivity implements View.On
         dataPost.put("visitorId", String.valueOf(id));
         dataPost.put("newStatus", status);
         dataPost.put("communityId", sharedPrefHelper.getString(StaticData.COMM_ID));
+        dataPost.put("flatId", flatID.toString());
 
 
         JSONObject jsonDataPost = new JSONObject(dataPost);
+        Log.e("TAG", "callVisitorInFunction: json data visitor in by guard =  "+jsonDataPost );
 
         String url = StaticData.baseURL + "" + StaticData.changeVisitorStatus;
 

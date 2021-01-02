@@ -41,7 +41,7 @@ public class StaticData {
     }
 
 //    public static final String baseURL = "https://home.api.rokkhi.com";
-    public static final String baseURL = "http://13.76.190.212:3200";
+    public static final String baseURL = "http://api.rokkhi.com:3200";
     public static String imageUploadURL = "/api/v1/image/uploadSingle";
 
     public static final String getNotice = "/api/v1/notice/getNotices";
