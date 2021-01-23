@@ -3,6 +3,7 @@ apply plugin: 'com.google.gms.google-services'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 
+
 apply plugin: 'kotlin-android-extensions'
 
 android {
@@ -13,8 +14,8 @@ android {
         applicationId "com.rokkhi.rokkhiguard"
         minSdkVersion 27
         targetSdkVersion 30
-        versionCode 10
-        versionName "2.0"
+        versionCode 11
+        versionName "2.01"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 

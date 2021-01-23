@@ -137,11 +137,41 @@
 
         </LinearLayout>
 
+
+        <LinearLayout
+            android:id="@+id/reladdress"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/reldesig"
+            android:layout_marginTop="@dimen/_20sdp"
+            android:orientation="vertical">
+
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:hint="ঠিকানা  *"
+                style="@style/LoginTextInputLayoutStyle"
+                android:layout_height="wrap_content">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/user_address"
+                    android:textCursorDrawable="@drawable/color_cursor"
+                    android:textColor="@color/black"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_52sdp"
+                    android:paddingStart="10dp"
+                    android:textSize="24sp" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+
+        </LinearLayout>
+
         <LinearLayout
             android:id="@+id/relflat"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/reldesig"
+            android:layout_below="@+id/reladdress"
             android:layout_marginTop="@dimen/_20sdp"
             android:orientation="vertical">
 

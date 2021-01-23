@@ -82,6 +82,10 @@ public class CreateProfileActivity extends AppCompatActivity implements IPickRes
     /**
      * Done ( শেষ )
      */
+    private TextInputEditText userAddress;
+    /**
+     * Done ( শেষ )
+     */
     private Button submitUserDataBtn;
     private ProgressBar mProgressBar;
     private TextView imageUploadTV;
@@ -151,6 +155,7 @@ public class CreateProfileActivity extends AppCompatActivity implements IPickRes
         mUserPhoneET =  findViewById(R.id.user_Phone_ET);
         mUserWtype =  findViewById(R.id.user_wtype);
         mUserWtype.setOnClickListener(this);
+        userAddress =  findViewById(R.id.user_address);
         UserFlatET =  findViewById(R.id.user_flat);
         UserFlatET.setOnClickListener(this);
         submitUserDataBtn = (Button) findViewById(R.id.SubmitUserInfoBtn);
@@ -226,47 +231,7 @@ public class CreateProfileActivity extends AppCompatActivity implements IPickRes
         selectbutton.setVisibility(View.GONE);
         unselectbutton.setVisibility(View.GONE);
 
-        /*
-        selectbutton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                historyFlats.clear();
-                totaltext = "";
-                tt.setText(totaltext);
 
-                //add again
-                for (int i = 0; i < activeFlat.getData().size(); i++) {
-
-                    activeFlatAdapter.changedata(activeFlat.getData().get(i).getNumber(), true);
-                    activeFlatAdapter.notifyDataSetChanged();
-                    historyFlats.add(activeFlat.getData().get(i));
-                    totaltext = totaltext + " " + activeFlat.getData().get(i).getNumber() + " ";
-                    unselectbutton.setVisibility(View.VISIBLE);
-                    selectbutton.setVisibility(View.GONE);
-                }
-                tt.setText(totaltext);
-
-            }
-        });
-
-        unselectbutton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                for (int i = 0; i < activeFlat.getData().size(); i++) {
-
-                    activeFlatAdapter.changedata(activeFlat.getData().get(i).getNumber(), false);
-                    activeFlatAdapter.notifyDataSetChanged();
-                    historyFlats.remove(activeFlat.getData().get(i));
-                    totaltext = totaltext.replace(" " + activeFlat.getData().get(i).getNumber(), " ");
-                    unselectbutton.setVisibility(View.GONE);
-                    selectbutton.setVisibility(View.VISIBLE);
-                }
-                totaltext = "";
-                tt.setText(totaltext);
-                historyFlats.clear();
-            }
-        });
-*/
         editText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -490,7 +455,7 @@ public class CreateProfileActivity extends AppCompatActivity implements IPickRes
         dataPost.put("userId", "");
         dataPost.put("name", mUserName.getText().toString());
         dataPost.put("userRoleCode", StaticData.SERVICE_WORKER.toString());
-        dataPost.put("address", "");
+        dataPost.put("address", userAddress.getText().toString());
         dataPost.put("email", "");
         dataPost.put("phone", mUserPhoneET.getText().toString());
         dataPost.put("gender", "");

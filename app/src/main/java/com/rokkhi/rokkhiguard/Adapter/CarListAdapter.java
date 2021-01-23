@@ -26,6 +26,7 @@ import com.rokkhi.rokkhiguard.Model.api.RecordVehicleEntryModelClass;
 import com.rokkhi.rokkhiguard.Model.api.VehicleData;
 import com.rokkhi.rokkhiguard.R;
 import com.rokkhi.rokkhiguard.StaticData;
+import com.rokkhi.rokkhiguard.Utils.FullScreenAlertDialog;
 import com.rokkhi.rokkhiguard.helper.SharedPrefHelper;
 
 import org.json.JSONObject;
@@ -137,6 +138,7 @@ public class CarListAdapter extends RecyclerView.Adapter<CarListAdapter.GridView
 
     private void callVehicleEntryData(VehicleData vehicleData, Context context, String url) {
 
+        FullScreenAlertDialog   fullScreenAlertDialog=new FullScreenAlertDialog(context);
 
         SharedPrefHelper sharedPrefHelper=new SharedPrefHelper(context);
 
@@ -153,6 +155,8 @@ public class CarListAdapter extends RecyclerView.Adapter<CarListAdapter.GridView
         Log.e("TAG", "onCreate: " + jsonDataPost);
         Log.e("TAG", "onCreate: " + url);
         Log.e("TAG", "onCreate: ---------------------- ");
+
+        fullScreenAlertDialog.showdialog();
 
 
         AndroidNetworking.post(url)
@@ -173,11 +177,13 @@ public class CarListAdapter extends RecyclerView.Adapter<CarListAdapter.GridView
                         StaticData.showSuccessDialog((FragmentActivity) context,"Success !","Your action completed.");
 
 
+                        fullScreenAlertDialog.dismissdialog();
                     }
 
                     @Override
                     public void onError(ANError anError) {
 
+                        fullScreenAlertDialog.dismissdialog();
 
                         StaticData.showErrorAlertDialog(context,"Alert !","আবার চেষ্টা করুন ।");
 

@@ -38,6 +38,7 @@ import java.util.Map;
 
 public class SWorkersListActivity extends AppCompatActivity  {
 
+    private static final String TAG = "SWorkersListActivity";
 
     Context context;
     SharedPrefHelper sharedPrefHelper;
@@ -58,7 +59,7 @@ public class SWorkersListActivity extends AppCompatActivity  {
     @Override
     protected void onPostResume() {
         super.onPostResume();
-
+        Log.e(TAG, "onPostResume: Call " );
         //call inside this method because when add user and return ,  that time call this function
         callWorkerList();
     }

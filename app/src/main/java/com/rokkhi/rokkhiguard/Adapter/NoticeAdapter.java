@@ -96,6 +96,7 @@ public class NoticeAdapter extends RecyclerView.Adapter<NoticeAdapter.Notoficati
                     context.startActivity(new Intent(context.getApplicationContext(), NoticeDetailsActivity.class)
                     .putExtra("noticeTitle",noticeModelClass.getData().get(getAdapterPosition()).getTitle())
                     .putExtra("noticeDetails",noticeModelClass.getData().get(getAdapterPosition()).getBody())
+                    .putExtra("noticeDate",noticeModelClass.getData().get(getAdapterPosition()).getDate())
                     );
 
                 }
