@@ -24,6 +24,7 @@ public class StaticData {
     public static final String BUILD_ADDRESS = "BUILD_ADDRESS";
     public static final int REQUEST_FOR_APPEAR_ON_TOP_CODE = 565;
     public static final String JWT_TOKEN = "JWT_TOKEN";
+    public static final String KRY_DEVICE_TOKEN = "DEVICE_TOKEN";
 
     public static final void showErrorAlertDialog(Context context, String alertTitle, String alertBody) {
 
@@ -40,8 +41,8 @@ public class StaticData {
 
     }
 
-    public static final String baseURL = "https://home.api.rokkhi.com";
-//    public static final String baseURL = "http://api.rokkhi.com:3200";
+//    public static final String baseURL = "https://home.api.rokkhi.com";
+    public static final String baseURL = "http://dev.rokkhi.com:3200";
     public static String imageUploadURL = "/api/v1/image/uploadSingle";
 
     public static final String getNotice = "/api/v1/notice/getNotices";
@@ -62,6 +63,7 @@ public class StaticData {
     public static final String recordServiceWorkerEntry = "/api/v1/entrance/recordServiceWorkerEntry";
     public static final String recordServiceWorkerExit = "/api/v1/entrance/recordServiceWorkerExit";
     public static final String getRecordedUserByPhoneNumber = "/api/v1/entrance/getRecordedUserByPhoneNumber";
+    public static final String removeDeviceToken = "/api/v1/device/removeDevice";
 
 
     public static final String getVisitorById = "/api/v1/entrance/getVisitorById";

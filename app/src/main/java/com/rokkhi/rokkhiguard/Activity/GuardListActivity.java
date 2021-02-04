@@ -283,6 +283,7 @@ public class GuardListActivity extends AppCompatActivity {
             public void onSuccess(InstanceIdResult instanceIdResult) {
 
                 String deviceToken = instanceIdResult.getToken();
+                sharedPrefHelper.putString(StaticData.KRY_DEVICE_TOKEN,deviceToken);
 
                 Log.e("TAG", "token ID onSuccess first time : Device Token =  " + deviceToken);
                 Log.e("TAG", "token ID onSuccess first time : auth JWT Token  =  " + sharedPrefHelper.getString(StaticData.JWT_TOKEN));

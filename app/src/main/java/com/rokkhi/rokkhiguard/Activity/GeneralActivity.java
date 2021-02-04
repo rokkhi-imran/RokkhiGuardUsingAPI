@@ -15,10 +15,22 @@ import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.preference.RingtonePreference;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.MenuItem;
 
+import com.androidnetworking.AndroidNetworking;
+import com.androidnetworking.common.Priority;
+import com.androidnetworking.error.ANError;
+import com.androidnetworking.interfaces.JSONObjectRequestListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.rokkhi.rokkhiguard.R;
+import com.rokkhi.rokkhiguard.StaticData;
+import com.rokkhi.rokkhiguard.helper.SharedPrefHelper;
+
+import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class GeneralActivity extends AppCompatPreferenceActivity {
 
@@ -120,26 +132,79 @@ public class GeneralActivity extends AppCompatPreferenceActivity {
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
 
-                    final ProgressDialog progressDialog = new ProgressDialog(getContext());
-                    progressDialog.setMessage("Action Executing.....");
-                    progressDialog.show();
-
-
-                    SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getContext());
-                    SharedPreferences.Editor editor = sharedPref.edit();
-                    String buildid = sharedPref.getString("buildid", "none");
-                    String thismobileuid = FirebaseAuth.getInstance().getUid();
-
-                    FirebaseAuth.getInstance().signOut();
-                    progressDialog.dismiss();
-                    Intent intent = new Intent(getContext(), GuardListActivity.class);
-                    startActivity(intent);
-                    getActivity().finish();
-
-
+                    removeDeviceToken();
                     return true;
                 }
             });
         }
+
+        private void callLogOutFunction(ProgressDialog progressDialog) {
+
+            SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getContext());
+            SharedPreferences.Editor editor = sharedPref.edit();
+            String buildid = sharedPref.getString("buildid", "none");
+            String thismobileuid = FirebaseAuth.getInstance().getUid();
+
+            FirebaseAuth.getInstance().signOut();
+            progressDialog.dismiss();
+            Intent intent = new Intent(getContext(), GuardListActivity.class);
+            startActivity(intent);
+            getActivity().finish();
+
+        }
+
+        private void removeDeviceToken() {
+            SharedPrefHelper sharedPrefHelper = new SharedPrefHelper(getContext());
+
+            Map<String, String> dataPost = new HashMap<>();
+
+            dataPost.put("limit", "");
+            dataPost.put("pageId", "");
+            dataPost.put("communityId", sharedPrefHelper.getString(StaticData.COMM_ID));
+            dataPost.put("deviceToken", sharedPrefHelper.getString(StaticData.KRY_DEVICE_TOKEN));
+
+
+            JSONObject jsonDataPost = new JSONObject(dataPost);
+
+            String url = StaticData.baseURL + "" + StaticData.removeDeviceToken;
+
+            Log.e("TAG", "onCreate: " + jsonDataPost);
+            Log.e("TAG", "onCreate: " + url);
+            Log.e("TAG", "onCreate: ---------------------- ");
+            final ProgressDialog progressDialog = new ProgressDialog(getContext());
+            progressDialog.setMessage("Action Executing.....");
+            progressDialog.show();
+
+            AndroidNetworking.post(url)
+                    .addHeaders("jwtTokenHeader", sharedPrefHelper.getString(StaticData.JWT_TOKEN))
+                    .setContentType("application/json")
+                    .addJSONObjectBody(jsonDataPost)
+                    .setPriority(Priority.MEDIUM)
+                    .build()
+                    .getAsJSONObject(new JSONObjectRequestListener() {
+                        @Override
+                        public void onResponse(JSONObject response) {
+
+                            callLogOutFunction(progressDialog);
+                            Log.e(TAG, "onResponse logout: "+response.toString() );
+
+                        }
+
+                        @Override
+                        public void onError(ANError anError) {
+
+
+
+                            Log.e("TAG", "onResponse: error message =  " + anError.getMessage());
+                            Log.e("TAG", "onResponse: error code =  " + anError.getErrorCode());
+                            Log.e("TAG", "onResponse: error body =  " + anError.getErrorBody());
+                            Log.e("TAG", "onResponse: error  getErrorDetail =  " + anError.getErrorDetail());
+                        }
+                    });
+
+
+        }
+
+
     }
 }
