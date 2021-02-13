@@ -2,10 +2,10 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:id="@+id/root"
     tools:context=".Activity.GuardListActivity">
 
     <com.google.android.material.appbar.AppBarLayout
@@ -51,39 +51,52 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <ProgressBar
-        android:id="@+id/progressbar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:visibility="gone"/>
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/guardListRecyclerView"
-        android:layout_width="match_parent"
-        tools:listitem="@layout/item_guard_list"
-        android:layout_height="match_parent" />
     <LinearLayout
-        android:id="@+id/noDataImageLayout"
-        android:orientation="vertical"
-        android:visibility="gone"
-        android:layout_gravity="center"
-        android:gravity="center"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-        <ImageView
-            android:id="@+id/noDataImage"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <ProgressBar
+            android:id="@+id/progressbar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical|center_horizontal"
+            android:visibility="visible" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/guardListRecyclerView"
             android:layout_width="match_parent"
-            android:src="@drawable/no_guard_found"
-            android:layout_height="@dimen/_250sdp" />
-        <TextView
+            android:layout_height="match_parent"
+            android:visibility="gone"
+            tools:listitem="@layout/item_guard_list" />
+
+        <LinearLayout
+            android:id="@+id/noDataImageLayout"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/_50sdp"
-            android:textSize="@dimen/_25sdp"
-            android:text="কোনো গার্ড পাওয়া যায় নাই । "
-            android:textColor="@color/red_light"
-            android:gravity="center"/>
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <ImageView
+                android:id="@+id/noDataImage"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_250sdp"
+                android:src="@drawable/no_guard_found" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_50sdp"
+                android:gravity="center"
+                android:text="কোনো গার্ড পাওয়া যায় নাই । "
+                android:textColor="@color/red_light"
+                android:textSize="@dimen/_25sdp" />
+
+        </LinearLayout>
 
     </LinearLayout>
+
 
 </LinearLayout>

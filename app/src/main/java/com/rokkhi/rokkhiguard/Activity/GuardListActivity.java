@@ -197,6 +197,9 @@ public class GuardListActivity extends AppCompatActivity {
                             mGuardListRecyclerView.setVisibility(View.GONE);
                             noDataImageLayout.setVisibility(View.VISIBLE);
 
+                        }else {
+                            mGuardListRecyclerView.setVisibility(View.VISIBLE);
+
                         }
 
                     }

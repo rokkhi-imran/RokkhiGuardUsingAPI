@@ -36,6 +36,9 @@ import com.rokkhi.rokkhiguard.Adapter.ActiveFlatAdapter;
 import com.rokkhi.rokkhiguard.Adapter.TypesAdapter;
 import com.rokkhi.rokkhiguard.Model.api.ActiveFlatData;
 import com.rokkhi.rokkhiguard.Model.api.ActiveFlatsModelClass;
+import com.rokkhi.rokkhiguard.Model.api.AssignRoleToUserDataModelPost;
+import com.rokkhi.rokkhiguard.Model.api.AssignRoleToUserServiceWorkerResponse;
+import com.rokkhi.rokkhiguard.Model.api.DataFlatInfoPost;
 import com.rokkhi.rokkhiguard.Model.api.RegisterUserModelClass;
 import com.rokkhi.rokkhiguard.R;
 import com.rokkhi.rokkhiguard.StaticData;
@@ -53,14 +56,14 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class CreateProfileActivity extends AppCompatActivity implements IPickResult, View.OnClickListener {
-
-
+    private static final String TAG = "CreateProfileActivity";
     private CircleImageView userPhotoImageView;
     Context context;
     /**
@@ -97,11 +100,12 @@ public class CreateProfileActivity extends AppCompatActivity implements IPickRes
     FullScreenAlertDialog fullScreenAlertDialog;
 
     RegisterUserModelClass registerUserModelClass;
+    AssignRoleToUserServiceWorkerResponse assignRoleToUserServiceWorkerResponse;
 
 
-    String totaltext="";
+    String totaltext = "";
 
-    ArrayList<ActiveFlatData>historyFlats;
+    ArrayList<ActiveFlatData> historyFlats;
     Normalfunc normalfunc;
 
     @Override
@@ -112,8 +116,8 @@ public class CreateProfileActivity extends AppCompatActivity implements IPickRes
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        historyFlats=new ArrayList<>();
-        normalfunc=new Normalfunc();
+        historyFlats = new ArrayList<>();
+        normalfunc = new Normalfunc();
 
         AndroidNetworking.initialize(getApplicationContext());
 
@@ -151,18 +155,18 @@ public class CreateProfileActivity extends AppCompatActivity implements IPickRes
 
         userPhotoImageView = (CircleImageView) findViewById(R.id.user_photoIV);
         userPhotoImageView.setOnClickListener(this);
-        mUserName =  findViewById(R.id.user_nameET);
-        mUserPhoneET =  findViewById(R.id.user_Phone_ET);
-        mUserWtype =  findViewById(R.id.user_wtype);
+        mUserName = findViewById(R.id.user_nameET);
+        mUserPhoneET = findViewById(R.id.user_Phone_ET);
+        mUserWtype = findViewById(R.id.user_wtype);
         mUserWtype.setOnClickListener(this);
-        userAddress =  findViewById(R.id.user_address);
-        UserFlatET =  findViewById(R.id.user_flat);
+        userAddress = findViewById(R.id.user_address);
+        UserFlatET = findViewById(R.id.user_flat);
         UserFlatET.setOnClickListener(this);
         submitUserDataBtn = (Button) findViewById(R.id.SubmitUserInfoBtn);
         submitUserDataBtn.setOnClickListener(this);
         mProgressBar = (ProgressBar) findViewById(R.id.progressBar1);
         context = CreateProfileActivity.this;
-        imageUploadTV=findViewById(R.id.imageUploadTV);
+        imageUploadTV = findViewById(R.id.imageUploadTV);
         imageUploadTV.setOnClickListener(this);
     }
 
@@ -198,7 +202,6 @@ public class CreateProfileActivity extends AppCompatActivity implements IPickRes
         String json = sharedPrefHelper.getString(StaticData.ALL_FLATS);
         ActiveFlatsModelClass activeFlat = gson.fromJson(json, ActiveFlatsModelClass.class);
 
-        
         final ActiveFlatAdapter activeFlatAdapter = new ActiveFlatAdapter(activeFlat, context);
         final AlertDialog alertcompany = new AlertDialog.Builder(context).create();
         LayoutInflater inflater = getLayoutInflater();
@@ -211,7 +214,128 @@ public class CreateProfileActivity extends AppCompatActivity implements IPickRes
         final Button unselectbutton = convertView.findViewById(R.id.deselect);
         final TextView tt = convertView.findViewById(R.id.selected);
         tt.setMovementMethod(new ScrollingMovementMethod());
+        tt.setVisibility(View.VISIBLE);
         totaltext = "";
+        historyFlats.clear();
+
+
+        alertcompany.setView(convertView);
+        alertcompany.setCancelable(false);
+        //valueAdapter.notifyDataSetChanged();
+
+        lv.setAdapter(activeFlatAdapter);
+        alertcompany.show();
+
+        done.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                UserFlatET.setText(totaltext);
+                alertcompany.dismiss();
+            }
+        });
+
+        selectbutton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                historyFlats.clear();
+                totaltext = "";
+                tt.setText(totaltext);
+
+                //add again
+                for (int i = 0; i < activeFlat.getData().size(); i++) {
+
+                    activeFlatAdapter.changedata(activeFlat.getData().get(i).getNumber(), true);
+                    activeFlatAdapter.notifyDataSetChanged();
+                    historyFlats.add(activeFlat.getData().get(i));
+                    totaltext = totaltext + " " + activeFlat.getData().get(i).getNumber() + " ";
+                    unselectbutton.setVisibility(View.VISIBLE);
+                    selectbutton.setVisibility(View.GONE);
+                }
+                tt.setText(totaltext);
+
+            }
+        });
+
+        unselectbutton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                for (int i = 0; i < activeFlat.getData().size(); i++) {
+
+                    activeFlatAdapter.changedata(activeFlat.getData().get(i).getNumber(), false);
+                    activeFlatAdapter.notifyDataSetChanged();
+                    historyFlats.remove(activeFlat.getData().get(i));
+                    totaltext = totaltext.replace(" " + activeFlat.getData().get(i).getNumber(), " ");
+                    unselectbutton.setVisibility(View.GONE);
+                    selectbutton.setVisibility(View.VISIBLE);
+                }
+                totaltext = "";
+                tt.setText(totaltext);
+                historyFlats.clear();
+            }
+        });
+
+        editText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                activeFlatAdapter.getFilter().filter(s.toString().trim());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        });
+
+
+        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+
+                ActiveFlatData ss = (ActiveFlatData) lv.getItemAtPosition(position);
+
+                //selected na hoile selected er moto kaj korbe.. selection er subidhar jnno
+
+                if (!historyFlats.contains(ss)) {
+
+                    activeFlatAdapter.changedata(ss.getNumber(), true);
+                    historyFlats.add(ss);
+                    activeFlatAdapter.notifyDataSetChanged();
+                    totaltext = totaltext + "  " + ss.getNumber();
+                    tt.setText(totaltext);
+
+                } else {
+                    activeFlatAdapter.changedata(ss.getNumber(), false);
+                    historyFlats.remove(ss);
+
+
+                    totaltext = "";
+                    //add again
+                    for (int i = 0; i < historyFlats.size(); i++) {
+
+//                        activeFlatAdapter.changedata(activeFlats.get(i).getF_no(), true);
+//                        activeFlatAdapter.notifyDataSetChanged();
+//                        historyFlats.add(activeFlats.get(i));
+                        totaltext = totaltext + " " + historyFlats.get(i).getNumber() + " ";
+
+                    }
+//                    tt.setText(totaltext);
+
+
+//                    totaltext = totaltext.replace(ss.getF_no(), "");
+
+                    activeFlatAdapter.notifyDataSetChanged();
+                    tt.setText(totaltext);
+
+                }
+
+
+            }
+        });
+       /* totaltext = "";
 
 
         alertcompany.setView(convertView);
@@ -261,7 +385,7 @@ public class CreateProfileActivity extends AppCompatActivity implements IPickRes
                 UserFlatET.setText(totaltext);
                 alertcompany.dismiss();
 
-              /*
+              *//*
 
                 if (!historyFlats.contains(ss)) {
 
@@ -289,17 +413,17 @@ public class CreateProfileActivity extends AppCompatActivity implements IPickRes
 
                 }
 
-*/
+*//*
             }
         });
-
+*/
     }
 
 
     private void sWorkerType() {
 
 
-        ArrayList<String> parcelTypes=new ArrayList<>();
+        ArrayList<String> parcelTypes = new ArrayList<>();
 
         parcelTypes.add("গার্ড");
         parcelTypes.add("শিক্ষক");
@@ -403,10 +527,10 @@ public class CreateProfileActivity extends AppCompatActivity implements IPickRes
             String currentDateandTime = sdf.format(new Date());
             Log.e("TAG", "onClick: currentDateandTime =  " + currentDateandTime);
 
-            String imageUploadUrl = StaticData.baseURL+StaticData.imageUploadURL;
+            String imageUploadUrl = StaticData.baseURL + StaticData.imageUploadURL;
 
             AndroidNetworking.upload(imageUploadUrl)
-                    .addHeaders("jwtTokenHeader",sharedPrefHelper.getString(StaticData.JWT_TOKEN))
+                    .addHeaders("jwtTokenHeader", sharedPrefHelper.getString(StaticData.JWT_TOKEN))
                     .addMultipartFile("image", file)// posting any type of file
                     .addMultipartParameter("folderName", "visitors")
                     .addMultipartParameter("subFolderName", sharedPrefHelper.getString(StaticData.BUILD_ID))
@@ -457,6 +581,7 @@ public class CreateProfileActivity extends AppCompatActivity implements IPickRes
         dataPost.put("userRoleCode", StaticData.SERVICE_WORKER.toString());
         dataPost.put("address", userAddress.getText().toString());
         dataPost.put("email", "");
+
         dataPost.put("phone", mUserPhoneET.getText().toString());
         dataPost.put("gender", "");
         dataPost.put("organization", "");
@@ -464,7 +589,8 @@ public class CreateProfileActivity extends AppCompatActivity implements IPickRes
         dataPost.put("password", "");
         dataPost.put("image", imageDownloadLink);
         dataPost.put("thumbImage", imageDownloadLink);
-        dataPost.put("flatId", String.valueOf(historyFlats.get(0).getId()));
+        dataPost.put("flatId", "");
+//        dataPost.put("flatId", String.valueOf(historyFlats.get(0).getId()));
         dataPost.put("communityId", sharedPrefHelper.getString(StaticData.COMM_ID));
         dataPost.put("buildingId", sharedPrefHelper.getString(StaticData.BUILD_ID));
 
@@ -475,7 +601,6 @@ public class CreateProfileActivity extends AppCompatActivity implements IPickRes
 
         Log.e("TAG", "onCreate: " + jsonDataPost);
         Log.e("TAG", "onCreate: " + url);
-//        Log.e("TAG", "onCreate: " + token);
         Log.e("TAG", "onCreate: ---------------------- ");
 
 
@@ -489,15 +614,15 @@ public class CreateProfileActivity extends AppCompatActivity implements IPickRes
                     @Override
                     public void onResponse(JSONObject response) {
 
-                        fullScreenAlertDialog.dismissdialog();
 
 
-                        Log.e("TAG", "onResponse: =  =----------- " + response);
+                        Log.e("TAG", "onResponse: = service worker added =----------- " + response);
 
                         Gson gson = new Gson();
                         registerUserModelClass = gson.fromJson(String.valueOf(response), RegisterUserModelClass.class);
+                        Log.e(TAG, "onResponse: register id = " + registerUserModelClass.getData().getId());
+                        assignRoleToUserBeta(String.valueOf(registerUserModelClass.getData().getId()), historyFlats);
 
-                        StaticData.showSuccessDialog(CreateProfileActivity.this, "ইনফর্মেশন !", "প্রোফাইলটি তৈরি করা সম্পূর্ণ হয়েছে । ");
 
                     }
 
@@ -514,6 +639,87 @@ public class CreateProfileActivity extends AppCompatActivity implements IPickRes
                         Log.e("TAG", "onResponse: error  getErrorDetail =  " + anError.getErrorDetail());
                     }
                 });
+
+
+    }
+
+    private void assignRoleToUserBeta(String sWorkerId, ArrayList<ActiveFlatData> historyFlats) {
+
+        List<Integer> flatListID = new ArrayList<>();
+        List<DataFlatInfoPost> dataFlatInfoPostList = new ArrayList<>();
+
+        for (ActiveFlatData activeFlatData : historyFlats) {
+            flatListID.add(activeFlatData.getId());
+        }
+
+        DataFlatInfoPost dataFlatInfoPost = new DataFlatInfoPost(Integer.parseInt(sharedPrefHelper.getString(StaticData.BUILD_ID)), flatListID, StaticData.SERVICE_WORKER.toString());
+        dataFlatInfoPostList.add(dataFlatInfoPost);
+
+        AssignRoleToUserDataModelPost assignRoleToUserDataModelPost = new AssignRoleToUserDataModelPost(
+                Integer.parseInt(sharedPrefHelper.getString(StaticData.COMM_ID)),
+                dataFlatInfoPostList,
+                "",
+                "",
+                StaticData.SERVICE_WORKER.toString(),
+                Integer.parseInt(sharedPrefHelper.getString(StaticData.COMM_ID)),
+                Integer.parseInt(sWorkerId));
+
+
+        Gson gson = new Gson();
+        String jsonStr = gson.toJson(assignRoleToUserDataModelPost);
+
+
+        try {
+            JSONObject jsonDataPost = new JSONObject(jsonStr);
+            Log.e(TAG, "assignRoleToUserBeta: jsonStr = " + jsonDataPost);
+
+            String url = StaticData.baseURL + "" + StaticData.assignRoleToUserBeta;
+
+            Log.e("TAG", "onCreate: " + url);
+
+
+            AndroidNetworking.post(url)
+                    .addHeaders("jwtTokenHeader", sharedPrefHelper.getString(StaticData.JWT_TOKEN))
+                    .setContentType("application/json")
+                    .addJSONObjectBody(jsonDataPost)
+                    .setPriority(Priority.MEDIUM)
+                    .build()
+                    .getAsJSONObject(new JSONObjectRequestListener() {
+                        @Override
+                        public void onResponse(JSONObject response) {
+
+                            fullScreenAlertDialog.dismissdialog();
+
+
+                            Log.e("TAG", "onResponse: = service worker added 2nd call  =----------- " + response);
+
+                            Gson gson = new Gson();
+                            assignRoleToUserServiceWorkerResponse = gson.fromJson(String.valueOf(response), AssignRoleToUserServiceWorkerResponse.class);
+                            Log.e(TAG, "onResponse: register id = " + registerUserModelClass.getData().getId());
+
+                            StaticData.showSuccessDialog(CreateProfileActivity.this, "ইনফর্মেশন !", "প্রোফাইলটি তৈরি করা সম্পূর্ণ হয়েছে । ");
+
+                        }
+
+                        @Override
+                        public void onError(ANError anError) {
+
+                            fullScreenAlertDialog.dismissdialog();
+
+                            StaticData.showErrorAlertDialog(context, "Alert !", "আবার চেষ্টা করুন ।");
+
+                            Log.e("TAG", "onResponse: error message =  " + anError.getMessage());
+                            Log.e("TAG", "onResponse: error code =  " + anError.getErrorCode());
+                            Log.e("TAG", "onResponse: error body =  " + anError.getErrorBody());
+                            Log.e("TAG", "onResponse: error  getErrorDetail =  " + anError.getErrorDetail());
+                        }
+                    });
+
+        } catch (JSONException e) {
+            Log.e(TAG, "assignRoleToUserBeta: jsonStr = " + e.getMessage());
+
+            e.printStackTrace();
+        }
 
 
     }

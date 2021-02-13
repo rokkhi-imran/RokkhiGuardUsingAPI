@@ -158,8 +158,6 @@ public class ParkingActivity extends AppCompatActivity implements View.OnClickLi
         mSearch = (EditText) findViewById(R.id.search);
         mSearch.setOnClickListener(this);
         mRecyclerview = (RecyclerView) findViewById(R.id.recyclerview);
-//        mRecyclerview.setLayoutManager(new GridLayoutManager(this,2));
-
         mProgressBar1 = (ProgressBar) findViewById(R.id.progressBar1);
         sharedPrefHelper=new SharedPrefHelper(getApplicationContext());
 
