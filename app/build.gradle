@@ -32,6 +32,7 @@ android {
     }
     lintOptions {
         checkReleaseBuilds false
+        abortOnError false
     }
 }
 
@@ -79,6 +80,8 @@ dependencies {
     //shimmar
     implementation 'com.facebook.shimmer:shimmer:0.5.0'
 
+    implementation 'com.simplemobiletools:commons:5.33.27'
+    implementation 'com.github.tibbi:IndicatorFastScroll:08f512858a'
 
 
 }

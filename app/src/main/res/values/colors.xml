@@ -54,6 +54,7 @@
     <color name="lightorange">#E76A45</color>
 
     <color name="background">#dddddd</color>
+    <color name="ripple_foreground">#33FFFFFF</color>
 
 
 

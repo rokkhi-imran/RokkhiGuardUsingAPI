@@ -93,7 +93,7 @@ public class MainPageActivity extends AppCompatActivity {
 
         //set default caller
 
-//        offerReplacingDefaultDialer(context);
+        offerReplacingDefaultDialer(context);
 
         //check the call permission
         if (context.checkSelfPermission(Manifest.permission.READ_PHONE_STATE) == PackageManager.PERMISSION_DENIED || context.checkSelfPermission(Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_DENIED) {

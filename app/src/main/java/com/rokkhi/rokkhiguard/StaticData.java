@@ -25,6 +25,8 @@ public class StaticData {
     public static final int REQUEST_FOR_APPEAR_ON_TOP_CODE = 565;
     public static final String JWT_TOKEN = "JWT_TOKEN";
     public static final String KRY_DEVICE_TOKEN = "DEVICE_TOKEN";
+    public static final String CALL_FLAT_NAME = "CALL_FLAT_NAME";
+    public static final String GET_CALL_NUMBER = "GET_CALL_NUMBER";
 
     public static final void showErrorAlertDialog(Context context, String alertTitle, String alertBody) {
 

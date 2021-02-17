@@ -62,6 +62,7 @@ public class GuardListActivity extends AppCompatActivity {
     GuardListAdapter guardListAdapter;
 
     private static final int RC_SIGN_IN = 12773;
+    static int REQUEST_CODE_SET_DEFAULT_DIALER = 200;
 
     AuthUI.IdpConfig phoneConfigWithDefaultNumber;
     FirebaseUser firebaseUser;
@@ -72,6 +73,7 @@ public class GuardListActivity extends AppCompatActivity {
 
     Normalfunc normalfunc;
     LinearLayout noDataImageLayout;
+    boolean called = false;
 
 
     @Override
@@ -93,6 +95,9 @@ public class GuardListActivity extends AppCompatActivity {
 
         } else {
         }
+        if (called){
+            mProgressbar.setVisibility(View.GONE);
+        }
 
         mAuth = FirebaseAuth.getInstance();
         mAuthListener = new FirebaseAuth.AuthStateListener() {
@@ -104,21 +109,19 @@ public class GuardListActivity extends AppCompatActivity {
                     sharedPrefHelper.clearAllData();
                     goSignInPage();
                 } else {
-                    mProgressbar.setVisibility(View.VISIBLE);
+//                    mProgressbar.setVisibility(View.VISIBLE);
 
                     FirebaseAuth.getInstance().getCurrentUser().getIdToken(true).addOnSuccessListener(new OnSuccessListener<GetTokenResult>() {
                         @Override
                         public void onSuccess(GetTokenResult getTokenResult) {
 
+                            if (!called) {
 
-                            callUserDetails(getTokenResult.getToken());
+                                callUserDetails(getTokenResult.getToken());
+                            }
 
                         }
                     });
-
-
-
-
 
 
                 }
@@ -127,6 +130,7 @@ public class GuardListActivity extends AppCompatActivity {
 
 
     }
+
 
     private void appearOnTheTopAlert() {
 
@@ -197,7 +201,7 @@ public class GuardListActivity extends AppCompatActivity {
                             mGuardListRecyclerView.setVisibility(View.GONE);
                             noDataImageLayout.setVisibility(View.VISIBLE);
 
-                        }else {
+                        } else {
                             mGuardListRecyclerView.setVisibility(View.VISIBLE);
 
                         }
@@ -284,9 +288,10 @@ public class GuardListActivity extends AppCompatActivity {
         FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener(new OnSuccessListener<InstanceIdResult>() {
             @Override
             public void onSuccess(InstanceIdResult instanceIdResult) {
+                called = true;
 
                 String deviceToken = instanceIdResult.getToken();
-                sharedPrefHelper.putString(StaticData.KRY_DEVICE_TOKEN,deviceToken);
+                sharedPrefHelper.putString(StaticData.KRY_DEVICE_TOKEN, deviceToken);
 
                 Log.e("TAG", "token ID onSuccess first time : Device Token =  " + deviceToken);
                 Log.e("TAG", "token ID onSuccess first time : auth JWT Token  =  " + sharedPrefHelper.getString(StaticData.JWT_TOKEN));
@@ -295,7 +300,7 @@ public class GuardListActivity extends AppCompatActivity {
                 dataPost.put("limit", "");
                 dataPost.put("pageId", "");
                 dataPost.put("communityId", "");
-                dataPost.put("firebaseIdToken", firebaseToken );
+                dataPost.put("firebaseIdToken", firebaseToken);
                 dataPost.put("deviceToken", deviceToken);
                 dataPost.put("deviceType", "Android");
 

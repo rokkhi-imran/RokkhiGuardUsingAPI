@@ -49,6 +49,7 @@ public class ChildListAdapter extends RecyclerView.Adapter<ChildListAdapter.Visi
     public ArrayList<ChildData> childList;
 
     private Context context;
+    private SharedPrefHelper sharedPrefHelper;
 
     public ChildListAdapter(ArrayList<ChildData> childList, Context context) {
         this.childList = childList;
@@ -169,8 +170,16 @@ public class ChildListAdapter extends RecyclerView.Adapter<ChildListAdapter.Visi
                 public void onClick(View v) {
 
                     if (!childList.get(getAdapterPosition()).getContactPersonPhone().isEmpty()){
-                        Intent intent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + childList.get(getAdapterPosition()).getContactPersonPhone()));// Initiates the Intent
-                        context.startActivity(intent);
+
+                        sharedPrefHelper=new SharedPrefHelper(context);
+                        sharedPrefHelper.putString(StaticData.CALL_FLAT_NAME,childList.get(getAdapterPosition()).getFlat().getName());
+
+
+                        String number=childList.get(getAdapterPosition()).getContactPersonPhone();
+                        Intent callIntent = new Intent(Intent.ACTION_CALL);
+                        callIntent.setData(Uri.parse("tel:"+number));
+                        context.startActivity(callIntent);
+
                     }else {
                         showNoContactAlert();
                     }

@@ -35,7 +35,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 
-public class ChildrenListActivity extends AppCompatActivity  {
+public class ChildrenListActivity extends AppCompatActivity {
     private static final String TAG = "ChildrenList";
 
 
@@ -57,12 +57,12 @@ public class ChildrenListActivity extends AppCompatActivity  {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_child_list);
         Toolbar toolbar = findViewById(R.id.toolbar);
-        noDataLinearLayout=findViewById(R.id.noDataLayout);
-        shimmerFrameLayout=findViewById(R.id.shimmer_view_container);
+        noDataLinearLayout = findViewById(R.id.noDataLayout);
+        shimmerFrameLayout = findViewById(R.id.shimmer_view_container);
         shimmerFrameLayout.startShimmer();
         shimmerFrameLayout.setVisibility(View.VISIBLE);
         setSupportActionBar(toolbar);
-        context=this;
+        context = this;
         recyclerView = findViewById(R.id.recyclerview);
 
         recyclerView.setNestedScrollingEnabled(false);
@@ -72,19 +72,20 @@ public class ChildrenListActivity extends AppCompatActivity  {
         recyclerView.setDrawingCacheEnabled(true);
         recyclerView.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_HIGH);
 
-        mProgressBar=findViewById(R.id.progressBar2);
+        mProgressBar = findViewById(R.id.progressBar2);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
 
-        sharedPrefHelper=new SharedPrefHelper(getApplicationContext());
-        searchET=findViewById(R.id.search);
+        sharedPrefHelper = new SharedPrefHelper(getApplicationContext());
+        searchET = findViewById(R.id.search);
 
 
         searchET.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             }
+
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 recyclerView = findViewById(R.id.recyclerview);
@@ -98,9 +99,14 @@ public class ChildrenListActivity extends AppCompatActivity  {
 
                 recyclerView.setLayoutManager(new LinearLayoutManager(context));
 
+                try {
+                    childAdapter.getFilter().filter(s);
 
-                childAdapter.getFilter().filter(s);
+                } catch (Exception e) {
+                    Log.e(TAG, "onTextChanged: "+e.getMessage() );
+                }
             }
+
             @Override
             public void afterTextChanged(Editable s) {
             }
@@ -147,7 +153,7 @@ public class ChildrenListActivity extends AppCompatActivity  {
                         childAdapter.setHasStableIds(true);
                         recyclerView.setAdapter(childAdapter);
 
-                        if (childModelClass.getData().size()<1){
+                        if (childModelClass.getData().size() < 1) {
                             noDataLinearLayout.setVisibility(View.VISIBLE);
                         }
 
@@ -162,7 +168,7 @@ public class ChildrenListActivity extends AppCompatActivity  {
 
                         mProgressBar.setVisibility(View.GONE);
 
-                        StaticData.showErrorAlertDialog(context,"Alert !","আবার চেষ্টা করুন ।");
+                        StaticData.showErrorAlertDialog(context, "Alert !", "আবার চেষ্টা করুন ।");
 
                         Log.e("TAG", "onResponse: error message =  " + anError.getMessage());
                         Log.e("TAG", "onResponse: error code =  " + anError.getErrorCode());
@@ -170,8 +176,6 @@ public class ChildrenListActivity extends AppCompatActivity  {
                         Log.e("TAG", "onResponse: error  getErrorDetail =  " + anError.getErrorDetail());
                     }
                 });
-
-
 
 
     }
