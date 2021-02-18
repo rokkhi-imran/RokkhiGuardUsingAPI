@@ -24,8 +24,8 @@ import com.androidnetworking.interfaces.JSONObjectRequestListener;
 import com.facebook.shimmer.ShimmerFrameLayout;
 import com.google.gson.Gson;
 import com.rokkhi.rokkhiguard.Adapter.SWorkerAdapter;
-import com.rokkhi.rokkhiguard.Model.api.SWorkerModelClass;
-import com.rokkhi.rokkhiguard.Model.api.SworkerData;
+import com.rokkhi.rokkhiguard.Model.api.ServiceWorkerListModelClass;
+import com.rokkhi.rokkhiguard.Model.api.ServiceWorkerListModelData;
 import com.rokkhi.rokkhiguard.R;
 import com.rokkhi.rokkhiguard.StaticData;
 import com.rokkhi.rokkhiguard.helper.SharedPrefHelper;
@@ -49,7 +49,7 @@ public class SWorkersListActivity extends AppCompatActivity  {
 
     private Button mCreateprofile;
 
-    SWorkerModelClass sWorkerModelClass;
+    ServiceWorkerListModelClass serviceWorkerListModelClass;
     SWorkerAdapter sWorkerAdapter;
     ShimmerFrameLayout shimmerFrameLayout;
 
@@ -106,17 +106,31 @@ public class SWorkersListActivity extends AppCompatActivity  {
 
         sharedPrefHelper=new SharedPrefHelper(context);
 
+        /*
+        * "limit": "",
+  "pageId": "",
+  "communityId": "",
+  "toUserId": "",
+  "toCommunityId": "",
+  "toBuildingId": 38,
+  "toFlatId": "",
+  "toUserRoleCode": 1003
+        * */
 
         AndroidNetworking.initialize(getApplicationContext());
         Map<String, String> dataPost = new HashMap<>();
-        dataPost.put("buildingId", sharedPrefHelper.getString(StaticData.BUILD_ID));
+        dataPost.put("limit", "");
+        dataPost.put("pageId", "");
         dataPost.put("communityId", sharedPrefHelper.getString(StaticData.COMM_ID));
-        dataPost.put("flatId", "");
-        dataPost.put("userRoleCode", StaticData.SERVICE_WORKER.toString());
+        dataPost.put("toUserId", "");
+        dataPost.put("toCommunityId", "");
+        dataPost.put("toBuildingId", sharedPrefHelper.getString(StaticData.BUILD_ID));
+        dataPost.put("toFlatId", "");
+        dataPost.put("toUserRoleCode", StaticData.SERVICE_WORKER.toString());
 
         JSONObject jsonDataPost = new JSONObject(dataPost);
 
-        String url = StaticData.baseURL + "" + StaticData.getUsersList;
+        String url = StaticData.baseURL + "" + StaticData.getServiceWorkers;
 
         Log.e("TAG", "onCreate: " + jsonDataPost);
         Log.e("TAG", "onCreate: " + url);
@@ -143,13 +157,13 @@ public class SWorkersListActivity extends AppCompatActivity  {
                         Log.e("TAG ","Worker List onResponse: =   " + response);
 
                         Gson gson = new Gson();
-                        sWorkerModelClass = gson.fromJson(String.valueOf(response), SWorkerModelClass.class);
+                        serviceWorkerListModelClass = gson.fromJson(String.valueOf(response), ServiceWorkerListModelClass.class);
 
-                        sWorkerAdapter = new SWorkerAdapter((ArrayList<SworkerData>) sWorkerModelClass.getData(), context);
+                        sWorkerAdapter = new SWorkerAdapter((ArrayList<ServiceWorkerListModelData>) serviceWorkerListModelClass.getData(), context);
 
                         mSWorkerRecyclerViewID.setAdapter(sWorkerAdapter);
 
-                        if (sWorkerModelClass.getData().size()<1){
+                        if (serviceWorkerListModelClass.getData().size()<1){
                             noDataLinearLayout.setVisibility(View.VISIBLE);
                         }
 

@@ -1,14 +1,20 @@
 package com.rokkhi.rokkhiguard.Activity;
 
 import android.content.Context;
+import android.icu.text.DateFormat;
+import android.icu.text.SimpleDateFormat;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+
 import com.rokkhi.rokkhiguard.R;
+
+import java.util.Date;
+import java.util.Locale;
+
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class NoticeDetailsActivity extends AppCompatActivity implements View.OnClickListener {
@@ -33,8 +39,18 @@ public class NoticeDetailsActivity extends AppCompatActivity implements View.OnC
         noticeTitleTV.setText(noticeDataTitle);
         noticeDetailsTV.setText(noticeDataDetails);
 
-        noticeDateTV.setText(noticeDate);
+        try {
 
+            DateFormat outputFormat = new SimpleDateFormat("dd MMMM yyyy", Locale.US);
+            DateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSX", Locale.US);
+            Date date = inputFormat.parse(noticeDate);
+            String outputText = outputFormat.format(date);
+
+            noticeDateTV.setText(outputText);
+
+        }catch (Exception e){
+
+        }
 
 
     }

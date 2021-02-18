@@ -2,6 +2,9 @@ package com.rokkhi.rokkhiguard.Adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.icu.text.DateFormat;
+import android.icu.text.SimpleDateFormat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,11 +13,14 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.rokkhi.rokkhiguard.Activity.NoticeDetailsActivity;
 import com.rokkhi.rokkhiguard.Model.api.NoticeModelClass;
 import com.rokkhi.rokkhiguard.R;
-import com.rokkhi.rokkhiguard.Activity.NoticeDetailsActivity;
 import com.rokkhi.rokkhiguard.helper.SharedPrefHelper;
 import com.squareup.picasso.Picasso;
+
+import java.util.Date;
+import java.util.Locale;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -44,10 +50,28 @@ public class NoticeAdapter extends RecyclerView.Adapter<NoticeAdapter.Notoficati
     @Override
     public void onBindViewHolder(@NonNull final NotoficationViewHolder holder, int position) {
         try {
+            try {
 
-            holder.title.setText(noticeModelClass.getData().get(position).getTitle());
-            holder.body.setText(noticeModelClass.getData().get(position).getBody());
-            holder.date.setText(noticeModelClass.getData().get(position).getDate());
+                DateFormat outputFormat = new SimpleDateFormat("dd MMMM yyyy", Locale.US);
+                DateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSX", Locale.US);
+
+                String inputText = noticeModelClass.getData().get(position).getDate();
+                Date date = inputFormat.parse(inputText);
+                String outputText = outputFormat.format(date);
+
+                Log.e(TAG, "onBindViewHolder: localDate = "+outputText );
+                Log.e(TAG, "onBindViewHolder: localDate in long = "+outputText);
+                holder.title.setText(noticeModelClass.getData().get(position).getTitle());
+                holder.body.setText(noticeModelClass.getData().get(position).getBody());
+                holder.date.setText(outputText);
+
+            }catch (Exception e ){
+                Log.e(TAG, "onBindViewHolder: localDate = "+e.getMessage() );
+
+            }
+            Log.e(TAG, "onBindViewHolder: notice" );
+
+
             Picasso.get()
                     .load("").fit().placeholder( R.drawable.progress_animation ).error(R.drawable.noticeboard).into(holder.propic);
 

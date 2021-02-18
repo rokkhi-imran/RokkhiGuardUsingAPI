@@ -230,6 +230,10 @@ public class CreateProfileActivity extends AppCompatActivity implements IPickRes
             @Override
             public void onClick(View view) {
                 UserFlatET.setText(totaltext);
+                for (ActiveFlatData flatID :historyFlats){
+                    Log.e(TAG, "onClick: flat id =  "+flatID.getId() );
+                    Log.e(TAG, "onClick: flat name = "+flatID.getName() );
+                }
                 alertcompany.dismiss();
             }
         });

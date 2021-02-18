@@ -70,6 +70,7 @@ public class StaticData {
 
 
     public static final String getVisitorById = "/api/v1/entrance/getVisitorById";
+    public static final String getServiceWorkers = "/api/v1/user-relations/getServiceWorkers";
 
 
 

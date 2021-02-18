@@ -59,6 +59,7 @@
                 android:text="last came"
                 android:textColor="@color/link_blue"
                 android:textStyle="italic" />
+
             <TextView
                 android:id="@+id/flatNumber"
                 android:layout_width="match_parent"
@@ -68,7 +69,6 @@
                 android:layout_marginTop="4dp"
                 android:layout_marginBottom="@dimen/_8sdp"
                 android:layout_toEndOf="@+id/one"
-                android:text="Flat"
                 android:textColor="@color/grey_1000"
                 android:textStyle="italic" />
         </RelativeLayout>
