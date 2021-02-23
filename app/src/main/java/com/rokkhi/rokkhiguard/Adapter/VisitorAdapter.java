@@ -180,6 +180,7 @@ public class VisitorAdapter extends RecyclerView.Adapter<VisitorAdapter.VisitorV
                         VisitorOutModelClass visitorOutModelClass = gson.fromJson(String.valueOf(response), VisitorOutModelClass.class);
                         StaticData.showSuccessDialog((FragmentActivity) context, "OUT Alert !", "Successfully out");
 
+                        AndroidNetworking.cancelAll();
                     }
 
                     @Override

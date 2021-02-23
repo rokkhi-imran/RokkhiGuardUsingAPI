@@ -236,6 +236,7 @@ public class MainPageActivity extends AppCompatActivity {
 
                         sharedPrefHelper.putString(StaticData.ALL_FLATS, jsonFlats);
 
+                        AndroidNetworking.cancelAll();
                     }
 
                     @Override

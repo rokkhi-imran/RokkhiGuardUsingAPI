@@ -106,16 +106,6 @@ public class SWorkersListActivity extends AppCompatActivity  {
 
         sharedPrefHelper=new SharedPrefHelper(context);
 
-        /*
-        * "limit": "",
-  "pageId": "",
-  "communityId": "",
-  "toUserId": "",
-  "toCommunityId": "",
-  "toBuildingId": 38,
-  "toFlatId": "",
-  "toUserRoleCode": 1003
-        * */
 
         AndroidNetworking.initialize(getApplicationContext());
         Map<String, String> dataPost = new HashMap<>();
@@ -167,6 +157,8 @@ public class SWorkersListActivity extends AppCompatActivity  {
                             noDataLinearLayout.setVisibility(View.VISIBLE);
                         }
 
+                        AndroidNetworking.cancelAll();
+
                     }
 
                     @Override
@@ -174,6 +166,7 @@ public class SWorkersListActivity extends AppCompatActivity  {
                         shimmerFrameLayout.setVisibility(View.GONE);
                         shimmerFrameLayout.stopShimmer();
 
+                        AndroidNetworking.cancelAll();
 
 
                         mProgressBar.setVisibility(View.GONE);

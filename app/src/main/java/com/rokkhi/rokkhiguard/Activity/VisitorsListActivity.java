@@ -136,6 +136,7 @@ public class VisitorsListActivity extends AppCompatActivity  {
                         if (getVisitorInsideModelClass.getData().size()<1){
                             noDataLinearLayout.setVisibility(View.VISIBLE);
                         }
+                        AndroidNetworking.cancelAll();
 
                     }
 

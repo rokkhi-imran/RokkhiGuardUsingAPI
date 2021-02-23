@@ -157,6 +157,7 @@ public class ChildrenListActivity extends AppCompatActivity {
                             noDataLinearLayout.setVisibility(View.VISIBLE);
                         }
 
+                        AndroidNetworking.cancelAll();
 
                     }
 

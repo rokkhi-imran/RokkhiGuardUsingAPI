@@ -204,6 +204,7 @@ public class DaroanPassActivity extends AppCompatActivity implements View.OnClic
                                 Log.e("TAG", "onResponse: getPrimaryRoleCode  = ==  "+userDetailsModelClassUserByPhoneNumberModelClass.getData().getPrimaryRoleCode());
 
 
+                                AndroidNetworking.cancelAll();
                             }
 
                             @Override

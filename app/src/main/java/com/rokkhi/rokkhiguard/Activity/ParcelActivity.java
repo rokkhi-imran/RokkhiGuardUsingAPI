@@ -260,6 +260,7 @@ public class ParcelActivity extends AppCompatActivity implements IPickResult {
                         parcelResponseModelClass = gson.fromJson(String.valueOf(response), ParcelResponseModelClass.class);
 
                         showSuccessDialog();
+                        AndroidNetworking.cancelAll();
 
                     }
 

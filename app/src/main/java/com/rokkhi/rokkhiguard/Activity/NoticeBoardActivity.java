@@ -99,6 +99,7 @@ public class NoticeBoardActivity extends AppCompatActivity {
                         if (noticeModelClass.getData().size()<1){
                             noDataLinearLayout.setVisibility(View.VISIBLE);
                         }
+                        AndroidNetworking.cancelAll();
 
                     }
 

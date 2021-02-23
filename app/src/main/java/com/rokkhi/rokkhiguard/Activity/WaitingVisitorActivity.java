@@ -152,6 +152,7 @@ public class WaitingVisitorActivity extends AppCompatActivity implements View.On
                             StaticData.showSuccessDialog((FragmentActivity) context, "Cancel Alert !", "Cancel Successfully Done ");
 
                         }
+                        AndroidNetworking.cancelAll();
 
                     }
 

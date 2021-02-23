@@ -205,6 +205,7 @@ public class GuardListActivity extends AppCompatActivity {
                             mGuardListRecyclerView.setVisibility(View.VISIBLE);
 
                         }
+                        AndroidNetworking.cancelAll();
 
                     }
 

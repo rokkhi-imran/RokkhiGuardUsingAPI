@@ -242,6 +242,7 @@ public class ChildListAdapter extends RecyclerView.Adapter<ChildListAdapter.Visi
 
                         StaticData.showSuccessDialog((FragmentActivity) context,"Alert !","রেকর্ড করা হয়েছে । ");
 
+                        AndroidNetworking.cancelAll();
                     }
 
                     @Override

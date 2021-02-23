@@ -175,6 +175,7 @@ public class AddVisitorActivity extends AppCompatActivity implements View.OnClic
                         if (!getRecordedUserByPhoneNumber.getData().getType().equals("NOT_FOUND")) {
                             showUserInformationDialog(getRecordedUserByPhoneNumber, context);
                         }
+                        AndroidNetworking.cancelAll();
 
                     }
 
@@ -301,6 +302,7 @@ public class AddVisitorActivity extends AppCompatActivity implements View.OnClic
                         mVisitorPendingListRecycelrViewID.setVisibility(View.VISIBLE);
                         mVisitorPendingListRecycelrViewID.setAdapter(visitorWaitingListAdapter);
 
+                        AndroidNetworking.cancelAll();
 
                     }
 
@@ -552,6 +554,7 @@ public class AddVisitorActivity extends AppCompatActivity implements View.OnClic
 
                             }
 
+                            AndroidNetworking.cancelAll();
 
 
                         }

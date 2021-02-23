@@ -594,7 +594,6 @@ public class CreateProfileActivity extends AppCompatActivity implements IPickRes
         dataPost.put("image", imageDownloadLink);
         dataPost.put("thumbImage", imageDownloadLink);
         dataPost.put("flatId", "");
-//        dataPost.put("flatId", String.valueOf(historyFlats.get(0).getId()));
         dataPost.put("communityId", sharedPrefHelper.getString(StaticData.COMM_ID));
         dataPost.put("buildingId", sharedPrefHelper.getString(StaticData.BUILD_ID));
 
@@ -637,10 +636,10 @@ public class CreateProfileActivity extends AppCompatActivity implements IPickRes
 
                         StaticData.showErrorAlertDialog(context, "Alert !", "আবার চেষ্টা করুন ।");
 
-                        Log.e("TAG", "onResponse: error message =  " + anError.getMessage());
-                        Log.e("TAG", "onResponse: error code =  " + anError.getErrorCode());
-                        Log.e("TAG", "onResponse: error body =  " + anError.getErrorBody());
-                        Log.e("TAG", "onResponse: error  getErrorDetail =  " + anError.getErrorDetail());
+                        Log.e("TAG", "onResponse: error message registerOrUpdate =  " + anError.getMessage());
+                        Log.e("TAG", "onResponse: error code registerOrUpdate =  " + anError.getErrorCode());
+                        Log.e("TAG", "onResponse: error body registerOrUpdate =  " + anError.getErrorBody());
+                        Log.e("TAG", "onResponse: error  getErrorDetail registerOrUpdate =  " + anError.getErrorDetail());
                     }
                 });
 
@@ -703,6 +702,7 @@ public class CreateProfileActivity extends AppCompatActivity implements IPickRes
 
                             StaticData.showSuccessDialog(CreateProfileActivity.this, "ইনফর্মেশন !", "প্রোফাইলটি তৈরি করা সম্পূর্ণ হয়েছে । ");
 
+                            AndroidNetworking.cancelAll();
                         }
 
                         @Override

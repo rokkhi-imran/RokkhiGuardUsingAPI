@@ -150,6 +150,7 @@ public class GeneralActivity extends AppCompatPreferenceActivity {
             Intent intent = new Intent(getContext(), GuardListActivity.class);
             startActivity(intent);
             getActivity().finish();
+            AndroidNetworking.cancelAll();
 
         }
 

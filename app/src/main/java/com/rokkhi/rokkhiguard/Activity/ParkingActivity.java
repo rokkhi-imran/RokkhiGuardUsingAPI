@@ -120,6 +120,7 @@ public class ParkingActivity extends AppCompatActivity implements View.OnClickLi
                         if (vehicleListModelClass.getData().size()<1){
                             noDataLinearLayout.setVisibility(View.VISIBLE);
                         }
+                        AndroidNetworking.cancelAll();
 
                     }
 

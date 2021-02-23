@@ -13,15 +13,30 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
+import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.androidnetworking.AndroidNetworking;
+import com.androidnetworking.common.Priority;
+import com.androidnetworking.error.ANError;
+import com.androidnetworking.interfaces.JSONObjectRequestListener;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectWriter;
+import com.rokkhi.rokkhiguard.Model.api.ServiceWorkerInOutModel;
 import com.rokkhi.rokkhiguard.Model.api.ServiceWorkerListModelData;
 import com.rokkhi.rokkhiguard.R;
 import com.rokkhi.rokkhiguard.StaticData;
+import com.rokkhi.rokkhiguard.Utils.FullScreenAlertDialog;
 import com.rokkhi.rokkhiguard.Utils.Normalfunc;
+import com.rokkhi.rokkhiguard.helper.SharedPrefHelper;
 import com.squareup.picasso.Picasso;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
+import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -63,27 +78,27 @@ public class SWorkerAdapter extends RecyclerView.Adapter<SWorkerAdapter.SWorkerV
     @Override
     public void onBindViewHolder(@NonNull final SWorkerViewHolder holder, int position) {
 
-        Log.e(TAG, "onBindViewHolder: 5 position = "+position);
+        Log.e(TAG, "onBindViewHolder: 5 position = " + position);
         try {
-            Log.e(TAG, "onBindViewHolder:1 "+sworkerDataList.toString() );
+            Log.e(TAG, "onBindViewHolder:1 " + sworkerDataList.toString());
             int workPlaceSize = sworkerDataList.get(position).getWorkPlace().size();
-            Log.e(TAG, "onBindViewHolder: 2 = "+workPlaceSize );
+            Log.e(TAG, "onBindViewHolder: 2 = " + workPlaceSize);
             holder.flatNumber.setText("");
-            for (int i=0;i<workPlaceSize;i++){
-                holder.flatNumber.append(sworkerDataList.get(position).getWorkPlace().get(i).getFlat().getName()+" ");
+            for (int i = 0; i < workPlaceSize; i++) {
+                holder.flatNumber.append(sworkerDataList.get(position).getWorkPlace().get(i).getFlat().getName() + " ");
             }
 
-            Log.e(TAG, "onBindViewHolder:3 "+sworkerDataList.toString() );
+            Log.e(TAG, "onBindViewHolder:3 " + sworkerDataList.toString());
             holder.name.setText(sworkerDataList.get(position).getName());
             holder.lastcome.setText(sworkerDataList.get(position).getPhone());
             Picasso.get()
-                    .load(sworkerDataList.get(position).getImage() )
+                    .load(sworkerDataList.get(position).getImage())
                     .fit()
-                    .placeholder( R.drawable.progress_animation )
-                    .into( holder.propic );
+                    .placeholder(R.drawable.progress_animation)
+                    .into(holder.propic);
 
         } catch (Exception e) {
-            Log.e(TAG, "onBindViewHolder:4 "+e.getMessage() );
+            Log.e(TAG, "onBindViewHolder:4 " + e.getMessage());
 
         }
 
@@ -122,7 +137,7 @@ public class SWorkerAdapter extends RecyclerView.Adapter<SWorkerAdapter.SWorkerV
 
     public class SWorkerViewHolder extends RecyclerView.ViewHolder {
         public View view;
-        TextView name, lastcome,flatNumber;
+        TextView name, lastcome, flatNumber;
         CircleImageView propic;
 
         SWorkerViewHolder(View itemView) {
@@ -131,7 +146,7 @@ public class SWorkerAdapter extends RecyclerView.Adapter<SWorkerAdapter.SWorkerV
             name = view.findViewById(R.id.name);
             propic = view.findViewById(R.id.one);
             lastcome = view.findViewById(R.id.lastcome);
-            flatNumber=view.findViewById(R.id.flatNumber);
+            flatNumber = view.findViewById(R.id.flatNumber);
 
             view.setOnClickListener(v -> {
                 inOutSworkerAlert(context, getAdapterPosition(), sworkerDataFilterList);
@@ -154,25 +169,23 @@ public class SWorkerAdapter extends RecyclerView.Adapter<SWorkerAdapter.SWorkerV
 
         textViewName.setText(sworkerData.get(adapterPosition).getName());
 
-        if(!sworkerData.get(adapterPosition).getImage().isEmpty()){
+        if (!sworkerData.get(adapterPosition).getImage().isEmpty()) {
 
-            Picasso.get().load(sworkerData.get(adapterPosition).getImage()).fit().placeholder( R.drawable.progress_animation ).into(circleImageView);
+            Picasso.get().load(sworkerData.get(adapterPosition).getImage()).fit().placeholder(R.drawable.progress_animation).into(circleImageView);
         }
 
         int workPlaceSize = sworkerData.get(adapterPosition).getWorkPlace().size();
         editTextFlat.setText("");
-        for (int i=0;i<workPlaceSize;i++){
-            editTextFlat.append(sworkerData.get(adapterPosition).getWorkPlace().get(i).getFlat().getName()+" ");
+        for (int i = 0; i < workPlaceSize; i++) {
+            editTextFlat.append(sworkerData.get(adapterPosition).getWorkPlace().get(i).getFlat().getName() + " ");
         }
-
-
 
 
         buttonIn.setOnClickListener(v -> {
 
 
             String url = StaticData.baseURL + "" + StaticData.recordServiceWorkerEntry;
-//            callWorkerInOutFunction(context,sworkerData,adapterPosition,url,"In Alert","Service Worker Successfully in this building");
+            callWorkerInOutFunction(context, sworkerData, adapterPosition, url, "In Alert", "Service Worker Successfully in this building");
 
         });
         buttonOut.setOnClickListener(new View.OnClickListener() {
@@ -181,7 +194,7 @@ public class SWorkerAdapter extends RecyclerView.Adapter<SWorkerAdapter.SWorkerV
 
                 String url = StaticData.baseURL + "" + StaticData.recordServiceWorkerExit;
 
-//                callWorkerInOutFunction(context,sworkerData,adapterPosition, url,"OUT Alert !","Service Worker Successfully out from the building");
+                callWorkerInOutFunction(context, sworkerData, adapterPosition, url, "OUT Alert !", "Service Worker Successfully out from the building");
             }
         });
 
@@ -191,66 +204,82 @@ public class SWorkerAdapter extends RecyclerView.Adapter<SWorkerAdapter.SWorkerV
 
     }
 
-//    private void callWorkerInOutFunction(Context context, ArrayList<ServiceWorkerListModelData> sWorkerData, int adapterPosition, String url, String alertTitle, String detailsAlert) {
-//
-//        SharedPrefHelper sharedPrefHelper = new SharedPrefHelper(context);
-//
-//        FullScreenAlertDialog fullScreenAlertDialog = new FullScreenAlertDialog(context);
-//        fullScreenAlertDialog.showdialog();
-//
-//        Map<String, String> dataPost = new HashMap<>();
-//        dataPost.put("limit", "");
-//        dataPost.put("pageId", "");
-//        dataPost.put("communityId", sharedPrefHelper.getString(StaticData.COMM_ID));
-//        dataPost.put("serviceWorkerId", String.valueOf(sWorkerData.get(adapterPosition).getId()));
-//        dataPost.put("buildingId", sharedPrefHelper.getString(StaticData.BUILD_ID));
-//        dataPost.put("flatId",String.valueOf( sWorkerData.get(adapterPosition).getFlat().getId()));
-//        dataPost.put("guardId",sharedPrefHelper.getString(StaticData.USER_ID));
-//        dataPost.put("acknowledgedBy","");
-//
-//
-//        JSONObject jsonDataPost = new JSONObject(dataPost);
-//
-//
-//
-//
-//        AndroidNetworking.post(url)
-//                .addHeaders("jwtTokenHeader",sharedPrefHelper.getString(StaticData.JWT_TOKEN))
-//                .setContentType("application/json")
-//                .addJSONObjectBody(jsonDataPost)
-//                .setPriority(Priority.MEDIUM)
-//                .build()
-//                .getAsJSONObject(new JSONObjectRequestListener() {
-//                    @Override
-//                    public void onResponse(JSONObject response) {
-//
-//                        fullScreenAlertDialog.dismissdialog();
-//
-//                        Log.e(TAG, "onResponse: =  =----------- " + response);
-//
-////                        Gson gson = new Gson();
-////                        VisitorOutModelClass visitorOutModelClass = gson.fromJson(String.valueOf(response), VisitorOutModelClass.class);
-//                        StaticData.showSuccessDialog((FragmentActivity) context, alertTitle, detailsAlert);
-//
-//                    }
-//
-//                    @Override
-//                    public void onError(ANError anError) {
-//
-//                        fullScreenAlertDialog.dismissdialog();
-//
-//                        StaticData.showErrorAlertDialog(context, "Alert !", "আবার চেষ্টা করুন ।");
-//
-//                        Log.e(TAG, "onResponse: error message =  " + anError.getMessage());
-//                        Log.e(TAG, "onResponse: error code =  " + anError.getErrorCode());
-//                        Log.e(TAG, "onResponse: error body =  " + anError.getErrorBody());
-//                        Log.e(TAG, "onResponse: error  getErrorDetail =  " + anError.getErrorDetail());
-//                    }
-//                });
-//
-//
-//
-//    }
+    private void callWorkerInOutFunction(Context context, ArrayList<ServiceWorkerListModelData> sWorkerData, int adapterPosition, String url, String alertTitle, String detailsAlert) {
+
+        SharedPrefHelper sharedPrefHelper = new SharedPrefHelper(context);
+
+        FullScreenAlertDialog fullScreenAlertDialog = new FullScreenAlertDialog(context);
+        fullScreenAlertDialog.showdialog();
+
+/*        Map<String, String> dataPost = new HashMap<>();
+        dataPost.put("limit", "");
+        dataPost.put("pageId", "");
+        dataPost.put("communityId", sharedPrefHelper.getString(StaticData.COMM_ID));
+        dataPost.put("serviceWorkerId", String.valueOf(sWorkerData.get(adapterPosition).getId()));
+        dataPost.put("buildingId", sharedPrefHelper.getString(StaticData.BUILD_ID));
+        dataPost.put("flatId", String.valueOf(sWorkerData.get(adapterPosition).getFlat().getId()));
+        dataPost.put("guardId", sharedPrefHelper.getString(StaticData.USER_ID));
+        dataPost.put("acknowledgedBy", "");*/
+
+        List<Integer> flatIdList = new ArrayList<>();
+
+        for (ServiceWorkerListModelData serviceWorkerListModelData : sWorkerData) {
+            flatIdList.add(serviceWorkerListModelData.getId());
+        }
+
+        ServiceWorkerInOutModel serviceWorkerInOutModel = new ServiceWorkerInOutModel(0, Integer.parseInt(sharedPrefHelper.getString(StaticData.BUILD_ID)),
+                Integer.parseInt(sharedPrefHelper.getString(StaticData.COMM_ID)), flatIdList, Integer.parseInt(sharedPrefHelper.getString(StaticData.USER_ID)),
+                "", "", sWorkerData.get(adapterPosition).getId(), "");
+
+
+        ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
+        try {
+            String json = ow.writeValueAsString(serviceWorkerInOutModel);
+            JSONObject jsonDataPost = new JSONObject(json);
+            Log.e(TAG, "callWorkerInOutFunction: " + jsonDataPost);
+
+            AndroidNetworking.post(url)
+                    .addHeaders("jwtTokenHeader", sharedPrefHelper.getString(StaticData.JWT_TOKEN))
+                    .setContentType("application/json")
+                    .addJSONObjectBody(jsonDataPost)
+                    .setPriority(Priority.MEDIUM)
+                    .build()
+                    .getAsJSONObject(new JSONObjectRequestListener() {
+                        @Override
+                        public void onResponse(JSONObject response) {
+
+                            fullScreenAlertDialog.dismissdialog();
+
+                            Log.e(TAG, "onResponse: =  =----------- " + response);
+
+//                        Gson gson = new Gson();
+//                        VisitorOutModelClass visitorOutModelClass = gson.fromJson(String.valueOf(response), VisitorOutModelClass.class);
+                            StaticData.showSuccessDialog((FragmentActivity) context, alertTitle, detailsAlert);
+
+                            AndroidNetworking.cancelAll();
+                        }
+
+                        @Override
+                        public void onError(ANError anError) {
+
+                            fullScreenAlertDialog.dismissdialog();
+
+                            StaticData.showErrorAlertDialog(context, "Alert !", "আবার চেষ্টা করুন ।");
+
+                            Log.e(TAG, "onResponse: error message =  " + anError.getMessage());
+                            Log.e(TAG, "onResponse: error code =  " + anError.getErrorCode());
+                            Log.e(TAG, "onResponse: error body =  " + anError.getErrorBody());
+                            Log.e(TAG, "onResponse: error  getErrorDetail =  " + anError.getErrorDetail());
+                        }
+                    });
+
+
+        } catch (JsonProcessingException | JSONException e) {
+            Log.e(TAG, "callWorkerInOutFunction: " + e.getMessage());
+            fullScreenAlertDialog.dismissdialog();
+        }
+
+    }
 
 
     private class ValueFilter extends Filter {

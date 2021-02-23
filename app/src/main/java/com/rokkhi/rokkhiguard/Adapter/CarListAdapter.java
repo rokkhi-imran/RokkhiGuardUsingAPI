@@ -178,6 +178,7 @@ public class CarListAdapter extends RecyclerView.Adapter<CarListAdapter.GridView
 
 
                         fullScreenAlertDialog.dismissdialog();
+                        AndroidNetworking.cancelAll();
                     }
 
                     @Override
