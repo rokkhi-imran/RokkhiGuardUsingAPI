@@ -211,6 +211,7 @@ public class ChildListAdapter extends RecyclerView.Adapter<ChildListAdapter.Visi
 
         Map<String, String> dataPost = new HashMap<>();
 
+        dataPost.put("timeZone", sharedPrefHelper.getString(StaticData.TIME_ZONE));
         dataPost.put("requesterFirebaseId",FirebaseAuth.getInstance().getCurrentUser().getUid());
         dataPost.put("requesterProfileId", sharedPrefHelper.getString(StaticData.USER_ID));
         dataPost.put("limit", "");

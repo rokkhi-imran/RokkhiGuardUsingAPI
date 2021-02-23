@@ -211,15 +211,6 @@ public class SWorkerAdapter extends RecyclerView.Adapter<SWorkerAdapter.SWorkerV
         FullScreenAlertDialog fullScreenAlertDialog = new FullScreenAlertDialog(context);
         fullScreenAlertDialog.showdialog();
 
-/*        Map<String, String> dataPost = new HashMap<>();
-        dataPost.put("limit", "");
-        dataPost.put("pageId", "");
-        dataPost.put("communityId", sharedPrefHelper.getString(StaticData.COMM_ID));
-        dataPost.put("serviceWorkerId", String.valueOf(sWorkerData.get(adapterPosition).getId()));
-        dataPost.put("buildingId", sharedPrefHelper.getString(StaticData.BUILD_ID));
-        dataPost.put("flatId", String.valueOf(sWorkerData.get(adapterPosition).getFlat().getId()));
-        dataPost.put("guardId", sharedPrefHelper.getString(StaticData.USER_ID));
-        dataPost.put("acknowledgedBy", "");*/
 
         List<Integer> flatIdList = new ArrayList<>();
 
@@ -229,7 +220,8 @@ public class SWorkerAdapter extends RecyclerView.Adapter<SWorkerAdapter.SWorkerV
 
         ServiceWorkerInOutModel serviceWorkerInOutModel = new ServiceWorkerInOutModel(0, Integer.parseInt(sharedPrefHelper.getString(StaticData.BUILD_ID)),
                 Integer.parseInt(sharedPrefHelper.getString(StaticData.COMM_ID)), flatIdList, Integer.parseInt(sharedPrefHelper.getString(StaticData.USER_ID)),
-                "", "", sWorkerData.get(adapterPosition).getId(), "");
+                "", "", sWorkerData.get(adapterPosition).getId(),
+                sharedPrefHelper.getString(StaticData.TIME_ZONE));
 
 
         ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();

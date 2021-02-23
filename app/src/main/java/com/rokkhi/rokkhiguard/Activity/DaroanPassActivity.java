@@ -154,6 +154,7 @@ public class DaroanPassActivity extends AppCompatActivity implements View.OnClic
 
 
         Map<String, String> dataPost = new HashMap<>();
+        dataPost.put("timeZone", sharedPrefHelper.getString(StaticData.TIME_ZONE));
         dataPost.put("phoneNumber",getUserByPhoneData.getPhone());
 
         JSONObject jsonDataPost = new JSONObject(dataPost);

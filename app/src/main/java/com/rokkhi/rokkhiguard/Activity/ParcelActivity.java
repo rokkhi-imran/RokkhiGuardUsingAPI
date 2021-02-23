@@ -219,6 +219,7 @@ public class ParcelActivity extends AppCompatActivity implements IPickResult {
 
 
         Map<String, String> dataPost = new HashMap<>();
+        dataPost.put("timeZone", sharedPrefHelper.getString(StaticData.TIME_ZONE));
         dataPost.put("name", parcelTypeET.getText().toString());
         dataPost.put("company", companyNameET.getText().toString());
         dataPost.put("image", imageDownloadLink);

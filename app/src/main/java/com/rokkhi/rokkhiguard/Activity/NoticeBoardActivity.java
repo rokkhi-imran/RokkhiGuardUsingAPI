@@ -55,6 +55,7 @@ public class NoticeBoardActivity extends AppCompatActivity {
         sharedPrefHelper = new SharedPrefHelper(context);
 
         Map<String, String> dataPost = new HashMap<>();
+        dataPost.put("timeZone", sharedPrefHelper.getString(StaticData.TIME_ZONE));
         dataPost.put("noticeFor", "");
         dataPost.put("buildingId", sharedPrefHelper.getString(StaticData.BUILD_ID));
         dataPost.put("communityId", sharedPrefHelper.getString(StaticData.COMM_ID));

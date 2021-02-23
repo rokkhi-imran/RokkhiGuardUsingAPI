@@ -199,6 +199,7 @@ public class MainPageActivity extends AppCompatActivity {
 
 
         Map<String, String> dataPost = new HashMap<>();
+        dataPost.put("timeZone", sharedPrefHelper.getString(StaticData.TIME_ZONE));
         dataPost.put("buildingId", sharedPrefHelper.getString(StaticData.BUILD_ID));
         dataPost.put("communityId", sharedPrefHelper.getString(StaticData.COMM_ID));
 

@@ -580,6 +580,7 @@ public class CreateProfileActivity extends AppCompatActivity implements IPickRes
     private void uploadDataData(String imageDownloadLink) {
 
         Map<String, String> dataPost = new HashMap<>();
+        dataPost.put("timeZone", sharedPrefHelper.getString(StaticData.TIME_ZONE));
         dataPost.put("userId", "");
         dataPost.put("name", mUserName.getText().toString());
         dataPost.put("userRoleCode", StaticData.SERVICE_WORKER.toString());

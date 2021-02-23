@@ -140,6 +140,7 @@ public class AddVisitorActivity extends AppCompatActivity implements View.OnClic
     private void callUserInformationByPhoneNumber(CharSequence s) {
 
         Map<String, String> dataPost = new HashMap<>();
+        dataPost.put("timeZone", sharedPrefHelper.getString(StaticData.TIME_ZONE));
 
         dataPost.put("limit", "");
         dataPost.put("pageId", "");
@@ -256,6 +257,7 @@ public class AddVisitorActivity extends AppCompatActivity implements View.OnClic
 
 
         Map<String, String> dataPost = new HashMap<>();
+        dataPost.put("timeZone", sharedPrefHelper.getString(StaticData.TIME_ZONE));
 
         dataPost.put("limit", "");
         dataPost.put("pageId", "");

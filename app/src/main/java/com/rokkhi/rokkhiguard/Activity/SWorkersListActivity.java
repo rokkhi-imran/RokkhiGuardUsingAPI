@@ -109,6 +109,7 @@ public class SWorkersListActivity extends AppCompatActivity  {
 
         AndroidNetworking.initialize(getApplicationContext());
         Map<String, String> dataPost = new HashMap<>();
+        dataPost.put("timeZone", sharedPrefHelper.getString(StaticData.TIME_ZONE));
         dataPost.put("limit", "");
         dataPost.put("pageId", "");
         dataPost.put("communityId", sharedPrefHelper.getString(StaticData.COMM_ID));

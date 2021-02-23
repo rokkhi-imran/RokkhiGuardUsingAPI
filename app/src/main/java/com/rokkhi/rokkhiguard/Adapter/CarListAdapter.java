@@ -143,6 +143,7 @@ public class CarListAdapter extends RecyclerView.Adapter<CarListAdapter.GridView
         SharedPrefHelper sharedPrefHelper=new SharedPrefHelper(context);
 
         Map<String, String> dataPost = new HashMap<>();
+        dataPost.put("timeZone", sharedPrefHelper.getString(StaticData.TIME_ZONE));
         dataPost.put("vehicleId", String.valueOf(vehicleData.getId()));
         dataPost.put("buildingId", sharedPrefHelper.getString(StaticData.BUILD_ID));
         dataPost.put("flatId",String.valueOf( vehicleData.getFlat().getId()));

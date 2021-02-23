@@ -150,6 +150,7 @@ public class VisitorAdapter extends RecyclerView.Adapter<VisitorAdapter.VisitorV
 
 
         Map<String, String> dataPost = new HashMap<>();
+        dataPost.put("timeZone", sharedPrefHelper.getString(StaticData.TIME_ZONE));
         dataPost.put("visitorId", String.valueOf(id));
         dataPost.put("communityId", sharedPrefHelper.getString(StaticData.COMM_ID));
         dataPost.put("newStatus", StaticData.OUTSIDE_COMPOUND);

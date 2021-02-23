@@ -158,6 +158,7 @@ public class GeneralActivity extends AppCompatPreferenceActivity {
             SharedPrefHelper sharedPrefHelper = new SharedPrefHelper(getContext());
 
             Map<String, String> dataPost = new HashMap<>();
+            dataPost.put("timeZone", sharedPrefHelper.getString(StaticData.TIME_ZONE));
 
             dataPost.put("limit", "");
             dataPost.put("pageId", "");

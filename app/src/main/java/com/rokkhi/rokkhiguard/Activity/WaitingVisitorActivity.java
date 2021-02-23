@@ -117,6 +117,7 @@ public class WaitingVisitorActivity extends AppCompatActivity implements View.On
         FullScreenAlertDialog fullScreenAlertDialog = new FullScreenAlertDialog(context);
 
         Map<String, String> dataPost = new HashMap<>();
+        dataPost.put("timeZone", sharedPrefHelper.getString(StaticData.TIME_ZONE));
         dataPost.put("visitorId", String.valueOf(id));
         dataPost.put("newStatus", status);
         dataPost.put("communityId", sharedPrefHelper.getString(StaticData.COMM_ID));
