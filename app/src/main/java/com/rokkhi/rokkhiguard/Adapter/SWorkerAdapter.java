@@ -25,6 +25,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.rokkhi.rokkhiguard.Model.api.ServiceWorkerInOutModel;
 import com.rokkhi.rokkhiguard.Model.api.ServiceWorkerListModelData;
+import com.rokkhi.rokkhiguard.Model.api.ServiceWorkerListModelWorkPlace;
 import com.rokkhi.rokkhiguard.R;
 import com.rokkhi.rokkhiguard.StaticData;
 import com.rokkhi.rokkhiguard.Utils.FullScreenAlertDialog;
@@ -214,8 +215,9 @@ public class SWorkerAdapter extends RecyclerView.Adapter<SWorkerAdapter.SWorkerV
 
         List<Integer> flatIdList = new ArrayList<>();
 
-        for (ServiceWorkerListModelData serviceWorkerListModelData : sWorkerData) {
-            flatIdList.add(serviceWorkerListModelData.getId());
+
+        for (ServiceWorkerListModelWorkPlace serviceWorkerListModelDataWorkPlace : sWorkerData.get(adapterPosition).getWorkPlace()) {
+            flatIdList.add(serviceWorkerListModelDataWorkPlace.getFlat().getId());
         }
 
         ServiceWorkerInOutModel serviceWorkerInOutModel = new ServiceWorkerInOutModel(0, Integer.parseInt(sharedPrefHelper.getString(StaticData.BUILD_ID)),
