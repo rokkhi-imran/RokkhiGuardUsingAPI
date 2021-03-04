@@ -193,9 +193,10 @@ public class SWorkerAdapter extends RecyclerView.Adapter<SWorkerAdapter.SWorkerV
             @Override
             public void onClick(View v) {
 
-                String url = StaticData.baseURL + "" + StaticData.recordServiceWorkerExit;
+//                String url = StaticData.baseURL + "" + StaticData.recordServiceWorkerExit;
+                String url = StaticData.baseURL + "" + StaticData.changeServiceWorkerStatus;
 
-                callWorkerInOutFunction(context, sworkerData, adapterPosition, url, "OUT Alert !", "Service Worker Successfully out from the building");
+                changeServiceWorkerStatus(context, sworkerData, adapterPosition, url, "OUT Alert !", "Service Worker Successfully out from the building");
             }
         });
 
@@ -269,6 +270,68 @@ public class SWorkerAdapter extends RecyclerView.Adapter<SWorkerAdapter.SWorkerV
 
 
         } catch (JsonProcessingException | JSONException e) {
+            Log.e(TAG, "callWorkerInOutFunction: " + e.getMessage());
+            fullScreenAlertDialog.dismissdialog();
+        }
+
+    }
+
+    private void changeServiceWorkerStatus(Context context, ArrayList<ServiceWorkerListModelData> sWorkerData, int adapterPosition, String url, String alertTitle, String detailsAlert) {
+
+        SharedPrefHelper sharedPrefHelper = new SharedPrefHelper(context);
+
+        FullScreenAlertDialog fullScreenAlertDialog = new FullScreenAlertDialog(context);
+        fullScreenAlertDialog.showdialog();
+
+
+        try {
+            JSONObject dataPost = new JSONObject();
+            dataPost.put("limit", "");
+            dataPost.put("pageId", "");
+            dataPost.put("communityId", sharedPrefHelper.getString(StaticData.COMM_ID));
+            dataPost.put("timeZone", sharedPrefHelper.getString(StaticData.TIME_ZONE));
+            dataPost.put("serviceWorkerId", sWorkerData.get(adapterPosition).getId());
+            dataPost.put("newStatus", StaticData.OUTSIDE_COMPOUND);
+
+            Log.e(TAG, "changeServiceWorkerStatus: " + dataPost);
+
+            AndroidNetworking.post(url)
+                    .addHeaders("jwtTokenHeader", sharedPrefHelper.getString(StaticData.JWT_TOKEN))
+                    .setContentType("application/json")
+                    .addJSONObjectBody(dataPost)
+                    .setPriority(Priority.MEDIUM)
+                    .build()
+                    .getAsJSONObject(new JSONObjectRequestListener() {
+                        @Override
+                        public void onResponse(JSONObject response) {
+
+                            fullScreenAlertDialog.dismissdialog();
+
+                            Log.e(TAG, "changeServiceWorkerStatus onResponse: =  =----------- " + response);
+
+//                        Gson gson = new Gson();
+//                        VisitorOutModelClass visitorOutModelClass = gson.fromJson(String.valueOf(response), VisitorOutModelClass.class);
+                            StaticData.showSuccessDialog((FragmentActivity) context, alertTitle, detailsAlert);
+
+                            AndroidNetworking.cancelAll();
+                        }
+
+                        @Override
+                        public void onError(ANError anError) {
+
+                            fullScreenAlertDialog.dismissdialog();
+
+                            StaticData.showErrorAlertDialog(context, "Alert !", "আবার চেষ্টা করুন ।");
+
+                            Log.e(TAG, "onResponse: changeServiceWorkerStatus error message =  " + anError.getMessage());
+                            Log.e(TAG, "onResponse: changeServiceWorkerStatus error code =  " + anError.getErrorCode());
+                            Log.e(TAG, "onResponse: changeServiceWorkerStatus error body =  " + anError.getErrorBody());
+                            Log.e(TAG, "onResponse: changeServiceWorkerStatus error  getErrorDetail =  " + anError.getErrorDetail());
+                        }
+                    });
+
+
+        } catch (JSONException e) {
             Log.e(TAG, "callWorkerInOutFunction: " + e.getMessage());
             fullScreenAlertDialog.dismissdialog();
         }

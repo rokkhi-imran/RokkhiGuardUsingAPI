@@ -65,6 +65,7 @@ public class StaticData {
     public static final String changeVisitorStatus = "/api/v1/entrance/changeVisitorStatus";
     public static final String recordServiceWorkerEntry = "/api/v1/entrance/recordServiceWorkerEntry";
     public static final String recordServiceWorkerExit = "/api/v1/entrance/recordServiceWorkerExit";
+    public static final String changeServiceWorkerStatus = "/api/v1/entrance/changeServiceWorkerStatus";
     public static final String getRecordedUserByPhoneNumber = "/api/v1/entrance/getRecordedUserByPhoneNumber";
     public static final String removeDeviceToken = "/api/v1/device/removeDevice";
     public static final String assignRoleToUserBeta = "/api/v1/privilege/assignRoleToUserBeta";
