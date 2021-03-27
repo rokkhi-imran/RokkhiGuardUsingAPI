@@ -9,5 +9,11 @@ data class ServiceWorkerInOutModel(
     val limit: String,
     val pageId: String,
     val serviceWorkerId: Int,
-    val timeZone: String
+    val timeZone: String,
+    val requesterFlatId: Int,
+    val requesterBuildingId: Int,
+    val requesterCommunityId: Int,
+    val requesterUserRole: Int,
+
 )
+

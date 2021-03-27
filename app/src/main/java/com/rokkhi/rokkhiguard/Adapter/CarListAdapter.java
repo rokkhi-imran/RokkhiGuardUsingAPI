@@ -142,15 +142,24 @@ public class CarListAdapter extends RecyclerView.Adapter<CarListAdapter.GridView
 
         SharedPrefHelper sharedPrefHelper=new SharedPrefHelper(context);
 
-        Map<String, String> dataPost = new HashMap<>();
+        Map<String, Object> dataPost = new HashMap<>();
+        dataPost.put("limit", "");
+        dataPost.put("pageId", "");
         dataPost.put("timeZone", sharedPrefHelper.getString(StaticData.TIME_ZONE));
-        dataPost.put("vehicleId", String.valueOf(vehicleData.getId()));
-        dataPost.put("buildingId", sharedPrefHelper.getString(StaticData.BUILD_ID));
-        dataPost.put("flatId",String.valueOf( vehicleData.getFlat().getId()));
-        dataPost.put("communityId", sharedPrefHelper.getString(StaticData.COMM_ID));
-        dataPost.put("guardId", sharedPrefHelper.getString(StaticData.USER_ID));
+        dataPost.put("requesterFlatId", 0);
+        dataPost.put("requesterBuildingId", Integer.parseInt(sharedPrefHelper.getString(StaticData.BUILD_ID)));
+        dataPost.put("requesterCommunityId", Integer.parseInt(sharedPrefHelper.getString(StaticData.COMM_ID)));
+
+        dataPost.put("requesterUserRole", 1);
+
+        dataPost.put("vehicleId", vehicleData.getId());
+        dataPost.put("communityId", Integer.parseInt(sharedPrefHelper.getString(StaticData.COMM_ID)));
+        dataPost.put("buildingId", Integer.parseInt(sharedPrefHelper.getString(StaticData.BUILD_ID)));
+        dataPost.put("flatId",vehicleData.getFlat().getId());
+        dataPost.put("guardId", Integer.parseInt(sharedPrefHelper.getString(StaticData.USER_ID)));
         dataPost.put("acknowledgedBy", "");
         JSONObject jsonDataPost = new JSONObject(dataPost);
+
 
 
         Log.e("TAG", "onCreate: " + jsonDataPost);

@@ -23,7 +23,6 @@ import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONObjectRequestListener;
-import com.google.firebase.auth.FirebaseAuth;
 import com.rokkhi.rokkhiguard.Model.api.ChildData;
 import com.rokkhi.rokkhiguard.R;
 import com.rokkhi.rokkhiguard.StaticData;
@@ -209,18 +208,19 @@ public class ChildListAdapter extends RecyclerView.Adapter<ChildListAdapter.Visi
         fullScreenAlertDialog.showdialog();
 
 
-        Map<String, String> dataPost = new HashMap<>();
+        Map<String, Object> dataPost = new HashMap<>();
 
-        dataPost.put("timeZone", sharedPrefHelper.getString(StaticData.TIME_ZONE));
-        dataPost.put("requesterFirebaseId",FirebaseAuth.getInstance().getCurrentUser().getUid());
-        dataPost.put("requesterProfileId", sharedPrefHelper.getString(StaticData.USER_ID));
         dataPost.put("limit", "");
         dataPost.put("pageId", "");
-        dataPost.put("communityId",sharedPrefHelper.getString(StaticData.COMM_ID));
+        dataPost.put("timeZone", sharedPrefHelper.getString(StaticData.TIME_ZONE));
+        dataPost.put("requesterBuildingId", Integer.parseInt(sharedPrefHelper.getString(StaticData.BUILD_ID)));
+        dataPost.put("requesterCommunityId", Integer.parseInt(sharedPrefHelper.getString(StaticData.COMM_ID)));
+        dataPost.put("requesterUserRole", 1);
+        dataPost.put("requesterFlatId", 0);
         dataPost.put("childrenId",String.valueOf(childList.get(adapterPosition).getId()));
         dataPost.put("guardId", sharedPrefHelper.getString(StaticData.USER_ID));
-
         JSONObject jsonDataPost = new JSONObject(dataPost);
+
 
         String url = StaticData.baseURL + "" + StaticData.recordChildrenExitFromCompound;
 

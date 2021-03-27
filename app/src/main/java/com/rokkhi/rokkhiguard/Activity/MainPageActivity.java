@@ -197,26 +197,28 @@ public class MainPageActivity extends AppCompatActivity {
     private void callFlatList() {
         fullScreenAlertDialog.showdialog();
 
-
-        Map<String, String> dataPost = new HashMap<>();
+        Map<String, Object> dataPost = new HashMap<>();
+        dataPost.put("limit", "");
+        dataPost.put("pageId", "");
         dataPost.put("timeZone", sharedPrefHelper.getString(StaticData.TIME_ZONE));
-        dataPost.put("buildingId", sharedPrefHelper.getString(StaticData.BUILD_ID));
-        dataPost.put("communityId", sharedPrefHelper.getString(StaticData.COMM_ID));
-
+        dataPost.put("requesterFlatId", 0);
+        dataPost.put("requesterBuildingId", Integer.parseInt(sharedPrefHelper.getString(StaticData.BUILD_ID)));
+        dataPost.put("requesterCommunityId", Integer.parseInt(sharedPrefHelper.getString(StaticData.COMM_ID)));
+        dataPost.put("requesterUserRole", 1);
+        dataPost.put("buildingId", Integer.parseInt(sharedPrefHelper.getString(StaticData.BUILD_ID)));
         JSONObject jsonDataPost = new JSONObject(dataPost);
 
-        String url = StaticData.baseURL + "" + StaticData.getFlats;
+        String getFlatsUrl = StaticData.baseURL + "" + StaticData.getFlats;
 
         Log.e(TAG, "onCreate: " + jsonDataPost);
-        Log.e(TAG, "onCreate: " + url);
+        Log.e(TAG, "onCreate: " + getFlatsUrl);
         Log.e(TAG, "onCreate: JWT Token =- " + sharedPrefHelper.getString(StaticData.JWT_TOKEN));
 
         Log.e(TAG, "onCreate: " + FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber());
         Log.e(TAG, "onCreate: ---------------------- ");
 
 
-
-        AndroidNetworking.post(url)
+        AndroidNetworking.post(getFlatsUrl)
                 .addHeaders("jwtTokenHeader", sharedPrefHelper.getString(StaticData.JWT_TOKEN))
                 .setContentType("application/json")
                 .addJSONObjectBody(jsonDataPost)
@@ -239,7 +241,6 @@ public class MainPageActivity extends AppCompatActivity {
 
                         AndroidNetworking.cancelAll();
                     }
-
                     @Override
                     public void onError(ANError anError) {
                         fullScreenAlertDialog.dismissdialog();
@@ -252,7 +253,6 @@ public class MainPageActivity extends AppCompatActivity {
                         Log.e("TAG", "onResponse: error  getErrorDetail =  " + anError.getErrorDetail());
                     }
                 });
-
 
     }
 

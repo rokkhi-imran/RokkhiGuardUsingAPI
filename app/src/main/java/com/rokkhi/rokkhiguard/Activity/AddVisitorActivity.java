@@ -139,13 +139,19 @@ public class AddVisitorActivity extends AppCompatActivity implements View.OnClic
 
     private void callUserInformationByPhoneNumber(CharSequence s) {
 
-        Map<String, String> dataPost = new HashMap<>();
+        Map<String, Object> dataPost = new HashMap<>();
         dataPost.put("timeZone", sharedPrefHelper.getString(StaticData.TIME_ZONE));
 
         dataPost.put("limit", "");
         dataPost.put("pageId", "");
-        dataPost.put("communityId", sharedPrefHelper.getString(StaticData.COMM_ID));
+        dataPost.put("timeZone", sharedPrefHelper.getString(StaticData.TIME_ZONE));
+        dataPost.put("requesterFlatId", 0);
+        dataPost.put("requesterBuildingId", Integer.parseInt(sharedPrefHelper.getString(StaticData.BUILD_ID)));
+        dataPost.put("requesterCommunityId", Integer.parseInt(sharedPrefHelper.getString(StaticData.COMM_ID)));
+        dataPost.put("requesterUserRole",1);
         dataPost.put("phoneNumber", s.toString());
+
+
 
 
         JSONObject jsonDataPost = new JSONObject(dataPost);
@@ -256,17 +262,22 @@ public class AddVisitorActivity extends AppCompatActivity implements View.OnClic
     private void getVisitorWaitingList() {
 
 
-        Map<String, String> dataPost = new HashMap<>();
-        dataPost.put("timeZone", sharedPrefHelper.getString(StaticData.TIME_ZONE));
+        Map<String, Object> dataPost = new HashMap<>();
 
         dataPost.put("limit", "");
         dataPost.put("pageId", "");
-        dataPost.put("buildingId", sharedPrefHelper.getString(StaticData.BUILD_ID));
-        dataPost.put("communityId", sharedPrefHelper.getString(StaticData.COMM_ID));
-        dataPost.put("flatId", "");
+        dataPost.put("timeZone", sharedPrefHelper.getString(StaticData.TIME_ZONE));
+        dataPost.put("requesterFlatId", 0);
+        dataPost.put("requesterBuildingId", Integer.parseInt(sharedPrefHelper.getString(StaticData.BUILD_ID)));
+        dataPost.put("requesterCommunityId", Integer.parseInt(sharedPrefHelper.getString(StaticData.COMM_ID)));
+        dataPost.put("requesterUserRole",1);
+        dataPost.put("buildingId", Integer.parseInt(sharedPrefHelper.getString(StaticData.BUILD_ID)));
+        dataPost.put("communityId", Integer.parseInt(sharedPrefHelper.getString(StaticData.COMM_ID)));
+        dataPost.put("flatId", 0);
         dataPost.put("status", StaticData.PENDING_PERMISSION);
         dataPost.put("fromDate", "");
         dataPost.put("toDate", "");
+
 
 
         JSONObject jsonDataPost = new JSONObject(dataPost);
@@ -494,6 +505,13 @@ public class AddVisitorActivity extends AppCompatActivity implements View.OnClic
         try {
 
             JSONObject dataPost = new JSONObject();
+            dataPost.put("limit", "");
+            dataPost.put("pageId", "");
+            dataPost.put("timeZone", sharedPrefHelper.getString(StaticData.TIME_ZONE));
+            dataPost.put("requesterFlatId", 0);
+            dataPost.put("requesterBuildingId", Integer.parseInt(sharedPrefHelper.getString(StaticData.BUILD_ID)));
+            dataPost.put("requesterCommunityId", Integer.parseInt(sharedPrefHelper.getString(StaticData.COMM_ID)));
+            dataPost.put("requesterUserRole", 1);
             dataPost.put("name", mUserNameET.getText().toString());
             dataPost.put("address", mAddressET.getText().toString());
             dataPost.put("contact", mPhoneNoET.getText().toString());
@@ -501,22 +519,20 @@ public class AddVisitorActivity extends AppCompatActivity implements View.OnClic
             dataPost.put("purpose", mPuposeET.getText().toString());
             dataPost.put("image", imageLink);
             dataPost.put("thumbImage", imageLink);
-            dataPost.put("communityId", sharedPrefHelper.getString(StaticData.COMM_ID));
-            dataPost.put("buildingId", sharedPrefHelper.getString(StaticData.BUILD_ID));
-            dataPost.put("flatId", String.valueOf(historyFlats.get(0).getId()));
-            dataPost.put("guardId", sharedPrefHelper.getString(StaticData.USER_ID));
+            dataPost.put("communityId", Integer.parseInt(sharedPrefHelper.getString(StaticData.COMM_ID)));
+            dataPost.put("buildingId", Integer.parseInt(sharedPrefHelper.getString(StaticData.BUILD_ID)));
+            dataPost.put("flatId", historyFlats.get(0).getId());
+            dataPost.put("guardId", Integer.parseInt(sharedPrefHelper.getString(StaticData.USER_ID)));
             dataPost.put("responderId", 0);
 
 
-
-
-            String url = StaticData.baseURL + "" + StaticData.addVisitor;
+            String addVisitorUrl = StaticData.baseURL + "" + StaticData.addVisitor;
 
             Log.e("TAG", "onCreate: " + dataPost);
-            Log.e("TAG", "onCreate: " + url);
+            Log.e("TAG", "onCreate: " + addVisitorUrl);
             Log.e("TAG", "onCreate: ---------------------- ");
 
-            AndroidNetworking.post(url)
+            AndroidNetworking.post(addVisitorUrl)
                     .addHeaders("jwtTokenHeader", sharedPrefHelper.getString(StaticData.JWT_TOKEN))
                     .setContentType("application/json")
                     .addJSONObjectBody(dataPost)

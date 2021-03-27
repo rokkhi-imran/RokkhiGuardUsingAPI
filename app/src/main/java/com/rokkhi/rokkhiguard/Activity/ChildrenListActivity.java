@@ -113,12 +113,17 @@ public class ChildrenListActivity extends AppCompatActivity {
         });
 
 
-        Map<String, String> dataPost = new HashMap<>();
-        dataPost.put("timeZone", sharedPrefHelper.getString(StaticData.TIME_ZONE));
 
-        dataPost.put("buildingId", sharedPrefHelper.getString(StaticData.BUILD_ID));
-        dataPost.put("communityId", sharedPrefHelper.getString(StaticData.COMM_ID));
-        dataPost.put("flatId", "");
+        Map<String, Object> dataPost = new HashMap<>();
+        dataPost.put("limit","");
+        dataPost.put("pageId","");
+        dataPost.put("timeZone", sharedPrefHelper.getString(StaticData.TIME_ZONE));
+        dataPost.put("requesterFlatId", 0);
+        dataPost.put("requesterBuildingId",Integer.parseInt(sharedPrefHelper.getString(StaticData.BUILD_ID)) );
+        dataPost.put("requesterCommunityId", Integer.parseInt(sharedPrefHelper.getString(StaticData.COMM_ID)));
+        dataPost.put("requesterUserRole", 1);
+        dataPost.put("buildingId", Integer.parseInt(sharedPrefHelper.getString(StaticData.BUILD_ID)));
+        dataPost.put("flatId", 0);
         dataPost.put("userRoleCode", StaticData.CHILD.toString());
 
         JSONObject jsonDataPost = new JSONObject(dataPost);

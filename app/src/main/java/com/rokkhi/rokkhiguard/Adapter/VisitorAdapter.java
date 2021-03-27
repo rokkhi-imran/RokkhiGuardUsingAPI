@@ -142,20 +142,24 @@ public class VisitorAdapter extends RecyclerView.Adapter<VisitorAdapter.VisitorV
 
     private void callVisitorOutFunction(Context context, int id, int visitorFlatID, String name) {
 
-
         SharedPrefHelper sharedPrefHelper = new SharedPrefHelper(context);
-
         FullScreenAlertDialog fullScreenAlertDialog = new FullScreenAlertDialog(context);
         fullScreenAlertDialog.showdialog();
 
 
-        Map<String, String> dataPost = new HashMap<>();
+        Map<String, Object> dataPost = new HashMap<>();
+        dataPost.put("limit", "");
+        dataPost.put("pageId", "");
         dataPost.put("timeZone", sharedPrefHelper.getString(StaticData.TIME_ZONE));
-        dataPost.put("visitorId", String.valueOf(id));
-        dataPost.put("communityId", sharedPrefHelper.getString(StaticData.COMM_ID));
+        dataPost.put("requesterFlatId",0);
+        dataPost.put("requesterUserRole",1);
+        dataPost.put("requesterBuildingId",Integer.parseInt(sharedPrefHelper.getString(StaticData.BUILD_ID)));
+        dataPost.put("requesterCommunityId",Integer.parseInt(sharedPrefHelper.getString(StaticData.COMM_ID)));
+        dataPost.put("visitorId", id);
         dataPost.put("newStatus", StaticData.OUTSIDE_COMPOUND);
         dataPost.put("visitorName", name);
-        dataPost.put("flatId", String.valueOf(visitorFlatID));
+        dataPost.put("flatId", visitorFlatID);
+
 
         JSONObject jsonDataPost = new JSONObject(dataPost);
         Log.e(TAG, "callVisitorOutFunction: visitor status change =  "+jsonDataPost);

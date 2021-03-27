@@ -108,16 +108,20 @@ public class SWorkersListActivity extends AppCompatActivity  {
 
 
         AndroidNetworking.initialize(getApplicationContext());
-        Map<String, String> dataPost = new HashMap<>();
-        dataPost.put("timeZone", sharedPrefHelper.getString(StaticData.TIME_ZONE));
+        Map<String, Object> dataPost = new HashMap<>();
         dataPost.put("limit", "");
         dataPost.put("pageId", "");
-        dataPost.put("communityId", sharedPrefHelper.getString(StaticData.COMM_ID));
-        dataPost.put("toUserId", "");
-        dataPost.put("toCommunityId", "");
-        dataPost.put("toBuildingId", sharedPrefHelper.getString(StaticData.BUILD_ID));
-        dataPost.put("toFlatId", "");
-        dataPost.put("toUserRoleCode", StaticData.SERVICE_WORKER.toString());
+        dataPost.put("timeZone", sharedPrefHelper.getString(StaticData.TIME_ZONE));
+        dataPost.put("requesterFlatId", 0);
+        dataPost.put("requesterBuildingId", Integer.parseInt(sharedPrefHelper.getString(StaticData.BUILD_ID)));
+        dataPost.put("requesterCommunityId",Integer.parseInt( sharedPrefHelper.getString(StaticData.COMM_ID)));
+        dataPost.put("requesterUserRole", 1);
+        dataPost.put("toUserId", 0);
+        dataPost.put("toCommunityId", 0);
+        dataPost.put("toBuildingId", Integer.parseInt(sharedPrefHelper.getString(StaticData.BUILD_ID)));
+        dataPost.put("toFlatId", 0);
+        dataPost.put("userRoleCode", StaticData.SERVICE_WORKER.toString());
+
 
         JSONObject jsonDataPost = new JSONObject(dataPost);
 
@@ -125,7 +129,6 @@ public class SWorkersListActivity extends AppCompatActivity  {
 
         Log.e("TAG", "onCreate: " + jsonDataPost);
         Log.e("TAG", "onCreate: " + url);
-//        Log.e("TAG", "onCreate: " + token);
         Log.e("TAG", "onCreate: ---------------------- ");
 
 

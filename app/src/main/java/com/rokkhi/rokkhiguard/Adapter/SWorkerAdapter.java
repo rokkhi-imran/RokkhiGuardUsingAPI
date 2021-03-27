@@ -109,6 +109,7 @@ public class SWorkerAdapter extends RecyclerView.Adapter<SWorkerAdapter.SWorkerV
 
     @Override
     public int getItemCount() {
+        Log.e(TAG, "getItemCount:  sworkerDataList.size = "+sworkerDataList.size() );
         return sworkerDataList.size();
     }
 
@@ -221,10 +222,13 @@ public class SWorkerAdapter extends RecyclerView.Adapter<SWorkerAdapter.SWorkerV
             flatIdList.add(serviceWorkerListModelDataWorkPlace.getFlat().getId());
         }
 
-        ServiceWorkerInOutModel serviceWorkerInOutModel = new ServiceWorkerInOutModel(0, Integer.parseInt(sharedPrefHelper.getString(StaticData.BUILD_ID)),
+
+
+        ServiceWorkerInOutModel serviceWorkerInOutModel = new ServiceWorkerInOutModel(
+                0, Integer.parseInt(sharedPrefHelper.getString(StaticData.BUILD_ID)),
                 Integer.parseInt(sharedPrefHelper.getString(StaticData.COMM_ID)), flatIdList, Integer.parseInt(sharedPrefHelper.getString(StaticData.USER_ID)),
                 "", "", sWorkerData.get(adapterPosition).getId(),
-                sharedPrefHelper.getString(StaticData.TIME_ZONE));
+                sharedPrefHelper.getString(StaticData.TIME_ZONE),0,Integer.parseInt(sharedPrefHelper.getString(StaticData.BUILD_ID)),Integer.parseInt(sharedPrefHelper.getString(StaticData.COMM_ID)),1);
 
 
         ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
@@ -288,10 +292,14 @@ public class SWorkerAdapter extends RecyclerView.Adapter<SWorkerAdapter.SWorkerV
             JSONObject dataPost = new JSONObject();
             dataPost.put("limit", "");
             dataPost.put("pageId", "");
-            dataPost.put("communityId", sharedPrefHelper.getString(StaticData.COMM_ID));
+            dataPost.put("requesterFlatId", 0);
+            dataPost.put("requesterBuildingId", Integer.parseInt(sharedPrefHelper.getString(StaticData.BUILD_ID)));
+            dataPost.put("requesterCommunityId", Integer.parseInt(sharedPrefHelper.getString(StaticData.COMM_ID)));
+            dataPost.put("requesterUserRole", 1);
             dataPost.put("timeZone", sharedPrefHelper.getString(StaticData.TIME_ZONE));
             dataPost.put("serviceWorkerId", sWorkerData.get(adapterPosition).getId());
             dataPost.put("newStatus", StaticData.OUTSIDE_COMPOUND);
+
 
             Log.e(TAG, "changeServiceWorkerStatus: " + dataPost);
 

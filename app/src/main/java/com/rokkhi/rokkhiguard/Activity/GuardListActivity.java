@@ -44,8 +44,8 @@ import com.google.firebase.iid.InstanceIdResult;
 import com.google.gson.Gson;
 import com.rokkhi.rokkhiguard.Adapter.GuardListAdapter;
 import com.rokkhi.rokkhiguard.Model.api.GuardListData;
-import com.rokkhi.rokkhiguard.Model.api.GuardListModelClass;
 import com.rokkhi.rokkhiguard.Model.api.UserDetailsModelClass;
+import com.rokkhi.rokkhiguard.Model.api.GuardListModelClass;
 import com.rokkhi.rokkhiguard.R;
 import com.rokkhi.rokkhiguard.StaticData;
 import com.rokkhi.rokkhiguard.Utils.Normalfunc;
@@ -73,7 +73,6 @@ public class GuardListActivity extends AppCompatActivity {
     GuardListAdapter guardListAdapter;
 
     private static final int RC_SIGN_IN = 12773;
-    static int REQUEST_CODE_SET_DEFAULT_DIALER = 200;
 
     AuthUI.IdpConfig phoneConfigWithDefaultNumber;
     FirebaseUser firebaseUser;
@@ -102,8 +101,8 @@ public class GuardListActivity extends AppCompatActivity {
         mGuardListRecyclerView = findViewById(R.id.guardListRecyclerView);
         noDataImageLayout = findViewById(R.id.noDataImageLayout);
         normalfunc = new Normalfunc();
-        ActivityCompat.requestPermissions( this,
-                new String[] {Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_LOCATION);
+        ActivityCompat.requestPermissions(this,
+                new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_LOCATION);
         getlatLon();
 
         //get system alert window permission
@@ -113,7 +112,7 @@ public class GuardListActivity extends AppCompatActivity {
 
         } else {
         }
-        if (called){
+        if (called) {
             mProgressbar.setVisibility(View.GONE);
         }
 
@@ -127,7 +126,7 @@ public class GuardListActivity extends AppCompatActivity {
                     sharedPrefHelper.clearAllData();
                     goSignInPage();
                 } else {
-//                    mProgressbar.setVisibility(View.VISIBLE);
+
 
                     FirebaseAuth.getInstance().getCurrentUser().getIdToken(true).addOnSuccessListener(new OnSuccessListener<GetTokenResult>() {
                         @Override
@@ -173,19 +172,19 @@ public class GuardListActivity extends AppCompatActivity {
                 Geocoder geocoder = new Geocoder(this, Locale.getDefault());
 
                 try {
-                    List<Address>addressList=geocoder.getFromLocation(lat,longi,1);
+                    List<Address> addressList = geocoder.getFromLocation(lat, longi, 1);
                     String cityName = addressList.get(0).getLocality();
                     String countryCode = addressList.get(0).getCountryCode();
 
                     String json_str = "{\"AD\":\"Europe\",\"AE\":\"Asia\",\"AF\":\"Asia\",\"AG\":\"North America\",\"AI\":\"North America\",\"AL\":\"Europe\",\"AM\":\"Asia\",\"AN\":\"North America\",\"AO\":\"Africa\",\"AQ\":\"Antarctica\",\"AR\":\"South America\",\"AS\":\"Australia\",\"AT\":\"Europe\",\"AU\":\"Australia\",\"AW\":\"North America\",\"AZ\":\"Asia\",\"BA\":\"Europe\",\"BB\":\"North America\",\"BD\":\"Asia\",\"BE\":\"Europe\",\"BF\":\"Africa\",\"BG\":\"Europe\",\"BH\":\"Asia\",\"BI\":\"Africa\",\"BJ\":\"Africa\",\"BM\":\"North America\",\"BN\":\"Asia\",\"BO\":\"South America\",\"BR\":\"South America\",\"BS\":\"North America\",\"BT\":\"Asia\",\"BW\":\"Africa\",\"BY\":\"Europe\",\"BZ\":\"North America\",\"CA\":\"North America\",\"CC\":\"Asia\",\"CD\":\"Africa\",\"CF\":\"Africa\",\"CG\":\"Africa\",\"CH\":\"Europe\",\"CI\":\"Africa\",\"CK\":\"Australia\",\"CL\":\"South America\",\"CM\":\"Africa\",\"CN\":\"Asia\",\"CO\":\"South America\",\"CR\":\"North America\",\"CU\":\"North America\",\"CV\":\"Africa\",\"CX\":\"Asia\",\"CY\":\"Asia\",\"CZ\":\"Europe\",\"DE\":\"Europe\",\"DJ\":\"Africa\",\"DK\":\"Europe\",\"DM\":\"North America\",\"DO\":\"North America\",\"DZ\":\"Africa\",\"EC\":\"South America\",\"EE\":\"Europe\",\"EG\":\"Africa\",\"EH\":\"Africa\",\"ER\":\"Africa\",\"ES\":\"Europe\",\"ET\":\"Africa\",\"FI\":\"Europe\",\"FJ\":\"Australia\",\"FK\":\"South America\",\"FM\":\"Australia\",\"FO\":\"Europe\",\"FR\":\"Europe\",\"GA\":\"Africa\",\"GB\":\"Europe\",\"GD\":\"North America\",\"GE\":\"Asia\",\"GF\":\"South America\",\"GG\":\"Europe\",\"GH\":\"Africa\",\"GI\":\"Europe\",\"GL\":\"North America\",\"GM\":\"Africa\",\"GN\":\"Africa\",\"GP\":\"North America\",\"GQ\":\"Africa\",\"GR\":\"Europe\",\"GS\":\"Antarctica\",\"GT\":\"North America\",\"GU\":\"Australia\",\"GW\":\"Africa\",\"GY\":\"South America\",\"HK\":\"Asia\",\"HN\":\"North America\",\"HR\":\"Europe\",\"HT\":\"North America\",\"HU\":\"Europe\",\"ID\":\"Asia\",\"IE\":\"Europe\",\"IL\":\"Asia\",\"IM\":\"Europe\",\"IN\":\"Asia\",\"IO\":\"Asia\",\"IQ\":\"Asia\",\"IR\":\"Asia\",\"IS\":\"Europe\",\"IT\":\"Europe\",\"JE\":\"Europe\",\"JM\":\"North America\",\"JO\":\"Asia\",\"JP\":\"Asia\",\"KE\":\"Africa\",\"KG\":\"Asia\",\"KH\":\"Asia\",\"KI\":\"Australia\",\"KM\":\"Africa\",\"KN\":\"North America\",\"KP\":\"Asia\",\"KR\":\"Asia\",\"KW\":\"Asia\",\"KY\":\"North America\",\"KZ\":\"Asia\",\"LA\":\"Asia\",\"LB\":\"Asia\",\"LC\":\"North America\",\"LI\":\"Europe\",\"LK\":\"Asia\",\"LR\":\"Africa\",\"LS\":\"Africa\",\"LT\":\"Europe\",\"LU\":\"Europe\",\"LV\":\"Europe\",\"LY\":\"Africa\",\"MA\":\"Africa\",\"MC\":\"Europe\",\"MD\":\"Europe\",\"ME\":\"Europe\",\"MG\":\"Africa\",\"MH\":\"Australia\",\"MK\":\"Europe\",\"ML\":\"Africa\",\"MM\":\"Asia\",\"MN\":\"Asia\",\"MO\":\"Asia\",\"MP\":\"Australia\",\"MQ\":\"North America\",\"MR\":\"Africa\",\"MS\":\"North America\",\"MT\":\"Europe\",\"MU\":\"Africa\",\"MV\":\"Asia\",\"MW\":\"Africa\",\"MX\":\"North America\",\"MY\":\"Asia\",\"MZ\":\"Africa\",\"NA\":\"Africa\",\"NC\":\"Australia\",\"NE\":\"Africa\",\"NF\":\"Australia\",\"NG\":\"Africa\",\"NI\":\"North America\",\"NL\":\"Europe\",\"NO\":\"Europe\",\"NP\":\"Asia\",\"NR\":\"Australia\",\"NU\":\"Australia\",\"NZ\":\"Australia\",\"OM\":\"Asia\",\"PA\":\"North America\",\"PE\":\"South America\",\"PF\":\"Australia\",\"PG\":\"Australia\",\"PH\":\"Asia\",\"PK\":\"Asia\",\"PL\":\"Europe\",\"PM\":\"North America\",\"PN\":\"Australia\",\"PR\":\"North America\",\"PS\":\"Asia\",\"PT\":\"Europe\",\"PW\":\"Australia\",\"PY\":\"South America\",\"QA\":\"Asia\",\"RE\":\"Africa\",\"RO\":\"Europe\",\"RS\":\"Europe\",\"RU\":\"Europe\",\"RW\":\"Africa\",\"SA\":\"Asia\",\"SB\":\"Australia\",\"SC\":\"Africa\",\"SD\":\"Africa\",\"SE\":\"Europe\",\"SG\":\"Asia\",\"SH\":\"Africa\",\"SI\":\"Europe\",\"SJ\":\"Europe\",\"SK\":\"Europe\",\"SL\":\"Africa\",\"SM\":\"Europe\",\"SN\":\"Africa\",\"SO\":\"Africa\",\"SR\":\"South America\",\"ST\":\"Africa\",\"SV\":\"North America\",\"SY\":\"Asia\",\"SZ\":\"Africa\",\"TC\":\"North America\",\"TD\":\"Africa\",\"TF\":\"Antarctica\",\"TG\":\"Africa\",\"TH\":\"Asia\",\"TJ\":\"Asia\",\"TK\":\"Australia\",\"TM\":\"Asia\",\"TN\":\"Africa\",\"TO\":\"Australia\",\"TR\":\"Asia\",\"TT\":\"North America\",\"TV\":\"Australia\",\"TW\":\"Asia\",\"TZ\":\"Africa\",\"UA\":\"Europe\",\"UG\":\"Africa\",\"US\":\"North America\",\"UY\":\"South America\",\"UZ\":\"Asia\",\"VC\":\"North America\",\"VE\":\"South America\",\"VG\":\"North America\",\"VI\":\"North America\",\"VN\":\"Asia\",\"VU\":\"Australia\",\"WF\":\"Australia\",\"WS\":\"Australia\",\"YE\":\"Asia\",\"YT\":\"Africa\",\"ZA\":\"Africa\",\"ZM\":\"Africa\",\"ZW\":\"Africa\"}";
                     JSONObject jsonObject = new JSONObject(json_str);
                     String continentName = jsonObject.getString(countryCode);
-                    String timeZone=cityName+"/"+continentName;
+                    String timeZone = cityName + "/" + continentName;
 
-                    sharedPrefHelper.putString(StaticData.TIME_ZONE,timeZone);
+                    sharedPrefHelper.putString(StaticData.TIME_ZONE, timeZone);
 
-                    Log.e(TAG, "getLocation: timeZon =  "+sharedPrefHelper.getString(StaticData.TIME_ZONE) );
-                    Log.e(TAG, "getLocation: = "+cityName+" country = "+countryCode+" country name = "+continentName );
+                    Log.e(TAG, "getLocation: timeZon =  " + sharedPrefHelper.getString(StaticData.TIME_ZONE));
+                    Log.e(TAG, "getLocation: = " + cityName + " country = " + countryCode + " country name = " + continentName);
 
 
                 } catch (IOException | JSONException e) {
@@ -193,7 +192,7 @@ public class GuardListActivity extends AppCompatActivity {
                 }
 
 
-                Log.e(TAG, "getLocation: = "+lat+" lon = "+longi );
+                Log.e(TAG, "getLocation: = " + lat + " lon = " + longi);
 
             } else {
                 Toast.makeText(this, "Unable to find location.", Toast.LENGTH_SHORT).show();
@@ -203,7 +202,7 @@ public class GuardListActivity extends AppCompatActivity {
 
     private void OnGPS() {
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage("Enable GPS").setCancelable(false).setPositiveButton("Yes", new  DialogInterface.OnClickListener() {
+        builder.setMessage("Enable GPS").setCancelable(false).setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 startActivity(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS));
@@ -244,25 +243,31 @@ public class GuardListActivity extends AppCompatActivity {
 
     private void callGuardList(String jWTToken) {
 
-        Map<String, String> dataPost = new HashMap<>();
+
+        Map<String, Object> dataPost = new HashMap<>();
+        dataPost.put("limit","");
+        dataPost.put("pageId","");
         dataPost.put("timeZone", sharedPrefHelper.getString(StaticData.TIME_ZONE));
-        dataPost.put("buildingId", sharedPrefHelper.getString(StaticData.BUILD_ID));
-        dataPost.put("communityId", sharedPrefHelper.getString(StaticData.COMM_ID));
-        dataPost.put("flatId", "");
+        dataPost.put("requesterFlatId", 0);
+        dataPost.put("requesterBuildingId",Integer.parseInt(sharedPrefHelper.getString(StaticData.BUILD_ID)) );
+        dataPost.put("requesterCommunityId", Integer.parseInt(sharedPrefHelper.getString(StaticData.COMM_ID)));
+        dataPost.put("requesterUserRole", 1);
+        dataPost.put("buildingId", Integer.parseInt(sharedPrefHelper.getString(StaticData.BUILD_ID)));
+        dataPost.put("flatId", 0);
         dataPost.put("userRoleCode", StaticData.GUARD.toString());
 
 
         JSONObject jsonDataPost = new JSONObject(dataPost);
 
-        String url = StaticData.baseURL + "" + StaticData.getUsersList;
+        String getUsersListUrl = StaticData.baseURL + "" + StaticData.getUsersList;
 
         Log.e("TAG", "onCreate: Guard List " + jsonDataPost);
-        Log.e("TAG", "onCreate: Guard List " + url);
+        Log.e("TAG", "onCreate: Guard List " + getUsersListUrl);
         Log.e("TAG", "onCreate: Guard List " + sharedPrefHelper.getString(StaticData.JWT_TOKEN));
         Log.e("TAG", "onCreate: ---------------------- ");
 
 
-        AndroidNetworking.post(url)
+        AndroidNetworking.post(getUsersListUrl)
                 .addHeaders("jwtTokenHeader", jWTToken)
                 .setContentType("application/json")
                 .addJSONObjectBody(jsonDataPost)
@@ -372,7 +377,7 @@ public class GuardListActivity extends AppCompatActivity {
 
     private void callUserDetails(String firebaseToken) {
 
-        Log.e("TAG", "onSuccess: first time call Function: ");
+        Log.e("TAG", "onSuccess: first time call Function: " + firebaseToken);
 
         FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener(new OnSuccessListener<InstanceIdResult>() {
             @Override
@@ -386,10 +391,9 @@ public class GuardListActivity extends AppCompatActivity {
                 Log.e("TAG", "token ID onSuccess first time : auth JWT Token  =  " + sharedPrefHelper.getString(StaticData.JWT_TOKEN));
 
                 Map<String, String> dataPost = new HashMap<>();
-                dataPost.put("timeZone", sharedPrefHelper.getString(StaticData.TIME_ZONE));
                 dataPost.put("limit", "");
                 dataPost.put("pageId", "");
-                dataPost.put("communityId", "");
+                dataPost.put("timeZone", sharedPrefHelper.getString(StaticData.TIME_ZONE));
                 dataPost.put("firebaseIdToken", firebaseToken);
                 dataPost.put("deviceToken", deviceToken);
                 dataPost.put("deviceType", "Android");
@@ -397,13 +401,13 @@ public class GuardListActivity extends AppCompatActivity {
 
                 JSONObject jsonDataPost = new JSONObject(dataPost);
 
-                String url = StaticData.baseURL + "" + StaticData.getUserDetails;
+                String getUserDetailsUrl = StaticData.baseURL + "" + StaticData.getUserDetails;
 
                 Log.e("TAG", "onCreate: Call User Details Json Data : " + jsonDataPost);
-                Log.e("TAG", "onCreate: Call user Details Url " + url);
+                Log.e("TAG", "onCreate: Call user Details Url " + getUserDetailsUrl);
                 Log.e("TAG", "onCreate: ---------------------- ");
 
-                AndroidNetworking.post(url)
+                AndroidNetworking.post(getUserDetailsUrl)
                         .addHeaders("jwtTokenHeader", sharedPrefHelper.getString(StaticData.JWT_TOKEN))
                         .setContentType("application/json")
                         .addJSONObjectBody(jsonDataPost)
@@ -417,14 +421,34 @@ public class GuardListActivity extends AppCompatActivity {
 
                                 Gson gson = new Gson();
                                 UserDetailsModelClass userDetailsModelClass = gson.fromJson(String.valueOf(response), UserDetailsModelClass.class);
+                                boolean isGuardCodeContains = false;
+                                int buildingID = 0;
+                                int communityID = 0;
 
-                                if (!userDetailsModelClass.getData().getPrimaryRoleCode().equals(StaticData.GUARD_PHONE.toString())) {
+                                for (int i = 0; i < userDetailsModelClass.getData().getUserRoles().size(); i++) {
+                                    if (String.valueOf(userDetailsModelClass.getData().getUserRoles().get(i).getBuildingId()) != null) {
+                                        buildingID = userDetailsModelClass.getData().getUserRoles().get(i).getBuildingId();
+                                    }
+
+                                    if (String.valueOf(userDetailsModelClass.getData().getUserRoles().get(i).getCommunityId()) != null) {
+                                        communityID = userDetailsModelClass.getData().getUserRoles().get(i).getCommunityId();
+                                    }
+                                    if (userDetailsModelClass.getData().getUserRoles().get(i).getUserRole() == 1) {
+                                        isGuardCodeContains = true;
+                                    }
+
+                                }
+
+                                if (userDetailsModelClass.getData().getUserRoles().isEmpty() || !isGuardCodeContains) {
                                     showAlertDialog(context);
                                 } else {
+                                    Log.e(TAG, "onResponse: buildingID  = = = " + buildingID);
+                                    Log.e(TAG, "onResponse: communityID = = = " + communityID);
+                                    Log.e(TAG, "onResponse: isGuardCodeContains = = = " + isGuardCodeContains);
 
-                                    sharedPrefHelper.putString(StaticData.BUILD_ID, String.valueOf(userDetailsModelClass.getData().getBuildingId()));
-                                    sharedPrefHelper.putString(StaticData.COMM_ID, String.valueOf(userDetailsModelClass.getData().getCommunityId()));
-                                    sharedPrefHelper.putString(StaticData.JWT_TOKEN, String.valueOf(userDetailsModelClass.getData().getJwtToken()));
+                                    sharedPrefHelper.putString(StaticData.BUILD_ID, String.valueOf(buildingID));
+                                    sharedPrefHelper.putString(StaticData.COMM_ID, String.valueOf(communityID));
+                                    sharedPrefHelper.putString(StaticData.JWT_TOKEN, userDetailsModelClass.getData().getJwtToken());
 
                                     callGuardList(sharedPrefHelper.getString(StaticData.JWT_TOKEN));
                                 }

@@ -218,17 +218,26 @@ public class ParcelActivity extends AppCompatActivity implements IPickResult {
     private void uploadDataData(String imageDownloadLink) {
 
 
-        Map<String, String> dataPost = new HashMap<>();
+        Map<String, Object> dataPost = new HashMap<>();
+        dataPost.put("limit", "");
+        dataPost.put("pageId", "");
         dataPost.put("timeZone", sharedPrefHelper.getString(StaticData.TIME_ZONE));
+        dataPost.put("requesterFlatId", 0);
+        dataPost.put("requesterBuildingId", Integer.parseInt(sharedPrefHelper.getString(StaticData.BUILD_ID)));
+        dataPost.put("requesterCommunityId",  Integer.parseInt(sharedPrefHelper.getString(StaticData.COMM_ID)));
+        dataPost.put("requesterUserRole", 1);
         dataPost.put("name", parcelTypeET.getText().toString());
         dataPost.put("company", companyNameET.getText().toString());
         dataPost.put("image", imageDownloadLink);
         dataPost.put("thumbImage", imageDownloadLink);
         dataPost.put("acknowledgedBy", "");
-        dataPost.put("guardId", sharedPrefHelper.getString(StaticData.USER_ID));
-        dataPost.put("buildingId", sharedPrefHelper.getString(StaticData.BUILD_ID));
-        dataPost.put("flatId", String.valueOf(historyFlats.get(0).getId()));
-        dataPost.put("communityId", sharedPrefHelper.getString(StaticData.COMM_ID));
+        dataPost.put("guardId", Integer.parseInt(sharedPrefHelper.getString(StaticData.USER_ID)));
+        dataPost.put("buildingId", Integer.parseInt(sharedPrefHelper.getString(StaticData.BUILD_ID)));
+        dataPost.put("flatId", historyFlats.get(0).getId());
+        dataPost.put("communityId", Integer.parseInt(sharedPrefHelper.getString(StaticData.COMM_ID)));
+
+
+
 
         JSONObject jsonDataPost = new JSONObject(dataPost);
 

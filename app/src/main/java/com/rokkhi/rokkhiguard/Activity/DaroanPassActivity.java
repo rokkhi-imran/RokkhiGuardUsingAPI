@@ -41,7 +41,7 @@ import huwi.joldi.abrar.rokkhiguardo.Kotlin.CirclePinField;
 
 public class DaroanPassActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private static final String TAG = "DaroanPass";
+    private static final String TAG = "DaroanPassActivity";
     static TextView homename;
     CirclePinField circlePinField;
     TextView one;
@@ -79,7 +79,7 @@ public class DaroanPassActivity extends AppCompatActivity implements View.OnClic
         Gson gson = new Gson();
         getUserByPhoneData = gson.fromJson(getIntent().getStringExtra("guardinfo"), GetUserByPhoneData.class);
 
-        Log.e(TAG, "onCreate: getUserByPhoneData = "+getUserByPhoneData );
+        Log.e(TAG, "onCreate: getUserByPhoneData = " + getUserByPhoneData);
 
 
         //check Stroage permission Start
@@ -136,16 +136,11 @@ public class DaroanPassActivity extends AppCompatActivity implements View.OnClic
         cross.setOnClickListener(this);
         clear.setOnClickListener(this);
 
-     /*   if (FirebaseAuth.getInstance().getCurrentUser()!=null){
-
-            callTokenID();
-        }*/
 
         fullScreenAlertDialog = new FullScreenAlertDialog(context);
 
         fullScreenAlertDialog.showdialog();
-        callUserInformation(fullScreenAlertDialog,sharedPrefHelper.getString(StaticData.JWT_TOKEN));
-
+        callUserInformation(fullScreenAlertDialog, sharedPrefHelper.getString(StaticData.JWT_TOKEN));
 
 
     }
@@ -153,75 +148,76 @@ public class DaroanPassActivity extends AppCompatActivity implements View.OnClic
     private void callUserInformation(FullScreenAlertDialog fullScreenAlertDialog, String jWTToken) {
 
 
-        Map<String, String> dataPost = new HashMap<>();
+        Map<String, Object> dataPost = new HashMap<>();
+        dataPost.put("limit", "");
+        dataPost.put("pageId", "");
         dataPost.put("timeZone", sharedPrefHelper.getString(StaticData.TIME_ZONE));
-        dataPost.put("phoneNumber",getUserByPhoneData.getPhone());
+        dataPost.put("requesterFlatId", 0);
+        dataPost.put("requesterBuildingId", Integer.parseInt(sharedPrefHelper.getString(StaticData.BUILD_ID)));
+        dataPost.put("requesterCommunityId", Integer.parseInt(sharedPrefHelper.getString(StaticData.COMM_ID)));
+        dataPost.put("requesterUserRole", 1);
+        dataPost.put("phoneNumber", getUserByPhoneData.getPhone());
 
         JSONObject jsonDataPost = new JSONObject(dataPost);
 
         String url = StaticData.baseURL + "" + StaticData.getByPhoneNumber;
 
-        Log.e("TAG", "onCreate: callUserInformation jsonDataPost 1 = " + jsonDataPost);
-        Log.e("TAG", "onCreate:  callUserInformation 1 = " + url);
-        Log.e("TAG", "onCreate: callUserInformation jWTToken 1 =" + jWTToken);
-        Log.e("TAG", "onCreate: callUserInformation 1 =" + FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber());
-        Log.e("TAG", "onCreate: ---------------------- ");
-
-//                sharedPrefHelper.clearAllData();
+        Log.e(TAG, "onCreate: callUserInformation jsonDataPost 1 = " + jsonDataPost);
+        Log.e(TAG, "onCreate:  callUserInformation 1 = " + url);
+        Log.e(TAG, "onCreate: callUserInformation jWTToken 1 =" + jWTToken);
+        Log.e(TAG, "onCreate: callUserInformation 1 =" + FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber());
+        Log.e(TAG, "onCreate: ---------------------- ");
 
 
-                SharedPrefHelper sharedPrefHelper = new SharedPrefHelper(context);
+        SharedPrefHelper sharedPrefHelper = new SharedPrefHelper(context);
 
-                AndroidNetworking.post(url)
-                        .addHeaders("jwtTokenHeader", jWTToken)
-                        .setContentType("application/json")
-                        .addJSONObjectBody(jsonDataPost)
-                        .setPriority(Priority.MEDIUM)
-                        .build()
-                        .getAsJSONObject(new JSONObjectRequestListener() {
-                            @Override
-                            public void onResponse(JSONObject response) {
+        AndroidNetworking.post(url)
+                .addHeaders("jwtTokenHeader", jWTToken)
+                .setContentType("application/json")
+                .addJSONObjectBody(jsonDataPost)
+                .setPriority(Priority.MEDIUM)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
 
-                                fullScreenAlertDialog.dismissdialog();
-
-
-                                Log.e("TAG ","onResponse: =   " + response);
-
-                                Gson gson = new Gson();
-                                GetUserByPhoneNumberModelClass userDetailsModelClassUserByPhoneNumberModelClass = gson.fromJson(String.valueOf(response), GetUserByPhoneNumberModelClass.class);
-
-                                sharedPrefHelper.putString(StaticData.BUILD_ID,String.valueOf(userDetailsModelClassUserByPhoneNumberModelClass.getData().getBuilding().getId()));
-                                sharedPrefHelper.putString(StaticData.COMM_ID,String.valueOf(userDetailsModelClassUserByPhoneNumberModelClass.getData().getCommunity().getId()));
-                                sharedPrefHelper.putString(StaticData.USER_ID,String.valueOf(userDetailsModelClassUserByPhoneNumberModelClass.getData().getId()));
-
-                                homename.setText(userDetailsModelClassUserByPhoneNumberModelClass.getData().getBuilding().getName());
-
-                                sharedPrefHelper.putString(StaticData.BUILD_NAME,userDetailsModelClassUserByPhoneNumberModelClass.getData().getBuilding().getName());
-                                sharedPrefHelper.putString(StaticData.BUILD_ADDRESS,userDetailsModelClassUserByPhoneNumberModelClass.getData().getBuilding().getAddress());
+                        fullScreenAlertDialog.dismissdialog();
 
 
+                        Log.e("TAG ", "onResponse: =   " + response);
+
+                        Gson gson = new Gson();
+                        GetUserByPhoneNumberModelClass userDetailsModelClassUserByPhoneNumberModelClass = gson.fromJson(String.valueOf(response), GetUserByPhoneNumberModelClass.class);
+
+                        sharedPrefHelper.putString(StaticData.BUILD_ID, String.valueOf(userDetailsModelClassUserByPhoneNumberModelClass.getData().getBuilding().getId()));
+                        sharedPrefHelper.putString(StaticData.COMM_ID, String.valueOf(userDetailsModelClassUserByPhoneNumberModelClass.getData().getCommunity().getId()));
+                        sharedPrefHelper.putString(StaticData.USER_ID, String.valueOf(userDetailsModelClassUserByPhoneNumberModelClass.getData().getId()));
+
+                        homename.setText(userDetailsModelClassUserByPhoneNumberModelClass.getData().getBuilding().getName());
+
+                        sharedPrefHelper.putString(StaticData.BUILD_NAME, userDetailsModelClassUserByPhoneNumberModelClass.getData().getBuilding().getName());
+                        sharedPrefHelper.putString(StaticData.BUILD_ADDRESS, userDetailsModelClassUserByPhoneNumberModelClass.getData().getBuilding().getAddress());
 
 
-                                Log.e("TAG", "onResponse: getPrimaryRoleCode  = ==  "+userDetailsModelClassUserByPhoneNumberModelClass.getData().getPrimaryRoleCode());
+                        Log.e(TAG, "onResponse: getPrimaryRoleCode  = ==  " + userDetailsModelClassUserByPhoneNumberModelClass.getData().getPrimaryRoleCode());
 
 
-                                AndroidNetworking.cancelAll();
-                            }
+                        AndroidNetworking.cancelAll();
+                    }
 
-                            @Override
-                            public void onError(ANError anError) {
-                                fullScreenAlertDialog.dismissdialog();
+                    @Override
+                    public void onError(ANError anError) {
+                        fullScreenAlertDialog.dismissdialog();
 
 
-                                StaticData.showErrorAlertDialog(context, "Alert !", "আবার চেষ্টা করুন ।");
+                        StaticData.showErrorAlertDialog(context, "Alert !", "আবার চেষ্টা করুন ।");
 
-                                Log.e("TAG", "onResponse: error message =  " + anError.getMessage());
-                                Log.e("TAG", "onResponse: error code =  " + anError.getErrorCode());
-                                Log.e("TAG", "onResponse: error body =  " + anError.getErrorBody());
-                                Log.e("TAG", "onResponse: error  getErrorDetail =  " + anError.getErrorDetail());
-                            }
-                        });
-
+                        Log.e(TAG, "onResponse: error message =  " + anError.getMessage());
+                        Log.e(TAG, "onResponse: error code =  " + anError.getErrorCode());
+                        Log.e(TAG, "onResponse: error body =  " + anError.getErrorBody());
+                        Log.e(TAG, "onResponse: error  getErrorDetail =  " + anError.getErrorDetail());
+                    }
+                });
 
 
     }

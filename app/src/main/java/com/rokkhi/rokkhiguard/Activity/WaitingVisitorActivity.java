@@ -116,20 +116,28 @@ public class WaitingVisitorActivity extends AppCompatActivity implements View.On
 
         FullScreenAlertDialog fullScreenAlertDialog = new FullScreenAlertDialog(context);
 
-        Map<String, String> dataPost = new HashMap<>();
+        Map<String, Object> dataPost = new HashMap<>();
+        dataPost.put("limit", "");
+        dataPost.put("pageId", "");
         dataPost.put("timeZone", sharedPrefHelper.getString(StaticData.TIME_ZONE));
-        dataPost.put("visitorId", String.valueOf(id));
+        dataPost.put("requesterFlatId",0);
+        dataPost.put("requesterUserRole",1);
+        dataPost.put("requesterBuildingId",Integer.parseInt(sharedPrefHelper.getString(StaticData.BUILD_ID)));
+        dataPost.put("requesterCommunityId",Integer.parseInt(sharedPrefHelper.getString(StaticData.COMM_ID)));
+        dataPost.put("visitorId", id);
         dataPost.put("newStatus", status);
-        dataPost.put("communityId", sharedPrefHelper.getString(StaticData.COMM_ID));
-        dataPost.put("flatId", flatID.toString());
+        dataPost.put("visitorName", "");
+        dataPost.put("flatId", flatID);
+
+
 
 
         JSONObject jsonDataPost = new JSONObject(dataPost);
         Log.e("TAG", "callVisitorInFunction: json data visitor in by guard =  "+jsonDataPost );
 
-        String url = StaticData.baseURL + "" + StaticData.changeVisitorStatus;
+        String changeVisitorStatusUrl = StaticData.baseURL + "" + StaticData.changeVisitorStatus;
 
-        AndroidNetworking.post(url)
+        AndroidNetworking.post(changeVisitorStatusUrl)
                 .addHeaders("jwtTokenHeader",sharedPrefHelper.getString(StaticData.JWT_TOKEN))
                 .setContentType("application/json")
                 .addJSONObjectBody(jsonDataPost)

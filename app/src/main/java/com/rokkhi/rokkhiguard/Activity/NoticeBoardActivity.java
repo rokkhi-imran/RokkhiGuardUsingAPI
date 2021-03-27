@@ -54,13 +54,20 @@ public class NoticeBoardActivity extends AppCompatActivity {
         context = this;
         sharedPrefHelper = new SharedPrefHelper(context);
 
-        Map<String, String> dataPost = new HashMap<>();
+        Map<String, Object> dataPost = new HashMap<>();
+        dataPost.put("limit","" );
+        dataPost.put("pageId","" );
         dataPost.put("timeZone", sharedPrefHelper.getString(StaticData.TIME_ZONE));
+        dataPost.put("requesterFlatId", 0);
+        dataPost.put("requesterBuildingId", Integer.parseInt(sharedPrefHelper.getString(StaticData.BUILD_ID)));
+        dataPost.put("requesterCommunityId", Integer.parseInt(sharedPrefHelper.getString(StaticData.COMM_ID)));
+        dataPost.put("requesterUserRole", 1);
         dataPost.put("noticeFor", "");
-        dataPost.put("buildingId", sharedPrefHelper.getString(StaticData.BUILD_ID));
-        dataPost.put("communityId", sharedPrefHelper.getString(StaticData.COMM_ID));
+        dataPost.put("buildingId", Integer.parseInt(sharedPrefHelper.getString(StaticData.BUILD_ID)));
+        dataPost.put("communityId", Integer.parseInt(sharedPrefHelper.getString(StaticData.COMM_ID)));
         dataPost.put("fromDate", "");
         dataPost.put("toDate", "");
+
 
         JSONObject jsonDataPost = new JSONObject(dataPost);
 
@@ -70,9 +77,6 @@ public class NoticeBoardActivity extends AppCompatActivity {
         Log.e("TAG", "onCreate: " + url);
 
         Log.e("TAG", "onCreate: ---------------------- ");
-
-
-
 
         AndroidNetworking.post(url)
                 .addHeaders("jwtTokenHeader", sharedPrefHelper.getString(StaticData.JWT_TOKEN))

@@ -579,11 +579,19 @@ public class CreateProfileActivity extends AppCompatActivity implements IPickRes
 
     private void uploadDataData(String imageDownloadLink) {
 
-        Map<String, String> dataPost = new HashMap<>();
+        Map<String, Object> dataPost = new HashMap<>();
+        dataPost.put("limit","");
+        dataPost.put("pageId","");
         dataPost.put("timeZone", sharedPrefHelper.getString(StaticData.TIME_ZONE));
+        dataPost.put("requesterFlatId", 0);
+        dataPost.put("requesterBuildingId", Integer.parseInt(sharedPrefHelper.getString(StaticData.BUILD_ID)));
+        dataPost.put("requesterCommunityId", Integer.parseInt(sharedPrefHelper.getString(StaticData.COMM_ID)));
+        dataPost.put("requesterUserRole", 1);
         dataPost.put("userId", "");
         dataPost.put("name", mUserName.getText().toString());
         dataPost.put("userRoleCode", StaticData.SERVICE_WORKER.toString());
+        dataPost.put("contactPersonPhone", "");
+        dataPost.put("contactPersonName", "");
         dataPost.put("address", userAddress.getText().toString());
         dataPost.put("email", "");
 
@@ -592,13 +600,16 @@ public class CreateProfileActivity extends AppCompatActivity implements IPickRes
         dataPost.put("organization", "");
         dataPost.put("nid", "");
         dataPost.put("password", "");
+        dataPost.put("age", 0);
         dataPost.put("image", imageDownloadLink);
         dataPost.put("thumbImage", imageDownloadLink);
-        dataPost.put("flatId", "");
-        dataPost.put("communityId", sharedPrefHelper.getString(StaticData.COMM_ID));
-        dataPost.put("buildingId", sharedPrefHelper.getString(StaticData.BUILD_ID));
-
+        dataPost.put("flatId", 0);
+        dataPost.put("communityId", Integer.parseInt(sharedPrefHelper.getString(StaticData.COMM_ID)));
+        dataPost.put("buildingId", Integer.parseInt(sharedPrefHelper.getString(StaticData.BUILD_ID)));
+        dataPost.put("update", false);
         JSONObject jsonDataPost = new JSONObject(dataPost);
+
+
 
 
         String url = StaticData.baseURL + "" + StaticData.registerOrUpdate;
@@ -660,7 +671,11 @@ public class CreateProfileActivity extends AppCompatActivity implements IPickRes
         dataFlatInfoPostList.add(dataFlatInfoPost);
 
         AssignRoleToUserDataModelPost assignRoleToUserDataModelPost = new AssignRoleToUserDataModelPost(
+                sharedPrefHelper.getString(StaticData.TIME_ZONE),
+                0,
+                Integer.parseInt(sharedPrefHelper.getString(StaticData.BUILD_ID)),
                 Integer.parseInt(sharedPrefHelper.getString(StaticData.COMM_ID)),
+                1,
                 dataFlatInfoPostList,
                 "",
                 "",
