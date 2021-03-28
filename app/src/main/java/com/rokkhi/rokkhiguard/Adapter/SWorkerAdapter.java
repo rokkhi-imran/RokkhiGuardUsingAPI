@@ -80,28 +80,37 @@ public class SWorkerAdapter extends RecyclerView.Adapter<SWorkerAdapter.SWorkerV
     public void onBindViewHolder(@NonNull final SWorkerViewHolder holder, int position) {
 
         Log.e(TAG, "onBindViewHolder: 5 position = " + position);
-        try {
+//        try {
             Log.e(TAG, "onBindViewHolder:1 " + sworkerDataList.toString());
             int workPlaceSize = sworkerDataList.get(position).getWorkPlace().size();
             Log.e(TAG, "onBindViewHolder: 2 = " + workPlaceSize);
             holder.flatNumber.setText("");
             for (int i = 0; i < workPlaceSize; i++) {
-                holder.flatNumber.append(sworkerDataList.get(position).getWorkPlace().get(i).getFlat().getName() + " ");
+                try {
+                    holder.flatNumber.append(sworkerDataList.get(position).getWorkPlace().get(i).getFlat().getName() + " ");
+                }catch (Exception e){
+                    Log.e(TAG, "onBindViewHolder: "+e.getMessage() );
+                }
             }
 
             Log.e(TAG, "onBindViewHolder:3 " + sworkerDataList.toString());
             holder.name.setText(sworkerDataList.get(position).getName());
             holder.lastcome.setText(sworkerDataList.get(position).getPhone());
-            Picasso.get()
-                    .load(sworkerDataList.get(position).getImage())
-                    .fit()
-                    .placeholder(R.drawable.progress_animation)
-                    .into(holder.propic);
 
-        } catch (Exception e) {
-            Log.e(TAG, "onBindViewHolder:4 " + e.getMessage());
+           try {
+               Picasso.get()
+                       .load(sworkerDataList.get(position).getImage())
+                       .fit()
+                       .placeholder(R.drawable.progress_animation)
+                       .into(holder.propic);
+           }catch (Exception e){
+               Log.e(TAG, "onBindViewHolder: get picasso error "+e.getMessage() );
+           }
 
-        }
+//        } catch (Exception e) {
+//            Log.e(TAG, "onBindViewHolder:4 " + e.getMessage());
+//
+//        }
 
 
     }
@@ -109,7 +118,6 @@ public class SWorkerAdapter extends RecyclerView.Adapter<SWorkerAdapter.SWorkerV
 
     @Override
     public int getItemCount() {
-        Log.e(TAG, "getItemCount:  sworkerDataList.size = "+sworkerDataList.size() );
         return sworkerDataList.size();
     }
 
@@ -151,7 +159,9 @@ public class SWorkerAdapter extends RecyclerView.Adapter<SWorkerAdapter.SWorkerV
             flatNumber = view.findViewById(R.id.flatNumber);
 
             view.setOnClickListener(v -> {
-                inOutSworkerAlert(context, getAdapterPosition(), sworkerDataFilterList);
+
+                    inOutSworkerAlert(context, getAdapterPosition(), sworkerDataFilterList);
+
             });
         }
     }
@@ -178,8 +188,13 @@ public class SWorkerAdapter extends RecyclerView.Adapter<SWorkerAdapter.SWorkerV
 
         int workPlaceSize = sworkerData.get(adapterPosition).getWorkPlace().size();
         editTextFlat.setText("");
+        Log.e(TAG, "inOutSworkerAlert workPlaceSize : "+workPlaceSize);
         for (int i = 0; i < workPlaceSize; i++) {
-            editTextFlat.append(sworkerData.get(adapterPosition).getWorkPlace().get(i).getFlat().getName() + " ");
+            try {
+                editTextFlat.append(sworkerData.get(adapterPosition).getWorkPlace().get(i).getFlat().getName() + " ");
+            }catch (Exception e){
+                Log.e(TAG, "inOutSworkerAlert: "+e.getMessage() );
+            }
         }
 
 
@@ -219,10 +234,12 @@ public class SWorkerAdapter extends RecyclerView.Adapter<SWorkerAdapter.SWorkerV
 
 
         for (ServiceWorkerListModelWorkPlace serviceWorkerListModelDataWorkPlace : sWorkerData.get(adapterPosition).getWorkPlace()) {
-            flatIdList.add(serviceWorkerListModelDataWorkPlace.getFlat().getId());
+            try {
+                flatIdList.add(serviceWorkerListModelDataWorkPlace.getFlat().getId());
+            }catch (Exception e){
+                Log.e(TAG, "callWorkerInOutFunction: "+e.getMessage() );
+            }
         }
-
-
 
         ServiceWorkerInOutModel serviceWorkerInOutModel = new ServiceWorkerInOutModel(
                 0, Integer.parseInt(sharedPrefHelper.getString(StaticData.BUILD_ID)),

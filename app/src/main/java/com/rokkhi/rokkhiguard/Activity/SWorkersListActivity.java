@@ -125,15 +125,15 @@ public class SWorkersListActivity extends AppCompatActivity  {
 
         JSONObject jsonDataPost = new JSONObject(dataPost);
 
-        String url = StaticData.baseURL + "" + StaticData.getServiceWorkers;
+        String getServiceWorkersUrl = StaticData.baseURL + "" + StaticData.getServiceWorkers;
 
-        Log.e("TAG", "onCreate: " + jsonDataPost);
-        Log.e("TAG", "onCreate: " + url);
-        Log.e("TAG", "onCreate: ---------------------- ");
+        Log.e(TAG, "onCreate: " + jsonDataPost);
+        Log.e(TAG, "onCreate: " + getServiceWorkersUrl);
+        Log.e(TAG, "onCreate: jwt ---------------------- "+sharedPrefHelper.getString(StaticData.JWT_TOKEN));
 
 
 
-        AndroidNetworking.post(url)
+        AndroidNetworking.post(getServiceWorkersUrl)
                 .addHeaders("jwtTokenHeader", sharedPrefHelper.getString(StaticData.JWT_TOKEN))
                 .setContentType("application/json")
                 .addJSONObjectBody(jsonDataPost)
@@ -177,10 +177,10 @@ public class SWorkersListActivity extends AppCompatActivity  {
 
                         StaticData.showErrorAlertDialog(context, "Alert !", "আবার চেষ্টা করুন ।");
 
-                        Log.e("TAG", "onResponse: error message =  " + anError.getMessage());
-                        Log.e("TAG", "onResponse: error code =  " + anError.getErrorCode());
-                        Log.e("TAG", "onResponse: error body =  " + anError.getErrorBody());
-                        Log.e("TAG", "onResponse: error  getErrorDetail =  " + anError.getErrorDetail());
+                        Log.e(TAG, "onResponse: error message =  " + anError.getMessage());
+                        Log.e(TAG, "onResponse: error code =  " + anError.getErrorCode());
+                        Log.e(TAG, "onResponse: error body =  " + anError.getErrorBody());
+                        Log.e(TAG, "onResponse: error  getErrorDetail =  " + anError.getErrorDetail());
                     }
                 });
 

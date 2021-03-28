@@ -1,4 +1,5 @@
 package com.rokkhi.rokkhiguard.Model.api
+/*
 
 data class AssignRoleToUserServiceWorkerResponse(
         val `data`: List<DataServiceWorkerResponse>,
@@ -161,4 +162,35 @@ data class UserServiceWorkerResponse(
 )
 
 class SubscribePackagesServiceWorkerResponse(
+)*/
+
+data class AssignRoleToUserServiceWorkerResponse(
+    val `data`: List<List<DataServiceWorkerResponse>>,
+    val errors: List<Any>,
+    val status: String,
+    val statusCode: Int
+)
+
+data class DataServiceWorkerResponse(
+    val building: Int,
+    val community: Int,
+    val createdDate: String,
+    val deletedDate: Any,
+    val flat: Int,
+    val id: Int,
+    val updatedBy: Int,
+    val updatedDate: String,
+    val user: Int,
+    val userRole: AssignRoleToUserServiceWorkerUserRole
+)
+
+data class AssignRoleToUserServiceWorkerUserRole(
+    val code: String,
+    val createdDate: String,
+    val deletedDate: Any,
+    val description: String,
+    val group: String,
+    val id: Int,
+    val name: String,
+    val updatedDate: String
 )

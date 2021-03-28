@@ -125,7 +125,7 @@ data class ActiveFlatData(
     val updatedDate: String
 )
 
-data class ChildModelClass(
+/*data class ChildModelClass(
     val `data`: List<ChildData>,
     val errors: List<Any>,
     val status: String,
@@ -173,7 +173,7 @@ data class ChildFlat(
     val totalRoom: Int,
     val totalWashRoom: Int,
     val updatedDate: String
-)
+)*/
 
 
 data class RegisterUserModelClass(

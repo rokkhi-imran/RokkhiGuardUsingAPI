@@ -62,7 +62,7 @@ public class NoticeBoardActivity extends AppCompatActivity {
         dataPost.put("requesterBuildingId", Integer.parseInt(sharedPrefHelper.getString(StaticData.BUILD_ID)));
         dataPost.put("requesterCommunityId", Integer.parseInt(sharedPrefHelper.getString(StaticData.COMM_ID)));
         dataPost.put("requesterUserRole", 1);
-        dataPost.put("noticeFor", "");
+        dataPost.put("noticeFor", StaticData.NOTICE_GUARDS);
         dataPost.put("buildingId", Integer.parseInt(sharedPrefHelper.getString(StaticData.BUILD_ID)));
         dataPost.put("communityId", Integer.parseInt(sharedPrefHelper.getString(StaticData.COMM_ID)));
         dataPost.put("fromDate", "");

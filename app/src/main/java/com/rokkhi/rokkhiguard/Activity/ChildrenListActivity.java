@@ -130,7 +130,7 @@ public class ChildrenListActivity extends AppCompatActivity {
 
         String url = StaticData.baseURL + "" + StaticData.getUsersList;
 
-        Log.e("TAG", "onCreate: " + jsonDataPost);
+        Log.e("TAG", "onCreate: get child list  = " + jsonDataPost);
         Log.e("TAG", "onCreate: " + url);
         Log.e("TAG", "onCreate: ---------------------- ");
 
@@ -149,7 +149,7 @@ public class ChildrenListActivity extends AppCompatActivity {
                         shimmerFrameLayout.stopShimmer();
                         shimmerFrameLayout.setVisibility(View.GONE);
 
-                        Log.e(TAG, "onResponse: =   " + response);
+                        Log.e(TAG, "get Child List onResponse: =   " + response);
 
                         Gson gson = new Gson();
                         childModelClass = gson.fromJson(String.valueOf(response), ChildModelClass.class);

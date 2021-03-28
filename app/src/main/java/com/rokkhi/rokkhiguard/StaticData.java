@@ -29,6 +29,12 @@ public class StaticData {
     public static final String GET_CALL_NUMBER = "GET_CALL_NUMBER";
     public static final String TIME_ZONE ="TIME_ZONE" ;
 
+    public static  String NOTICE_ALL = "ALL";
+    public  static  String NOTICE_FLAT_MEMBERS = "FLAT_MEMBERS";
+    public static  String NOTICE_BUILDING_OWNERS = "BUILDING_OWNERS";
+    public static  String NOTICE_COMMITTEE_MEMBERS = "COMMITTEE_MEMBERS";
+    public  static  String NOTICE_GUARDS = "GUARDS";
+
     public static final void showErrorAlertDialog(Context context, String alertTitle, String alertBody) {
 
         new AlertDialog.Builder(context)

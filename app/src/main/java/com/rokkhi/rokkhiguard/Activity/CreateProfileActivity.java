@@ -536,7 +536,7 @@ public class CreateProfileActivity extends AppCompatActivity implements IPickRes
             AndroidNetworking.upload(imageUploadUrl)
                     .addHeaders("jwtTokenHeader", sharedPrefHelper.getString(StaticData.JWT_TOKEN))
                     .addMultipartFile("image", file)// posting any type of file
-                    .addMultipartParameter("folderName", "visitors")
+                    .addMultipartParameter("folderName", "serviceWorkers")
                     .addMultipartParameter("subFolderName", sharedPrefHelper.getString(StaticData.BUILD_ID))
                     .addMultipartParameter("fileName", currentDateandTime)
                     .setPriority(Priority.MEDIUM)
@@ -612,14 +612,14 @@ public class CreateProfileActivity extends AppCompatActivity implements IPickRes
 
 
 
-        String url = StaticData.baseURL + "" + StaticData.registerOrUpdate;
+        String registerOrUpdateUrl = StaticData.baseURL + "" + StaticData.registerOrUpdate;
 
         Log.e("TAG", "onCreate: " + jsonDataPost);
-        Log.e("TAG", "onCreate: " + url);
+        Log.e("TAG", "onCreate: " + registerOrUpdateUrl);
         Log.e("TAG", "onCreate: ---------------------- ");
 
 
-        AndroidNetworking.post(url)
+        AndroidNetworking.post(registerOrUpdateUrl)
                 .addHeaders("jwtTokenHeader", sharedPrefHelper.getString(StaticData.JWT_TOKEN))
                 .setContentType("application/json")
                 .addJSONObjectBody(jsonDataPost)
@@ -628,8 +628,6 @@ public class CreateProfileActivity extends AppCompatActivity implements IPickRes
                 .getAsJSONObject(new JSONObjectRequestListener() {
                     @Override
                     public void onResponse(JSONObject response) {
-
-
 
                         Log.e("TAG", "onResponse: = service worker added =----------- " + response);
 
@@ -692,12 +690,12 @@ public class CreateProfileActivity extends AppCompatActivity implements IPickRes
             JSONObject jsonDataPost = new JSONObject(jsonStr);
             Log.e(TAG, "assignRoleToUserBeta: jsonStr = " + jsonDataPost);
 
-            String url = StaticData.baseURL + "" + StaticData.assignRoleToUserBeta;
+            String assignRoleToUserBetaUrl = StaticData.baseURL + "" + StaticData.assignRoleToUserBeta;
 
-            Log.e("TAG", "onCreate: " + url);
+            Log.e("TAG", "onCreate: " + assignRoleToUserBetaUrl);
 
 
-            AndroidNetworking.post(url)
+            AndroidNetworking.post(assignRoleToUserBetaUrl)
                     .addHeaders("jwtTokenHeader", sharedPrefHelper.getString(StaticData.JWT_TOKEN))
                     .setContentType("application/json")
                     .addJSONObjectBody(jsonDataPost)
@@ -712,8 +710,9 @@ public class CreateProfileActivity extends AppCompatActivity implements IPickRes
 
                             Log.e("TAG", "onResponse: = service worker added 2nd call  =----------- " + response);
 
-                            Gson gson = new Gson();
-                            assignRoleToUserServiceWorkerResponse = gson.fromJson(String.valueOf(response), AssignRoleToUserServiceWorkerResponse.class);
+                           /* Gson gson = new Gson();
+                            assignRoleToUserServiceWorkerResponse = gson.fromJson(String.valueOf(response), AssignRoleToUserServiceWorkerResponse.class);*/
+
                             Log.e(TAG, "onResponse: register id = " + registerUserModelClass.getData().getId());
 
                             StaticData.showSuccessDialog(CreateProfileActivity.this, "ইনফর্মেশন !", "প্রোফাইলটি তৈরি করা সম্পূর্ণ হয়েছে । ");

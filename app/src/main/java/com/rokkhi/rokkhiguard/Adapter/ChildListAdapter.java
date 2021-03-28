@@ -88,13 +88,17 @@ public class ChildListAdapter extends RecyclerView.Adapter<ChildListAdapter.Visi
 
         holder.name.setText(childList.get(position).getName());
 
-        holder.flat.setText(childList.get(position).getFlat().getNumber());
+        try {
+            holder.flat.setText(childList.get(position).getFlat().getNumber());
+        } catch (Exception e) {
+
+        }
 
         if (childList.get(position).getImage().isEmpty()) {
 
         } else {
 
-            Picasso.get().load(childList.get(position).getImage()).fit().placeholder( R.drawable.progress_animation ).error(R.drawable.male1).into(holder.propic);
+            Picasso.get().load(childList.get(position).getImage()).fit().placeholder(R.drawable.progress_animation).error(R.drawable.male1).into(holder.propic);
         }
     }
 
@@ -135,7 +139,7 @@ public class ChildListAdapter extends RecyclerView.Adapter<ChildListAdapter.Visi
                 @Override
                 public void onClick(View v) {
 
-                   AlertDialog alertDialog = new AlertDialog.Builder(context).create();
+                    AlertDialog alertDialog = new AlertDialog.Builder(context).create();
                     LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                     View convertView = (View) inflater.inflate(R.layout.dialog_confirm_child_out, null);
                     final Button cancel = convertView.findViewById(R.id.cancel);
@@ -155,10 +159,9 @@ public class ChildListAdapter extends RecyclerView.Adapter<ChildListAdapter.Visi
                         @Override
                         public void onClick(View v) {
 
-                            childOutRecord(context,getAdapterPosition());
+                            childOutRecord(context, getAdapterPosition());
                         }
                     });
-
 
 
                 }
@@ -168,18 +171,18 @@ public class ChildListAdapter extends RecyclerView.Adapter<ChildListAdapter.Visi
                 @Override
                 public void onClick(View v) {
 
-                    if (!childList.get(getAdapterPosition()).getContactPersonPhone().isEmpty()){
+                    if (!childList.get(getAdapterPosition()).getContactPersonPhone().isEmpty()) {
 
-                        sharedPrefHelper=new SharedPrefHelper(context);
-                        sharedPrefHelper.putString(StaticData.CALL_FLAT_NAME,childList.get(getAdapterPosition()).getFlat().getName());
+                        sharedPrefHelper = new SharedPrefHelper(context);
+                        sharedPrefHelper.putString(StaticData.CALL_FLAT_NAME, childList.get(getAdapterPosition()).getFlat().getName());
 
 
-                        String number=childList.get(getAdapterPosition()).getContactPersonPhone();
+                        String number = childList.get(getAdapterPosition()).getContactPersonPhone();
                         Intent callIntent = new Intent(Intent.ACTION_CALL);
-                        callIntent.setData(Uri.parse("tel:"+number));
+                        callIntent.setData(Uri.parse("tel:" + number));
                         context.startActivity(callIntent);
 
-                    }else {
+                    } else {
                         showNoContactAlert();
                     }
 
@@ -203,8 +206,8 @@ public class ChildListAdapter extends RecyclerView.Adapter<ChildListAdapter.Visi
 
     private void childOutRecord(Context context, int adapterPosition) {
 
-        SharedPrefHelper sharedPrefHelper=new SharedPrefHelper(context);
-        FullScreenAlertDialog fullScreenAlertDialog=new FullScreenAlertDialog(context);
+        SharedPrefHelper sharedPrefHelper = new SharedPrefHelper(context);
+        FullScreenAlertDialog fullScreenAlertDialog = new FullScreenAlertDialog(context);
         fullScreenAlertDialog.showdialog();
 
 
@@ -217,7 +220,7 @@ public class ChildListAdapter extends RecyclerView.Adapter<ChildListAdapter.Visi
         dataPost.put("requesterCommunityId", Integer.parseInt(sharedPrefHelper.getString(StaticData.COMM_ID)));
         dataPost.put("requesterUserRole", 1);
         dataPost.put("requesterFlatId", 0);
-        dataPost.put("childrenId",String.valueOf(childList.get(adapterPosition).getId()));
+        dataPost.put("childrenId", String.valueOf(childList.get(adapterPosition).getId()));
         dataPost.put("guardId", sharedPrefHelper.getString(StaticData.USER_ID));
         JSONObject jsonDataPost = new JSONObject(dataPost);
 
@@ -241,7 +244,7 @@ public class ChildListAdapter extends RecyclerView.Adapter<ChildListAdapter.Visi
 
                         fullScreenAlertDialog.dismissdialog();
 
-                        StaticData.showSuccessDialog((FragmentActivity) context,"Alert !","রেকর্ড করা হয়েছে । ");
+                        StaticData.showSuccessDialog((FragmentActivity) context, "Alert !", "রেকর্ড করা হয়েছে । ");
 
                         AndroidNetworking.cancelAll();
                     }
@@ -250,7 +253,7 @@ public class ChildListAdapter extends RecyclerView.Adapter<ChildListAdapter.Visi
                     public void onError(ANError anError) {
                         fullScreenAlertDialog.dismissdialog();
 
-                        StaticData.showErrorAlertDialog(context,"Alert !","আবার চেষ্টা করুন ।");
+                        StaticData.showErrorAlertDialog(context, "Alert !", "আবার চেষ্টা করুন ।");
 
                         Log.e("TAG", "onResponse: error message =  " + anError.getMessage());
                         Log.e("TAG", "onResponse: error code =  " + anError.getErrorCode());
@@ -258,7 +261,6 @@ public class ChildListAdapter extends RecyclerView.Adapter<ChildListAdapter.Visi
                         Log.e("TAG", "onResponse: error  getErrorDetail =  " + anError.getErrorDetail());
                     }
                 });
-
 
 
     }
@@ -271,7 +273,7 @@ public class ChildListAdapter extends RecyclerView.Adapter<ChildListAdapter.Visi
         protected FilterResults performFiltering(CharSequence constraint) {
 
             FilterResults results = new FilterResults();
-            results.values=null;
+            results.values = null;
 
             ArrayList<ChildData> filterList = new ArrayList<>();
             if (constraint != null && constraint.length() > 0) {
@@ -279,7 +281,7 @@ public class ChildListAdapter extends RecyclerView.Adapter<ChildListAdapter.Visi
                 filterList.clear();
 
                 for (int i = 0; i < mvisitorFilterList.size(); i++) {
-                    if (mvisitorFilterList.get(i).getName().toLowerCase().contains(constraint.toString().toLowerCase()) || mvisitorFilterList.get(i).getFlat().getName().toLowerCase().contains(constraint.toString().toLowerCase()) || mvisitorFilterList.get(i).getFlat().getNumber().toLowerCase().contains(constraint.toString().toLowerCase()) ) {
+                    if (mvisitorFilterList.get(i).getName().toLowerCase().contains(constraint.toString().toLowerCase()) || mvisitorFilterList.get(i).getFlat().getName().toLowerCase().contains(constraint.toString().toLowerCase()) || mvisitorFilterList.get(i).getFlat().getNumber().toLowerCase().contains(constraint.toString().toLowerCase())) {
                         filterList.add(mvisitorFilterList.get(i));
                     }
                 }
