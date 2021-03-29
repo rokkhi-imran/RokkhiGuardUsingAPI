@@ -14,8 +14,8 @@ android {
         applicationId "com.rokkhi.rokkhiguard"
         minSdkVersion 27
         targetSdkVersion 30
-        versionCode 15
-        versionName "2.05"
+        versionCode 16
+        versionName "2.06"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 

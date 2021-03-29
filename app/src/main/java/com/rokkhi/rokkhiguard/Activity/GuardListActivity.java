@@ -4,10 +4,6 @@ import android.Manifest;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.location.Address;
-import android.location.Geocoder;
-import android.location.Location;
 import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
@@ -18,7 +14,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -44,22 +39,19 @@ import com.google.firebase.iid.InstanceIdResult;
 import com.google.gson.Gson;
 import com.rokkhi.rokkhiguard.Adapter.GuardListAdapter;
 import com.rokkhi.rokkhiguard.Model.api.GuardListData;
-import com.rokkhi.rokkhiguard.Model.api.UserDetailsModelClass;
 import com.rokkhi.rokkhiguard.Model.api.GuardListModelClass;
+import com.rokkhi.rokkhiguard.Model.api.UserDetailsModelClass;
 import com.rokkhi.rokkhiguard.R;
 import com.rokkhi.rokkhiguard.StaticData;
 import com.rokkhi.rokkhiguard.Utils.Normalfunc;
 import com.rokkhi.rokkhiguard.helper.SharedPrefHelper;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
 public class GuardListActivity extends AppCompatActivity {
@@ -103,7 +95,7 @@ public class GuardListActivity extends AppCompatActivity {
         normalfunc = new Normalfunc();
         ActivityCompat.requestPermissions(this,
                 new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_LOCATION);
-        getlatLon();
+//        getlatLon();
 
         //get system alert window permission
         if (!Settings.canDrawOverlays(context)) {
@@ -148,7 +140,7 @@ public class GuardListActivity extends AppCompatActivity {
 
     }
 
-    private void getlatLon() {
+  /*  private void getlatLon() {
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
             OnGPS();
@@ -216,7 +208,7 @@ public class GuardListActivity extends AppCompatActivity {
         final AlertDialog alertDialog = builder.create();
         alertDialog.show();
     }
-
+*/
 
     private void appearOnTheTopAlert() {
 
