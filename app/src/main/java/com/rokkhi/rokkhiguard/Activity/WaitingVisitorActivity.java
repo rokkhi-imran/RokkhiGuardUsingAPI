@@ -56,26 +56,26 @@ public class WaitingVisitorActivity extends AppCompatActivity implements View.On
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_waiting_visitor);
-        context=this;
+        context = this;
         phoneNumberET = findViewById(R.id.phoneET);
         flatET = findViewById(R.id.flatNumberET);
         visitET = findViewById(R.id.visitET_ID);
         cancleBTn = findViewById(R.id.cancelUserInfoBtn);
         imageView = findViewById(R.id.imageView_id);
         nameET = findViewById(R.id.nameET);
-        entyBtn=findViewById(R.id.insideBtn);
-        goBack=findViewById(R.id.backbuttonInfoBtn);
+        entyBtn = findViewById(R.id.insideBtn);
+        goBack = findViewById(R.id.backbuttonInfoBtn);
 
         cancleBTn.setOnClickListener(this);
         entyBtn.setOnClickListener(this);
         goBack.setOnClickListener(this);
 
-        visitorID = getIntent().getIntExtra("visitorID",0);
+        visitorID = getIntent().getIntExtra("visitorID", 0);
         name = getIntent().getStringExtra("name");
         phone = getIntent().getStringExtra("phone");
         image = getIntent().getStringExtra("image");
         flat = getIntent().getStringExtra("flat");
-        flatID = getIntent().getIntExtra("flatID",0);
+        flatID = getIntent().getIntExtra("flatID", 0);
         purpose = getIntent().getStringExtra("purpose");
         address = getIntent().getStringExtra("address");
 
@@ -95,13 +95,13 @@ public class WaitingVisitorActivity extends AppCompatActivity implements View.On
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.cancelUserInfoBtn:
-                callVisitorInFunction(context,visitorID,StaticData.CANCEL_COMPOUND,flatID);
+                callVisitorInFunction(context, visitorID, StaticData.CANCEL_COMPOUND, flatID);
 
                 break;
             case R.id.insideBtn:
-                callVisitorInFunction(context,visitorID,StaticData.INSIDE_COMPOUND,flatID);
+                callVisitorInFunction(context, visitorID, StaticData.INSIDE_COMPOUND, flatID);
                 break;
             case R.id.backbuttonInfoBtn:
                 finish();
@@ -120,25 +120,23 @@ public class WaitingVisitorActivity extends AppCompatActivity implements View.On
         dataPost.put("limit", "");
         dataPost.put("pageId", "");
         dataPost.put("timeZone", sharedPrefHelper.getString(StaticData.TIME_ZONE));
-        dataPost.put("requesterFlatId",0);
-        dataPost.put("requesterUserRole",1);
-        dataPost.put("requesterBuildingId",Integer.parseInt(sharedPrefHelper.getString(StaticData.BUILD_ID)));
-        dataPost.put("requesterCommunityId",Integer.parseInt(sharedPrefHelper.getString(StaticData.COMM_ID)));
+        dataPost.put("requesterFlatId", 0);
+        dataPost.put("requesterUserRole", Integer.parseInt(sharedPrefHelper.getString(StaticData.USER_ROLE)));
+        dataPost.put("requesterBuildingId", Integer.parseInt(sharedPrefHelper.getString(StaticData.BUILD_ID)));
+        dataPost.put("requesterCommunityId", Integer.parseInt(sharedPrefHelper.getString(StaticData.COMM_ID)));
         dataPost.put("visitorId", id);
         dataPost.put("newStatus", status);
         dataPost.put("visitorName", "");
         dataPost.put("flatId", flatID);
 
 
-
-
         JSONObject jsonDataPost = new JSONObject(dataPost);
-        Log.e("TAG", "callVisitorInFunction: json data visitor in by guard =  "+jsonDataPost );
+        Log.e("TAG", "callVisitorInFunction: json data visitor in by guard =  " + jsonDataPost);
 
         String changeVisitorStatusUrl = StaticData.baseURL + "" + StaticData.changeVisitorStatus;
 
         AndroidNetworking.post(changeVisitorStatusUrl)
-                .addHeaders("jwtTokenHeader",sharedPrefHelper.getString(StaticData.JWT_TOKEN))
+                .addHeaders("jwtTokenHeader", sharedPrefHelper.getString(StaticData.JWT_TOKEN))
                 .setContentType("application/json")
                 .addJSONObjectBody(jsonDataPost)
                 .setPriority(Priority.MEDIUM)
@@ -154,10 +152,10 @@ public class WaitingVisitorActivity extends AppCompatActivity implements View.On
 
                         Gson gson = new Gson();
                         VisitorOutModelClass visitorOutModelClass = gson.fromJson(String.valueOf(response), VisitorOutModelClass.class);
-                        if (status.equals(StaticData.INSIDE_COMPOUND)){
+                        if (status.equals(StaticData.INSIDE_COMPOUND)) {
 
                             StaticData.showSuccessDialog((FragmentActivity) context, "Entry Alert !", "Entry Successfully Done ");
-                        }else if (status.equals(StaticData.CANCEL_COMPOUND)){
+                        } else if (status.equals(StaticData.CANCEL_COMPOUND)) {
                             StaticData.showSuccessDialog((FragmentActivity) context, "Cancel Alert !", "Cancel Successfully Done ");
 
                         }

@@ -150,7 +150,7 @@ public class CarListAdapter extends RecyclerView.Adapter<CarListAdapter.GridView
         dataPost.put("requesterBuildingId", Integer.parseInt(sharedPrefHelper.getString(StaticData.BUILD_ID)));
         dataPost.put("requesterCommunityId", Integer.parseInt(sharedPrefHelper.getString(StaticData.COMM_ID)));
 
-        dataPost.put("requesterUserRole", 1);
+        dataPost.put("requesterUserRole", Integer.parseInt(sharedPrefHelper.getString(StaticData.USER_ROLE)));
 
         dataPost.put("vehicleId", vehicleData.getId());
         dataPost.put("communityId", Integer.parseInt(sharedPrefHelper.getString(StaticData.COMM_ID)));

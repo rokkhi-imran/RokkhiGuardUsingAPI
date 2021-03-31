@@ -24,6 +24,7 @@ public class StaticData {
     public static final String BUILD_ADDRESS = "BUILD_ADDRESS";
     public static final int REQUEST_FOR_APPEAR_ON_TOP_CODE = 565;
     public static final String JWT_TOKEN = "JWT_TOKEN";
+    public static final String USER_ROLE = "USER_ROLE";
     public static final String KRY_DEVICE_TOKEN = "DEVICE_TOKEN";
     public static final String CALL_FLAT_NAME = "CALL_FLAT_NAME";
     public static final String GET_CALL_NUMBER = "GET_CALL_NUMBER";

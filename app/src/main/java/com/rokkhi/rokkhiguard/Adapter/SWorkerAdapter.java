@@ -81,31 +81,31 @@ public class SWorkerAdapter extends RecyclerView.Adapter<SWorkerAdapter.SWorkerV
 
         Log.e(TAG, "onBindViewHolder: 5 position = " + position);
 //        try {
-            Log.e(TAG, "onBindViewHolder:1 " + sworkerDataList.toString());
-            int workPlaceSize = sworkerDataList.get(position).getWorkPlace().size();
-            Log.e(TAG, "onBindViewHolder: 2 = " + workPlaceSize);
-            holder.flatNumber.setText("");
-            for (int i = 0; i < workPlaceSize; i++) {
-                try {
-                    holder.flatNumber.append(sworkerDataList.get(position).getWorkPlace().get(i).getFlat().getName() + " ");
-                }catch (Exception e){
-                    Log.e(TAG, "onBindViewHolder: "+e.getMessage() );
-                }
+        Log.e(TAG, "onBindViewHolder:1 " + sworkerDataList.toString());
+        int workPlaceSize = sworkerDataList.get(position).getWorkPlace().size();
+        Log.e(TAG, "onBindViewHolder: 2 = " + workPlaceSize);
+        holder.flatNumber.setText("");
+        for (int i = 0; i < workPlaceSize; i++) {
+            try {
+                holder.flatNumber.append(sworkerDataList.get(position).getWorkPlace().get(i).getFlat().getName() + " ");
+            } catch (Exception e) {
+                Log.e(TAG, "onBindViewHolder: " + e.getMessage());
             }
+        }
 
-            Log.e(TAG, "onBindViewHolder:3 " + sworkerDataList.toString());
-            holder.name.setText(sworkerDataList.get(position).getName());
-            holder.lastcome.setText(sworkerDataList.get(position).getPhone());
+        Log.e(TAG, "onBindViewHolder:3 " + sworkerDataList.toString());
+        holder.name.setText(sworkerDataList.get(position).getName());
+        holder.lastcome.setText(sworkerDataList.get(position).getPhone());
 
-           try {
-               Picasso.get()
-                       .load(sworkerDataList.get(position).getImage())
-                       .fit()
-                       .placeholder(R.drawable.progress_animation)
-                       .into(holder.propic);
-           }catch (Exception e){
-               Log.e(TAG, "onBindViewHolder: get picasso error "+e.getMessage() );
-           }
+        try {
+            Picasso.get()
+                    .load(sworkerDataList.get(position).getImage())
+                    .fit()
+                    .placeholder(R.drawable.progress_animation)
+                    .into(holder.propic);
+        } catch (Exception e) {
+            Log.e(TAG, "onBindViewHolder: get picasso error " + e.getMessage());
+        }
 
 //        } catch (Exception e) {
 //            Log.e(TAG, "onBindViewHolder:4 " + e.getMessage());
@@ -160,7 +160,7 @@ public class SWorkerAdapter extends RecyclerView.Adapter<SWorkerAdapter.SWorkerV
 
             view.setOnClickListener(v -> {
 
-                    inOutSworkerAlert(context, getAdapterPosition(), sworkerDataFilterList);
+                inOutSworkerAlert(context, getAdapterPosition(), sworkerDataFilterList);
 
             });
         }
@@ -188,12 +188,12 @@ public class SWorkerAdapter extends RecyclerView.Adapter<SWorkerAdapter.SWorkerV
 
         int workPlaceSize = sworkerData.get(adapterPosition).getWorkPlace().size();
         editTextFlat.setText("");
-        Log.e(TAG, "inOutSworkerAlert workPlaceSize : "+workPlaceSize);
+        Log.e(TAG, "inOutSworkerAlert workPlaceSize : " + workPlaceSize);
         for (int i = 0; i < workPlaceSize; i++) {
             try {
                 editTextFlat.append(sworkerData.get(adapterPosition).getWorkPlace().get(i).getFlat().getName() + " ");
-            }catch (Exception e){
-                Log.e(TAG, "inOutSworkerAlert: "+e.getMessage() );
+            } catch (Exception e) {
+                Log.e(TAG, "inOutSworkerAlert: " + e.getMessage());
             }
         }
 
@@ -236,8 +236,8 @@ public class SWorkerAdapter extends RecyclerView.Adapter<SWorkerAdapter.SWorkerV
         for (ServiceWorkerListModelWorkPlace serviceWorkerListModelDataWorkPlace : sWorkerData.get(adapterPosition).getWorkPlace()) {
             try {
                 flatIdList.add(serviceWorkerListModelDataWorkPlace.getFlat().getId());
-            }catch (Exception e){
-                Log.e(TAG, "callWorkerInOutFunction: "+e.getMessage() );
+            } catch (Exception e) {
+                Log.e(TAG, "callWorkerInOutFunction: " + e.getMessage());
             }
         }
 
@@ -245,7 +245,10 @@ public class SWorkerAdapter extends RecyclerView.Adapter<SWorkerAdapter.SWorkerV
                 0, Integer.parseInt(sharedPrefHelper.getString(StaticData.BUILD_ID)),
                 Integer.parseInt(sharedPrefHelper.getString(StaticData.COMM_ID)), flatIdList, Integer.parseInt(sharedPrefHelper.getString(StaticData.USER_ID)),
                 "", "", sWorkerData.get(adapterPosition).getId(),
-                sharedPrefHelper.getString(StaticData.TIME_ZONE),0,Integer.parseInt(sharedPrefHelper.getString(StaticData.BUILD_ID)),Integer.parseInt(sharedPrefHelper.getString(StaticData.COMM_ID)),1);
+                sharedPrefHelper.getString(StaticData.TIME_ZONE), 0,
+                Integer.parseInt(sharedPrefHelper.getString(StaticData.BUILD_ID)),
+                Integer.parseInt(sharedPrefHelper.getString(StaticData.COMM_ID)),
+                Integer.parseInt(sharedPrefHelper.getString(StaticData.USER_ROLE)));
 
 
         ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
@@ -312,7 +315,7 @@ public class SWorkerAdapter extends RecyclerView.Adapter<SWorkerAdapter.SWorkerV
             dataPost.put("requesterFlatId", 0);
             dataPost.put("requesterBuildingId", Integer.parseInt(sharedPrefHelper.getString(StaticData.BUILD_ID)));
             dataPost.put("requesterCommunityId", Integer.parseInt(sharedPrefHelper.getString(StaticData.COMM_ID)));
-            dataPost.put("requesterUserRole", 1);
+            dataPost.put("requesterUserRole", Integer.parseInt(sharedPrefHelper.getString(StaticData.USER_ROLE)));
             dataPost.put("timeZone", sharedPrefHelper.getString(StaticData.TIME_ZONE));
             dataPost.put("serviceWorkerId", sWorkerData.get(adapterPosition).getId());
             dataPost.put("newStatus", StaticData.OUTSIDE_COMPOUND);

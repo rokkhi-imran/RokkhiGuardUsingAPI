@@ -92,15 +92,13 @@ public class VisitorAdapter extends RecyclerView.Adapter<VisitorAdapter.VisitorV
         final GetInsideVisitorData visitor = list.get(position);
         holder.name.setText(visitor.getName());
 
-        if (visitor.getImage()!=null && !visitor.getImage().isEmpty()) {
+        if (visitor.getImage() != null && !visitor.getImage().isEmpty()) {
 
-            Picasso.get().load(visitor.getImage()).fit().placeholder( R.drawable.progress_animation ).error(R.drawable.male1).into(holder.propic);
+            Picasso.get().load(visitor.getImage()).fit().placeholder(R.drawable.progress_animation).error(R.drawable.male1).into(holder.propic);
         }
 
 
-            holder.intime.setText(visitor.getInTime());
-
-
+        holder.intime.setText(visitor.getInTime());
 
 
         holder.out.setOnClickListener(new View.OnClickListener() {
@@ -127,7 +125,7 @@ public class VisitorAdapter extends RecyclerView.Adapter<VisitorAdapter.VisitorV
                 confirm.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        callVisitorOutFunction(context, visitor.getId(),visitor.getFlat().getId(),visitor.getName());
+                        callVisitorOutFunction(context, visitor.getId(), visitor.getFlat().getId(), visitor.getName());
                     }
                 });
 
@@ -151,10 +149,10 @@ public class VisitorAdapter extends RecyclerView.Adapter<VisitorAdapter.VisitorV
         dataPost.put("limit", "");
         dataPost.put("pageId", "");
         dataPost.put("timeZone", sharedPrefHelper.getString(StaticData.TIME_ZONE));
-        dataPost.put("requesterFlatId",0);
-        dataPost.put("requesterUserRole",1);
-        dataPost.put("requesterBuildingId",Integer.parseInt(sharedPrefHelper.getString(StaticData.BUILD_ID)));
-        dataPost.put("requesterCommunityId",Integer.parseInt(sharedPrefHelper.getString(StaticData.COMM_ID)));
+        dataPost.put("requesterFlatId", 0);
+        dataPost.put("requesterUserRole", Integer.parseInt(sharedPrefHelper.getString(StaticData.USER_ROLE)));
+        dataPost.put("requesterBuildingId", Integer.parseInt(sharedPrefHelper.getString(StaticData.BUILD_ID)));
+        dataPost.put("requesterCommunityId", Integer.parseInt(sharedPrefHelper.getString(StaticData.COMM_ID)));
         dataPost.put("visitorId", id);
         dataPost.put("newStatus", StaticData.OUTSIDE_COMPOUND);
         dataPost.put("visitorName", name);
@@ -162,7 +160,7 @@ public class VisitorAdapter extends RecyclerView.Adapter<VisitorAdapter.VisitorV
 
 
         JSONObject jsonDataPost = new JSONObject(dataPost);
-        Log.e(TAG, "callVisitorOutFunction: visitor status change =  "+jsonDataPost);
+        Log.e(TAG, "callVisitorOutFunction: visitor status change =  " + jsonDataPost);
         String url = StaticData.baseURL + "" + StaticData.changeVisitorStatus;
 
 

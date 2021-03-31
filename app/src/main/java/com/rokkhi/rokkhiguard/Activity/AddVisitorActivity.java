@@ -101,7 +101,7 @@ public class AddVisitorActivity extends AppCompatActivity implements View.OnClic
     SharedPrefHelper sharedPrefHelper;
 
     Normalfunc normalfunc;
-    String imageLinkPre="";
+    String imageLinkPre = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -115,7 +115,7 @@ public class AddVisitorActivity extends AppCompatActivity implements View.OnClic
         AndroidNetworking.initialize(getApplicationContext());
         sharedPrefHelper = new SharedPrefHelper(context);
         fullScreenAlertDialog = new FullScreenAlertDialog(context);
-        normalfunc=new Normalfunc();
+        normalfunc = new Normalfunc();
 
         mPhoneNoET.addTextChangedListener(new TextWatcher() {
             @Override
@@ -148,10 +148,8 @@ public class AddVisitorActivity extends AppCompatActivity implements View.OnClic
         dataPost.put("requesterFlatId", 0);
         dataPost.put("requesterBuildingId", Integer.parseInt(sharedPrefHelper.getString(StaticData.BUILD_ID)));
         dataPost.put("requesterCommunityId", Integer.parseInt(sharedPrefHelper.getString(StaticData.COMM_ID)));
-        dataPost.put("requesterUserRole",1);
+        dataPost.put("requesterUserRole", Integer.parseInt(sharedPrefHelper.getString(StaticData.USER_ROLE)));
         dataPost.put("phoneNumber", s.toString());
-
-
 
 
         JSONObject jsonDataPost = new JSONObject(dataPost);
@@ -238,8 +236,8 @@ public class AddVisitorActivity extends AppCompatActivity implements View.OnClic
             mAddressET.setText(getUserByPhoneNumberModelClass.getData().getAddress());
             if (getUserByPhoneNumberModelClass.getData().getImage() != null && !getUserByPhoneNumberModelClass.getData().getImage().isEmpty()) {
 
-                imageLinkPre=getUserByPhoneNumberModelClass.getData().getImage();
-                bitmap=null;
+                imageLinkPre = getUserByPhoneNumberModelClass.getData().getImage();
+                bitmap = null;
 
                 Picasso.get().load(getUserByPhoneNumberModelClass.getData().getImage()).fit().placeholder(R.drawable.progress_animation).error(R.drawable.male1).into(mUserPhotoIV);
             }
@@ -270,14 +268,13 @@ public class AddVisitorActivity extends AppCompatActivity implements View.OnClic
         dataPost.put("requesterFlatId", 0);
         dataPost.put("requesterBuildingId", Integer.parseInt(sharedPrefHelper.getString(StaticData.BUILD_ID)));
         dataPost.put("requesterCommunityId", Integer.parseInt(sharedPrefHelper.getString(StaticData.COMM_ID)));
-        dataPost.put("requesterUserRole",1);
+        dataPost.put("requesterUserRole", Integer.parseInt(sharedPrefHelper.getString(StaticData.USER_ROLE)));
         dataPost.put("buildingId", Integer.parseInt(sharedPrefHelper.getString(StaticData.BUILD_ID)));
         dataPost.put("communityId", Integer.parseInt(sharedPrefHelper.getString(StaticData.COMM_ID)));
         dataPost.put("flatId", 0);
         dataPost.put("status", StaticData.PENDING_PERMISSION);
         dataPost.put("fromDate", "");
         dataPost.put("toDate", "");
-
 
 
         JSONObject jsonDataPost = new JSONObject(dataPost);
@@ -446,10 +443,10 @@ public class AddVisitorActivity extends AppCompatActivity implements View.OnClic
             Log.e(TAG, "onClick: currentDateandTime =  " + currentDateandTime);
             Log.e(TAG, "onClick: currentDateandTime =  " + sharedPrefHelper.getString(StaticData.JWT_TOKEN));
 
-            String imageUploadUrl = StaticData.baseURL+StaticData.imageUploadURL;
+            String imageUploadUrl = StaticData.baseURL + StaticData.imageUploadURL;
 
             AndroidNetworking.upload(imageUploadUrl)
-                    .addHeaders("jwtTokenHeader",sharedPrefHelper.getString(StaticData.JWT_TOKEN))
+                    .addHeaders("jwtTokenHeader", sharedPrefHelper.getString(StaticData.JWT_TOKEN))
                     .addMultipartFile("image", file)// posting any type of file
                     .addMultipartParameter("folderName", "visitors")
                     .addMultipartParameter("subFolderName", sharedPrefHelper.getString(StaticData.BUILD_ID))
@@ -495,8 +492,8 @@ public class AddVisitorActivity extends AppCompatActivity implements View.OnClic
 
     private void uploadDataData(String imageLink) {
 
-        if (!imageLinkPre.isEmpty() && bitmap==null){
-            imageLink=imageLinkPre;
+        if (!imageLinkPre.isEmpty() && bitmap == null) {
+            imageLink = imageLinkPre;
         }
 
         fullScreenAlertDialog.showdialog();
@@ -511,7 +508,7 @@ public class AddVisitorActivity extends AppCompatActivity implements View.OnClic
             dataPost.put("requesterFlatId", 0);
             dataPost.put("requesterBuildingId", Integer.parseInt(sharedPrefHelper.getString(StaticData.BUILD_ID)));
             dataPost.put("requesterCommunityId", Integer.parseInt(sharedPrefHelper.getString(StaticData.COMM_ID)));
-            dataPost.put("requesterUserRole", 1);
+            dataPost.put("requesterUserRole", Integer.parseInt(sharedPrefHelper.getString(StaticData.USER_ROLE)));
             dataPost.put("name", mUserNameET.getText().toString());
             dataPost.put("address", mAddressET.getText().toString());
             dataPost.put("contact", mPhoneNoET.getText().toString());
@@ -549,25 +546,25 @@ public class AddVisitorActivity extends AppCompatActivity implements View.OnClic
                             Gson gson = new Gson();
                             AddVisitorResponse addVisitorResponse = gson.fromJson(String.valueOf(response), AddVisitorResponse.class);
 
-                            if (addVisitorResponse.getData().getMessage().equals(StaticData.WHITE_LISTED)){
+                            if (addVisitorResponse.getData().getMessage().equals(StaticData.WHITE_LISTED)) {
 
-                                showAlertDialog(StaticData.WHITE_LISTED,context,addVisitorResponse);
+                                showAlertDialog(StaticData.WHITE_LISTED, context, addVisitorResponse);
 
-                            }else if (addVisitorResponse.getData().getMessage().equals(StaticData.BLACK_LISTED)){
-                                showAlertDialog(StaticData.BLACK_LISTED,context,addVisitorResponse);
+                            } else if (addVisitorResponse.getData().getMessage().equals(StaticData.BLACK_LISTED)) {
+                                showAlertDialog(StaticData.BLACK_LISTED, context, addVisitorResponse);
 
 
-                            }else if (addVisitorResponse.getData().getMessage().equals(StaticData.NO_SPECIALITY)){
+                            } else if (addVisitorResponse.getData().getMessage().equals(StaticData.NO_SPECIALITY)) {
 
                                 try {
                                     StaticData.showSuccessDialog((FragmentActivity) context, "Alert !", "অতিথি কে অ্যাড করা হয়েছে । নিশ্চিত হওয়ার জন্য অপেক্ষা করুন ");
 
-                                }catch (Exception e){
+                                } catch (Exception e) {
 
                                 }
-                            }else {
+                            } else {
                                 //No FLat User Found
-                                showAlertDialog(StaticData.NO_FLAT_MEMBER,context,addVisitorResponse);
+                                showAlertDialog(StaticData.NO_FLAT_MEMBER, context, addVisitorResponse);
 
 
                             }
@@ -605,13 +602,12 @@ public class AddVisitorActivity extends AppCompatActivity implements View.OnClic
     private void showAlertDialog(String visitorStatus, Context context, AddVisitorResponse addVisitorResponse) {
 
 
-
-        if (visitorStatus.equals(StaticData.WHITE_LISTED)){
+        if (visitorStatus.equals(StaticData.WHITE_LISTED)) {
 
             final AlertDialog alertDialog = new AlertDialog.Builder(context).create();
             LayoutInflater inflater = getLayoutInflater();
             View convertView = (View) inflater.inflate(R.layout.custom_white_list_dialog, null);
-            Button okWhiteButton=convertView.findViewById(R.id.okWhitelist);
+            Button okWhiteButton = convertView.findViewById(R.id.okWhitelist);
             alertDialog.setView(convertView);
             alertDialog.setCancelable(false);
 
@@ -620,7 +616,7 @@ public class AddVisitorActivity extends AppCompatActivity implements View.OnClic
                 public void onClick(View view) {
 
                     alertDialog.dismiss();
-                    startActivity(new Intent(context,AddVisitorActivity.class));
+                    startActivity(new Intent(context, AddVisitorActivity.class));
                     finish();
 
                 }
@@ -629,12 +625,12 @@ public class AddVisitorActivity extends AppCompatActivity implements View.OnClic
             alertDialog.show();
 
 
-        }else if (visitorStatus.equals(StaticData.BLACK_LISTED)){
+        } else if (visitorStatus.equals(StaticData.BLACK_LISTED)) {
 
             final AlertDialog alertDialog = new AlertDialog.Builder(context).create();
             LayoutInflater inflater = getLayoutInflater();
             View convertView = (View) inflater.inflate(R.layout.custom_black_list_dialog, null);
-            Button okBlackButton=convertView.findViewById(R.id.okBlacklist);
+            Button okBlackButton = convertView.findViewById(R.id.okBlacklist);
             alertDialog.setView(convertView);
             alertDialog.setCancelable(false);
 
@@ -644,7 +640,7 @@ public class AddVisitorActivity extends AppCompatActivity implements View.OnClic
 
 
                     alertDialog.dismiss();
-                    startActivity(new Intent(context,AddVisitorActivity.class));
+                    startActivity(new Intent(context, AddVisitorActivity.class));
                     finish();
 
                 }
@@ -652,12 +648,12 @@ public class AddVisitorActivity extends AppCompatActivity implements View.OnClic
 
             alertDialog.show();
 
-        }else if (visitorStatus.equals(StaticData.NO_FLAT_MEMBER)){
+        } else if (visitorStatus.equals(StaticData.NO_FLAT_MEMBER)) {
 
             final AlertDialog alertDialog = new AlertDialog.Builder(context).create();
             LayoutInflater inflater = getLayoutInflater();
             View convertView = (View) inflater.inflate(R.layout.custom_no_flat_user_dialog, null);
-            Button okNoFlatUserBtn=convertView.findViewById(R.id.okNoFlatUserBtn);
+            Button okNoFlatUserBtn = convertView.findViewById(R.id.okNoFlatUserBtn);
             alertDialog.setView(convertView);
             alertDialog.setCancelable(false);
 
@@ -667,7 +663,7 @@ public class AddVisitorActivity extends AppCompatActivity implements View.OnClic
 
 
                     alertDialog.dismiss();
-                    startActivity(new Intent(context,AddVisitorActivity.class));
+                    startActivity(new Intent(context, AddVisitorActivity.class));
                     finish();
 
                 }

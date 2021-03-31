@@ -38,7 +38,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 
-public class VisitorsListActivity extends AppCompatActivity  {
+public class VisitorsListActivity extends AppCompatActivity {
 
     private static final String TAG = "VisitorsListActivity";
     RecyclerView recyclerView;
@@ -49,7 +49,7 @@ public class VisitorsListActivity extends AppCompatActivity  {
     EditText search;
 
     NestedScrollView myNestedScroll;
-    Date low,high;
+    Date low, high;
 
     SharedPrefHelper sharedPrefHelper;
     GetVisitorInsideModelClass getVisitorInsideModelClass;
@@ -65,28 +65,30 @@ public class VisitorsListActivity extends AppCompatActivity  {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        context= VisitorsListActivity.this;
-        myNestedScroll= (NestedScrollView) findViewById(R.id.nested);
-        progressBar= findViewById(R.id.progressBar2);
-        shimmerFrameLayout= findViewById(R.id.shimmer_view_container);
+        context = VisitorsListActivity.this;
+        myNestedScroll = (NestedScrollView) findViewById(R.id.nested);
+        progressBar = findViewById(R.id.progressBar2);
+        shimmerFrameLayout = findViewById(R.id.shimmer_view_container);
         shimmerFrameLayout.setVisibility(View.VISIBLE);
         shimmerFrameLayout.startShimmer();
-        recyclerView=findViewById(R.id.recyclerview);
+        recyclerView = findViewById(R.id.recyclerview);
         recyclerView.setNestedScrollingEnabled(false);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        mrootView=findViewById(R.id.root);
+        mrootView = findViewById(R.id.root);
         search = findViewById(R.id.search);
-        sharedPrefHelper=new SharedPrefHelper(context);
-        noDataLinearLayout=findViewById(R.id.noDataLayout);
+        sharedPrefHelper = new SharedPrefHelper(context);
+        noDataLinearLayout = findViewById(R.id.noDataLayout);
 
         search.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             }
+
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 visitorAdapter.getFilter().filter(s);
             }
+
             @Override
             public void afterTextChanged(Editable s) {
             }
@@ -100,7 +102,7 @@ public class VisitorsListActivity extends AppCompatActivity  {
         dataPost.put("requesterFlatId", 0);
         dataPost.put("requesterBuildingId", Integer.parseInt(sharedPrefHelper.getString(StaticData.BUILD_ID)));
         dataPost.put("requesterCommunityId", Integer.parseInt(sharedPrefHelper.getString(StaticData.COMM_ID)));
-        dataPost.put("requesterUserRole",1);
+        dataPost.put("requesterUserRole", Integer.parseInt(sharedPrefHelper.getString(StaticData.USER_ROLE)));
         dataPost.put("buildingId", Integer.parseInt(sharedPrefHelper.getString(StaticData.BUILD_ID)));
         dataPost.put("communityId", Integer.parseInt(sharedPrefHelper.getString(StaticData.COMM_ID)));
         dataPost.put("flatId", 0);
@@ -118,7 +120,6 @@ public class VisitorsListActivity extends AppCompatActivity  {
         Log.e(TAG, "onCreate: ---------------------- ");
 
 
-
         AndroidNetworking.post(url)
                 .addHeaders("jwtTokenHeader", sharedPrefHelper.getString(StaticData.JWT_TOKEN))
                 .setContentType("application/json")
@@ -134,13 +135,13 @@ public class VisitorsListActivity extends AppCompatActivity  {
 
                         progressBar.setVisibility(View.GONE);
 
-                        Log.e("TAG ","onResponse: =   " + response);
+                        Log.e("TAG ", "onResponse: =   " + response);
 
                         Gson gson = new Gson();
                         getVisitorInsideModelClass = gson.fromJson(String.valueOf(response), GetVisitorInsideModelClass.class);
-                        visitorAdapter=new VisitorAdapter((ArrayList<GetInsideVisitorData>) getVisitorInsideModelClass.getData(),context);
+                        visitorAdapter = new VisitorAdapter((ArrayList<GetInsideVisitorData>) getVisitorInsideModelClass.getData(), context);
                         recyclerView.setAdapter(visitorAdapter);
-                        if (getVisitorInsideModelClass.getData().size()<1){
+                        if (getVisitorInsideModelClass.getData().size() < 1) {
                             noDataLinearLayout.setVisibility(View.VISIBLE);
                         }
                         AndroidNetworking.cancelAll();
@@ -165,12 +166,9 @@ public class VisitorsListActivity extends AppCompatActivity  {
                 });
 
 
-
-
-
     }
 
-    public void getdate(){
+    public void getdate() {
         Calendar cal = Calendar.getInstance(); //current date and time
         cal.add(Calendar.DAY_OF_MONTH, 0); //add a day
         cal.set(Calendar.HOUR_OF_DAY, 23); //set hour to last hour
@@ -178,16 +176,16 @@ public class VisitorsListActivity extends AppCompatActivity  {
         cal.set(Calendar.SECOND, 59); //set seconds to last second
         cal.set(Calendar.MILLISECOND, 999); //set milliseconds to last millisecond
 
-        high=cal.getTime();
+        high = cal.getTime();
         Calendar cal1 = Calendar.getInstance(); //current date and time
         cal1.add(Calendar.DAY_OF_MONTH, 0); //add a day
         cal1.set(Calendar.HOUR_OF_DAY, 0); //set hour to last hour
         cal1.set(Calendar.MINUTE, 0); //set minutes to last minute
         cal1.set(Calendar.SECOND, 0); //set seconds to last second
         cal1.set(Calendar.MILLISECOND, 0); //set milliseconds to last millisecond
-        low= cal1.getTime();
+        low = cal1.getTime();
 
-        Log.d(TAG, "getdate: bb "+ high + " "+low);
+        Log.d(TAG, "getdate: bb " + high + " " + low);
 
     }
 

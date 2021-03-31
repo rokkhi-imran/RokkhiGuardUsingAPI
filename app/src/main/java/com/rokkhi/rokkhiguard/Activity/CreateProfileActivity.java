@@ -586,7 +586,7 @@ public class CreateProfileActivity extends AppCompatActivity implements IPickRes
         dataPost.put("requesterFlatId", 0);
         dataPost.put("requesterBuildingId", Integer.parseInt(sharedPrefHelper.getString(StaticData.BUILD_ID)));
         dataPost.put("requesterCommunityId", Integer.parseInt(sharedPrefHelper.getString(StaticData.COMM_ID)));
-        dataPost.put("requesterUserRole", 1);
+        dataPost.put("requesterUserRole", Integer.parseInt(sharedPrefHelper.getString(StaticData.USER_ROLE)));
         dataPost.put("userId", "");
         dataPost.put("name", mUserName.getText().toString());
         dataPost.put("userRoleCode", StaticData.SERVICE_WORKER.toString());
@@ -673,7 +673,7 @@ public class CreateProfileActivity extends AppCompatActivity implements IPickRes
                 0,
                 Integer.parseInt(sharedPrefHelper.getString(StaticData.BUILD_ID)),
                 Integer.parseInt(sharedPrefHelper.getString(StaticData.COMM_ID)),
-                1,
+                Integer.parseInt(sharedPrefHelper.getString(StaticData.USER_ROLE)),
                 dataFlatInfoPostList,
                 "",
                 "",

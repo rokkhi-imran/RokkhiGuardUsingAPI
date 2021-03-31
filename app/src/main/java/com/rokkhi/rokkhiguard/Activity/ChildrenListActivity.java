@@ -121,7 +121,7 @@ public class ChildrenListActivity extends AppCompatActivity {
         dataPost.put("requesterFlatId", 0);
         dataPost.put("requesterBuildingId",Integer.parseInt(sharedPrefHelper.getString(StaticData.BUILD_ID)) );
         dataPost.put("requesterCommunityId", Integer.parseInt(sharedPrefHelper.getString(StaticData.COMM_ID)));
-        dataPost.put("requesterUserRole", 1);
+        dataPost.put("requesterUserRole", Integer.parseInt(sharedPrefHelper.getString(StaticData.USER_ROLE)));
         dataPost.put("buildingId", Integer.parseInt(sharedPrefHelper.getString(StaticData.BUILD_ID)));
         dataPost.put("flatId", 0);
         dataPost.put("userRoleCode", StaticData.CHILD.toString());

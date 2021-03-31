@@ -243,7 +243,7 @@ public class GuardListActivity extends AppCompatActivity {
         dataPost.put("requesterFlatId", 0);
         dataPost.put("requesterBuildingId",Integer.parseInt(sharedPrefHelper.getString(StaticData.BUILD_ID)) );
         dataPost.put("requesterCommunityId", Integer.parseInt(sharedPrefHelper.getString(StaticData.COMM_ID)));
-        dataPost.put("requesterUserRole", 1);
+        dataPost.put("requesterUserRole", Integer.parseInt(sharedPrefHelper.getString(StaticData.USER_ROLE)));
         dataPost.put("buildingId", Integer.parseInt(sharedPrefHelper.getString(StaticData.BUILD_ID)));
         dataPost.put("flatId", 0);
         dataPost.put("userRoleCode", StaticData.GUARD.toString());
@@ -416,8 +416,12 @@ public class GuardListActivity extends AppCompatActivity {
                                 boolean isGuardCodeContains = false;
                                 int buildingID = 0;
                                 int communityID = 0;
+                                int userRoleCode = 0;
 
                                 for (int i = 0; i < userDetailsModelClass.getData().getUserRoles().size(); i++) {
+                                    Log.e(TAG, "onResponse: call userRole Loop" );
+                                    Log.e(TAG, "onResponse: call userRole Loop = "+isGuardCodeContains );
+                                    Log.e(TAG, "onResponse: call userRole Loop = "+userDetailsModelClass.getData().getUserRoles().get(i).getUserRoleCode() );
                                     if (String.valueOf(userDetailsModelClass.getData().getUserRoles().get(i).getBuildingId()) != null) {
                                         buildingID = userDetailsModelClass.getData().getUserRoles().get(i).getBuildingId();
                                     }
@@ -425,22 +429,28 @@ public class GuardListActivity extends AppCompatActivity {
                                     if (String.valueOf(userDetailsModelClass.getData().getUserRoles().get(i).getCommunityId()) != null) {
                                         communityID = userDetailsModelClass.getData().getUserRoles().get(i).getCommunityId();
                                     }
-                                    if (userDetailsModelClass.getData().getUserRoles().get(i).getUserRole() == 1) {
+                                    if (String.valueOf(userDetailsModelClass.getData().getUserRoles().get(i).getUserRole()) != null) {
+                                        userRoleCode = userDetailsModelClass.getData().getUserRoles().get(i).getUserRole();
+                                    }
+                                    if (userDetailsModelClass.getData().getUserRoles().get(i).getUserRoleCode().equals(StaticData.GUARD_PHONE.toString())) {
                                         isGuardCodeContains = true;
                                     }
 
                                 }
 
-                                if (userDetailsModelClass.getData().getUserRoles().isEmpty() || !isGuardCodeContains) {
+                                Log.e(TAG, "onResponse: call userRole Loop = "+isGuardCodeContains );
+
+                                if (!isGuardCodeContains) {
                                     showAlertDialog(context);
                                 } else {
                                     Log.e(TAG, "onResponse: buildingID  = = = " + buildingID);
                                     Log.e(TAG, "onResponse: communityID = = = " + communityID);
-                                    Log.e(TAG, "onResponse: isGuardCodeContains = = = " + isGuardCodeContains);
+//                                    Log.e(TAG, "onResponse: isGuardCodeContains = = = " + isGuardCodeContains);
 
                                     sharedPrefHelper.putString(StaticData.BUILD_ID, String.valueOf(buildingID));
                                     sharedPrefHelper.putString(StaticData.COMM_ID, String.valueOf(communityID));
                                     sharedPrefHelper.putString(StaticData.JWT_TOKEN, userDetailsModelClass.getData().getJwtToken());
+                                    sharedPrefHelper.putString(StaticData.USER_ROLE, String.valueOf(userRoleCode));
 
                                     callGuardList(sharedPrefHelper.getString(StaticData.JWT_TOKEN));
                                 }

@@ -218,7 +218,7 @@ public class ChildListAdapter extends RecyclerView.Adapter<ChildListAdapter.Visi
         dataPost.put("timeZone", sharedPrefHelper.getString(StaticData.TIME_ZONE));
         dataPost.put("requesterBuildingId", Integer.parseInt(sharedPrefHelper.getString(StaticData.BUILD_ID)));
         dataPost.put("requesterCommunityId", Integer.parseInt(sharedPrefHelper.getString(StaticData.COMM_ID)));
-        dataPost.put("requesterUserRole", 1);
+        dataPost.put("requesterUserRole", Integer.parseInt(sharedPrefHelper.getString(StaticData.USER_ROLE)));
         dataPost.put("requesterFlatId", 0);
         dataPost.put("childrenId", String.valueOf(childList.get(adapterPosition).getId()));
         dataPost.put("guardId", sharedPrefHelper.getString(StaticData.USER_ID));
